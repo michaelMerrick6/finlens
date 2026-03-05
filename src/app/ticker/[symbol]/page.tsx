@@ -1,19 +1,48 @@
-'use client';
-
-import { useParams } from 'next/navigation';
 import { Building2, UserCircle2, TrendingUp, AlertCircle } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
-export default function TickerPage() {
-    const params = useParams();
-    const symbol = (params.symbol as string).toUpperCase();
+export const revalidate = 60; // Revalidate cache every 60 seconds
 
-    // In a real app, we would fetch data from Supabase aggregating all three tables.
-    const mockTimeline = [
-        { date: '2026-03-01', type: 'politician', actor: 'Nancy Pelosi (D)', action: 'Bought $1M-$5M', impact: 'Bullish' },
-        { date: '2026-02-15', type: 'fund', actor: 'Renaissance Tech', action: 'Increased position by 150%', impact: 'Bullish' },
-        { date: '2026-01-20', type: 'insider', actor: 'Jensen Huang (CEO)', action: 'Sold $14M', impact: 'Bearish' },
-        { date: '2026-01-10', type: 'insider', actor: 'Colette Kress (CFO)', action: 'Sold $2M', impact: 'Bearish' },
+export default async function TickerPage({ params }: { params: Promise<{ symbol: string }> }) {
+    const resolvedParams = await params;
+    const symbol = resolvedParams.symbol.toUpperCase();
+
+    // Fetch live data from the database
+    const [polTrades, inTrades, fundHoldings] = await Promise.all([
+        supabase.from('politician_trades').select('*').eq('ticker', symbol).order('transaction_date', { ascending: false }),
+        supabase.from('insider_trades').select('*').eq('ticker', symbol).order('transaction_date', { ascending: false }),
+        supabase.from('institutional_holdings').select('*').eq('ticker', symbol).order('report_period', { ascending: false })
+    ]);
+
+    // Aggregate into unified timeline array
+    const rawTimeline = [
+        ...(polTrades.data || []).map((trade: any) => ({
+            date: trade.transaction_date,
+            type: 'politician',
+            actor: trade.politician_name,
+            action: `${trade.transaction_type} ${trade.amount_range}`,
+            impact: trade.transaction_type.includes('Purchase') ? 'Bullish' : 'Bearish'
+        })),
+        ...(inTrades.data || []).map((trade: any) => ({
+            date: trade.transaction_date,
+            type: 'insider',
+            actor: trade.filer_name,
+            action: `${trade.transaction_code === 'P' ? 'Bought' : 'Sold'} $${trade.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+            impact: trade.transaction_code === 'P' ? 'Bullish' : 'Bearish'
+        })),
+        ...(fundHoldings.data || []).map((fund: any) => ({
+            date: fund.published_date,
+            type: 'fund',
+            actor: fund.fund_name,
+            action: fund.qoq_change_percent > 0 ? `Increased position by ${fund.qoq_change_percent}%` : `Decreased position by ${Math.abs(fund.qoq_change_percent)}%`,
+            impact: fund.qoq_change_percent > 0 ? 'Bullish' : 'Bearish'
+        }))
     ];
+
+    // Sort by date descending and take top 20
+    const unifiedTimeline = rawTimeline
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 20);
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
@@ -82,10 +111,10 @@ export default function TickerPage() {
                 </h2>
 
                 <div className="relative border-l-2 border-[rgba(255,255,255,0.1)] ml-4 space-y-8 pl-8 py-4">
-                    {mockTimeline.map((item, idx) => (
+                    {unifiedTimeline.map((item: any, idx: number) => (
                         <div key={idx} className="relative group">
                             <div className={`absolute -left-[41px] h-6 w-6 rounded-full border-4 border-[var(--bg-dark)] ${item.type === 'politician' ? 'bg-blue-500' :
-                                    item.type === 'insider' ? 'bg-violet-500' : 'bg-emerald-500'
+                                item.type === 'insider' ? 'bg-violet-500' : 'bg-emerald-500'
                                 }`} />
 
                             <div className="bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.05)] rounded-2xl p-5 transition-all">
