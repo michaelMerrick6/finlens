@@ -1,7 +1,28 @@
 import SearchForm from '@/components/SearchForm';
 import { ArrowRight, TrendingUp, AlertCircle, Building2, UserCircle2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
+  // Fetch real data from the database
+  const { data: politicians } = await supabase
+    .from('politician_trades')
+    .select('*')
+    .order('published_date', { ascending: false })
+    .limit(2);
+
+  const { data: insiders } = await supabase
+    .from('insider_trades')
+    .select('*')
+    .order('published_date', { ascending: false })
+    .limit(2);
+
+  const { data: funds } = await supabase
+    .from('institutional_holdings')
+    .select('*')
+    .order('value_held', { ascending: false })
+    .limit(2);
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
 
@@ -41,24 +62,24 @@ export default function Home() {
           </div>
 
           <div className="space-y-4 mt-2">
-            <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <div>
-                <p className="font-semibold text-white">Nancy Pelosi (D)</p>
-                <p className="text-sm text-gray-400 text-sm">Bought $1M-$5M of NVDA</p>
-              </div>
-              <span className="text-green-400 text-sm font-bold bg-green-400/10 px-2 py-1 rounded">Buy</span>
-            </div>
-            <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <div>
-                <p className="font-semibold text-white">Tommy Tuberville (R)</p>
-                <p className="text-sm text-gray-400 text-sm">Sold $500k of TSLA</p>
-              </div>
-              <span className="text-red-400 text-sm font-bold bg-red-400/10 px-2 py-1 rounded">Sell</span>
-            </div>
+            {politicians?.map((trade) => (
+              <Link href={`/ticker/${trade.ticker}`} key={trade.id}>
+                <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer mb-2">
+                  <div>
+                    <p className="font-semibold text-white truncate max-w-[150px]">{trade.politician_name}</p>
+                    <p className="text-sm text-gray-400">Traded {trade.ticker}</p>
+                  </div>
+                  <span className={`text-sm font-bold px-2 py-1 rounded ${trade.transaction_type === 'buy' ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'}`}>
+                    {trade.transaction_type === 'buy' ? 'Buy' : 'Sell'}
+                  </span>
+                </div>
+              </Link>
+            ))}
+            {(!politicians || politicians.length === 0) && <p className="text-gray-500 text-sm">No recent trades found.</p>}
           </div>
-          <button className="mt-auto pt-4 flex items-center justify-center gap-2 text-sm text-[var(--color-primary)] font-medium group-hover:text-blue-400 transition-colors">
+          <Link href="/politicians" className="mt-auto pt-4 flex items-center justify-center gap-2 text-sm text-[var(--color-primary)] font-medium group-hover:text-blue-400 transition-colors w-full">
             View All Trades <ArrowRight size={16} />
-          </button>
+          </Link>
         </div>
 
         {/* Insiders Column */}
@@ -74,20 +95,20 @@ export default function Home() {
           </div>
 
           <div className="space-y-4 mt-2">
-            <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <div>
-                <p className="font-semibold text-white">Mark Zuckerberg (CEO)</p>
-                <p className="text-sm text-gray-400 text-sm">Sold $42M of META</p>
-              </div>
-              <span className="text-red-400 text-sm font-bold bg-red-400/10 px-2 py-1 rounded">Sell</span>
-            </div>
-            <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <div>
-                <p className="font-semibold text-white">Jamie Dimon (CEO)</p>
-                <p className="text-sm text-gray-400 text-sm">Sold $150M of JPM</p>
-              </div>
-              <span className="text-red-400 text-sm font-bold bg-red-400/10 px-2 py-1 rounded">Sell</span>
-            </div>
+            {insiders?.map((trade) => (
+              <Link href={`/ticker/${trade.ticker}`} key={trade.id}>
+                <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer mb-2">
+                  <div>
+                    <p className="font-semibold text-white truncate max-w-[150px]">{trade.filer_name}</p>
+                    <p className="text-sm text-gray-400">Valued at ${(trade.value / 1000000).toFixed(1)}M</p>
+                  </div>
+                  <span className={`text-sm font-bold px-2 py-1 rounded ${trade.transaction_code === 'buy' ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'}`}>
+                    {trade.transaction_code === 'buy' ? 'Buy' : 'Sell'}
+                  </span>
+                </div>
+              </Link>
+            ))}
+            {(!insiders || insiders.length === 0) && <p className="text-gray-500 text-sm">No recent filings found.</p>}
           </div>
           <button className="mt-auto pt-4 flex items-center justify-center gap-2 text-sm text-[var(--color-accent)] font-medium group-hover:text-violet-400 transition-colors">
             View All Form 4s <ArrowRight size={16} />
@@ -107,20 +128,18 @@ export default function Home() {
           </div>
 
           <div className="space-y-4 mt-2">
-            <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <div>
-                <p className="font-semibold text-white">Bridgewater Assoc.</p>
-                <p className="text-sm text-gray-400 text-sm">+340% increase in MSFT</p>
-              </div>
-              <span className="text-green-400 text-sm font-bold bg-green-400/10 px-2 py-1 rounded">+340%</span>
-            </div>
-            <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer">
-              <div>
-                <p className="font-semibold text-white">Renaissance Tech</p>
-                <p className="text-sm text-gray-400 text-sm">-100% (Liquidated) AMC</p>
-              </div>
-              <span className="text-red-400 text-sm font-bold bg-red-400/10 px-2 py-1 rounded">-100%</span>
-            </div>
+            {funds?.map((fund) => (
+              <Link href={`/ticker/${fund.ticker}`} key={fund.id}>
+                <div className="flex items-start justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition cursor-pointer mb-2">
+                  <div>
+                    <p className="font-semibold text-white truncate max-w-[150px]">{fund.fund_name.replace(', L.P.', '').replace(' LLC', '')}</p>
+                    <p className="text-sm text-gray-400">Hold {(fund.value_held / 1000000).toFixed(1)}M in {fund.ticker}</p>
+                  </div>
+                  <span className="text-emerald-400 text-sm font-bold bg-emerald-400/10 px-2 py-1 rounded">Hold</span>
+                </div>
+              </Link>
+            ))}
+            {(!funds || funds.length === 0) && <p className="text-gray-500 text-sm">No recent holdings found.</p>}
           </div>
           <button className="mt-auto pt-4 flex items-center justify-center gap-2 text-sm text-emerald-500 font-medium group-hover:text-emerald-400 transition-colors">
             View All 13Fs <ArrowRight size={16} />

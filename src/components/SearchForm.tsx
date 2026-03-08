@@ -10,8 +10,9 @@ export default function SearchForm() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        if (query.trim()) {
-            router.push(`/ticker/${query.trim().toUpperCase()}`);
+        const cleanQuery = query.trim();
+        if (cleanQuery) {
+            router.push(`/search?q=${encodeURIComponent(cleanQuery)}`);
         }
     };
 
@@ -24,7 +25,7 @@ export default function SearchForm() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by Ticker (e.g. AAPL, NVDA)..."
+                placeholder="Search Politicians or Tickers (e.g. Pelosi, NVDA)..."
                 className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-2xl py-5 pl-16 pr-16 text-xl text-white placeholder-gray-500 focus:outline-none focus:border-[var(--color-primary)] focus:ring-4 focus:ring-blue-500/20 transition-all shadow-[0_0_30px_rgba(59,130,246,0.1)] focus:shadow-[0_0_40px_rgba(59,130,246,0.2)]"
             />
             <button

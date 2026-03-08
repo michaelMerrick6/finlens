@@ -1,14 +1,18 @@
-name: Daily Data Scraper
+name: Trade Data Monitor
 
 on:
   schedule:
-    # Runs at 21:00 UTC (4:00 PM EST / 5:00 PM EDT) automatically on Mon-Fri
-    - cron: '0 21 * * 1-5'
-  workflow_dispatch: # Allows manual trigger from the GitHub UI
+    # Run every 2 hours during market/filing hours (Mon-Fri)
+    # 14:00-02:00 UTC = 9AM-9PM EST covers all filing windows
+    - cron: '0 14,16,18,20,22,0,2 * * 1-5'
+    # Weekend catch-up run (some filings post over weekends)
+    - cron: '0 18 * * 0,6'
+  workflow_dispatch: # Manual trigger from GitHub UI
 
 jobs:
   scrape-and-ingest:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - name: Checkout repository
@@ -25,24 +29,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r scripts/requirements.txt
 
-    - name: Run Scraper Scripts
+    - name: Run Full Scraper Pipeline
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        FINLENS_DAILY_MODE: '1'
       run: |
-        echo "Running Politician Trades Scraper..."
-        python scripts/scrape_politicians.py
-        
-        echo "Running Form 4 Scraper..."
-        python scripts/scrape_form4.py
-        
-        echo "Running 13F-HR Scraper..."
-        python scripts/scrape_13f.py
+        echo "Running Trade Data Monitor Pipeline..."
+        python scripts/daily_scraper.py
 
     - name: Notify on Failure
       if: failure()
       env:
         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       run: |
-        curl -H "Content-Type: application/json" -d '{"content": "🚨 **FinLens Alert**: The daily data scraper GitHub Action has failed! Please check the repository logs."}' $DISCORD_WEBHOOK_URL
+        curl -H "Content-Type: application/json" -d '{"content": "🚨 **FinLens Alert**: The trade data monitor has failed! Please check the GitHub Actions logs."}' $DISCORD_WEBHOOK_URL
