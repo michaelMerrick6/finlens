@@ -47,12 +47,6 @@ def main():
         os.path.join(base_dir, "ingest_senate_official.py"), critical=False
     )
     
-    # 3) Capitol Trades (SUPPLEMENTAL only — catches handwritten filers that PDFs can't parse)
-    #    Official sources above are primary. This is a fallback for image-only PDFs.
-    results["Capitol Trades (supplemental)"] = run_script(
-        os.path.join(base_dir, "daily_capitol_trades.py"), critical=False
-    )
-    
     # 4) SEC Edgar (Form 4 insider trades - Daily Lightweight)
     results["SEC Edgar"] = run_script(
         os.path.join(base_dir, "ingest_sec_daily.py"), critical=False
