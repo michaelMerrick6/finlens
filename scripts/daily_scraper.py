@@ -53,9 +53,9 @@ def main():
         os.path.join(base_dir, "daily_capitol_trades.py"), critical=False
     )
     
-    # 4) SEC Edgar (Form 4 insider trades)
+    # 4) SEC Edgar (Form 4 insider trades - Daily Lightweight)
     results["SEC Edgar"] = run_script(
-        os.path.join(base_dir, "ingest_sec_edgar.py"), critical=False
+        os.path.join(base_dir, "ingest_sec_daily.py"), critical=False
     )
     
     elapsed = (datetime.now() - start).total_seconds()
