@@ -59,21 +59,36 @@ def extract_transactions_from_lines(lines: list[str], doc_id: str, first_name: s
     transactions = []
     full_text = " ".join(lines).replace('\x00', '')
     
-    # Resolve Bioguide ID
+    # Resolve Bioguide ID - More robust logic
     member_id = None
+    
+    # Try exact match first
     for m in members_db:
-         if m["last_name"].lower() in last_name.lower() and m["first_name"].lower() in first_name.lower():
+         m_first = m["first_name"].lower()
+         m_last = m["last_name"].lower()
+         # Check for name overlaps (e.g. April McClain vs April McClain Delaney)
+         if (m_last in last_name.lower() or last_name.lower() in m_last) and \
+            (m_first in first_name.lower() or first_name.lower() in m_first):
               member_id = m["id"]
               break
-    
+              
     if not member_id:
+         # Fuzzy placeholder
          member_id = f"unknown-{first_name.lower().replace(' ','')}-{last_name.lower().replace(' ','')}"[:50]
-         try:
-             supabase.table("congress_members").upsert({
-                 "id": member_id, "first_name": first_name, "last_name": last_name, "chamber": "House"
-             }).execute()
-             members_db.append({"id": member_id, "first_name": first_name, "last_name": last_name})
-         except: pass
+         # Lazy insert fallback - but only if NOT already in DB as an unknown
+         found_existing_unknown = False
+         for m in members_db:
+              if m["id"] == member_id:
+                   found_existing_unknown = True
+                   break
+         
+         if not found_existing_unknown:
+             try:
+                 supabase.table("congress_members").upsert({
+                     "id": member_id, "first_name": first_name, "last_name": last_name, "chamber": "House"
+                 }).execute()
+                 members_db.append({"id": member_id, "first_name": first_name, "last_name": last_name})
+             except: pass
 
     tx_pattern = re.compile(
         r"(?P<asset_name>.+?)\s*"
@@ -96,9 +111,17 @@ def extract_transactions_from_lines(lines: list[str], doc_id: str, first_name: s
         amount_text = match.group(6).strip()
 
         ticker_match = re.search(r'\(([A-Z]{1,6})\)', asset_name)
-        if not ticker_match:
-            continue
-        ticker = ticker_match.group(1)[:10]
+        if ticker_match:
+            ticker = ticker_match.group(1)[:10]
+        else:
+            ticker = "N/A"
+            # Best effort mapping for Treasuries
+            if "UNITED STATES TREAS" in asset_name.upper():
+                ticker = "US-TREAS"
+            elif "ALPHABET" in asset_name.upper():
+                ticker = "GOOGL"
+            elif "CHUBB" in asset_name.upper():
+                ticker = "CB"
 
         tx_type = {"P": "buy", "S": "sell", "E": "exchange"}.get(tx_code, "unknown")
         
@@ -114,10 +137,19 @@ def extract_transactions_from_lines(lines: list[str], doc_id: str, first_name: s
         
         # Clean asset_name for company name
         company_name = re.sub(r'\([^)]*\)', '', asset_name).strip()
+        # Remove common PDF noise/metadata
+        for noise in ["F S: New", "F S: Amended", "S O:", "D:", "ID Owner", "Owner"]:
+            if noise in company_name:
+                company_name = company_name.split(noise)[-1].strip()
+                
         if "$200?" in company_name:
             company_name = company_name.split("$200?")[-1].strip()
         elif "Amount Cap." in company_name:
             company_name = company_name.split("Amount Cap.")[-1].strip()
+            
+        # If the name is still messy with multi-line junk, take the last part
+        if "\n" in company_name:
+            company_name = company_name.split("\n")[-1].strip()
             
         try:
             supabase.table("companies").upsert({
@@ -133,7 +165,7 @@ def extract_transactions_from_lines(lines: list[str], doc_id: str, first_name: s
             "party": "Unknown",
             "ticker": ticker,
             "transaction_date": tx_date,
-            "published_date": published_date,
+            "published_date": str(tx_year), # Placeholder, will be replaced by index date
             "transaction_type": tx_type,
             "asset_type": asset_type[:50] if asset_type else "Stock",
             "amount_range": amount_text[:255],
@@ -160,16 +192,16 @@ def fetch_house_trades():
     
     daily_mode = os.environ.get("FINLENS_DAILY_MODE", "0") == "1"
     start_year = datetime.now().year
-    end_year = start_year - 1 if daily_mode else 2013 # Only do this year and last year if on daily mode
+    end_year = (start_year - 1) if daily_mode else 2012
     
-    for current_year in range(start_year, end_year, -1):
-        print(f"\n1. Fetching Bulk Index for {current_year}...")
+    for y in range(start_year, start_year - 1, -1):
+        print(f"\n1. Fetching Bulk Index for {y}...")
         
-        url = HOUSE_INDEX_URL.format(year=current_year)
+        url = HOUSE_INDEX_URL.format(year=y)
         response = session.get(url, timeout=30)
         
         if response.status_code != 200:
-             print(f"Skipping {current_year}, index not available.")
+             print(f"Skipping {y}, index not available.")
              continue
              
         payload = response.content.decode("utf-8-sig", errors="replace")
@@ -186,20 +218,38 @@ def fetch_house_trades():
                 "doc_id": doc_id,
                 "first_name": (row.get("First") or "").strip(),
                 "last_name": (row.get("Last") or "").strip(),
-                "year": current_year
+                "filing_date": (row.get("FilingDate") or "").strip(),
+                "year": y
             })
 
-        print(f"Found {len(bulk_filings)} House PTR filings in the {current_year} index. Processing ALL records for maximum historical depth.")
+        print(f"Found {len(bulk_filings)} House PTR filings in the {y} index. Processing ALL records for maximum historical depth.")
         
-        # Process every single document in the index
-        for filing in bulk_filings:
+        # Process records from the index
+        print(f"Index check: {len(bulk_filings)} records.")
+        
+        consecutive_existing = 0
+        for filing in reversed(bulk_filings): # Start from most recent (highest DocID)
             doc_id = filing["doc_id"]
             fname = filing["first_name"]
             lname = filing["last_name"]
             year = filing["year"]
+            idx_filing_date_raw = filing["filing_date"]
+
+            check = supabase.table("politician_trades").select("id").eq("doc_id", f"house-{year}-{doc_id}-0").execute()
+            if check.data:
+                continue
             
+            consecutive_existing = 0
+            
+            # Normalize index filing date 3/14/2026 -> 2026-03-14
+            try:
+                dt = datetime.strptime(idx_filing_date_raw, "%m/%d/%Y")
+                idx_filing_date = dt.strftime("%Y-%m-%d")
+            except:
+                idx_filing_date = datetime.now().strftime("%Y-%m-%d")
+
             pdf_url = HOUSE_PTR_PDF_URL.format(year=year, doc_id=doc_id)
-            print(f"Downloading PDF {doc_id} for {fname} {lname}...")
+            print(f"Fetching NEW PDF {doc_id} for {fname} {lname}...")
             
             try:
                  pdf_resp = session.get(pdf_url, timeout=15)
@@ -208,8 +258,10 @@ def fetch_house_trades():
                  lines = extract_pdf_lines(pdf_resp.content)
                  txs = extract_transactions_from_lines(lines, doc_id, fname, lname, year, members_db)
                  if txs:
+                     for t in txs:
+                         t["published_date"] = idx_filing_date # Use the official Filing Date
                      all_transactions.extend(txs)
-                     print(f" -> Extracted {len(txs)} electronic trades from PDF")
+                     print(f" -> Extracted {len(txs)} trades")
             except Exception as e:
                  print(f" -> PDF Exception: {e}")
                  
@@ -220,9 +272,17 @@ def fetch_house_trades():
         for i in range(0, len(all_transactions), 50):
             chunk = all_transactions[i:i + 50]
             try:
-                supabase.table("politician_trades").insert(chunk).execute()
+                # Manual Upsert: filter out already existing doc_ids
+                doc_ids = [t["doc_id"] for t in chunk]
+                existing = supabase.table("politician_trades").select("doc_id").in_("doc_id", doc_ids).execute()
+                existing_ids = {r["doc_id"] for r in existing.data}
+                
+                to_insert = [t for t in chunk if t["doc_id"] not in existing_ids]
+                if to_insert:
+                    supabase.table("politician_trades").insert(to_insert).execute()
+                    print(f" -> Inserted {len(to_insert)} new House trades.")
             except Exception as e:
-                print(f"Error inserting chunk: {e}")
+                print(f"Error manual-upserting chunk: {e}")
                 
         print("Successfully seeded HOUSE trades!")
 

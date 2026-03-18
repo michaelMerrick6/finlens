@@ -110,25 +110,46 @@ def fetch_senate_trades():
         
     def resolve_member_id(first, last):
          for m in members_db:
-              if m["last_name"].lower() in last.lower() and m["first_name"].lower() in first.lower():
+              m_first = m["first_name"].lower()
+              m_last = m["last_name"].lower()
+              if (m_last in last.lower() or last.lower() in m_last) and \
+                 (m_first in first.lower() or first.lower() in m_first):
                    return m["id"]
+         
          # Fallback generation to prevent Foreign Key constraint crash
          new_id = f"unknown-{first.lower().replace(' ','')}-{last.lower().replace(' ','')}"[:50]
-         # Lazy insert fallback
-         try:
-             supabase.table("congress_members").upsert({
-                 "id": new_id, "first_name": first, "last_name": last, "chamber": "Senate"
-             }).execute()
-             members_db.append({"id": new_id, "first_name": first, "last_name": last})
-         except: pass
+         # Lazy insert fallback - but only if NOT already in DB as an unknown
+         found_existing_unknown = False
+         for m in members_db:
+              if m["id"] == new_id:
+                   found_existing_unknown = True
+                   break
+         
+         if not found_existing_unknown:
+             try:
+                 supabase.table("congress_members").upsert({
+                     "id": new_id, "first_name": first, "last_name": last, "chamber": "Senate"
+                 }).execute()
+                 members_db.append({"id": new_id, "first_name": first, "last_name": last})
+             except: pass
          return new_id
     
     formatted_trades = []
     
-    # Process every single filing for the absolute maximum historical backlog
+    # Process filings
+    consecutive_existing = 0
     for row in all_rows:
         first_name = str(row[0]).strip()
         last_name = str(row[1]).strip()
+        
+        # Link is in row[3]
+        link_str = str(row[3])
+        href_match = DOCUMENT_HREF_RE.search(link_str)
+        if not href_match: continue
+        detail_path = href_match.group(1)
+        
+        # Skip paper for this scraper
+        if "/search/view/paper/" in detail_path: continue
         
         member_id = resolve_member_id(first_name, last_name)
         
@@ -138,16 +159,18 @@ def fetch_senate_trades():
         except:
             filed_date = "1970-01-01"
         
-        # Link is in row[3]
-        link_str = str(row[3])
-        href_match = DOCUMENT_HREF_RE.search(link_str)
-        if not href_match:
+        # Check if the FIRST trade of this filing already exists
+        # We use -0 as an anchor to see if we've processed this filing before
+        doc_id_filing_anchor = f"senate-{detail_path.split('/')[-2]}-0"
+        check = supabase.table("politician_trades").select("id").eq("doc_id", doc_id_filing_anchor).execute()
+        if check.data:
+            consecutive_existing += 1
+            if daily_mode and consecutive_existing > 10:
+                print(" -> Hit 10 consecutive existing Senate filings. Stopping.")
+                break
             continue
-        detail_path = href_match.group(1)
-        
-        # We only want Electronic filings (ptr) for data integrity mapping
-        if "/search/view/paper/" in detail_path:
-            continue
+            
+        consecutive_existing = 0
             
         print(f"Scraping eFD for {first_name} {last_name} ({detail_path})...")
         url = f"{SENATE_BASE_URL}{detail_path}"
@@ -168,6 +191,7 @@ def fetch_senate_trades():
         if not tbody:
             continue
             
+        trade_idx = 0
         for tr in tbody.find_all("tr"):
             cells = tr.find_all("td")
             if len(cells) < 8:
@@ -179,8 +203,8 @@ def fetch_senate_trades():
             tx_type_raw = cells[6].get_text(strip=True)
             amount_raw = cells[7].get_text(strip=True)
             
-            ticker = ticker_raw.split('<')[0].strip() if ticker_raw and ticker_raw != "--" else ""
-            if not ticker: continue
+            ticker = ticker_raw.split('<')[0].strip() if ticker_raw and ticker_raw != "--" else "N/A"
+            # No continue here, we want the trade even if ticker is N/A
                 
             try:
                  supabase.table("companies").upsert({
@@ -199,7 +223,7 @@ def fetch_senate_trades():
             elif "PURCHASE" in tx_type_upper: tx_type = "buy"
             else: tx_type = "exchange"
                 
-            doc_id_slug = f"senate-{detail_path.split('/')[-2]}"
+            doc_id_slug = f"senate-{detail_path.split('/')[-2]}-{trade_idx}"
                 
             formatted_trade = {
                 "member_id": member_id,
@@ -216,6 +240,7 @@ def fetch_senate_trades():
                 "doc_id": doc_id_slug
             }
             formatted_trades.append(formatted_trade)
+            trade_idx += 1
             
         time.sleep(0.5) # strict rate limit against senate.gov
         
@@ -227,9 +252,17 @@ def fetch_senate_trades():
         for i in range(0, len(formatted_trades), 50):
             chunk = formatted_trades[i:i + 50]
             try:
-                supabase.table("politician_trades").insert(chunk).execute()
+                # Manual Upsert: filter out already existing doc_ids
+                doc_ids = [t["doc_id"] for t in chunk]
+                existing = supabase.table("politician_trades").select("doc_id").in_("doc_id", doc_ids).execute()
+                existing_ids = {r["doc_id"] for r in existing.data}
+                
+                to_insert = [t for t in chunk if t["doc_id"] not in existing_ids]
+                if to_insert:
+                    supabase.table("politician_trades").insert(to_insert).execute()
+                    print(f" -> Inserted {len(to_insert)} new Senate trades.")
             except Exception as e:
-                print(f"Error inserting chunk: {e}")
+                print(f"Error manual-upserting chunk: {e}")
                 
         print("Successfully seeded SENATE trades!")
 

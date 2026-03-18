@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env.local
+.env.*.local
+
+# project specific
+*.log
+scripts/backlog_state.db
+supabase_schema_update.sql

@@ -14,7 +14,7 @@ export default async function Home() {
   const { data: insiders } = await supabase
     .from('insider_trades')
     .select('*')
-    .order('published_date', { ascending: false })
+    .order('transaction_date', { ascending: false })
     .limit(2);
 
   const { data: funds } = await supabase

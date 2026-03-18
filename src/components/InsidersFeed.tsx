@@ -1,47 +1,49 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { Search, ArrowUpRight, TrendingUp, TrendingDown, ExternalLink, Loader2 } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, ExternalLink, Loader2 } from 'lucide-react';
 
-interface Trade {
+interface InsiderTrade {
     id: string;
-    member_id: string;
-    politician_name: string;
     ticker: string;
-    transaction_type: string;
-    amount_range: string;
-    published_date: string;
+    filer_name: string;
+    filer_relation: string;
     transaction_date: string;
+    published_date: string;
+    transaction_code: string;
+    amount: number;
+    price: number;
+    value: number;
     source_url: string;
-    chamber: string;
-    congress_members: {
-        first_name: string;
-        last_name: string;
-        party: string;
-        chamber: string;
-        state: string;
-    } | null;
 }
 
-export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trade[] }) {
-    const [trades, setTrades] = useState<Trade[]>(initialTrades);
+function formatNumber(n: number): string {
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
+    return `$${n.toLocaleString()}`;
+}
+
+function formatShares(n: number): string {
+    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+    return n.toLocaleString();
+}
+
+export default function InsidersFeed({ initialTrades }: { initialTrades: InsiderTrade[] }) {
+    const [trades, setTrades] = useState<InsiderTrade[]>(initialTrades);
     const [searchQuery, setSearchQuery] = useState('');
-    const [chamberFilter, setChamberFilter] = useState('All');
     const [directionFilter, setDirectionFilter] = useState('All');
     const [isSearching, setIsSearching] = useState(false);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Fetch from API route when filters change
     useEffect(() => {
-        const hasFilters = searchQuery.trim() || chamberFilter !== 'All' || directionFilter !== 'All';
+        const hasFilters = searchQuery.trim() || directionFilter !== 'All';
 
         if (!hasFilters) {
             setTrades(initialTrades);
             return;
         }
 
-        // Debounce search input
         if (debounceRef.current) clearTimeout(debounceRef.current);
 
         debounceRef.current = setTimeout(async () => {
@@ -49,10 +51,9 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
             try {
                 const params = new URLSearchParams();
                 if (searchQuery.trim()) params.set('q', searchQuery.trim());
-                if (chamberFilter !== 'All') params.set('chamber', chamberFilter);
                 if (directionFilter !== 'All') params.set('direction', directionFilter);
 
-                const res = await fetch(`/api/search-trades?${params.toString()}`);
+                const res = await fetch(`/api/search-insider-trades?${params.toString()}`);
                 const json = await res.json();
                 setTrades(json.trades || []);
             } catch (err) {
@@ -64,9 +65,8 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
         };
-    }, [searchQuery, chamberFilter, directionFilter, initialTrades]);
+    }, [searchQuery, directionFilter, initialTrades]);
 
-    const chamberOptions = ['All', 'House', 'Senate'];
     const directionOptions = [
         { value: 'All', label: 'All' },
         { value: 'buy', label: 'Buy' },
@@ -75,7 +75,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
 
     return (
         <>
-            {/* Search + Filters Bar */}
+            {/* Search + Filters */}
             <div
                 style={{
                     background: 'rgba(255,255,255,0.03)',
@@ -86,7 +86,6 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                     padding: '20px',
                 }}
             >
-                {/* Search Input */}
                 <div style={{ position: 'relative', marginBottom: '14px' }}>
                     <Search
                         size={18}
@@ -108,13 +107,13 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                                 right: '14px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                color: '#60a5fa',
+                                color: '#f59e0b',
                             }}
                         />
                     )}
                     <input
                         type="text"
-                        placeholder="Search politician name or ticker (e.g. Pelosi, AAPL)..."
+                        placeholder="Search insider name or ticker (e.g. Tim Cook, AAPL)..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
@@ -132,36 +131,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                     />
                 </div>
 
-                {/* Filter Row */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-                        Chamber
-                    </span>
-                    <div style={{ display: 'inline-flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '3px', border: '1px solid rgba(255,255,255,0.07)' }}>
-                        {chamberOptions.map((opt) => (
-                            <button
-                                key={opt}
-                                onClick={() => setChamberFilter(opt)}
-                                style={{
-                                    padding: '6px 16px',
-                                    borderRadius: '8px',
-                                    fontSize: '13px',
-                                    fontWeight: 500,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.15s ease',
-                                    border: chamberFilter === opt ? '1px solid rgba(59,130,246,0.5)' : '1px solid transparent',
-                                    background: chamberFilter === opt ? 'rgba(59,130,246,0.15)' : 'transparent',
-                                    color: chamberFilter === opt ? '#60a5fa' : '#9ca3af',
-                                    fontFamily: 'inherit',
-                                }}
-                            >
-                                {opt}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div style={{ width: '1px', height: '22px', background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
-
                     <span style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
                         Direction
                     </span>
@@ -171,7 +141,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                             const colors: Record<string, { fg: string; bg: string; border: string }> = {
                                 buy: { fg: '#34d399', bg: 'rgba(16,185,129,0.15)', border: 'rgba(16,185,129,0.5)' },
                                 sell: { fg: '#f87171', bg: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.5)' },
-                                All: { fg: '#60a5fa', bg: 'rgba(59,130,246,0.15)', border: 'rgba(59,130,246,0.5)' },
+                                All: { fg: '#f59e0b', bg: 'rgba(245,158,11,0.15)', border: 'rgba(245,158,11,0.5)' },
                             };
                             const c = colors[opt.value] || colors.All;
                             return (
@@ -203,17 +173,14 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
             <div style={{ fontSize: '14px', color: '#6b7280', padding: '0 4px' }}>
                 {isSearching ? (
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                        <Loader2 size={14} className="animate-spin" style={{ color: '#60a5fa' }} />
+                        <Loader2 size={14} className="animate-spin" style={{ color: '#f59e0b' }} />
                         Searching...
                     </span>
                 ) : (
                     <>
                         Showing <span style={{ color: '#d1d5db', fontWeight: 600 }}>{trades.length}</span> trades
                         {searchQuery.trim() && (
-                            <span> matching &ldquo;<span style={{ color: '#60a5fa' }}>{searchQuery.trim()}</span>&rdquo;</span>
-                        )}
-                        {chamberFilter !== 'All' && (
-                            <span> in <span style={{ color: '#60a5fa' }}>{chamberFilter}</span></span>
+                            <span> matching &ldquo;<span style={{ color: '#f59e0b' }}>{searchQuery.trim()}</span>&rdquo;</span>
                         )}
                         {directionFilter !== 'All' && (
                             <span> — <span style={{ color: directionFilter === 'buy' ? '#34d399' : '#f87171' }}>
@@ -230,19 +197,19 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                     <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                                <th style={{ padding: '14px 16px 14px 20px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Politician</th>
+                                <th style={{ padding: '14px 16px 14px 20px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Insider</th>
                                 <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Ticker</th>
                                 <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Type</th>
-                                <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Amount Range</th>
-                                <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Filed Date</th>
+                                <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Shares</th>
+                                <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Price</th>
+                                <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Value</th>
                                 <th style={{ padding: '14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af' }}>Tx Date</th>
-                                <th style={{ padding: '14px 16px 14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af', textAlign: 'right' }}>Source DOC</th>
+                                <th style={{ padding: '14px 16px 14px 16px', fontSize: '13px', fontWeight: 600, color: '#9ca3af', textAlign: 'right' }}>Filing</th>
                             </tr>
                         </thead>
                         <tbody>
                             {trades.map((trade, i) => {
-                                const member = trade.congress_members;
-                                const isBuy = trade.transaction_type === 'buy';
+                                const isBuy = trade.transaction_code === 'buy';
 
                                 return (
                                     <tr
@@ -251,41 +218,27 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                                         className="hover:bg-white/5 transition-colors group"
                                     >
                                         <td style={{ padding: '14px 16px 14px 20px' }}>
-                                            <Link href={`/politician/${trade.member_id}`} className="block">
-                                                <div style={{ fontWeight: 600, color: '#fff', fontSize: '14px' }} className="group-hover:text-blue-400 transition-colors">
-                                                    {member ? `${member.first_name} ${member.last_name}` : trade.politician_name}
-                                                </div>
-                                                {member && (
-                                                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                        <span style={{ color: member.party === 'Democrat' ? '#3b82f6' : member.party === 'Republican' ? '#ef4444' : '#9ca3af' }}>
-                                                            {member.party?.charAt(0)}
-                                                        </span>
-                                                        <span>•</span>
-                                                        <span>{member.chamber}</span>
-                                                        <span>•</span>
-                                                        <span>{member.state}</span>
-                                                    </div>
-                                                )}
-                                            </Link>
+                                            <div style={{ fontWeight: 600, color: '#fff', fontSize: '14px' }}>
+                                                {trade.filer_name}
+                                            </div>
+                                            <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '3px' }}>
+                                                {trade.filer_relation || 'Insider'}
+                                            </div>
                                         </td>
                                         <td style={{ padding: '14px 16px' }}>
-                                            <Link href={`/ticker/${trade.ticker}`}>
-                                                <span style={{
-                                                    display: 'inline-flex',
-                                                    alignItems: 'center',
-                                                    gap: '5px',
-                                                    padding: '4px 10px',
-                                                    background: 'rgba(255,255,255,0.08)',
-                                                    borderRadius: '8px',
-                                                    fontWeight: 700,
-                                                    color: '#fff',
-                                                    fontSize: '13px',
-                                                    cursor: 'pointer',
-                                                }}>
-                                                    {trade.ticker}
-                                                    <ArrowUpRight size={13} style={{ color: '#9ca3af' }} />
-                                                </span>
-                                            </Link>
+                                            <span style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '5px',
+                                                padding: '4px 10px',
+                                                background: 'rgba(255,255,255,0.08)',
+                                                borderRadius: '8px',
+                                                fontWeight: 700,
+                                                color: '#fff',
+                                                fontSize: '13px',
+                                            }}>
+                                                {trade.ticker}
+                                            </span>
                                         </td>
                                         <td style={{ padding: '14px 16px' }}>
                                             <span style={{
@@ -303,13 +256,16 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                                                 {isBuy ? 'Buy' : 'Sell'}
                                             </span>
                                         </td>
-                                        <td style={{ padding: '14px 16px', fontSize: '14px', color: '#d1d5db', whiteSpace: 'nowrap' }}>
-                                            {trade.amount_range || 'Unknown'}
-                                        </td>
-                                        <td style={{ padding: '14px 16px', fontSize: '14px', color: '#fff', fontWeight: 500, whiteSpace: 'nowrap' }}>
-                                            {trade.published_date ? new Date(trade.published_date + 'T12:00:00').toLocaleDateString() : 'N/A'}
+                                        <td style={{ padding: '14px 16px', fontSize: '14px', color: '#d1d5db', whiteSpace: 'nowrap', fontWeight: 500 }}>
+                                            {formatShares(trade.amount)}
                                         </td>
                                         <td style={{ padding: '14px 16px', fontSize: '14px', color: '#9ca3af', whiteSpace: 'nowrap' }}>
+                                            {trade.price > 0 ? `$${trade.price.toFixed(2)}` : '—'}
+                                        </td>
+                                        <td style={{ padding: '14px 16px', fontSize: '14px', whiteSpace: 'nowrap', fontWeight: 600, color: isBuy ? '#34d399' : '#f87171' }}>
+                                            {trade.value > 0 ? formatNumber(trade.value) : '—'}
+                                        </td>
+                                        <td style={{ padding: '14px 16px', fontSize: '14px', color: '#fff', fontWeight: 500, whiteSpace: 'nowrap' }}>
                                             {trade.transaction_date ? new Date(trade.transaction_date + 'T12:00:00').toLocaleDateString() : 'N/A'}
                                         </td>
                                         <td style={{ padding: '14px 16px', textAlign: 'right' }}>
@@ -318,9 +274,9 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
                                                     href={trade.source_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '13px', color: '#60a5fa', textDecoration: 'none' }}
+                                                    style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '13px', color: '#f59e0b', textDecoration: 'none' }}
                                                 >
-                                                    {trade.source_url.includes('efdsearch.senate.gov') ? 'View Filing' : 'View PDF'}
+                                                    SEC Filing
                                                     <ExternalLink size={13} />
                                                 </a>
                                             ) : (
@@ -335,7 +291,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
 
                     {trades.length === 0 && !isSearching && (
                         <div style={{ textAlign: 'center', padding: '48px 16px', color: '#6b7280', fontSize: '15px' }}>
-                            No trades match your search. Try a different name or ticker.
+                            No insider trades match your search. Try a different name or ticker.
                         </div>
                     )}
                 </div>
