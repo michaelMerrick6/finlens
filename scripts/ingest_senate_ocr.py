@@ -9,8 +9,10 @@ from pdf2image import convert_from_bytes
 import pytesseract
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from legacy_congress_guard import require_legacy_write_opt_in
 
 load_dotenv(dotenv_path=".env.local")
+require_legacy_write_opt_in("ingest_senate_ocr.py")
 
 from datetime import datetime
 CURRENT_YEAR = datetime.now().year

@@ -4,8 +4,10 @@ import re
 import requests
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from legacy_congress_guard import require_legacy_write_opt_in
 
 load_dotenv(dotenv_path=".env.local")
+require_legacy_write_opt_in("ingest_real_politicians.py")
 
 url: str = os.environ.get("SUPABASE_URL", "")
 key: str = os.environ.get("SUPABASE_SERVICE_KEY", "")

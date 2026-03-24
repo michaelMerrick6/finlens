@@ -2,11 +2,10 @@ name: Trade Data Monitor
 
 on:
   schedule:
-    # Run every 2 hours during market/filing hours (Mon-Fri)
-    # 14:00-02:00 UTC = 9AM-9PM EST covers all filing windows
-    - cron: '0 14,16,18,20,22,0,2 * * 1-5'
-    # Weekend catch-up run (some filings post over weekends)
-    - cron: '0 18 * * 0,6'
+    # Run hourly on weekdays so congressional filings are picked up faster.
+    - cron: '15 * * * 1-5'
+    # Weekend catch-up run every 4 hours.
+    - cron: '45 */4 * * 0,6'
   workflow_dispatch: # Manual trigger from GitHub UI
 
 jobs:
@@ -23,6 +22,11 @@ jobs:
       with:
         python-version: '3.11'
         cache: 'pip'
+
+    - name: Install OCR system packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tesseract-ocr poppler-utils
 
     - name: Install Python dependencies
       run: |

@@ -1,0 +1,198 @@
+{
+  "thresholds": {
+    "politician_unusual_min_lower_bound": 100000,
+    "politician_theme_unusual_min_lower_bound": 50000,
+    "politician_committee_relevance_min_lower_bound": 15001,
+    "insider_buy_unusual_min_value": 250000,
+    "insider_theme_buy_unusual_min_value": 100000,
+    "insider_sell_unusual_min_value": 1000000
+  },
+  "notable_politician_keys": [
+    "Nancy Pelosi",
+    "P000197"
+  ],
+  "tweet_candidates": {
+    "minimum_importance": 0.88,
+    "minimum_group_count": 2,
+    "always_actor_keys": [
+      "Nancy Pelosi",
+      "P000197"
+    ],
+    "large_politician_buy_min_lower_bound": 100000,
+    "committee_relevance_buy_min_lower_bound": 15001,
+    "substantial_insider_sell_min_reduction_pct": 0.2,
+    "substantial_insider_sell_min_value": 1000000,
+    "theme_allowlist": [
+      "quantum",
+      "energy",
+      "nuclear",
+      "biotech",
+      "ai",
+      "defense",
+      "crypto"
+    ],
+    "enable_crypto_politician_sells": true
+  },
+  "priority_signal_tickers": [
+    "IONQ",
+    "SKYT",
+    "QBTS",
+    "RGTI",
+    "VLD",
+    "NVDA"
+  ],
+  "theme_tickers": {
+    "quantum": [
+      "IONQ",
+      "QBTS",
+      "RGTI",
+      "QUBT",
+      "QMCO"
+    ],
+    "energy": [
+      "XOM",
+      "CVX",
+      "COP",
+      "OXY",
+      "FANG",
+      "SLB",
+      "HAL",
+      "MPC",
+      "VLO",
+      "ET",
+      "WMB",
+      "KMI",
+      "CEG",
+      "VST",
+      "SMR",
+      "OKLO",
+      "NNE",
+      "CCJ"
+    ],
+    "nuclear": [
+      "OKLO",
+      "SMR",
+      "NNE",
+      "CCJ",
+      "BWXT",
+      "UEC",
+      "LEU",
+      "CEG",
+      "VST",
+      "URA",
+      "URNM",
+      "NUKZ"
+    ],
+    "biotech": [
+      "SANA",
+      "RXRX",
+      "DNA",
+      "CRSP",
+      "BEAM",
+      "EDIT",
+      "NTLA",
+      "TGTX",
+      "MRNA",
+      "XBI"
+    ],
+    "ai": [
+      "NVDA",
+      "AMD",
+      "ARM",
+      "SMCI",
+      "PLTR",
+      "BBAI",
+      "SOUN",
+      "AI",
+      "TSM",
+      "AVGO"
+    ],
+    "defense": [
+      "LMT",
+      "RTX",
+      "NOC",
+      "GD",
+      "LHX",
+      "LDOS",
+      "HII",
+      "KTOS",
+      "AVAV",
+      "MRCY"
+    ],
+    "crypto": [
+      "MSTR",
+      "COIN",
+      "MARA",
+      "RIOT",
+      "CLSK",
+      "IREN",
+      "HUT",
+      "BTBT",
+      "CIFR",
+      "HIVE"
+    ]
+  },
+  "theme_keywords": {
+    "quantum": [
+      "quantum",
+      "quantum computing",
+      "d wave",
+      "dwave",
+      "rigetti",
+      "ionq"
+    ],
+    "energy": [
+      "energy",
+      "oil",
+      "gas",
+      "petroleum",
+      "solar",
+      "renewable",
+      "power",
+      "pipeline",
+      "utilities"
+    ],
+    "nuclear": [
+      "nuclear",
+      "uranium",
+      "reactor",
+      "reactors",
+      "fission",
+      "fusion",
+      "nuscale",
+      "oklo"
+    ],
+    "biotech": [
+      "biotech",
+      "biosciences",
+      "therapeutics",
+      "pharmaceutical",
+      "pharma",
+      "genomics",
+      "oncology"
+    ],
+    "ai": [
+      "artificial intelligence",
+      "machine learning",
+      "ai infrastructure",
+      "gpu",
+      "semiconductor"
+    ],
+    "defense": [
+      "defense",
+      "defence",
+      "aerospace",
+      "missile",
+      "drone",
+      "munitions",
+      "naval"
+    ],
+    "crypto": [
+      "bitcoin",
+      "crypto",
+      "blockchain",
+      "digital asset",
+      "mining"
+    ]
+  }
+}

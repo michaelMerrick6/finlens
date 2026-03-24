@@ -11,6 +11,8 @@ export async function GET(request: NextRequest) {
         .from('politician_trades')
         .select(`*, congress_members ( first_name, last_name, party, chamber, state )`)
         .order('published_date', { ascending: false })
+        .order('created_at', { ascending: false })
+        .order('transaction_date', { ascending: false })
         .limit(500);
 
     // Apply search — search politician_name and ticker (case-insensitive)

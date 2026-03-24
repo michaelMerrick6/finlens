@@ -16,6 +16,8 @@ export default async function PoliticiansPage() {
       )
     `)
         .order('published_date', { ascending: false })
+        .order('created_at', { ascending: false })
+        .order('transaction_date', { ascending: false })
         .limit(500);
 
     return (

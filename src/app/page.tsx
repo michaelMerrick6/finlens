@@ -9,6 +9,8 @@ export default async function Home() {
     .from('politician_trades')
     .select('*')
     .order('published_date', { ascending: false })
+    .order('created_at', { ascending: false })
+    .order('transaction_date', { ascending: false })
     .limit(2);
 
   const { data: insiders } = await supabase

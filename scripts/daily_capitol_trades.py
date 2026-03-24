@@ -11,8 +11,10 @@ import requests
 from bs4 import BeautifulSoup
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from legacy_congress_guard import require_legacy_write_opt_in
 
 load_dotenv(dotenv_path=".env.local")
+require_legacy_write_opt_in("daily_capitol_trades.py")
 
 url_env: str = os.environ.get("SUPABASE_URL", "")
 key_env: str = os.environ.get("SUPABASE_SERVICE_KEY", "")

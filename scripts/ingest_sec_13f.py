@@ -2,6 +2,7 @@ import os
 import time
 import requests
 import re
+import json
 from xml.etree import ElementTree as ET
 from supabase import create_client, Client
 from dotenv import load_dotenv
@@ -155,6 +156,7 @@ def process_fund_13f(fund, filing_info):
 def main():
     print("Starting Official SEC EDGAR 13F-HR Scraper...")
     all_holdings = []
+    inserted_count = 0
     
     for fund in FUNDS:
         filing_info = fetch_latest_13f(fund)
@@ -167,22 +169,33 @@ def main():
     print(f"\nFinished parsing {len(all_holdings)} total institutional holdings.")
     
     if all_holdings:
-        print("Clearing old mock 13F data...")
-        try:
-            supabase.table("institutional_holdings").delete().neq("id", "00000000-0000-0000-0000-000000000000").execute()
-        except:
-            pass
-            
         print(f"Uploading {len(all_holdings)} real Hedge Fund holdings to Supabase...")
         
         for i in range(0, len(all_holdings), 500):
             chunk = all_holdings[i:i + 500]
             try:
-                supabase.table("institutional_holdings").insert(chunk).execute()
+                supabase.table("institutional_holdings").upsert(
+                    chunk,
+                    on_conflict="fund_name,ticker,report_period",
+                ).execute()
+                inserted_count += len(chunk)
             except Exception as e:
-                pass
+                print(f"Failed to upsert 13F chunk: {e}")
                 
         print("Successfully seeded INSTITUTIONAL HOLDINGS with REAL DATA!")
+
+    print(
+        "SUMMARY_JSON:"
+        + json.dumps(
+            {
+                "records_seen": len(all_holdings),
+                "records_inserted": inserted_count,
+                "records_skipped": max(len(all_holdings) - inserted_count, 0),
+                "funds_tracked": len(FUNDS),
+            },
+            sort_keys=True,
+        )
+    )
 
 if __name__ == "__main__":
     main()

@@ -1,19 +1,31 @@
 import os
 import requests
 from dotenv import load_dotenv
+from datetime import datetime, timezone
 
 load_dotenv()
 
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-def send_discord_alert(category, title, description, url, color=0x3b82f6):
-    """
-    Sends a rich embed message to a Discord Webhook.
-    Colors: Blue (0x3b82f6) for Info, Green (0x10b981) for Buys, Red (0xef4444) for Sells.
-    """
-    if not DISCORD_WEBHOOK_URL:
+def send_discord_payload(payload, webhook_url=None):
+    destination = webhook_url or DISCORD_WEBHOOK_URL
+    if not destination:
         print("Webhook URL not configured.")
-        return
+        return False
+
+    try:
+        response = requests.post(destination, json=payload, timeout=15)
+        response.raise_for_status()
+        return True
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending Discord payload: {e}")
+        return False
+
+
+def send_discord_alert(category, title, description, url, color=0x3b82f6, webhook_url=None):
+    if not (webhook_url or DISCORD_WEBHOOK_URL):
+        print("Webhook URL not configured.")
+        return False
 
     payload = {
         "username": "FinLens Engine",
@@ -24,17 +36,15 @@ def send_discord_alert(category, title, description, url, color=0x3b82f6):
                 "description": description,
                 "url": url,
                 "color": color,
-                "timestamp": __import__('datetime').datetime.now(tz=__import__('datetime').timezone.utc).isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
         ]
     }
 
-    try:
-        response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
-        response.raise_for_status()
+    if send_discord_payload(payload, webhook_url=webhook_url):
         print(f"Discord Alert Sent: {title}")
-    except requests.exceptions.RequestException as e:
-        print(f"Error sending Discord alert: {e}")
+        return True
+    return False
 
 # Example usage (can be imported by the other scrapers)
 if __name__ == "__main__":
