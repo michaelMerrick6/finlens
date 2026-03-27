@@ -7,7 +7,7 @@ from pipeline_support import emit_summary, get_supabase_client, utc_now
 
 
 LOOKBACK_DAYS = int(os.environ.get("SIGNAL_EVENT_LOOKBACK_DAYS", "30"))
-MAX_ROWS_PER_SOURCE = int(os.environ.get("SIGNAL_EVENT_MAX_ROWS", "1000"))
+MAX_ROWS_PER_SOURCE = int(os.environ.get("SIGNAL_EVENT_MAX_ROWS", "5000"))
 
 
 def stable_id(parts: list[str]) -> str:
@@ -225,6 +225,8 @@ def build_fund_events(rows: list[dict]) -> tuple[list[dict], list[dict]]:
     events: list[dict] = []
     raw_filings: list[dict] = []
     for holding in rows:
+        if not holding.get("ticker") or holding.get("qoq_change_percent") is None:
+            continue
         qoq_change_percent = float(holding.get("qoq_change_percent") or 0)
         if qoq_change_percent > 0:
             direction = "increase"
@@ -284,15 +286,26 @@ def build_fund_events(rows: list[dict]) -> tuple[list[dict], list[dict]]:
 
 def fetch_recent_rows(supabase, table: str) -> list[dict]:
     since_ts = (utc_now() - timedelta(days=LOOKBACK_DAYS)).isoformat()
-    response = (
-        supabase.table(table)
-        .select("*")
-        .gte("created_at", since_ts)
-        .order("created_at", desc=True)
-        .limit(MAX_ROWS_PER_SOURCE)
-        .execute()
-    )
-    return response.data or []
+    rows: list[dict] = []
+    offset = 0
+    while len(rows) < MAX_ROWS_PER_SOURCE:
+        upper = min(offset + 999, MAX_ROWS_PER_SOURCE - 1)
+        response = (
+            supabase.table(table)
+            .select("*")
+            .gte("created_at", since_ts)
+            .order("created_at", desc=True)
+            .range(offset, upper)
+            .execute()
+        )
+        batch = response.data or []
+        if not batch:
+            break
+        rows.extend(batch)
+        if len(batch) < (upper - offset + 1):
+            break
+        offset += len(batch)
+    return rows[:MAX_ROWS_PER_SOURCE]
 
 
 def dedupe_by_source_document_id(rows: list[dict]) -> list[dict]:
@@ -301,6 +314,39 @@ def dedupe_by_source_document_id(rows: list[dict]) -> list[dict]:
         key = (row["source"], row["source_document_id"])
         deduped[key] = row
     return list(deduped.values())
+
+
+def preserve_existing_congress_asset_names(supabase, raw_filings: list[dict]) -> None:
+    congress_rows = [row for row in raw_filings if row.get("source") == "congress"]
+    if not congress_rows:
+        return
+
+    existing_by_doc_id: dict[str, str] = {}
+    doc_ids = [str(row.get("source_document_id") or "").strip() for row in congress_rows if row.get("source_document_id")]
+
+    for index in range(0, len(doc_ids), 200):
+        chunk = doc_ids[index : index + 200]
+        response = (
+            supabase.table("raw_filings")
+            .select("source_document_id,payload")
+            .eq("source", "congress")
+            .in_("source_document_id", chunk)
+            .execute()
+        )
+        for existing in response.data or []:
+            payload = existing.get("payload") or {}
+            asset_name = str(payload.get("asset_name") or "").strip()
+            if asset_name:
+                existing_by_doc_id[str(existing.get("source_document_id") or "").strip()] = asset_name
+
+    for row in congress_rows:
+        payload = dict(row.get("payload") or {})
+        if str(payload.get("asset_name") or "").strip():
+            continue
+        existing_asset_name = existing_by_doc_id.get(str(row.get("source_document_id") or "").strip(), "")
+        if existing_asset_name:
+            payload["asset_name"] = existing_asset_name
+            row["payload"] = payload
 
 
 def main() -> None:
@@ -325,6 +371,8 @@ def main() -> None:
 
     raw_filings = dedupe_by_source_document_id(raw_filings)
     signal_events = dedupe_by_source_document_id(signal_events)
+
+    preserve_existing_congress_asset_names(supabase, raw_filings)
 
     if raw_filings:
         supabase.table("raw_filings").upsert(
