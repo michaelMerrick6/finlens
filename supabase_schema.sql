@@ -35,6 +35,7 @@ CREATE TABLE public.politician_trades (
     chamber VARCHAR(50) NOT NULL, -- 'House' or 'Senate'
     party VARCHAR(50),
     ticker VARCHAR(10) REFERENCES public.companies(ticker),
+    asset_name VARCHAR(255),
     transaction_date DATE NOT NULL,
     published_date DATE NOT NULL,
     transaction_type VARCHAR(50) NOT NULL, -- 'Purchase', 'Sale (Full)', 'Sale (Partial)'

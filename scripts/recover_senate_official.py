@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from legacy_congress_guard import require_legacy_write_opt_in
+from politician_schema_support import politician_trades_has_asset_name_column
 
 load_dotenv(dotenv_path=".env.local")
 require_legacy_write_opt_in("recover_senate_official.py")
@@ -14,6 +15,7 @@ require_legacy_write_opt_in("recover_senate_official.py")
 url_env: str = os.environ.get("SUPABASE_URL", "")
 key_env: str = os.environ.get("SUPABASE_SERVICE_KEY", "")
 supabase: Client = create_client(url_env, key_env)
+SUPPORTS_ASSET_NAME = politician_trades_has_asset_name_column(supabase)
 
 SENATE_BASE_URL = "https://efdsearch.senate.gov"
 SENATE_HOME_URL = f"{SENATE_BASE_URL}/search/home/"
@@ -107,6 +109,7 @@ def recover_senate_backfill():
                         "politician_name": f"{fname} {lname}",
                         "chamber": "Senate",
                         "ticker": ticker_raw,
+                        **({"asset_name": issuer[:255]} if SUPPORTS_ASSET_NAME and issuer else {}),
                         "transaction_date": datetime.strptime(tx_date_raw, "%m/%d/%Y").strftime("%Y-%m-%d"),
                         "published_date": pub_date,
                         "transaction_type": tx_type,

@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from PIL import Image
 from supabase import Client, create_client
+from politician_schema_support import politician_trades_has_asset_name_column
 from time_utils import congress_now
 
 load_dotenv(dotenv_path=".env.local")
@@ -33,6 +34,8 @@ DATE_RE = re.compile(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b")
 TICKER_RE = re.compile(r"\(([A-Z]{1,6})\)")
 PAPER_MARK_RE = re.compile(r"^[xX×]{1,3}$")
 COMMON_NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
+PRIVATE_ENTITY_MARKERS = (" LLC", " L.L.C", " L.P.", " LP", " PARTNERS", " FAMILY", " TRUST")
+PUBLIC_COMPANY_HINTS = (" STOCK", " SHARES", " COMMON", " ETF", " ETN", " ADR", " ADS", " INC", " CORP", " PLC")
 FIRST_NAME_ALIAS_GROUPS = (
     {"bill", "billy", "will", "william"},
     {"dan", "daniel", "danny"},
@@ -156,8 +159,8 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
         members_db.append(
             {"id": member_id, "first_name": first_name, "last_name": last_name, "chamber": target_chamber}
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        print(f"Warning: failed to upsert placeholder member {member_id}: {exc}")
     return member_id
 
 
@@ -205,29 +208,41 @@ def resolve_company_ticker(asset_text: str, valid_tickers: set[str]) -> str | No
     if ticker_match:
         return ticker_match.group(1)[:10]
 
-    for token in re.findall(r"\b[A-Z]{1,5}\b", asset_text.upper()):
-        if token in valid_tickers and token not in {"NYSE", "OTC", "LLC", "LP", "INC", "CORP", "LTD"}:
-            return token[:10]
-
     asset_upper = asset_text.upper()
     if "UNITED STATES TREAS" in asset_upper or "U.S. TREASURY" in asset_upper:
         return "US-TREAS"
 
-    if any(term in asset_upper for term in ("LLC", "L.P.", "PARTNERS", "FAMILY", "TRUST")):
+    is_private_entity = any(marker in f" {asset_upper}" for marker in PRIVATE_ENTITY_MARKERS)
+    has_public_company_hint = any(hint in f" {asset_upper}" for hint in PUBLIC_COMPANY_HINTS)
+
+    if not is_private_entity:
+        for token in re.findall(r"\b[A-Z]{1,5}\b", asset_upper):
+            if token in valid_tickers and token not in {"NYSE", "OTC", "LLC", "LP", "INC", "CORP", "LTD"}:
+                return token[:10]
+
+    if is_private_entity and not has_public_company_hint:
         return None
 
-    try:
-        result = (
-            supabase.table("companies")
-            .select("ticker")
-            .ilike("name", f"{asset_text[:80]}%")
-            .limit(1)
-            .execute()
-        )
-        if result.data:
-            return result.data[0]["ticker"]
-    except Exception:
-        pass
+    lookup_candidates = [clean_text(asset_text)]
+    stripped_candidate = clean_text(re.sub(r"\([^)]*\)", "", asset_text))
+    if stripped_candidate and stripped_candidate not in lookup_candidates:
+        lookup_candidates.append(stripped_candidate)
+
+    for candidate in lookup_candidates:
+        if not candidate:
+            continue
+        try:
+            result = (
+                supabase.table("companies")
+                .select("ticker")
+                .ilike("name", f"{candidate[:80]}%")
+                .limit(1)
+                .execute()
+            )
+            if result.data:
+                return result.data[0]["ticker"]
+        except Exception:
+            continue
     return None
 
 
@@ -241,8 +256,8 @@ def upsert_company(ticker: str, company_name: str):
                 "industry": "Unknown",
             }
         ).execute()
-    except Exception:
-        pass
+    except Exception as exc:
+        print(f"Warning: company upsert failed for {ticker}: {exc}")
 
 
 def infer_paper_transaction_type(type_marks: list[dict], line_text: str) -> str:
@@ -305,6 +320,7 @@ def build_trade_record(
     transaction_type: str,
     amount_range: str,
     source_url: str,
+    asset_name: str = "",
 ) -> dict:
     return {
         "member_id": member_id,
@@ -319,7 +335,24 @@ def build_trade_record(
         "amount_range": amount_range[:255],
         "source_url": source_url[:500],
         "doc_id": f"senate-{doc_key}-{trade_index}",
+        "asset_name": asset_name[:255] if asset_name else "",
+        "_asset_name": asset_name[:255] if asset_name else "",
     }
+
+
+def prepare_senate_trades_for_insert(trades: list[dict]) -> list[dict]:
+    supports_asset_name = politician_trades_has_asset_name_column(supabase)
+    prepared: list[dict] = []
+    for trade in trades:
+        prepared_trade = {key: value for key, value in trade.items() if not key.startswith("_")}
+        if not supports_asset_name:
+            prepared_trade.pop("asset_name", None)
+        elif not str(prepared_trade.get("asset_name") or "").strip():
+            fallback_asset_name = str(trade.get("_asset_name") or "").strip()
+            if fallback_asset_name:
+                prepared_trade["asset_name"] = fallback_asset_name[:255]
+        prepared.append(prepared_trade)
+    return prepared
 
 
 def parse_senate_html_table(
@@ -379,6 +412,7 @@ def parse_senate_html_table(
                 transaction_type=tx_type,
                 amount_range=amount_raw,
                 source_url=source_url,
+                asset_name=issuer_text or ticker_text or ticker,
             )
         )
     return trades
@@ -425,7 +459,7 @@ def load_paper_images(session: requests.Session, image_urls: list[str]) -> list[
     for image_url in image_urls:
         response = session.get(image_url, timeout=30)
         response.raise_for_status()
-        images.append(Image.open(io.BytesIO(response.content)).convert("L"))
+        images.append(Image.open(io.BytesIO(response.content)).convert("RGB"))
     return images
 
 
@@ -525,9 +559,7 @@ def parse_senate_paper_lines(
         if not tx_date:
             continue
 
-        ticker = resolve_company_ticker(asset_text, valid_tickers)
-        if not ticker:
-            continue
+        ticker = resolve_company_ticker(asset_text, valid_tickers) or "N/A"
 
         type_marks = [
             token
@@ -543,9 +575,19 @@ def parse_senate_paper_lines(
         line_text = " ".join(token["text"] for token in tokens)
         transaction_type = infer_paper_transaction_type(type_marks, line_text)
         amount_range = infer_paper_amount(amount_marks)
-        upsert_company(ticker, asset_text)
+        if ticker != "N/A":
+            upsert_company(ticker, asset_text)
 
-        unique_key = "|".join((ticker, tx_date, transaction_type, amount_range))
+        unique_key = "|".join(
+            (
+                str(tokens[0].get("page") or 0),
+                str(min(token.get("top") or 0 for token in tokens)),
+                re.sub(r"\s+", " ", asset_text).upper(),
+                tx_date,
+                transaction_type,
+                amount_range,
+            )
+        )
         if unique_key in seen:
             continue
         seen.add(unique_key)
@@ -564,6 +606,7 @@ def parse_senate_paper_lines(
                 transaction_type=transaction_type,
                 amount_range=amount_range,
                 source_url=source_url,
+                asset_name=asset_text,
             )
         )
 
@@ -616,19 +659,8 @@ def parse_senate_paper_report(
     )
 
 
-def fetch_senate_trades():
-    print("Starting Official Senate eFD Scraper...")
-    session = requests.Session()
-    session.headers.update(
-        {
-            "User-Agent": (
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            )
-        }
-    )
-
-    print("1. Bypassing Senate eFD Terms of Service Gateway...")
+def establish_senate_session(session: requests.Session) -> str:
+    """Perform the CSRF handshake and return the cookie CSRF token."""
     home = session.get(SENATE_HOME_URL, timeout=10)
     home.raise_for_status()
 
@@ -648,6 +680,23 @@ def fetch_senate_trades():
     cookie_csrf = session.cookies.get("csrftoken") or session.cookies.get("csrf")
     if not cookie_csrf:
         raise RuntimeError("Failed to obtain Senate csrf cookie")
+    return cookie_csrf
+
+
+def fetch_senate_trades():
+    print("Starting Official Senate eFD Scraper...")
+    session = requests.Session()
+    session.headers.update(
+        {
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            )
+        }
+    )
+
+    print("1. Bypassing Senate eFD Terms of Service Gateway...")
+    cookie_csrf = establish_senate_session(session)
 
     print("2. Fetching historical PTR reports via pagination...")
     daily_mode = os.environ.get("FINLENS_DAILY_MODE", "0") == "1"
@@ -747,10 +796,23 @@ def fetch_senate_trades():
             continue
 
         if "<title>eFD: Find Reports</title>" in detail_response.text:
-            parse_failures += 1
-            failed_doc_ids.append(doc_key)
-            print(f"Session redirect when fetching {detail_url}")
-            continue
+            # Session expired — refresh and retry once
+            print(f"Session redirect detected for {detail_url}. Refreshing session...")
+            try:
+                cookie_csrf = establish_senate_session(session)
+                detail_response = session.get(detail_url, headers={"Referer": SENATE_SEARCH_URL}, timeout=30)
+                detail_response.raise_for_status()
+            except Exception as refresh_exc:
+                parse_failures += 1
+                failed_doc_ids.append(doc_key)
+                print(f"Session refresh failed for {detail_url}: {refresh_exc}")
+                continue
+
+            if "<title>eFD: Find Reports</title>" in detail_response.text:
+                parse_failures += 1
+                failed_doc_ids.append(doc_key)
+                print(f"Session redirect persists after refresh for {detail_url}")
+                continue
 
         soup = BeautifulSoup(detail_response.text, "html.parser")
         paper_row_count = 0
@@ -797,9 +859,10 @@ def fetch_senate_trades():
     print(f"Parsed {len(formatted_trades)} detailed Senate trades.")
 
     if formatted_trades:
-        print(f"Uploading {len(formatted_trades)} real Senate trades to Supabase...")
-        for index in range(0, len(formatted_trades), 50):
-            chunk = formatted_trades[index : index + 50]
+        prepared_trades = prepare_senate_trades_for_insert(formatted_trades)
+        print(f"Uploading {len(prepared_trades)} real Senate trades to Supabase...")
+        for index in range(0, len(prepared_trades), 50):
+            chunk = prepared_trades[index : index + 50]
             try:
                 doc_ids = [trade["doc_id"] for trade in chunk]
                 existing = supabase.table("politician_trades").select("doc_id").in_("doc_id", doc_ids).execute()
@@ -826,8 +889,8 @@ def fetch_senate_trades():
                 "paper_unmapped_filings": paper_unmapped_filings,
                 "parse_failures": parse_failures,
                 "records_inserted": inserted_count,
-                "records_seen": len(formatted_trades),
-                "records_skipped": max(len(formatted_trades) - inserted_count, 0),
+                "records_seen": len(prepared_trades),
+                "records_skipped": max(len(prepared_trades) - inserted_count, 0),
             },
             sort_keys=True,
         )

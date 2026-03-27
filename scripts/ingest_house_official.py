@@ -4,6 +4,8 @@ import io
 import json
 import os
 import re
+import subprocess
+import tempfile
 import unicodedata
 from datetime import datetime
 
@@ -14,6 +16,7 @@ from pdf2image import convert_from_bytes
 from PIL import ImageOps
 from pypdf import PdfReader, PdfWriter
 from supabase import Client, create_client
+from politician_schema_support import politician_trades_has_asset_name_column
 from time_utils import congress_now
 
 load_dotenv(dotenv_path=".env.local")
@@ -36,8 +39,18 @@ HOUSE_AMOUNT_RE = re.compile(
     r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+)"
 )
 HOUSE_TICKER_RE = re.compile(r"\(([A-Z]{1,6})\)")
-HOUSE_INLINE_DATE_RE = re.compile(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b")
+HOUSE_LAYOUT_TICKER_RE = re.compile(r"\(([A-Za-z]{1,10})\)(?:\s+\[(?P<asset_type>[A-Z]{2})\])?")
+HOUSE_INLINE_DATE_RE = re.compile(r"\b\d{1,2}/\d{1,2}/\d{1,4}\b")
+HOUSE_FUZZY_DATE_RE = re.compile(r"(\d{1,2})\D+(\d{1,2})\D+(\d{1,4})")
+HOUSE_LAYOUT_ROW_RE = re.compile(
+    r"^(?P<asset_name>.+?)\s+"
+    r"(?P<tx_code>[PSEpse])\s+"
+    r"(?P<tx_date>\d{1,2}/\d{1,2}/\d{4})\s+"
+    r"(?P<notif_date>\d{1,2}/\d{1,2}/\d{4})\s+"
+    r"(?P<amount>Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+)"
+)
 HOUSE_OWNER_PREFIX_RE = re.compile(r"^(?:SP|DC|JT|C|D|S)\s+", re.IGNORECASE)
+HOUSE_LAYOUT_OWNER_PREFIX_RE = re.compile(r"^(?:[A-Za-z]{1,3}\s+)+(?=[A-Za-z])")
 FIRST_NAME_ALIAS_GROUPS = (
     {"bill", "billy", "will", "william"},
     {"dan", "daniel", "danny"},
@@ -65,6 +78,14 @@ HOUSE_STOP_PREFIXES = ("* FOR THE COMPLETE LIST", "I V D", "INVESTMENTS AND TRUS
 HOUSE_PREVIOUS_YEAR_DAILY_LIMIT = int(os.environ.get("HOUSE_PREVIOUS_YEAR_DAILY_LIMIT", "10"))
 HOUSE_OCR_TIMEOUT_SECONDS = int(os.environ.get("HOUSE_OCR_TIMEOUT_SECONDS", "20"))
 HOUSE_SCANNED_ROW_HEIGHT_RANGE = (18, 140)
+HOUSE_SCANNED_MIN_ROW_START_RATIO = 0.35
+HOUSE_SCANNED_MAX_ROW_END_RATIO = 0.92
+HOUSE_SCANNED_LINE_CONFIGS = (
+    (180, 0.4),
+    (210, 0.25),
+    (210, 0.2),
+    (200, 0.25),
+)
 HOUSE_SCANNED_ASSET_BOUNDS = (0.121, 0.308)
 HOUSE_SCANNED_TYPE_BOUNDS = (0.309, 0.423)
 HOUSE_SCANNED_TYPE_COLUMNS = (0.309, 0.338, 0.363, 0.395, 0.423)
@@ -82,6 +103,8 @@ HOUSE_SCANNED_SKIP_TEXT = (
     "EXAMPLE",
     "FULL ASSET NAME",
     "AMOUNT OF TRANSACTION",
+    "NOTE NUMBER",
+    "FILER NOTES",
 )
 HOUSE_ATTACHMENT_MARKERS = ("PLEASE SEE THE ATTACHED", "PLEASE SEE ATTACHED")
 HOUSE_NO_TRADE_MARKERS = ("NOTHING TO REPORT", "NO TRANSACTIONS TO REPORT")
@@ -103,36 +126,50 @@ HOUSE_COMPANY_ALIASES = {
     "ally financial": "ALLY",
     "american intl group": "AIG",
     "american international group": "AIG",
+    "american tower": "AMT",
+    "avnet": "AVT",
     "arista networks": "ANET",
     "at t": "T",
     "att": "T",
     "axalta": "AXTA",
+    "biogen": "BIIB",
     "bank of america": "BAC",
     "berkshire hathaway": "BRKB",
     "block inc": "XYZ",
     "broadcom": "AVGO",
     "canadian imperial bank": "CM",
     "capital one financial": "COF",
+    "costco wholesale": "COST",
     "carrier global": "CARR",
     "colgate palmolive": "CL",
     "coca cola europacific partners": "CCEP",
+    "estee laude": "EL",
+    "estee lauder": "EL",
     "eaton": "ETN",
     "eversource energy": "ES",
     "extra space storage": "EXR",
+    "first solar": "FSLR",
     "fortinet": "FTNT",
     "ge vernova": "GEV",
+    "gilead sciences": "GILD",
     "hims hers health": "HIMS",
     "hubspot": "HUBS",
     "imperial bank": "CM",
     "international business machines": "IBM",
     "ibm": "IBM",
+    "intel": "INTC",
     "kimberly clark": "KMB",
     "lam research": "LRCX",
     "lam resh": "LRCX",
+    "mead johnson": "MJN",
+    "michael kors": "KORS",
     "martin marietta": "MLM",
     "metlife": "MET",
     "micron technology": "MU",
+    "occidental petro": "OXY",
     "paycom software": "PAYC",
+    "qihu 360": "QIHU",
+    "quanta services": "PWR",
     "rockwell automation": "ROK",
     "salesforce": "CRM",
     "servicenow": "NOW",
@@ -256,6 +293,31 @@ def extract_pdf_lines(pdf_bytes: bytes) -> list[str]:
         return []
 
 
+def extract_pdftotext_layout_lines(pdf_bytes: bytes) -> list[str]:
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as handle:
+            handle.write(pdf_bytes)
+            handle.flush()
+            temp_path = handle.name
+        result = subprocess.run(
+            ["pdftotext", "-layout", temp_path, "-"],
+            capture_output=True,
+            text=True,
+            timeout=HOUSE_OCR_TIMEOUT_SECONDS,
+            check=False,
+        )
+        if result.returncode != 0:
+            return []
+        return result.stdout.splitlines()
+    except (FileNotFoundError, subprocess.SubprocessError, OSError):
+        return []
+    finally:
+        try:
+            os.unlink(temp_path)
+        except Exception:
+            pass
+
+
 def extract_ocr_lines(pdf_bytes: bytes) -> list[str]:
     try:
         images = convert_from_bytes(pdf_bytes, dpi=250)
@@ -286,6 +348,18 @@ def extract_document_lines(pdf_bytes: bytes) -> tuple[list[str], bool]:
     if ocr_lines:
         return ocr_lines, True
     return pdf_lines, False
+
+
+def score_house_transactions(trades: list[dict]) -> tuple[int, int]:
+    resolved = sum(1 for trade in trades if (trade.get("ticker") or "").strip().upper() not in {"", "N/A"})
+    return len(trades), resolved
+
+
+def select_best_house_transactions(*candidates: list[dict]) -> list[dict]:
+    viable = [candidate for candidate in candidates if candidate]
+    if not viable:
+        return []
+    return max(viable, key=score_house_transactions)
 
 
 def should_skip_house_line(line: str) -> bool:
@@ -382,8 +456,8 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
         members_db.append(
             {"id": member_id, "first_name": first_name, "last_name": last_name, "chamber": target_chamber}
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        print(f"Warning: failed to upsert placeholder member {member_id}: {exc}")
     return member_id
 
 
@@ -512,13 +586,14 @@ def upsert_company(ticker: str, company_name: str):
                 "industry": "Unknown",
             }
         ).execute()
-    except Exception:
-        pass
+    except Exception as exc:
+        print(f"Warning: company upsert failed for {ticker}: {exc}")
 
 
 def prepare_house_trades_for_insert(trades: list[dict]) -> list[dict]:
     prepared: list[dict] = []
     seen_tickers: set[str] = set()
+    supports_asset_name = politician_trades_has_asset_name_column(supabase)
 
     for trade in trades:
         ticker = (trade.get("ticker") or "").strip().upper()[:10]
@@ -526,7 +601,12 @@ def prepare_house_trades_for_insert(trades: list[dict]) -> list[dict]:
             upsert_company(ticker, trade.get("_company_name") or ticker)
             seen_tickers.add(ticker)
 
-        prepared.append({key: value for key, value in trade.items() if not key.startswith("_")})
+        prepared_trade = {key: value for key, value in trade.items() if not key.startswith("_")}
+        asset_name = str(trade.get("asset_name") or trade.get("_company_name") or "").strip()
+        if supports_asset_name and asset_name:
+            prepared_trade["asset_name"] = asset_name[:255]
+
+        prepared.append(prepared_trade)
 
     return prepared
 
@@ -539,6 +619,47 @@ def parse_house_date(raw_value: str) -> str | None:
             return datetime.strptime(raw_value, "%m/%d/%y").strftime("%Y-%m-%d")
         except ValueError:
             return None
+
+
+def parse_house_scanned_date(raw_value: str, tx_year: int) -> str | None:
+    parsed = parse_house_date(raw_value)
+    if parsed:
+        return parsed
+
+    match = HOUSE_FUZZY_DATE_RE.search(raw_value or "")
+    if not match:
+        return None
+
+    month, day, year_token = match.groups()
+    try:
+        month_value = int(month)
+        day_value = int(day)
+    except ValueError:
+        return None
+
+    if not (1 <= month_value <= 12 and 1 <= day_value <= 31):
+        return None
+
+    candidate_year_suffixes: list[str] = []
+    if len(year_token) == 1:
+        expected_suffix = f"{tx_year % 100:02d}"
+        candidate_year_suffixes.extend((year_token + expected_suffix[-1], expected_suffix[0] + year_token))
+    elif len(year_token) == 3:
+        expected_suffix = f"{tx_year:04d}"
+        candidate_year_suffixes.extend((year_token[:2], year_token[1:], expected_suffix[2:]))
+
+    seen_suffixes: set[str] = set()
+    for suffix in candidate_year_suffixes:
+        if suffix in seen_suffixes or not re.fullmatch(r"\d{2}", suffix):
+            continue
+        seen_suffixes.add(suffix)
+        candidate = parse_house_date(f"{month_value:02d}/{day_value:02d}/{suffix}")
+        if not candidate:
+            continue
+        candidate_year = int(candidate[:4])
+        if tx_year - 1 <= candidate_year <= tx_year + 1:
+            return candidate
+    return None
 
 
 def crop_ratio_box(image, bounds: tuple[float, float], row_start: int, row_end: int):
@@ -626,10 +747,18 @@ def score_house_checkbox_row(image, row_start: int, row_end: int, columns: list[
     return scores
 
 
-def extract_house_scanned_rows(image, *, asset_bounds: tuple[float, float] = HOUSE_SCANNED_ASSET_BOUNDS) -> list[tuple[int, int]]:
-    horizontal_lines = detect_dark_line_groups(image, axis="horizontal", threshold=180, min_fraction=0.4)
+def extract_house_scanned_rows_for_config(
+    image,
+    *,
+    asset_bounds: tuple[float, float],
+    threshold: int,
+    min_fraction: float,
+) -> list[tuple[int, int]]:
+    horizontal_lines = detect_dark_line_groups(image, axis="horizontal", threshold=threshold, min_fraction=min_fraction)
     rows: list[tuple[int, int]] = []
     min_height, max_height = HOUSE_SCANNED_ROW_HEIGHT_RANGE
+    min_row_start = int(image.height * HOUSE_SCANNED_MIN_ROW_START_RATIO)
+    max_row_end = int(image.height * HOUSE_SCANNED_MAX_ROW_END_RATIO)
 
     for current, nxt in zip(horizontal_lines, horizontal_lines[1:]):
         row_start = current[1]
@@ -637,7 +766,7 @@ def extract_house_scanned_rows(image, *, asset_bounds: tuple[float, float] = HOU
         height = row_end - row_start
         if not (min_height <= height <= max_height):
             continue
-        if row_start < int(image.height * 0.35) or row_end > int(image.height * 0.82):
+        if row_start < min_row_start or row_end > max_row_end:
             continue
         asset_crop = crop_ratio_box(image, asset_bounds, row_start, row_end)
         asset_text = ocr_house_scanned_cell(asset_crop)
@@ -646,6 +775,24 @@ def extract_house_scanned_rows(image, *, asset_bounds: tuple[float, float] = HOU
             continue
         rows.append((row_start, row_end))
     return rows
+
+
+def extract_house_scanned_rows(image, *, asset_bounds: tuple[float, float] = HOUSE_SCANNED_ASSET_BOUNDS) -> list[tuple[int, int]]:
+    best_rows: list[tuple[int, int]] = []
+
+    for threshold, min_fraction in HOUSE_SCANNED_LINE_CONFIGS:
+        rows = extract_house_scanned_rows_for_config(
+            image,
+            asset_bounds=asset_bounds,
+            threshold=threshold,
+            min_fraction=min_fraction,
+        )
+        if len(rows) > len(best_rows):
+            best_rows = rows
+        if len(rows) >= 3:
+            return rows
+
+    return best_rows
 
 
 def line_group_centers(groups: list[tuple[int, int]]) -> list[int]:
@@ -703,7 +850,7 @@ def detect_house_attachment_only_filing(pdf_bytes: bytes) -> bool:
             scale=4,
             config="--psm 7 -c tessedit_char_whitelist=0123456789/",
         )
-        if parse_house_date(tx_date_text):
+        if parse_house_date(tx_date_text) or HOUSE_FUZZY_DATE_RE.search(tx_date_text):
             saw_valid_tx_date = True
 
     return len(reader.pages) >= 20 and not saw_valid_tx_date
@@ -796,7 +943,7 @@ def extract_transactions_from_scanned_house_pdf(
                     scale=4,
                     config="--psm 7 -c tessedit_char_whitelist=0123456789/",
                 )
-                tx_date = parse_house_date(tx_date_text)
+                tx_date = parse_house_scanned_date(tx_date_text, tx_year)
                 if not tx_date:
                     if not row_text:
                         row_text = ocr_house_scanned_cell(
@@ -804,7 +951,7 @@ def extract_transactions_from_scanned_house_pdf(
                             scale=3,
                             config="--psm 6",
                         )
-                    inline_dates = [parse_house_date(match) for match in HOUSE_INLINE_DATE_RE.findall(row_text)]
+                    inline_dates = [parse_house_scanned_date(match, tx_year) for match in HOUSE_INLINE_DATE_RE.findall(row_text)]
                     inline_dates = [value for value in inline_dates if value]
                     if inline_dates:
                         tx_date = inline_dates[0]
@@ -819,9 +966,9 @@ def extract_transactions_from_scanned_house_pdf(
                     scale=4,
                     config="--psm 7 -c tessedit_char_whitelist=0123456789/",
                 )
-                published_date = parse_house_date(notified_text) or tx_date
+                published_date = parse_house_scanned_date(notified_text, tx_year) or tx_date
                 if published_date == tx_date and row_text:
-                    inline_dates = [parse_house_date(match) for match in HOUSE_INLINE_DATE_RE.findall(row_text)]
+                    inline_dates = [parse_house_scanned_date(match, tx_year) for match in HOUSE_INLINE_DATE_RE.findall(row_text)]
                     inline_dates = [value for value in inline_dates if value]
                     if len(inline_dates) >= 2:
                         published_date = inline_dates[1]
@@ -981,6 +1128,140 @@ def extract_transactions_from_lines(
     return transactions
 
 
+def extract_transactions_from_layout_lines(
+    lines: list[str],
+    doc_id: str,
+    first_name: str,
+    last_name: str,
+    tx_year: int,
+    members_db: list[dict],
+    company_lookup: list[dict] | None = None,
+) -> list[dict]:
+    filtered_lines = [normalize_line(line) for line in lines if normalize_line(line)]
+    member_id = resolve_member_id(first_name, last_name, members_db)
+
+    transactions: list[dict] = []
+    seen_keys: set[str] = set()
+
+    for index, line in enumerate(filtered_lines):
+        if should_skip_house_line(line):
+            continue
+
+        tx_match = HOUSE_LAYOUT_ROW_RE.search(line)
+        if not tx_match:
+            continue
+
+        raw_asset_name = HOUSE_LAYOUT_OWNER_PREFIX_RE.sub("", tx_match.group("asset_name")).strip()
+        asset_name = clean_house_asset_name(raw_asset_name)
+        if len(re.sub(r"[^A-Za-z0-9]", "", asset_name)) < 3:
+            continue
+
+        asset_type = "Stock"
+        ticker_match = HOUSE_LAYOUT_TICKER_RE.search(asset_name)
+        fallback_texts = [line]
+        for lookahead in range(index + 1, min(len(filtered_lines), index + 8)):
+            next_line = filtered_lines[lookahead]
+            if should_skip_house_line(next_line):
+                break
+            fallback_texts.append(next_line)
+            if HOUSE_LAYOUT_ROW_RE.search(next_line):
+                break
+            if not ticker_match:
+                ticker_match = HOUSE_LAYOUT_TICKER_RE.search(next_line)
+            if ticker_match and ticker_match.group("asset_type"):
+                asset_type = ticker_match.group("asset_type")[:50]
+                break
+
+        ticker = ticker_match.group(1).upper() if ticker_match else resolve_house_ticker(
+            asset_name,
+            company_lookup,
+            fallback_texts=fallback_texts,
+        )
+
+        tx_date = parse_house_date(tx_match.group("tx_date"))
+        if not tx_date:
+            continue
+
+        published_date = parse_house_date(tx_match.group("notif_date")) or tx_date
+        tx_code = tx_match.group("tx_code").upper()
+        tx_type = {"P": "buy", "S": "sell", "E": "exchange"}.get(tx_code, "unknown")
+        amount_range = tx_match.group("amount").strip()
+        detail_blob = " ".join(fallback_texts)
+
+        key = "|".join(
+            (
+                ticker,
+                tx_date,
+                published_date,
+                amount_range,
+                tx_type,
+                house_trade_fingerprint(asset_name, detail_blob),
+            )
+        )
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+
+        transactions.append(
+            {
+                "member_id": member_id,
+                "politician_name": f"{first_name} {last_name}"[:100],
+                "chamber": "House",
+                "party": "Unknown",
+                "ticker": ticker,
+                "transaction_date": tx_date,
+                "published_date": published_date,
+                "transaction_type": tx_type,
+                "asset_type": asset_type,
+                "amount_range": amount_range[:255],
+                "source_url": HOUSE_PTR_PDF_URL.format(year=tx_year, doc_id=doc_id),
+                "doc_id": f"house-{tx_year}-{doc_id}-{len(transactions)}",
+                "_company_name": asset_name[:255] if asset_name else ticker,
+            }
+        )
+
+    return transactions
+
+
+def extract_best_text_transactions(
+    pdf_bytes: bytes,
+    doc_id: str,
+    first_name: str,
+    last_name: str,
+    tx_year: int,
+    members_db: list[dict],
+    company_lookup: list[dict] | None = None,
+) -> tuple[list[dict], list[str]]:
+    pdf_lines = [normalize_line(line) for line in extract_pdf_lines(pdf_bytes)]
+    pdf_lines = [line for line in pdf_lines if line]
+
+    standard_transactions: list[dict] = []
+    if sum(len(line) for line in pdf_lines) >= 80:
+        standard_transactions = extract_transactions_from_lines(
+            pdf_lines,
+            doc_id,
+            first_name,
+            last_name,
+            tx_year,
+            members_db,
+            company_lookup,
+        )
+
+    layout_lines = [normalize_line(line) for line in extract_pdftotext_layout_lines(pdf_bytes)]
+    layout_lines = [line for line in layout_lines if line]
+    layout_transactions = extract_transactions_from_layout_lines(
+        layout_lines,
+        doc_id,
+        first_name,
+        last_name,
+        tx_year,
+        members_db,
+        company_lookup,
+    )
+
+    return select_best_house_transactions(standard_transactions, layout_transactions), pdf_lines
+
+
 def filing_sort_key(filing: dict) -> tuple[datetime, int]:
     try:
         filing_date = datetime.strptime(filing["filing_date"], "%m/%d/%Y")
@@ -1104,13 +1385,15 @@ def fetch_house_trades():
                 used_ocr = False
                 attachment_only = False
                 no_trade_filing = False
-                pdf_lines = [normalize_line(line) for line in extract_pdf_lines(pdf_resp.content)]
-                pdf_lines = [line for line in pdf_lines if line]
-                transactions = []
-                if sum(len(line) for line in pdf_lines) >= 80:
-                    transactions = extract_transactions_from_lines(
-                        pdf_lines, doc_id, first_name, last_name, year, members_db, company_lookup
-                    )
+                transactions, pdf_lines = extract_best_text_transactions(
+                    pdf_resp.content,
+                    doc_id,
+                    first_name,
+                    last_name,
+                    year,
+                    members_db,
+                    company_lookup,
+                )
 
                 if not transactions:
                     no_trade_filing = detect_house_no_trade_filing(pdf_resp.content)

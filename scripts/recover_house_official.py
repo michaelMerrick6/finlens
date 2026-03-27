@@ -9,6 +9,7 @@ from pypdf import PdfReader
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from legacy_congress_guard import require_legacy_write_opt_in
+from politician_schema_support import politician_trades_has_asset_name_column
 
 load_dotenv(dotenv_path=".env.local")
 require_legacy_write_opt_in("recover_house_official.py")
@@ -16,6 +17,7 @@ require_legacy_write_opt_in("recover_house_official.py")
 url: str = os.environ.get("SUPABASE_URL", "")
 key: str = os.environ.get("SUPABASE_SERVICE_KEY", "")
 supabase: Client = create_client(url, key)
+SUPPORTS_ASSET_NAME = politician_trades_has_asset_name_column(supabase)
 
 HOUSE_INDEX_URL = "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{year}FD.txt"
 HOUSE_PTR_PDF_URL = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf"
@@ -73,6 +75,7 @@ def parse_robust_trades(text, doc_id, fname, lname, year, member_id):
             "politician_name": f"{fname} {lname}",
             "chamber": "House",
             "ticker": ticker,
+            **({"asset_name": asset_raw[:255]} if SUPPORTS_ASSET_NAME and asset_raw else {}),
             "transaction_date": tx_date,
             "published_date": pub_date,
             "transaction_type": tx_type,
