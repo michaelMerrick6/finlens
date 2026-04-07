@@ -3,20 +3,17 @@ import json
 import os
 from datetime import datetime, timedelta
 
-from ingest_senate_official import CSRF_INPUT_RE, SENATE_HOME_URL, SENATE_REPORT_DATA_URL, SENATE_SEARCH_URL, parse_filed_date
+from ingest_senate_official import SENATE_REPORT_DATA_URL, SENATE_SEARCH_URL, load_valid_tickers, parse_filed_date
 from repair_senate_filings import (
     create_senate_session,
     load_members_lookup,
-    parse_senate_filing,
     replace_senate_doc,
-    supabase,
 )
-from ingest_senate_official import load_valid_tickers
 from time_utils import congress_today
 
 
-RECENT_DAYS = int(os.environ.get("SENATE_RECENT_SYNC_DAYS", "7"))
-MAX_FILINGS = int(os.environ.get("SENATE_RECENT_SYNC_LIMIT", "20"))
+RECENT_DAYS = int(os.environ.get("SENATE_RECENT_SYNC_DAYS", "30"))
+MAX_FILINGS = int(os.environ.get("SENATE_RECENT_SYNC_LIMIT", "100"))
 
 
 def load_recent_senate_filings(session, *, days: int, limit: int) -> list[dict]:
@@ -107,22 +104,22 @@ def main() -> None:
 
     for filing in filings:
         try:
-            trades = parse_senate_filing(session, filing["doc_key"], filing, members_db, valid_tickers)
+            existing_count, inserted_count = replace_senate_doc(
+                session,
+                filing["doc_key"],
+                filing,
+                members_db,
+                valid_tickers,
+            )
         except Exception as exc:
             if "/search/view/paper/" in filing["source_url"] and "No Senate trades parsed" in str(exc):
                 summary["paper_unmapped_filings"] += 1
                 print(f"Synced senate:{filing['doc_key']} {filing['published_date']} status=paper-unmapped")
                 continue
+            print(f"Failed senate:{filing['doc_key']} {filing['published_date']} error={exc}")
             summary["failed_doc_ids"].append(filing["doc_key"])
             continue
 
-        existing_count, inserted_count = replace_senate_doc(
-            session,
-            filing["doc_key"],
-            filing,
-            members_db,
-            valid_tickers,
-        )
         summary["filings_with_trades"] += 1
         summary["rows_replaced"] += existing_count
         summary["rows_inserted"] += inserted_count

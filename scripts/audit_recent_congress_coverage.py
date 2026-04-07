@@ -6,15 +6,15 @@ from ingest_house_official import load_company_lookup
 from ingest_senate_official import load_valid_tickers
 from pipeline_support import emit_summary, get_supabase_client
 from repair_senate_filings import create_senate_session, load_members_lookup, parse_senate_filing
-from sync_recent_house_filings import load_house_index, parse_house_doc
+from sync_recent_house_filings import load_recent_house_filings, parse_house_doc
 from sync_recent_senate_filings import load_recent_senate_filings
 from time_utils import congress_today
 
 
-HOUSE_AUDIT_DAYS = int(os.environ.get("HOUSE_AUDIT_DAYS", "3"))
-HOUSE_AUDIT_LIMIT = int(os.environ.get("HOUSE_AUDIT_LIMIT", "20"))
-SENATE_AUDIT_DAYS = int(os.environ.get("SENATE_AUDIT_DAYS", "3"))
-SENATE_AUDIT_LIMIT = int(os.environ.get("SENATE_AUDIT_LIMIT", "20"))
+HOUSE_AUDIT_DAYS = int(os.environ.get("HOUSE_AUDIT_DAYS", "14"))
+HOUSE_AUDIT_LIMIT = int(os.environ.get("HOUSE_AUDIT_LIMIT", "100"))
+SENATE_AUDIT_DAYS = int(os.environ.get("SENATE_AUDIT_DAYS", "30"))
+SENATE_AUDIT_LIMIT = int(os.environ.get("SENATE_AUDIT_LIMIT", "100"))
 
 
 def summarize_doc_prefix(doc_id: str) -> str:
@@ -23,28 +23,6 @@ def summarize_doc_prefix(doc_id: str) -> str:
     if doc_id.startswith("senate-") and doc_id.count("-") >= 5:
         return "-".join(doc_id.split("-")[:-1])
     return doc_id
-
-
-def load_recent_house_filings(*, days: int, limit: int) -> list[dict]:
-    today = congress_today()
-    cutoff = today - timedelta(days=days)
-    years = sorted({today.year, cutoff.year}, reverse=True)
-    filings: list[dict] = []
-
-    for year in years:
-        for filing in load_house_index(year):
-            filed_date = datetime.strptime(filing["filing_date_raw"], "%m/%d/%Y").date()
-            if cutoff <= filed_date <= today:
-                filings.append(filing)
-
-    filings.sort(
-        key=lambda filing: (
-            datetime.strptime(filing["filing_date_raw"], "%m/%d/%Y"),
-            int("".join(ch for ch in filing["doc_id"] if ch.isdigit()) or "0"),
-        ),
-        reverse=True,
-    )
-    return filings[:limit]
 
 
 def fetch_doc_rows(supabase, prefix: str) -> tuple[int, list[dict]]:

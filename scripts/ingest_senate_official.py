@@ -5,7 +5,7 @@ import re
 import time
 import unicodedata
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.parse import urljoin
 
 import pytesseract
@@ -48,6 +48,23 @@ FIRST_NAME_ALIAS_GROUPS = (
 FIRST_NAME_ALIAS_MAP = {
     token: group for group in FIRST_NAME_ALIAS_GROUPS for token in group
 }
+SENATE_DAILY_LOOKBACK_DAYS = int(os.environ.get("SENATE_DAILY_LOOKBACK_DAYS", "30"))
+SENATE_DAILY_EXISTING_STOP = int(os.environ.get("SENATE_DAILY_EXISTING_STOP", "0"))
+POLITICIAN_TRADE_INSERT_FIELDS = (
+    "member_id",
+    "politician_name",
+    "chamber",
+    "party",
+    "ticker",
+    "transaction_date",
+    "published_date",
+    "transaction_type",
+    "asset_type",
+    "amount_range",
+    "source_url",
+    "doc_id",
+    "asset_name",
+)
 
 
 def normalize_name_part(value: str) -> str:
@@ -340,19 +357,20 @@ def build_trade_record(
     }
 
 
+def sanitize_politician_trade_for_insert(trade: dict, *, supports_asset_name: bool) -> dict:
+    prepared_trade = {key: trade.get(key) for key in POLITICIAN_TRADE_INSERT_FIELDS if key in trade}
+    if not supports_asset_name:
+        prepared_trade.pop("asset_name", None)
+    elif not str(prepared_trade.get("asset_name") or "").strip():
+        fallback_asset_name = str(trade.get("_asset_name") or "").strip()
+        if fallback_asset_name:
+            prepared_trade["asset_name"] = fallback_asset_name[:255]
+    return prepared_trade
+
+
 def prepare_senate_trades_for_insert(trades: list[dict]) -> list[dict]:
     supports_asset_name = politician_trades_has_asset_name_column(supabase)
-    prepared: list[dict] = []
-    for trade in trades:
-        prepared_trade = {key: value for key, value in trade.items() if not key.startswith("_")}
-        if not supports_asset_name:
-            prepared_trade.pop("asset_name", None)
-        elif not str(prepared_trade.get("asset_name") or "").strip():
-            fallback_asset_name = str(trade.get("_asset_name") or "").strip()
-            if fallback_asset_name:
-                prepared_trade["asset_name"] = fallback_asset_name[:255]
-        prepared.append(prepared_trade)
-    return prepared
+    return [sanitize_politician_trade_for_insert(trade, supports_asset_name=supports_asset_name) for trade in trades]
 
 
 def parse_senate_html_table(
@@ -702,6 +720,10 @@ def fetch_senate_trades():
     daily_mode = os.environ.get("FINLENS_DAILY_MODE", "0") == "1"
     max_pagination = 500 if daily_mode else 10000
 
+    submitted_start_date = "01/01/2012 00:00:00"
+    if daily_mode:
+        submitted_start_date = (congress_now() - timedelta(days=SENATE_DAILY_LOOKBACK_DAYS)).strftime("%m/%d/%Y 00:00:00")
+
     all_rows = []
     for start_offset in range(0, max_pagination, 100):
         print(f" -> Fetching offset {start_offset}...")
@@ -710,7 +732,7 @@ def fetch_senate_trades():
             "length": "100",
             "report_types": "[11]",
             "filer_types": "[]",
-            "submitted_start_date": "01/01/2012 00:00:00",
+            "submitted_start_date": submitted_start_date,
             "submitted_end_date": "",
             "candidate_state": "",
             "senator_state": "",
@@ -758,6 +780,9 @@ def fetch_senate_trades():
     paper_unmapped_filings = 0
     parse_failures = 0
     failed_doc_ids: list[str] = []
+    existing_filings_seen = 0
+    write_failures = 0
+    prepared_trades: list[dict] = []
 
     consecutive_existing = 0
     for row in all_rows:
@@ -776,9 +801,11 @@ def fetch_senate_trades():
 
         check = supabase.table("politician_trades").select("id").eq("doc_id", anchor_doc_id).limit(1).execute()
         if check.data:
-            consecutive_existing += 1
-            if daily_mode and consecutive_existing >= 10:
-                print(" -> Hit 10 consecutive existing Senate filings. Stopping.")
+            existing_filings_seen += 1
+            if SENATE_DAILY_EXISTING_STOP > 0:
+                consecutive_existing += 1
+            if daily_mode and SENATE_DAILY_EXISTING_STOP > 0 and consecutive_existing >= SENATE_DAILY_EXISTING_STOP:
+                print(f" -> Hit {SENATE_DAILY_EXISTING_STOP} consecutive existing Senate filings. Stopping.")
                 break
             continue
 
@@ -863,6 +890,7 @@ def fetch_senate_trades():
         print(f"Uploading {len(prepared_trades)} real Senate trades to Supabase...")
         for index in range(0, len(prepared_trades), 50):
             chunk = prepared_trades[index : index + 50]
+            to_insert: list[dict] = []
             try:
                 doc_ids = [trade["doc_id"] for trade in chunk]
                 existing = supabase.table("politician_trades").select("doc_id").in_("doc_id", doc_ids).execute()
@@ -875,6 +903,16 @@ def fetch_senate_trades():
                     print(f" -> Inserted {len(to_insert)} new Senate trades.")
             except Exception as exc:
                 print(f"Error manual-upserting chunk: {exc}")
+                for trade in to_insert:
+                    try:
+                        supabase.table("politician_trades").insert(trade).execute()
+                        inserted_count += 1
+                    except Exception as inner_exc:
+                        write_failures += 1
+                        failed_doc_id = str(trade.get("doc_id") or "").rsplit("-", 1)[0].removeprefix("senate-")
+                        if failed_doc_id:
+                            failed_doc_ids.append(failed_doc_id)
+                        print(f" -> Failed to insert Senate trade {trade.get('doc_id')}: {inner_exc}")
 
         print("Successfully seeded SENATE trades!")
 
@@ -887,7 +925,9 @@ def fetch_senate_trades():
                 "paper_transaction_rows_seen": paper_transaction_rows_seen,
                 "paper_trades_parsed": paper_trades_parsed,
                 "paper_unmapped_filings": paper_unmapped_filings,
-                "parse_failures": parse_failures,
+                "existing_filings_seen": existing_filings_seen,
+                "write_failures": write_failures,
+                "parse_failures": parse_failures + write_failures,
                 "records_inserted": inserted_count,
                 "records_seen": len(prepared_trades),
                 "records_skipped": max(len(prepared_trades) - inserted_count, 0),

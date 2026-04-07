@@ -15,8 +15,12 @@ def politician_trades_has_asset_name_column(supabase: Client) -> bool:
         supabase.table("politician_trades").select("id,asset_name").limit(1).execute()
         _POLITICIAN_TRADES_HAS_ASSET_NAME = True
     except Exception as exc:
-        message = str(exc)
-        if "politician_trades.asset_name does not exist" in message:
+        message = str(exc).lower()
+        if "asset_name" in message and (
+            "does not exist" in message
+            or "could not find" in message
+            or "schema cache" in message
+        ):
             _POLITICIAN_TRADES_HAS_ASSET_NAME = False
         else:
             print(f"[politician_schema_support] asset_name column probe failed: {exc}")

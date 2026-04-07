@@ -13,10 +13,13 @@ from ingest_senate_official import (
     parse_filed_date,
     parse_senate_html_table,
     parse_senate_paper_report,
+    prepare_senate_trades_for_insert,
+    sanitize_politician_trade_for_insert,
     load_valid_tickers,
     resolve_member_id_from_full_name,
     supabase,
 )
+from politician_schema_support import politician_trades_has_asset_name_column
 
 
 def create_senate_session() -> requests.Session:
@@ -85,6 +88,69 @@ def load_existing_senate_filing(doc_key: str) -> dict:
     }
 
 
+def politician_trade_select_fields() -> str:
+    fields = [
+        "member_id",
+        "politician_name",
+        "chamber",
+        "party",
+        "ticker",
+        "transaction_date",
+        "published_date",
+        "transaction_type",
+        "asset_type",
+        "amount_range",
+        "source_url",
+        "doc_id",
+    ]
+    if politician_trades_has_asset_name_column(supabase):
+        fields.insert(5, "asset_name")
+    return ",".join(fields)
+
+
+def load_existing_senate_trade_rows(prefix: str) -> tuple[int, list[dict]]:
+    supports_asset_name = politician_trades_has_asset_name_column(supabase)
+    response = (
+        supabase.table("politician_trades")
+        .select(politician_trade_select_fields(), count="exact")
+        .ilike("doc_id", f"{prefix}%")
+        .limit(5000)
+        .execute()
+    )
+    rows = [
+        sanitize_politician_trade_for_insert(row, supports_asset_name=supports_asset_name)
+        for row in (response.data or [])
+    ]
+    return response.count or 0, rows
+
+
+def insert_politician_trade_rows(rows: list[dict]) -> int:
+    inserted = 0
+    row_failures: list[str] = []
+    for index in range(0, len(rows), 50):
+        chunk = rows[index : index + 50]
+        try:
+            supabase.table("politician_trades").insert(chunk).execute()
+            inserted += len(chunk)
+        except Exception as exc:
+            for row in chunk:
+                try:
+                    supabase.table("politician_trades").insert(row).execute()
+                    inserted += 1
+                except Exception as inner_exc:
+                    row_failures.append(f"{row.get('doc_id')}: {inner_exc}")
+            if row_failures:
+                break
+            if not chunk:
+                raise RuntimeError(f"Failed to insert politician trade chunk: {exc}") from exc
+
+    if row_failures:
+        preview = "; ".join(row_failures[:3])
+        raise RuntimeError(f"Failed to insert {len(row_failures)} politician trade rows ({preview})")
+
+    return inserted
+
+
 def parse_senate_filing(
     session: requests.Session,
     doc_key: str,
@@ -139,24 +205,33 @@ def replace_senate_doc(
     members_db: list[dict],
     valid_tickers: set[str],
 ) -> tuple[int, int]:
-    trades = parse_senate_filing(session, doc_key, filing, members_db, valid_tickers)
+    trades = prepare_senate_trades_for_insert(parse_senate_filing(session, doc_key, filing, members_db, valid_tickers))
+    if not trades:
+        raise RuntimeError(f"No Senate trades parsed for {doc_key}; refusing to replace existing data")
     prefix = f"senate-{doc_key}"
-    existing = (
-        supabase.table("politician_trades")
-        .select("doc_id", count="exact")
-        .ilike("doc_id", f"{prefix}%")
-        .limit(5000)
-        .execute()
-    )
-    existing_count = existing.count or 0
+    existing_count, existing_rows = load_existing_senate_trade_rows(prefix)
 
-    supabase.table("politician_trades").delete().ilike("doc_id", f"{prefix}%").execute()
+    if existing_count:
+        supabase.table("politician_trades").delete().ilike("doc_id", f"{prefix}%").execute()
 
-    inserted = 0
-    for index in range(0, len(trades), 50):
-        chunk = trades[index : index + 50]
-        supabase.table("politician_trades").insert(chunk).execute()
-        inserted += len(chunk)
+    try:
+        inserted = insert_politician_trade_rows(trades)
+    except Exception as exc:
+        try:
+            supabase.table("politician_trades").delete().ilike("doc_id", f"{prefix}%").execute()
+        except Exception:
+            pass
+
+        if existing_rows:
+            try:
+                insert_politician_trade_rows(existing_rows)
+            except Exception as restore_exc:
+                raise RuntimeError(
+                    f"Failed to replace Senate filing {doc_key}: {exc}; restore also failed: {restore_exc}"
+                ) from exc
+
+        raise RuntimeError(f"Failed to replace Senate filing {doc_key}: {exc}") from exc
+
     return existing_count, inserted
 
 
