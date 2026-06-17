@@ -128,6 +128,126 @@ def test_cluster_alert_watchlist_only_queues_selected_channels() -> None:
     assert deliveries[0]["channel"] == "email"
 
 
+def test_politician_trade_matches_politician_follow_by_member_id() -> None:
+    events = [
+        {
+            "id": "trade-1",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "ticker": "NVDA",
+            "actor_name": "Ro Khanna",
+            "actor_type": "politician",
+            "importance_score": 0.2,
+            "payload": {
+                "member_id": "K000389",
+                "politician_name": "Ro Khanna",
+                "asset_type": "Stock",
+                "amount_range": "$1,001 - $15,000",
+            },
+        }
+    ]
+    subscriptions = [
+        {
+            "id": "subscription-1",
+            "watchlist_id": "watchlist-1",
+            "channel": "email",
+            "destination": "alerts@example.com",
+            "minimum_importance": 0.75,
+        }
+    ]
+    watchlist_actors = {
+        "politician:k000389": [
+            {
+                "watchlist_id": "watchlist-1",
+                "match_type": "actor",
+                "alert_mode": "activity",
+                "actor_match_key": "politician:k000389",
+            }
+        ]
+    }
+
+    deliveries = module.queue_subscription_deliveries(
+        events,
+        subscriptions,
+        {},
+        watchlist_actors,
+        {},
+    )
+
+    assert len(deliveries) == 1
+    assert deliveries[0]["signal_event_id"] == "trade-1"
+    assert (deliveries[0].get("payload") or {}).get("reasons") == ["watchlist_actor_match"]
+    assert (deliveries[0].get("payload") or {}).get("matched_actor_keys") == ["politician:k000389"]
+
+
+def test_politician_filing_summary_matches_politician_follow_by_member_id() -> None:
+    events = [
+        {
+            "id": "summary-1",
+            "source": "congress",
+            "signal_type": "politician_filing_summary",
+            "ticker": "MULTI",
+            "actor_name": "Ro Khanna",
+            "actor_type": "politician",
+            "importance_score": 0.1,
+            "payload": {
+                "member_id": "K000389",
+                "politician_name": "Ro Khanna",
+                "base_signal_type": "politician_trade",
+                "summary_contains_activity": True,
+                "summary_event_ids": ["trade-1", "trade-2"],
+            },
+        },
+        {
+            "id": "trade-1",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "ticker": "NVDA",
+            "actor_name": "Ro Khanna",
+            "actor_type": "politician",
+            "importance_score": 0.2,
+            "payload": {
+                "member_id": "K000389",
+                "politician_name": "Ro Khanna",
+                "asset_type": "Stock",
+                "amount_range": "$1,001 - $15,000",
+            },
+        },
+    ]
+    subscriptions = [
+        {
+            "id": "subscription-1",
+            "watchlist_id": "watchlist-1",
+            "channel": "email",
+            "destination": "alerts@example.com",
+            "minimum_importance": 0.75,
+        }
+    ]
+    watchlist_actors = {
+        "politician:k000389": [
+            {
+                "watchlist_id": "watchlist-1",
+                "match_type": "actor",
+                "alert_mode": "activity",
+                "actor_match_key": "politician:k000389",
+            }
+        ]
+    }
+
+    deliveries = module.queue_subscription_deliveries(
+        events,
+        subscriptions,
+        {},
+        watchlist_actors,
+        {},
+    )
+
+    assert len(deliveries) == 1
+    assert deliveries[0]["signal_event_id"] == "summary-1"
+    assert (deliveries[0].get("payload") or {}).get("reasons") == ["watchlist_actor_match"]
+    assert (deliveries[0].get("payload") or {}).get("matched_actor_keys") == ["politician:k000389"]
+
+
 def test_fund_filing_reminder_matches_fund_follow() -> None:
     events = [
         {
@@ -279,6 +399,8 @@ def main() -> None:
     test_queue_owner_sms_signal_deliveries()
     test_cluster_alert_watchlist_queues_clusters_without_individual_follow()
     test_cluster_alert_watchlist_only_queues_selected_channels()
+    test_politician_trade_matches_politician_follow_by_member_id()
+    test_politician_filing_summary_matches_politician_follow_by_member_id()
     test_fund_filing_reminder_matches_fund_follow()
     test_fund_filing_received_matches_fund_follow()
     test_fund_position_change_does_not_match_fund_follow()
