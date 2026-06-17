@@ -31,13 +31,14 @@ def fetch_signal_events_since(supabase, *, column: str, since_value: str, signal
     page_size = 1000
     start = 0
     while True:
+        # Production PostgREST statement timeouts were triggered by broad
+        # multi-column ORDER BY scans. The compiler does not require database
+        # ordering because batches are merged and sorted in memory below.
         response = (
             supabase.table("signal_events")
             .select("*")
             .in_("signal_type", signal_types)
             .gte(column, since_value)
-            .order(column, desc=True)
-            .order("created_at", desc=True)
             .range(start, start + page_size - 1)
             .execute()
         )
@@ -110,6 +111,7 @@ def fetch_recent_politician_buy_signal_events(supabase):
     start = 0
     page_size = 1000
     while True:
+        # Avoid a wide ordered scan; callers only need the recent set.
         response = (
             supabase.table("signal_events")
             .select("*")
@@ -117,7 +119,6 @@ def fetch_recent_politician_buy_signal_events(supabase):
             .eq("signal_type", "politician_trade")
             .eq("direction", "buy")
             .gte("occurred_at", since_date)
-            .order("occurred_at", desc=True)
             .range(start, start + page_size - 1)
             .execute()
         )
@@ -137,12 +138,13 @@ def fetch_recent_cluster_signal_events(supabase):
     start = 0
     page_size = 1000
     while True:
+        # Avoid ordering in the DB; this query can span many recent cluster rows
+        # and ordering has caused production statement timeouts.
         response = (
             supabase.table("signal_events")
             .select("*")
             .in_("signal_type", CLUSTER_SIGNAL_TYPES)
             .gte("published_at", since_date)
-            .order("published_at", desc=True)
             .range(start, start + page_size - 1)
             .execute()
         )

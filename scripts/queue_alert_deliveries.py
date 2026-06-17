@@ -38,22 +38,21 @@ def stable_id(parts: list[str]) -> str:
 
 
 def fetch_recent_signal_events(supabase):
-    effective_hours = max(
-        LOOKBACK_HOURS,
-        CONGRESS_CLUSTER_WINDOW_DAYS * 24,
-        CROSS_SOURCE_CLUSTER_WINDOW_DAYS * 24,
-        FUND_ALIGNMENT_WINDOW_DAYS * 24,
-    )
-    since_ts = (utc_now() - timedelta(hours=effective_hours)).isoformat()
+    # Alerts should be queued for newly-created signal events. Pulling the full
+    # 45-120 day cluster/fund windows here made production scan and sort too
+    # much of signal_events, causing statement timeouts after capture succeeded.
+    since_ts = (utc_now() - timedelta(hours=LOOKBACK_HOURS)).isoformat()
     rows: list[dict] = []
     page_size = 1000
     start = 0
     while True:
+        # Do not order in the DB. The queued delivery key is idempotent, so
+        # processing order is not semantically important and avoiding ORDER BY
+        # keeps the scheduled path below PostgREST statement timeouts.
         response = (
             supabase.table("signal_events")
             .select("*")
             .gte("created_at", since_ts)
-            .order("created_at", desc=True)
             .range(start, start + page_size - 1)
             .execute()
         )
