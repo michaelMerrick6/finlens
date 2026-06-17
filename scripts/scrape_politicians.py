@@ -12,11 +12,11 @@ supabase: Client = create_client(url, key)
 
 def fetch_politician_trades():
     """
-    Fetches the latest trades from House and Senate sources.
-    This is highly complex to write from scratch as Senate requires complex session/form processing
-    and House provides periodic zip files of XMLs.
-    
-    For a production app, pulling from Capitol Trades API or Quiver Quantitative API is highly recommended.
+    Fetches the latest trades from official House and Senate sources.
+
+    Canonical Congress trade rows should come from the underlying government disclosure
+    systems only. Third-party sites may help identify possible coverage gaps, but they
+    should stay outside the write path.
     """
     print("Running Politician Trades crawler...")
     

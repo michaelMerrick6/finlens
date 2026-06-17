@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 from PIL import Image
 from supabase import Client, create_client
 from politician_schema_support import politician_trades_has_asset_name_column
+from politician_trade_option_support import normalize_politician_asset_type
 from time_utils import congress_now
 
 load_dotenv(dotenv_path=".env.local")
@@ -32,7 +33,9 @@ CSRF_INPUT_RE = re.compile(r'name="csrfmiddlewaretoken"\s+value="([^"]+)"')
 DOCUMENT_HREF_RE = re.compile(r'href="(.*?)"')
 DATE_RE = re.compile(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b")
 TICKER_RE = re.compile(r"\(([A-Z]{1,6})\)")
-PAPER_MARK_RE = re.compile(r"^[xX×]{1,3}$")
+# OCR on scanned Senate forms often emits checked boxes as "~", "*", "v", etc.
+# Accept a narrow set of short symbol-only tokens so checkbox marks are captured.
+PAPER_MARK_RE = re.compile(r"^(?:[xX×~*vV✓✔√/\\]){1,4}$")
 COMMON_NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 PRIVATE_ENTITY_MARKERS = (" LLC", " L.L.C", " L.P.", " LP", " PARTNERS", " FAMILY", " TRUST")
 PUBLIC_COMPANY_HINTS = (" STOCK", " SHARES", " COMMON", " ETF", " ETN", " ADR", " ADS", " INC", " CORP", " PLC")
@@ -339,6 +342,7 @@ def build_trade_record(
     source_url: str,
     asset_name: str = "",
 ) -> dict:
+    normalized_asset_type = normalize_politician_asset_type("Stock", asset_name)
     return {
         "member_id": member_id,
         "politician_name": f"{first_name} {last_name}"[:100],
@@ -348,7 +352,7 @@ def build_trade_record(
         "transaction_date": transaction_date,
         "published_date": published_date,
         "transaction_type": transaction_type[:10],
-        "asset_type": "Stock",
+        "asset_type": normalized_asset_type,
         "amount_range": amount_range[:255],
         "source_url": source_url[:500],
         "doc_id": f"senate-{doc_key}-{trade_index}",
@@ -598,8 +602,6 @@ def parse_senate_paper_lines(
 
         unique_key = "|".join(
             (
-                str(tokens[0].get("page") or 0),
-                str(min(token.get("top") or 0 for token in tokens)),
                 re.sub(r"\s+", " ", asset_text).upper(),
                 tx_date,
                 transaction_type,
@@ -628,7 +630,37 @@ def parse_senate_paper_lines(
             )
         )
 
-    return trades
+    if not trades:
+        return trades
+
+    base_key_with_known_amount: set[tuple[str, str, str]] = set()
+    for trade in trades:
+        amount_value = str(trade.get("amount_range") or "").strip().lower()
+        if amount_value and amount_value != "unknown":
+            base_key_with_known_amount.add(
+                (
+                    re.sub(r"\s+", " ", str(trade.get("asset_name") or "").strip()).upper(),
+                    str(trade.get("transaction_date") or ""),
+                    str(trade.get("transaction_type") or ""),
+                )
+            )
+
+    if not base_key_with_known_amount:
+        return trades
+
+    filtered: list[dict] = []
+    for trade in trades:
+        trade_key = (
+            re.sub(r"\s+", " ", str(trade.get("asset_name") or "").strip()).upper(),
+            str(trade.get("transaction_date") or ""),
+            str(trade.get("transaction_type") or ""),
+        )
+        amount_value = str(trade.get("amount_range") or "").strip().lower()
+        if amount_value == "unknown" and trade_key in base_key_with_known_amount:
+            continue
+        filtered.append(trade)
+
+    return filtered
 
 
 def parse_senate_paper_report(

@@ -19,11 +19,12 @@ def load_recent_insider_rows(supabase, *, days: int) -> list[dict]:
     rows: list[dict] = []
     offset = 0
     while True:
+        # created_at is indexed; published_date is not guaranteed to be. This
+        # keeps the recent replay bounded and avoids statement timeouts.
         response = (
             supabase.table("insider_trades")
-            .select("id, ticker, filer_name, filer_relation, transaction_date, published_date, transaction_code, amount, price, value, source_url")
-            .gte("published_date", cutoff)
-            .order("published_date", desc=True)
+            .select("id, ticker, filer_name, filer_relation, transaction_date, published_date, transaction_code, amount, price, value, source_url, created_at")
+            .gte("created_at", cutoff)
             .order("created_at", desc=True)
             .range(offset, offset + 999)
             .execute()

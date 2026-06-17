@@ -120,6 +120,46 @@ class SecForm4SupportTests(unittest.TestCase):
         self.assertEqual(len(parsed["rows"]), 1)
         self.assertEqual(parsed["rows"][0]["transaction_code"], "buy")
 
+    def test_returns_empty_rows_for_filings_without_supported_ticker(self) -> None:
+        text = """
+        <SEC-DOCUMENT>
+        <XML>
+        <ownershipDocument>
+          <issuer>
+            <issuerCik>0000885275</issuerCik>
+            <issuerName>Wilson Bank Holding Co</issuerName>
+            <issuerTradingSymbol>none</issuerTradingSymbol>
+          </issuer>
+          <periodOfReport>2026-04-08</periodOfReport>
+          <reportingOwner>
+            <reportingOwnerId>
+              <rptOwnerName>Lisa Pominski</rptOwnerName>
+            </reportingOwnerId>
+          </reportingOwner>
+          <nonDerivativeTransaction>
+            <transactionDate><value>2026-04-08</value></transactionDate>
+            <transactionCoding><transactionCode>P</transactionCode></transactionCoding>
+            <transactionAmounts>
+              <transactionShares><value>100</value></transactionShares>
+              <transactionPricePerShare><value>10</value></transactionPricePerShare>
+            </transactionAmounts>
+          </nonDerivativeTransaction>
+        </ownershipDocument>
+        </XML>
+        </SEC-DOCUMENT>
+        """
+
+        parsed = parse_form4_xml_text(
+            text,
+            fallback_source_url="https://www.sec.gov/Archives/edgar/data/885275/000207127126000004/0002071271-26-000004.txt",
+            filed_date="2026-04-08",
+        )
+
+        self.assertIsNotNone(parsed)
+        self.assertEqual(parsed["ticker"], "NONE")
+        self.assertEqual(parsed["rows"], [])
+        self.assertEqual(parsed["filed_date"], "2026-04-08")
+
     def test_recent_filings_cache_only_covers_narrower_requests(self) -> None:
         payload = {
             "days": 30,

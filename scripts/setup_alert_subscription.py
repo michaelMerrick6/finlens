@@ -3,7 +3,7 @@ from typing import Iterable
 
 from notification_targets import normalize_actor_key, resolve_politician_target
 from pipeline_support import get_supabase_client
-from telegram_support import resolve_chat_id
+from sms_support import normalize_phone_number
 
 
 def parse_csv(values: str | None) -> list[str]:
@@ -171,8 +171,8 @@ def build_named_actor_targets(actor_type: str, values: Iterable[str], *, alert_m
 def normalize_destination(channel: str, destination: str) -> str:
     if channel == "email":
         return destination.strip().lower()
-    if channel == "telegram":
-        return resolve_chat_id(destination)
+    if channel == "sms":
+        return normalize_phone_number(destination)
     return destination.strip()
 
 
@@ -217,8 +217,8 @@ def ensure_subscription(
 
 def main():
     parser = argparse.ArgumentParser(description="Create or update an alert subscription for Vail.")
-    parser.add_argument("--channel", required=True, choices=["discord", "email", "telegram"], help="Delivery channel.")
-    parser.add_argument("--destination", required=True, help="Email address, Discord webhook URL, or Telegram chat id/@username.")
+    parser.add_argument("--channel", required=True, choices=["discord", "email", "sms"], help="Delivery channel.")
+    parser.add_argument("--destination", required=True, help="Email address, Discord webhook URL, or text phone number.")
     parser.add_argument("--minimum-importance", type=float, default=0.8, help="Minimum importance score required.")
     parser.add_argument("--event-types", default="", help="Comma-separated event/source filters, e.g. insider_trade,politician_trade")
     parser.add_argument("--global", dest="global_subscription", action="store_true", help="Create a global subscription across all signal events.")

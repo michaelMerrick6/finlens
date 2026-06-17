@@ -229,17 +229,25 @@ def parse_form4_xml_text(text: str, *, fallback_source_url: str | None = None, f
 
     issuer_cik = str(issuer_node.findtext("issuerCik") or "").strip()
     issuer_name = str(issuer_node.findtext("issuerName") or "").strip()
+    canonical_source_url = canonical_form4_source_url(accession, issuer_cik, fallback_source_url)
+    effective_filed_date = filed_date or str(root.findtext(".//periodOfReport") or "").strip()[:10] or None
     ticker = str(issuer_node.findtext("issuerTradingSymbol") or "").strip().upper()
     if not ticker or ticker in {"NONE", "UNKNOWN"}:
-        return None
+        return {
+            "accession": accession,
+            "issuer_cik": issuer_cik,
+            "ticker": ticker or None,
+            "company_name": issuer_name or None,
+            "filer_name": None,
+            "filed_date": effective_filed_date,
+            "source_url": canonical_source_url,
+            "rows": [],
+        }
 
     reporting_owner = root.find(".//reportingOwner")
     filer_name = str(reporting_owner.findtext(".//rptOwnerName") if reporting_owner is not None else "" or "").strip() or "Unknown"
     relationship = reporting_owner.find(".//reportingOwnerRelationship") if reporting_owner is not None else None
     filer_relation = role_from_relationship(relationship)
-
-    canonical_source_url = canonical_form4_source_url(accession, issuer_cik, fallback_source_url)
-    effective_filed_date = filed_date or str(root.findtext(".//periodOfReport") or "").strip()[:10] or None
 
     rows: list[dict] = []
     for index, tx in enumerate(root.findall(".//nonDerivativeTransaction")):

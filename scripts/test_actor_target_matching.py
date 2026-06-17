@@ -36,9 +36,31 @@ def test_cluster_event_matches_politician_members():
     assert "politician:cleofields" in keys
 
 
+def test_cross_source_cluster_matches_mixed_actor_types():
+    event = {
+        "actor_type": "cluster",
+        "actor_name": "Thomas Kean, Jensen Huang, Berkshire Hathaway Inc",
+        "payload": {
+            "compiled_notification_event": True,
+            "base_signal_type": "cross_source_accumulation",
+            "cluster_actors": [
+                {"name": "Thomas Kean", "member_id": "K000398", "actor_type": "politician"},
+                {"name": "Jensen Huang", "actor_type": "insider"},
+                {"name": "Berkshire Hathaway Inc", "actor_type": "fund"},
+            ],
+        },
+    }
+    keys = event_actor_match_keys(event)
+    assert "politician:k000398" in keys
+    assert "politician:thomaskean" in keys
+    assert "insider:jensenhuang" in keys
+    assert "fund:berkshirehathawayinc" in keys
+
+
 def main():
     test_grouped_insider_event_matches_name()
     test_cluster_event_matches_politician_members()
+    test_cross_source_cluster_matches_mixed_actor_types()
     print("actor target matching tests passed")
 
 

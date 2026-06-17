@@ -1,5 +1,4 @@
 import os
-import sys
 
 import requests
 
@@ -46,18 +45,38 @@ def main():
     print("Dispatching email alerts...")
     supabase = get_supabase_client()
     deliveries = fetch_pending_deliveries(supabase, channel="email", batch_size=BATCH_SIZE)
-    if deliveries and (not RESEND_API_KEY or not RESEND_FROM_EMAIL):
+    if not deliveries:
+        emit_summary(
+            {
+                "deliveries_seen": 0,
+                "deliveries_sent": 0,
+                "deliveries_failed": 0,
+                "batch_size": BATCH_SIZE,
+            }
+        )
+        print("No pending email deliveries.")
+        return
+    if not RESEND_API_KEY or not RESEND_FROM_EMAIL:
+        for delivery in deliveries:
+            attempts = int(delivery.get("attempts") or 0) + 1
+            mark_delivery(
+                supabase,
+                delivery["id"],
+                status="failed",
+                attempts=attempts,
+                last_error="Email dispatch blocked: missing RESEND_API_KEY or RESEND_FROM_EMAIL.",
+            )
         emit_summary(
             {
                 "deliveries_seen": len(deliveries),
                 "deliveries_sent": 0,
-                "deliveries_failed": 0,
+                "deliveries_failed": len(deliveries),
                 "deliveries_blocked_config": len(deliveries),
                 "batch_size": BATCH_SIZE,
             }
         )
         print("Email dispatch blocked: missing RESEND_API_KEY or RESEND_FROM_EMAIL.")
-        sys.exit(1)
+        return
 
     sent = 0
     failed = 0

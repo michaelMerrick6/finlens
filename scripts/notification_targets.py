@@ -13,6 +13,7 @@ FIRST_NAME_ALIAS_GROUPS = (
     {"tom", "tommy", "thomas"},
 )
 FIRST_NAME_ALIAS_MAP = {token: group for group in FIRST_NAME_ALIAS_GROUPS for token in group}
+FUND_FILING_FOLLOW_SIGNAL_TYPES = {"fund_filing_deadline_reminder", "fund_filing_received"}
 
 
 def normalize_name_tokens(value: str) -> list[str]:
@@ -101,6 +102,7 @@ def event_actor_match_keys(event: dict) -> set[str]:
     if not actor_type:
         return set()
 
+    signal_type = str(event.get("signal_type") or "").strip().lower()
     payload = event.get("payload") or {}
     keys: set[str] = set()
 
@@ -122,22 +124,23 @@ def event_actor_match_keys(event: dict) -> set[str]:
     elif actor_type == "insider":
         add_normalized_key("insider", payload.get("filer_name"))
     elif actor_type == "fund":
-        add_normalized_key("fund", payload.get("fund_name"))
+        if signal_type in FUND_FILING_FOLLOW_SIGNAL_TYPES:
+            add_normalized_key("fund", payload.get("fund_name"))
     elif actor_type == "cluster":
         cluster_actors = payload.get("cluster_actors") or []
         base_signal_type = str(payload.get("base_signal_type") or "").lower()
-        if base_signal_type == "politician_trade":
-            for actor in cluster_actors:
-                if not isinstance(actor, dict):
-                    continue
+        for actor in cluster_actors:
+            if not isinstance(actor, dict):
+                continue
+            cluster_actor_type = str(actor.get("actor_type") or "").strip().lower()
+            if cluster_actor_type == "politician" or base_signal_type == "politician_trade":
                 add_exact_key("politician", actor.get("member_id"))
                 add_normalized_key("politician", actor.get("name"))
-        elif base_signal_type == "insider_trade":
-            for actor in cluster_actors:
-                if not isinstance(actor, dict):
-                    continue
+            elif cluster_actor_type == "insider" or base_signal_type == "insider_trade":
                 add_normalized_key("insider", actor.get("name"))
+            elif cluster_actor_type == "fund":
+                continue
 
-    if actor_type != "cluster":
+    if actor_type != "cluster" and (actor_type != "fund" or signal_type in FUND_FILING_FOLLOW_SIGNAL_TYPES):
         add_normalized_key(actor_type, event.get("actor_name"))
     return keys

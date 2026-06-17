@@ -1,18 +1,28 @@
-name: Trade Data Monitor
+name: Trade Data Monitor (Nightly Fallback)
+
+# NOTE: The primary pipeline is split into independent workflows:
+#   capture-congress.yml, capture-insider.yml, process-signals.yml, capture-13f.yml
+# This full-pipeline run is a nightly fallback that catches anything they miss.
 
 on:
   schedule:
-    # Run hourly on weekdays so congressional filings are picked up faster.
-    - cron: '15 * * * 1-5'
-    # Weekend catch-up run every 4 hours.
-    - cron: '45 */4 * * 0,6'
+    # Nightly fallback only. Primary same-day capture is handled by the split
+    # workflows above so one slow data source cannot block every source.
+    - cron: '15 9 * * *'
   workflow_dispatch: # Manual trigger from GitHub UI
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly-trade-data-monitor
+  cancel-in-progress: true
 
 jobs:
   scrape-and-ingest:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -33,12 +43,50 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r scripts/requirements.txt
 
+    - name: Run Tests
+      if: github.event_name == 'workflow_dispatch'
+      working-directory: scripts
+      run: |
+        python test_alert_rules.py
+        python test_notification_compiler.py
+        python test_politician_gain_signals.py
+        python test_queue_alert_deliveries.py
+        python test_queue_tweet_candidates.py
+        python test_tweet_candidate_compiler.py
+        python -m pytest test_house_parser_regressions.py -v || python test_house_parser_regressions.py
+        python test_recent_congress_audit_smoke.py
+        python -m pytest test_senate_parser_regressions.py -v || python test_senate_parser_regressions.py
+        python -m pytest test_capitol_trades_support.py -v || python test_capitol_trades_support.py
+        python -m pytest test_sec_form4_support.py -v || python test_sec_form4_support.py
+        python -m pytest test_sec_13f_support.py -v || python test_sec_13f_support.py
+        python test_schema_performance_indexes.py
+
     - name: Run Full Scraper Pipeline
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
+        RESEND_FROM_NAME: ${{ secrets.RESEND_FROM_NAME }}
+        RESEND_REPLY_TO: ${{ secrets.RESEND_REPLY_TO }}
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        TWILIO_FROM_PHONE: ${{ secrets.TWILIO_FROM_PHONE }}
+        SMS_CLUSTER_PHONE: ${{ secrets.SMS_CLUSTER_PHONE }}
+        TWEET_CANDIDATE_LOOKBACK_HOURS: '336'
+        TWEET_CANDIDATE_SIGNAL_EVENT_LIMIT: ''
+        SIGNAL_EVENT_SIGNAL_EVENTS_UPSERT_CHUNK_SIZE: '75'
+        SIGNAL_EVENT_RAW_FILINGS_UPSERT_CHUNK_SIZE: '50'
         FINLENS_DAILY_MODE: '1'
+        FINLENS_RUN_13F_DAILY: '1'
+        HOUSE_RECENT_SYNC_CARRYOVER_DAYS: '90'
+        HOUSE_RECENT_SYNC_CARRYOVER_DOC_LIMIT: '60'
+        CAPITOL_TRADES_LOOKBACK_DAYS: '21'
+        CAPITOL_TRADES_MAX_PAGES: '20'
+        CAPITOL_TRADES_RECONCILE_DAYS: '45'
+        CAPITOL_TRADES_AUDIT_DAYS: '21'
       run: |
         echo "Running Trade Data Monitor Pipeline..."
         python scripts/daily_scraper.py
@@ -48,4 +96,77 @@ jobs:
       env:
         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       run: |
+        if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+          echo "DISCORD_WEBHOOK_URL is not configured; skipping failure notification."
+          exit 0
+        fi
         curl -H "Content-Type: application/json" -d '{"content": "🚨 **FinLens Alert**: The trade data monitor has failed! Please check the GitHub Actions logs."}' $DISCORD_WEBHOOK_URL
+
+  # Retry job: runs 2 hours after the primary schedule in case of transient failures
+  retry-on-failure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: scrape-and-ingest
+    if: failure()
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install OCR system packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tesseract-ocr poppler-utils
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r scripts/requirements.txt
+
+    - name: Retry Full Scraper Pipeline
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
+        RESEND_FROM_NAME: ${{ secrets.RESEND_FROM_NAME }}
+        RESEND_REPLY_TO: ${{ secrets.RESEND_REPLY_TO }}
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        TWILIO_FROM_PHONE: ${{ secrets.TWILIO_FROM_PHONE }}
+        SMS_CLUSTER_PHONE: ${{ secrets.SMS_CLUSTER_PHONE }}
+        TWEET_CANDIDATE_LOOKBACK_HOURS: '336'
+        TWEET_CANDIDATE_SIGNAL_EVENT_LIMIT: ''
+        SIGNAL_EVENT_SIGNAL_EVENTS_UPSERT_CHUNK_SIZE: '75'
+        SIGNAL_EVENT_RAW_FILINGS_UPSERT_CHUNK_SIZE: '50'
+        FINLENS_DAILY_MODE: '1'
+        FINLENS_RUN_13F_DAILY: '1'
+        HOUSE_RECENT_SYNC_CARRYOVER_DAYS: '90'
+        HOUSE_RECENT_SYNC_CARRYOVER_DOC_LIMIT: '60'
+        CAPITOL_TRADES_LOOKBACK_DAYS: '21'
+        CAPITOL_TRADES_MAX_PAGES: '20'
+        CAPITOL_TRADES_RECONCILE_DAYS: '45'
+        CAPITOL_TRADES_AUDIT_DAYS: '21'
+      run: |
+        echo "Retrying Trade Data Monitor Pipeline after initial failure..."
+        sleep 120  # Wait 2 minutes before retry
+        python scripts/daily_scraper.py
+
+    - name: Notify on Retry Failure
+      if: failure()
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+          echo "DISCORD_WEBHOOK_URL is not configured; skipping retry failure notification."
+          exit 0
+        fi
+        curl -H "Content-Type: application/json" -d '{"content": "🚨🚨 **FinLens Alert**: The trade data monitor RETRY has also failed! Immediate attention required."}' $DISCORD_WEBHOOK_URL

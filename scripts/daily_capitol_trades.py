@@ -50,7 +50,8 @@ def parse_trade_date(cell_text: str) -> str:
         day, month, year = match.groups()
         try:
             return datetime.strptime(f"{day} {month} {year}", "%d %b %Y").strftime("%Y-%m-%d")
-        except:
+        except Exception as exc:
+            print(f"Warning: trade date parse error: {exc}")
             pass
     return ""
 
@@ -128,7 +129,8 @@ def parse_page(html: str) -> list[dict]:
                 "published_date": pub_date,
                 "amount_range": amount[:255],
             })
-        except:
+        except Exception as exc:
+            print(f"Warning: skipping trade row: {exc}")
             continue
     return trades
 
@@ -147,8 +149,8 @@ def send_discord_alert(trade: dict):
     )
     try:
         requests.post(DISCORD_WEBHOOK, json={"content": msg}, timeout=5)
-    except:
-        pass
+    except Exception as exc:
+        print(f"Warning: Discord notification failed: {exc}")
 
 
 def fetch_recent_keys() -> set:
@@ -191,8 +193,8 @@ def resolve_member(name: str, chamber: str, party: str, state: str, cache: dict)
         if resp.data:
             cache[cache_key] = resp.data[0]["id"]
             return resp.data[0]["id"]
-    except:
-        pass
+    except Exception as exc:
+        print(f"Warning: member lookup failed: {exc}")
 
     member_id = f"unknown-{first.lower()}-{last.lower()}"[:50]
     try:
@@ -200,8 +202,8 @@ def resolve_member(name: str, chamber: str, party: str, state: str, cache: dict)
             "id": member_id, "first_name": first, "last_name": last,
             "chamber": chamber, "party": party, "state": state,
         }).execute()
-    except:
-        pass
+    except Exception as exc:
+        print(f"Warning: member upsert failed: {exc}")
     cache[cache_key] = member_id
     return member_id
 
@@ -245,8 +247,8 @@ def run_daily_monitor():
                     "ticker": trade["ticker"], "name": trade["asset_name"] or trade["ticker"],
                     "sector": "Unknown", "industry": "Unknown",
                 }).execute()
-            except:
-                pass
+            except Exception as exc:
+                print(f"Warning: company upsert failed: {exc}")
 
             doc_id = f"capitol-{dedup_key}".replace(" ", "-")[:100]
 

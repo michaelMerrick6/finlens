@@ -2,7 +2,7 @@ import os
 
 import requests
 
-from alert_delivery_support import build_discord_embed, fetch_pending_deliveries, mark_delivery
+from alert_delivery_support import build_discord_webhook_payload, fetch_pending_deliveries, mark_delivery
 from pipeline_support import emit_summary, get_supabase_client
 
 
@@ -10,10 +10,7 @@ BATCH_SIZE = int(os.environ.get("DISCORD_ALERT_BATCH_SIZE", "20"))
 
 
 def send_webhook(destination: str, event: dict):
-    payload = {
-        "username": "Vail Signals",
-        "embeds": [build_discord_embed(event)],
-    }
+    payload = build_discord_webhook_payload(event)
     response = requests.post(destination, json=payload, timeout=15)
     response.raise_for_status()
 

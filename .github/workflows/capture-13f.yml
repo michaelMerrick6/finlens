@@ -1,0 +1,71 @@
+name: Capture 13F Holdings
+
+on:
+  schedule:
+    # 13F is not intraday data, but run daily so amended filings and deadline
+    # reminders are not blocked by the hourly trade capture jobs.
+    - cron: '10 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: capture-13f
+  cancel-in-progress: true
+
+jobs:
+  capture-13f:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r scripts/requirements.txt
+
+    - name: Run 13F Tests
+      if: github.event_name == 'workflow_dispatch'
+      working-directory: scripts
+      run: |
+        python -m pytest test_sec_13f_support.py -v || python test_sec_13f_support.py
+        python test_emit_13f_deadline_events.py
+        python test_schema_performance_indexes.py
+
+    - name: Capture 13F Holdings
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        FINLENS_DAILY_MODE: '1'
+        FINLENS_RUN_13F_DAILY: '1'
+      run: |
+        cd scripts
+        echo "=== 13F Ingest ==="
+        python ingest_sec_13f.py
+        echo "=== 13F Signal Events ==="
+        python emit_signal_events.py
+        echo "=== 13F Deadline Reminders ==="
+        python emit_13f_deadline_events.py
+        echo "=== 13F Audit ==="
+        python ../ops/audit_recent_13f_coverage.py
+
+    - name: Notify on Failure
+      if: failure()
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+          echo "DISCORD_WEBHOOK_URL is not configured; skipping failure notification."
+          exit 0
+        fi
+        curl -H "Content-Type: application/json" -d '{"content": "🚨 **FinLens**: 13F capture workflow failed."}' $DISCORD_WEBHOOK_URL

@@ -223,6 +223,8 @@ def enrich_event_with_member_roles(event: dict, profiles: dict[str, dict[str, An
         return event
 
     payload = dict(event.get("payload") or {})
+    if str(payload.get("member_role_source") or "").strip():
+        return event
     member_id = str(payload.get("member_id") or "").strip()
     if not member_id:
         return event

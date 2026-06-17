@@ -1,0 +1,108 @@
+name: Process Signals & Deliver
+
+on:
+  schedule:
+    # Run after the capture workflows so new raw trades become signal events
+    # and user alerts without waiting for the nightly fallback.
+    - cron: '50 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: process-signals
+  cancel-in-progress: true
+
+jobs:
+  process-signals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r scripts/requirements.txt
+
+    - name: Run Signal & Alert Tests
+      if: github.event_name == 'workflow_dispatch'
+      working-directory: scripts
+      run: |
+        python test_alert_rules.py
+        python test_emit_13f_deadline_events.py
+        python test_notification_compiler.py
+        python test_politician_gain_signals.py
+        python test_queue_alert_deliveries.py
+        python test_queue_tweet_candidates.py
+        python test_tweet_candidate_compiler.py
+
+    - name: Process Signals & Dispatch Alerts
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
+        RESEND_FROM_NAME: ${{ secrets.RESEND_FROM_NAME }}
+        RESEND_REPLY_TO: ${{ secrets.RESEND_REPLY_TO }}
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        TWILIO_FROM_PHONE: ${{ secrets.TWILIO_FROM_PHONE }}
+        SMS_CLUSTER_PHONE: ${{ secrets.SMS_CLUSTER_PHONE }}
+        TWEET_CANDIDATE_LOOKBACK_HOURS: '336'
+        TWEET_CANDIDATE_SIGNAL_EVENT_LIMIT: ''
+        SIGNAL_EVENT_SIGNAL_EVENTS_UPSERT_CHUNK_SIZE: '75'
+        SIGNAL_EVENT_RAW_FILINGS_UPSERT_CHUNK_SIZE: '50'
+      run: |
+        cd scripts
+        status=0
+
+        run_stage() {
+          local label="$1"
+          shift
+          echo "=== ${label} ==="
+          if ! "$@"; then
+            echo "::warning::${label} failed; continuing so downstream cluster and queue stages can still run."
+            status=1
+          fi
+        }
+
+        echo "=== Emit Signal Events ==="
+        if ! python emit_signal_events.py; then
+          echo "::warning::Emit Signal Events failed; compiling derived clusters from the latest available raw events."
+          status=1
+        fi
+
+        run_stage "13F Deadline Reminders" python emit_13f_deadline_events.py
+        run_stage "Compile Derived Signals" python compile_derived_signal_events.py
+        run_stage "Queue Alert Deliveries" python queue_alert_deliveries.py
+        run_stage "Queue Tweet Candidates" python queue_tweet_candidates.py
+        run_stage "Dispatch Email Alerts" python dispatch_email_alerts.py
+        run_stage "Dispatch Text Alerts" python dispatch_sms_alerts.py
+        run_stage "Dispatch Discord Alerts" python dispatch_discord_alerts.py
+        run_stage "Dispatch Discord Broadcasts" python dispatch_discord_broadcasts.py
+        run_stage "Dispatch X Posts" python dispatch_twitter_posts.py
+
+        exit "$status"
+
+    - name: Notify on Failure
+      if: failure()
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+          echo "DISCORD_WEBHOOK_URL is not configured; skipping failure notification."
+          exit 0
+        fi
+        curl -H "Content-Type: application/json" -d '{"content": "🚨 **FinLens**: Signal processing & delivery workflow failed."}' $DISCORD_WEBHOOK_URL

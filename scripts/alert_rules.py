@@ -33,6 +33,22 @@ INSIDER_SELL_UNUSUAL_MIN_VALUE = float(
     POLICY_THRESHOLDS.get("insider_sell_unusual_min_value")
     or os.environ.get("INSIDER_SELL_UNUSUAL_MIN_VALUE", "1000000")
 )
+INSIDER_POSITION_REDUCTION_UNUSUAL_MIN_PCT = float(
+    POLICY_THRESHOLDS.get("insider_position_reduction_unusual_min_pct")
+    or os.environ.get("INSIDER_POSITION_REDUCTION_UNUSUAL_MIN_PCT", "0.5")
+)
+INSIDER_POSITION_INCREASE_UNUSUAL_MIN_PCT = float(
+    POLICY_THRESHOLDS.get("insider_position_increase_unusual_min_pct")
+    or os.environ.get("INSIDER_POSITION_INCREASE_UNUSUAL_MIN_PCT", "0.5")
+)
+POLITICIAN_GAIN_MILESTONE_MIN_PCT = float(
+    POLICY_THRESHOLDS.get("politician_gain_milestone_min_pct")
+    or os.environ.get("POLITICIAN_GAIN_MILESTONE_MIN_PCT", "100")
+)
+CLUSTER_GAIN_MILESTONE_MIN_PCT = float(
+    POLICY_THRESHOLDS.get("cluster_gain_milestone_min_pct")
+    or os.environ.get("CLUSTER_GAIN_MILESTONE_MIN_PCT", "50")
+)
 
 PRIORITY_SIGNAL_TICKERS = {
     ticker.strip().upper()
@@ -51,6 +67,16 @@ NOTABLE_POLITICIAN_KEYS = {
     if value.strip()
 }
 NON_CLEAN_TICKER_PREFIXES = ("US-TREAS", "USTREAS")
+CONGRESS_CLEAN_EQUITY_ASSET_TYPES = {
+    "st",
+    "stock",
+    "stocks",
+    "stock/etf",
+    "etf",
+    "cs",
+    "common stock",
+    "common stocks",
+}
 
 
 def parse_amount_lower_bound(amount_range: str | None) -> float:
@@ -99,7 +125,7 @@ def is_clean_market_asset(event: dict) -> bool:
 
     if source == "congress" or signal_type == "politician_trade":
         asset_type = str(payload.get("asset_type") or "").strip().lower()
-        if asset_type and "stock" not in asset_type and "etf" not in asset_type:
+        if asset_type and asset_type not in CONGRESS_CLEAN_EQUITY_ASSET_TYPES and "stock" not in asset_type and "etf" not in asset_type:
             return False
         asset_name = str(payload.get("asset_name") or "").strip().lower()
         if "treasury" in asset_name or "municipal" in asset_name or "bond" in asset_name:
@@ -143,6 +169,53 @@ def classify_event_behavior(event: dict) -> dict:
             result["reasons"].append(f"theme_{theme}")
         return result
 
+    if signal_type == "cross_source_accumulation":
+        result["activity"] = True
+        result["unusual"] = True
+        result["reasons"].append("cross_source_accumulation")
+        if payload.get("includes_fund_source"):
+            result["reasons"].append("cross_source_full_stack")
+        if is_priority_signal:
+            result["reasons"].append("priority_theme_ticker")
+        for theme in themes:
+            result["reasons"].append(f"theme_{theme}")
+        return result
+
+    if signal_type == "politician_gain_milestone":
+        result["activity"] = True
+        gain_pct = float(payload.get("gain_return_pct") or 0)
+        if gain_pct >= POLITICIAN_GAIN_MILESTONE_MIN_PCT:
+            result["unusual"] = True
+            result["reasons"].append("politician_gain_milestone")
+        milestone_pct = float(payload.get("gain_milestone_pct") or 0)
+        if milestone_pct >= 100:
+            result["reasons"].append("triple_digit_gain")
+        if is_priority_signal:
+            result["reasons"].append("priority_theme_ticker")
+        for theme in themes:
+            result["reasons"].append(f"theme_{theme}")
+        return result
+
+    if signal_type == "cluster_gain_milestone":
+        result["activity"] = True
+        gain_pct = float(payload.get("gain_return_pct") or 0)
+        if gain_pct >= CLUSTER_GAIN_MILESTONE_MIN_PCT:
+            result["unusual"] = True
+            result["reasons"].append("cluster_gain_milestone")
+        milestone_pct = float(payload.get("gain_milestone_pct") or 0)
+        if milestone_pct >= 100:
+            result["reasons"].append("triple_digit_gain")
+        cluster_type = str(payload.get("cluster_type") or "").strip().lower()
+        if cluster_type == "cross_source_accumulation":
+            result["reasons"].append("cross_source_accumulation")
+        else:
+            result["reasons"].append("congress_cluster")
+        if is_priority_signal:
+            result["reasons"].append("priority_theme_ticker")
+        for theme in themes:
+            result["reasons"].append(f"theme_{theme}")
+        return result
+
     if signal_type in {"politician_filing_summary", "insider_filing_summary"}:
         result["activity"] = bool(payload.get("summary_contains_activity"))
         result["unusual"] = bool(payload.get("summary_contains_unusual"))
@@ -155,6 +228,11 @@ def classify_event_behavior(event: dict) -> dict:
             result["reasons"].append(f"theme_{theme}")
         return result
 
+    if signal_type in {"fund_filing_deadline_reminder", "fund_filing_received"}:
+        result["activity"] = True
+        result["reasons"].append(signal_type)
+        return result
+
     if not is_clean_market_asset(event):
         result["suppressed"] = True
         result["reasons"].append("non_clean_asset")
@@ -163,6 +241,8 @@ def classify_event_behavior(event: dict) -> dict:
     if base_signal_type == "politician_trade":
         result["activity"] = True
         lower_bound = parse_amount_lower_bound(payload.get("amount_range"))
+        is_first_congress_ticker_buy = bool(payload.get("is_first_congress_ticker_buy"))
+        is_first_congress_actor_ticker_buy = bool(payload.get("is_first_congress_actor_ticker_buy"))
         threshold = (
             POLITICIAN_THEME_UNUSUAL_MIN_LOWER_BOUND
             if is_priority_signal or is_notable_politician(event)
@@ -174,6 +254,13 @@ def classify_event_behavior(event: dict) -> dict:
         if committee_match_themes and lower_bound >= POLITICIAN_COMMITTEE_RELEVANCE_MIN_LOWER_BOUND:
             result["unusual"] = True
             result["reasons"].append("committee_relevance")
+        if direction == "buy" and "quantum" in themes and lower_bound > 0:
+            if is_first_congress_ticker_buy:
+                result["unusual"] = True
+                result["reasons"].append("first_quantum_congress_buy")
+            elif is_first_congress_actor_ticker_buy:
+                result["unusual"] = True
+                result["reasons"].append("new_quantum_position")
         if is_notable_politician(event):
             result["unusual"] = True
             result["reasons"].append("notable_politician")
@@ -191,10 +278,18 @@ def classify_event_behavior(event: dict) -> dict:
             if value >= threshold:
                 result["unusual"] = True
                 result["reasons"].append("large_insider_buy")
+            increase_pct = float(payload.get("insider_holding_increase_pct") or 0)
+            if increase_pct >= INSIDER_POSITION_INCREASE_UNUSUAL_MIN_PCT or payload.get("insider_new_position_after_buy"):
+                result["unusual"] = True
+                result["reasons"].append("substantial_insider_position_increase")
         elif direction == "sell":
             if value >= INSIDER_SELL_UNUSUAL_MIN_VALUE:
                 result["unusual"] = True
                 result["reasons"].append("large_insider_sell")
+            reduction_pct = float(payload.get("insider_holding_reduction_pct") or 0)
+            if reduction_pct >= INSIDER_POSITION_REDUCTION_UNUSUAL_MIN_PCT:
+                result["unusual"] = True
+                result["reasons"].append("substantial_insider_position_reduction")
         if is_priority_signal:
             result["reasons"].append("priority_theme_ticker")
         for theme in themes:
@@ -202,8 +297,27 @@ def classify_event_behavior(event: dict) -> dict:
         return result
 
     if signal_type == "fund_position_change":
-        result["suppressed"] = True
-        result["reasons"].append("fund_alerts_not_enabled")
+        result["activity"] = True
+        qoq_pct = abs(float(payload.get("qoq_change_percent") or 0))
+        change_type = str(payload.get("change_type") or "").lower()
+        if not change_type:
+            # Infer change_type from direction
+            if direction == "increase":
+                change_type = "increase"
+            elif direction == "decrease":
+                change_type = "decrease"
+        if change_type in {"new", "exit"} or qoq_pct >= 20:
+            result["unusual"] = True
+            if change_type == "new":
+                result["reasons"].append("new_fund_position")
+            elif change_type == "exit":
+                result["reasons"].append("fund_position_exit")
+            else:
+                result["reasons"].append("large_fund_position_change")
+        if is_priority_signal:
+            result["reasons"].append("priority_theme_ticker")
+        for theme in themes:
+            result["reasons"].append(f"theme_{theme}")
         return result
 
     result["activity"] = True
@@ -238,18 +352,44 @@ def describe_behavior_reasons(behavior: dict) -> list[str]:
             labels.append("Notable politician")
         elif reason == "committee_relevance":
             labels.append("Committee relevance")
+        elif reason == "new_quantum_position":
+            labels.append("New quantum position")
+        elif reason == "first_quantum_congress_buy":
+            labels.append("First Congress quantum buy")
         elif reason == "congress_cluster":
             labels.append("Congress cluster")
+        elif reason == "cross_source_accumulation":
+            labels.append("Cross-source accumulation")
+        elif reason == "politician_gain_milestone":
+            labels.append("Politician gain milestone")
+        elif reason == "cluster_gain_milestone":
+            labels.append("Cluster gain milestone")
+        elif reason == "triple_digit_gain":
+            labels.append("Triple-digit gain")
+        elif reason == "cross_source_full_stack":
+            labels.append("Congress + insiders + funds")
         elif reason == "actor_filing_summary":
             labels.append("Grouped filing summary")
+        elif reason == "substantial_insider_position_increase":
+            labels.append("Insider position increase")
+        elif reason == "substantial_insider_position_reduction":
+            labels.append("Insider position reduction")
         elif reason == "priority_theme_ticker":
             labels.append("Priority theme ticker")
         elif reason.startswith("theme_"):
             labels.extend(theme_labels([reason.removeprefix("theme_")]))
         elif reason == "non_clean_asset":
             labels.append("Non-market asset suppressed")
-        elif reason == "fund_alerts_not_enabled":
-            labels.append("Fund alerts disabled")
+        elif reason == "new_fund_position":
+            labels.append("New fund position")
+        elif reason == "fund_position_exit":
+            labels.append("Fund exited position")
+        elif reason == "large_fund_position_change":
+            labels.append("Large fund position change")
+        elif reason == "fund_filing_deadline_reminder":
+            labels.append("13F filing reminder")
+        elif reason == "fund_filing_received":
+            labels.append("13F filing received")
         else:
             labels.append(reason.replace("_", " ").title())
     return labels

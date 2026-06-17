@@ -1,9 +1,17 @@
 import argparse
 import json
 import os
+import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from ingest_senate_official import SENATE_REPORT_DATA_URL, SENATE_SEARCH_URL, load_valid_tickers, parse_filed_date
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+OPS_DIR = ROOT_DIR / "ops"
+if str(OPS_DIR) not in sys.path:
+    sys.path.insert(0, str(OPS_DIR))
+
 from repair_senate_filings import (
     create_senate_session,
     load_members_lookup,

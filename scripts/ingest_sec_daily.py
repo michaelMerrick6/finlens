@@ -1,31 +1,38 @@
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pipeline_support import get_supabase_client
 from sec_form4_support import create_session, extract_sec_accession, load_recent_form4_filings, parse_form4_filing
+from time_utils import congress_today
 
 
 MAX_PAGES = int(os.environ.get("SEC_DAILY_MAX_PAGES", "10"))
 MAX_FILINGS = int(os.environ.get("SEC_DAILY_MAX_FILINGS", "600"))
 RECENT_SCAN_DAYS = int(os.environ.get("SEC_DAILY_RECENT_SCAN_DAYS", "30"))
 CONSECUTIVE_EXISTING_LIMIT = int(os.environ.get("SEC_DAILY_EXISTING_STOP", "0"))
+RECENT_DB_LOOKBACK_DAYS = int(os.environ.get("SEC_DAILY_DB_LOOKBACK_DAYS", str(RECENT_SCAN_DAYS + 2)))
+RECENT_DB_ACCESSION_LIMIT = int(os.environ.get("SEC_DAILY_DB_ACCESSION_LIMIT", "6000"))
 
 
 def log(msg: str) -> None:
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}")
 
 
-def load_existing_accessions(supabase) -> set[str]:
+def load_existing_accessions(supabase, *, days: int, accession_limit: int = RECENT_DB_ACCESSION_LIMIT) -> set[str]:
     accessions: set[str] = set()
+    cutoff = (congress_today() - timedelta(days=days)).isoformat()
     offset = 0
     while True:
+        # Use the indexed ingestion timestamp for this dedupe scan. Filtering
+        # and sorting by published_date can time out once insider_trades grows.
         response = (
             supabase.table("insider_trades")
-            .select("source_url")
+            .select("source_url, created_at")
+            .gte("created_at", cutoff)
             .order("created_at", desc=True)
-            .range(offset, offset + 1999)
+            .range(offset, offset + 999)
             .execute()
         )
         rows = response.data or []
@@ -35,9 +42,11 @@ def load_existing_accessions(supabase) -> set[str]:
             accession = extract_sec_accession(row.get("source_url"))
             if accession:
                 accessions.add(accession)
-        if len(rows) < 2000:
+                if len(accessions) >= accession_limit:
+                    return accessions
+        if len(rows) < 1000:
             break
-        offset += 2000
+        offset += 1000
     return accessions
 
 
@@ -59,8 +68,8 @@ def main() -> None:
     supabase = get_supabase_client()
     session = create_session()
 
-    existing_accessions = load_existing_accessions(supabase)
-    log(f"Loaded {len(existing_accessions)} existing accessions for dedup")
+    existing_accessions = load_existing_accessions(supabase, days=RECENT_DB_LOOKBACK_DAYS)
+    log(f"Loaded {len(existing_accessions)} recent existing accessions for dedup")
 
     try:
         filings = load_recent_form4_filings(
@@ -103,12 +112,13 @@ def main() -> None:
                     "records_skipped": 0,
                     "companies_upserted": 0,
                     "document_fetch_errors": 0,
-                    "fatal_error": True,
+                    "no_filings_available": True,
                 },
                 sort_keys=True,
             )
         )
-        sys.exit(1)
+        log("No new Form 4 filings found. This may be normal on quiet days or weekends.")
+        return
 
     new_rows: list[dict] = []
     filings_inserted = 0

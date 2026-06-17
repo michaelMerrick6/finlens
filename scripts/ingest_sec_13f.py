@@ -1,201 +1,232 @@
 import os
-import time
-import requests
-import re
-import json
-from xml.etree import ElementTree as ET
-from supabase import create_client, Client
-from dotenv import load_dotenv
 
-load_dotenv(dotenv_path=".env.local")
+from pipeline_support import emit_summary, get_supabase_client
+from sec_13f_support import (
+    TRACKED_13F_FUNDS,
+    SecTickerResolver,
+    create_13f_session,
+    is_unbounded_limit,
+    load_company_reference,
+    load_available_13f_filings,
+    parse_13f_filing,
+)
 
-url: str = os.environ.get("SUPABASE_URL", "")
-key: str = os.environ.get("SUPABASE_SERVICE_KEY", "")
-supabase: Client = create_client(url, key)
+MAX_FILINGS_PER_FUND = int(os.environ.get("SEC_13F_MAX_FILINGS_PER_FUND", "12"))
+MAX_DISTINCT_PERIODS_PER_FUND = int(os.environ.get("SEC_13F_MAX_PERIODS_PER_FUND", "8"))
+MIN_RESOLUTION_RATIO = float(os.environ.get("SEC_13F_MIN_RESOLUTION_RATIO", "0.55"))
 
-SEC_HEADERS = {
-    "User-Agent": "vtdfor@gmail.com"
-}
 
-# The Top Hedge Funds / Institutions we want to track
-FUNDS = [
-    {"cik": "0001067983", "name": "Berkshire Hathaway Inc"},
-    {"cik": "0001336528", "name": "Pershing Square Capital Management, L.P."},
-    {"cik": "0001649339", "name": "Scion Asset Management, LLC"},
-    {"cik": "0001423053", "name": "Citadel Advisors LLC"}
-]
+def select_recent_distinct_periods(parsed_filings: list[dict], max_distinct_periods: int) -> list[dict]:
+    latest_by_period: dict[str, dict] = {}
+    for parsed in parsed_filings:
+        report_period = str(parsed.get("report_period") or "")
+        existing = latest_by_period.get(report_period)
+        if not existing or str(parsed.get("published_date") or "") > str(existing.get("published_date") or ""):
+            latest_by_period[report_period] = parsed
+    periods = sorted(latest_by_period.values(), key=lambda parsed: str(parsed.get("report_period") or ""))
+    if is_unbounded_limit(max_distinct_periods):
+        return periods
+    return periods[-max_distinct_periods:]
 
-def fetch_latest_13f(fund):
-    cik = fund["cik"]
-    cik_padded = f"CIK{cik.zfill(10)}"
-    api_url = f"https://data.sec.gov/submissions/{cik_padded}.json"
-    print(f"Fetching SEC Submissions for {fund['name']} ({cik})...")
-    
-    resp = requests.get(api_url, headers=SEC_HEADERS, timeout=10)
-    if resp.status_code != 200:
-        print(f"Error fetching {api_url}: {resp.status_code}")
-        return None
-        
-    data = resp.json()
-    filings = data.get("filings", {}).get("recent", {})
-    forms = filings.get("form", [])
-    acc_nums = filings.get("accessionNumber", [])
-    dates = filings.get("filingDate", [])
-    
-    # Find the most recent 13F-HR
-    for idx, form in enumerate(forms):
-        if form == "13F-HR":
-            accession = acc_nums[idx]
-            accession_no_dash = accession.replace("-", "")
-            filing_date = dates[idx]
-            
-            # The raw txt file contains the XML elements
-            txt_url = f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{accession_no_dash}/{accession}.txt"
-            return {"accession": accession, "date": filing_date, "txt_url": txt_url}
-            
-    return None
 
-def process_fund_13f(fund, filing_info):
-    txt_url = filing_info["txt_url"]
-    print(f"Parsing 13F-HR Information Table from {txt_url}...")
-    
-    resp = requests.get(txt_url, headers=SEC_HEADERS, timeout=10)
-    if resp.status_code != 200:
-        print(f"Error fetching TXT: {resp.status_code}")
-        return []
-        
-    content = resp.content.decode("utf-8", errors="replace")
-    
-    # 13F-HR .txt files contain exactly two <XML> blocks usually: Cover Page and Information Table
-    xml_blocks = re.findall(r"<XML>(.*?)</XML>", content, re.DOTALL)
-    
-    if len(xml_blocks) < 2:
-        print("Could not locate Information Table XML block")
-        return []
-        
-    info_table_xml = xml_blocks[1].strip()
-    # Clean namespaces so we can use basic findall paths
-    xml_content_clean = re.sub(r'\sxmlns="[^"]+"', '', info_table_xml)
-    
+def _holding_int(value) -> int:
     try:
-        root = ET.fromstring(xml_content_clean)
-    except ET.ParseError:
-        print("Error parsing XML structure")
-        return []
-        
-    info_tables = root.findall(".//infoTable")
-    print(f"Extracted {len(info_tables)} positions.")
-    
-    aggregated_holdings = {}
-    companies_batch = []
-    
-    for row in info_tables:
-        name_node = row.find("nameOfIssuer")
-        shares_node = row.find(".//shrsOrPrnAmt/sshPrnamt")
-        value_node = row.find("value")
-        
-        name = name_node.text if name_node is not None else "Unknown"
-        shares = shares_node.text if shares_node is not None else "0"
-        value = value_node.text if value_node is not None else "0"
-        
-        try:
-            shares_val = int(shares)
-            value_val = int(value) * 1000 # SEC 13F values are typically in thousands
-        except ValueError:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def apply_qoq(current_holdings: list[dict], previous_holdings: list[dict]) -> list[dict]:
+    previous_by_ticker = {
+        str(row.get("ticker") or "").upper(): row
+        for row in previous_holdings
+        if row.get("ticker")
+    }
+    if not previous_by_ticker:
+        for holding in current_holdings:
+            holding["qoq_change_shares"] = None
+            holding["qoq_change_percent"] = None
+        return current_holdings
+
+    current_by_ticker = {
+        str(row.get("ticker") or "").upper(): row
+        for row in current_holdings
+        if row.get("ticker")
+    }
+
+    for holding in current_holdings:
+        ticker = str(holding.get("ticker") or "").upper()
+        if not ticker:
+            holding["qoq_change_shares"] = None
+            holding["qoq_change_percent"] = None
             continue
-            
-        ticker = name.split()[0][:5].upper().replace(",", "").replace(".", "")
-        if ticker == "APPLE": ticker = "AAPL"
-        elif ticker == "MICRO": ticker = "MSFT"
-        elif ticker == "NVIDI": ticker = "NVDA"
-        elif ticker == "AMAZO": ticker = "AMZN"
-        elif ticker == "META": ticker = "META"
-        elif ticker == "ALPHABET": ticker = "GOOGL"
-        
-        companies_batch.append({
-            "ticker": ticker,
-            "name": name[:255],
-            "sector": "Hedge Fund Holding",
-            "industry": "Unknown"
-        })
-            
-        
-        if ticker not in aggregated_holdings:
-            aggregated_holdings[ticker] = {
-                "fund_name": fund["name"],
-                "ticker": ticker,
-                "report_period": filing_info["date"],
-                "published_date": filing_info["date"],
+        previous = previous_by_ticker.get(ticker)
+        if not previous:
+            holding["qoq_change_shares"] = _holding_int(holding.get("shares_held"))
+            holding["qoq_change_percent"] = None
+            continue
+        previous_shares = _holding_int(previous.get("shares_held"))
+        current_shares = _holding_int(holding.get("shares_held"))
+        change = current_shares - previous_shares
+        holding["qoq_change_shares"] = change
+        holding["qoq_change_percent"] = round((change / previous_shares) * 100, 2) if previous_shares else None
+
+    if not current_holdings:
+        return current_holdings
+
+    current_template = current_holdings[0]
+    compared_holdings = list(current_holdings)
+    for ticker, previous in previous_by_ticker.items():
+        if ticker in current_by_ticker:
+            continue
+        previous_shares = _holding_int(previous.get("shares_held"))
+        if previous_shares <= 0:
+            continue
+        compared_holdings.append(
+            {
+                "fund_name": current_template["fund_name"],
+                "ticker": previous.get("ticker"),
+                "report_period": current_template["report_period"],
+                "published_date": current_template["published_date"],
                 "shares_held": 0,
                 "value_held": 0,
-                "source_url": txt_url[:500]
+                "qoq_change_shares": -previous_shares,
+                "qoq_change_percent": -100.0,
+                "source_url": current_template["source_url"],
+                "_issuer_name": previous.get("_issuer_name") or previous.get("ticker"),
+                "_title_of_class": previous.get("_title_of_class"),
+                "_cusip": previous.get("_cusip"),
+                "_share_class": previous.get("_share_class"),
+                "_asset_key": previous.get("_asset_key") or ticker,
+                "_accession": current_template.get("_accession"),
             }
-            
-        aggregated_holdings[ticker]["shares_held"] += shares_val
-        aggregated_holdings[ticker]["value_held"] += value_val
-        
-    holdings = list(aggregated_holdings.values())
-        
-    print(f"Upserting {len(companies_batch)} tickers to verify Foreign Key constraints...")
-    try:
-        # Deduplicate companies batch
-        seen = set()
-        unique_companies = []
-        for c in companies_batch:
-             if c["ticker"] not in seen:
-                 seen.add(c["ticker"])
-                 unique_companies.append(c)
-                 
-        for i in range(0, len(unique_companies), 100):
-            supabase.table("companies").upsert(unique_companies[i:i+100]).execute()
-    except Exception as e:
-        print(f"Error upserting companies: {e}")
-        
-    return holdings
-
-def main():
-    print("Starting Official SEC EDGAR 13F-HR Scraper...")
-    all_holdings = []
-    inserted_count = 0
-    
-    for fund in FUNDS:
-        filing_info = fetch_latest_13f(fund)
-        if filing_info:
-            time.sleep(1) # Be a good SEC citizen
-            fund_holdings = process_fund_13f(fund, filing_info)
-            all_holdings.extend(fund_holdings)
-            time.sleep(1)
-            
-    print(f"\nFinished parsing {len(all_holdings)} total institutional holdings.")
-    
-    if all_holdings:
-        print(f"Uploading {len(all_holdings)} real Hedge Fund holdings to Supabase...")
-        
-        for i in range(0, len(all_holdings), 500):
-            chunk = all_holdings[i:i + 500]
-            try:
-                supabase.table("institutional_holdings").upsert(
-                    chunk,
-                    on_conflict="fund_name,ticker,report_period",
-                ).execute()
-                inserted_count += len(chunk)
-            except Exception as e:
-                print(f"Failed to upsert 13F chunk: {e}")
-                
-        print("Successfully seeded INSTITUTIONAL HOLDINGS with REAL DATA!")
-
-    print(
-        "SUMMARY_JSON:"
-        + json.dumps(
-            {
-                "records_seen": len(all_holdings),
-                "records_inserted": inserted_count,
-                "records_skipped": max(len(all_holdings) - inserted_count, 0),
-                "funds_tracked": len(FUNDS),
-            },
-            sort_keys=True,
         )
-    )
+    return compared_holdings
+
+
+def upsert_companies(supabase, holdings: list[dict]) -> None:
+    company_rows: dict[str, dict] = {}
+    for holding in holdings:
+        ticker = str(holding.get("ticker") or "").strip().upper()
+        if not ticker:
+            continue
+        company_rows[ticker] = {
+            "ticker": ticker[:10],
+            "name": str(holding.get("_issuer_name") or ticker).strip()[:255] or ticker,
+            "sector": "Institutional Holding",
+            "industry": "13F Filing",
+        }
+    if company_rows:
+        supabase.table("companies").upsert(list(company_rows.values()), on_conflict="ticker").execute()
+
+
+def replace_holdings_for_period(supabase, fund_name: str, report_period: str, holdings: list[dict]) -> int:
+    supabase.table("institutional_holdings").delete().eq("fund_name", fund_name).eq("report_period", report_period).execute()
+    published_date = str(holdings[0].get("published_date") or "").strip() if holdings else ""
+    if published_date:
+        supabase.table("institutional_holdings").delete().eq("fund_name", fund_name).eq("published_date", published_date).execute()
+    insert_rows = [
+        {
+            "fund_name": holding["fund_name"],
+            "ticker": holding.get("ticker"),
+            "report_period": holding["report_period"],
+            "published_date": holding["published_date"],
+            "shares_held": holding["shares_held"],
+            "value_held": holding["value_held"],
+            "qoq_change_shares": holding.get("qoq_change_shares"),
+            "qoq_change_percent": holding.get("qoq_change_percent"),
+            "source_url": holding["source_url"],
+        }
+        for holding in holdings
+        if holding.get("ticker")
+    ]
+    if not insert_rows:
+        return 0
+    for index in range(0, len(insert_rows), 200):
+        supabase.table("institutional_holdings").insert(insert_rows[index : index + 200]).execute()
+    return len(insert_rows)
+
+
+def main() -> None:
+    print("Starting SEC 13F-HR sync...")
+    supabase = get_supabase_client()
+    session = create_13f_session()
+    resolver = SecTickerResolver(load_company_reference(session))
+
+    funds_seen = 0
+    filings_seen = 0
+    records_seen = 0
+    records_inserted = 0
+    unresolved_rows = 0
+    unsupported_rows = 0
+    parse_failures = 0
+    failed_funds: list[str] = []
+
+    for fund in TRACKED_13F_FUNDS:
+        funds_seen += 1
+        fund_name = fund["name"]
+        fund_filings = load_available_13f_filings(session, fund, max_filings=MAX_FILINGS_PER_FUND)
+        parsed_by_period: dict[str, dict] = {}
+
+        for filing in fund_filings:
+            filings_seen += 1
+            parsed = parse_13f_filing(session, filing, resolver)
+            if not parsed:
+                parse_failures += 1
+                continue
+
+            supported = int(parsed.get("rows_supported") or 0)
+            resolved = int(parsed.get("rows_resolved") or 0)
+            resolution_ratio = (resolved / supported) if supported else 0.0
+            if supported <= 0 or resolution_ratio < MIN_RESOLUTION_RATIO:
+                parse_failures += 1
+                continue
+
+            report_period = str(parsed.get("report_period") or "")
+            existing = parsed_by_period.get(report_period)
+            if not existing or str(parsed.get("published_date") or "") > str(existing.get("published_date") or ""):
+                parsed_by_period[report_period] = parsed
+            if not is_unbounded_limit(MAX_DISTINCT_PERIODS_PER_FUND) and len(parsed_by_period) >= MAX_DISTINCT_PERIODS_PER_FUND:
+                break
+
+        parsed_periods = select_recent_distinct_periods(list(parsed_by_period.values()), MAX_DISTINCT_PERIODS_PER_FUND)
+        if not parsed_periods:
+            failed_funds.append(fund_name)
+            continue
+
+        for index, parsed in enumerate(parsed_periods):
+            current_holdings = parsed.get("holdings") or []
+            previous_holdings = parsed_periods[index - 1].get("holdings") or [] if index > 0 else []
+            compared_holdings = apply_qoq(current_holdings, previous_holdings)
+
+            records_seen += len(compared_holdings)
+            unresolved_rows += int(parsed.get("rows_unresolved") or 0)
+            unsupported_rows += int(parsed.get("rows_skipped") or 0)
+
+            resolved_holdings = [holding for holding in compared_holdings if holding.get("ticker")]
+            if not resolved_holdings:
+                continue
+            upsert_companies(supabase, resolved_holdings)
+            records_inserted += replace_holdings_for_period(
+                supabase,
+                fund_name,
+                parsed["report_period"],
+                resolved_holdings,
+            )
+
+    summary = {
+        "funds_seen": funds_seen,
+        "filings_seen": filings_seen,
+        "records_seen": records_seen,
+        "records_inserted": records_inserted,
+        "records_skipped": unresolved_rows + unsupported_rows,
+        "unresolved_rows": unresolved_rows,
+        "unsupported_rows": unsupported_rows,
+        "parse_failures": parse_failures,
+        "failed_funds": failed_funds,
+    }
+    emit_summary(summary)
+
 
 if __name__ == "__main__":
     main()

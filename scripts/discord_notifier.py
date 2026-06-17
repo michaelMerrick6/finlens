@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 load_dotenv()
 
-DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
+DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_GLOBAL_WEBHOOK_URL") or os.environ.get("DISCORD_WEBHOOK_URL")
 
 def send_discord_payload(payload, webhook_url=None):
     destination = webhook_url or DISCORD_WEBHOOK_URL
