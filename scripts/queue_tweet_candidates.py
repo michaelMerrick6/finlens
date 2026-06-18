@@ -28,6 +28,8 @@ TWEET_POLICY = POLICY.get("tweet_candidates") or {}
 MINIMUM_IMPORTANCE = float(TWEET_POLICY.get("minimum_importance") or os.environ.get("TWEET_CANDIDATE_MIN_IMPORTANCE", "0.88"))
 MINIMUM_GROUP_COUNT = int(TWEET_POLICY.get("minimum_group_count") or os.environ.get("TWEET_CANDIDATE_MIN_GROUP_COUNT", "2"))
 QUEUE_STAGE_TOTAL = 10
+CANDIDATE_KEY_LOOKUP_CHUNK_SIZE = int(os.environ.get("TWEET_CANDIDATE_KEY_LOOKUP_CHUNK_SIZE", "25"))
+CANDIDATE_UPSERT_CHUNK_SIZE = int(os.environ.get("TWEET_CANDIDATE_UPSERT_CHUNK_SIZE", "100"))
 UPSTREAM_SIGNAL_TABLES = {
     "politician_trades": "published_date",
     "insider_trades": "published_date",
@@ -313,8 +315,8 @@ def enrich_compiled_congress_amounts(events: list[dict]) -> list[dict]:
 def fetch_existing_candidates(supabase, *, candidate_keys: set[str]) -> dict[tuple[str, str], dict]:
     existing: dict[tuple[str, str], dict] = {}
     key_list = sorted(str(value) for value in candidate_keys if str(value).strip())
-    for index in range(0, len(key_list), 200):
-        chunk = key_list[index : index + 200]
+    for index in range(0, len(key_list), CANDIDATE_KEY_LOOKUP_CHUNK_SIZE):
+        chunk = key_list[index : index + CANDIDATE_KEY_LOOKUP_CHUNK_SIZE]
         if not chunk:
             continue
         response = (
@@ -457,7 +459,9 @@ def main():
 
     if candidates:
         emit_progress("Upserting candidate rows", 10, stale_deleted=stale_deleted)
-        supabase.table("tweet_candidates").upsert(candidates, on_conflict="channel,candidate_key").execute()
+        for index in range(0, len(candidates), CANDIDATE_UPSERT_CHUNK_SIZE):
+            chunk = candidates[index : index + CANDIDATE_UPSERT_CHUNK_SIZE]
+            supabase.table("tweet_candidates").upsert(chunk, on_conflict="channel,candidate_key").execute()
 
     summary = {
         "tweet_candidates_enabled": True,
@@ -473,6 +477,8 @@ def main():
         "minimum_importance": MINIMUM_IMPORTANCE,
         "minimum_group_count": MINIMUM_GROUP_COUNT,
         "signal_event_fetch_limit": SIGNAL_EVENTS_FETCH_LIMIT or "all",
+        "candidate_key_lookup_chunk_size": CANDIDATE_KEY_LOOKUP_CHUNK_SIZE,
+        "candidate_upsert_chunk_size": CANDIDATE_UPSERT_CHUNK_SIZE,
         "upstream_latest_dates": upstream_latest,
         "insider_position_enrichment_enabled": ENABLE_INSIDER_POSITION_ENRICHMENT,
         "congress_buy_history_enrichment_enabled": ENABLE_CONGRESS_BUY_HISTORY_ENRICHMENT,

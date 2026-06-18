@@ -181,9 +181,75 @@ def test_congress_cluster_reappearing_later_gets_new_identity():
     ]
     later_compiled = compile_notification_events(later_events, congress_cluster_window_days=7, congress_cluster_min_members=2)
     later_clusters = [event for event in later_compiled if event["signal_type"] == "politician_cluster"]
-    assert len(later_clusters) == 1
-    assert later_clusters[0]["payload"]["cluster_clocked_at"] == "2026-03-24"
-    assert later_clusters[0]["source_document_id"] != initial_clusters[0]["source_document_id"]
+    assert len(later_clusters) == 2
+    cluster_dates = {event["payload"]["cluster_clocked_at"] for event in later_clusters}
+    assert cluster_dates == {"2026-03-18", "2026-03-24"}
+    later_cluster = [event for event in later_clusters if event["payload"]["cluster_clocked_at"] == "2026-03-24"][0]
+    assert later_cluster["source_document_id"] != initial_clusters[0]["source_document_id"]
+
+
+def test_congress_cluster_keeps_older_window_when_latest_ticker_event_is_noise():
+    events = [
+        {
+            "id": "early-1",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "source_document_id": "house-2026-20034179-0",
+            "ticker": "NVDA",
+            "actor_name": "Thomas Kean",
+            "actor_type": "politician",
+            "direction": "buy",
+            "occurred_at": "2026-03-18",
+            "published_at": "2026-03-18",
+            "importance_score": 0.72,
+            "title": "Congress trade",
+            "summary": "Early cluster leg",
+            "source_url": "https://example.com/a.pdf",
+            "payload": {"member_id": "K000398", "amount_range": "$100,001 - $250,000"},
+            "created_at": "2026-03-18T20:00:00+00:00",
+        },
+        {
+            "id": "early-2",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "source_document_id": "house-2026-20034114-0",
+            "ticker": "NVDA",
+            "actor_name": "Cleo Fields",
+            "actor_type": "politician",
+            "direction": "buy",
+            "occurred_at": "2026-03-19",
+            "published_at": "2026-03-19",
+            "importance_score": 0.72,
+            "title": "Congress trade",
+            "summary": "Early cluster leg",
+            "source_url": "https://example.com/b.pdf",
+            "payload": {"member_id": "F000470", "amount_range": "$15,001 - $50,000"},
+            "created_at": "2026-03-19T20:00:00+00:00",
+        },
+        {
+            "id": "late-noise",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "source_document_id": "house-2026-20039999-0",
+            "ticker": "NVDA",
+            "actor_name": "Single Later Member",
+            "actor_type": "politician",
+            "direction": "buy",
+            "occurred_at": "2026-04-20",
+            "published_at": "2026-04-20",
+            "importance_score": 0.72,
+            "title": "Congress trade",
+            "summary": "Latest ticker event is not a cluster",
+            "source_url": "https://example.com/c.pdf",
+            "payload": {"member_id": "S000001", "amount_range": "$1,001 - $15,000"},
+            "created_at": "2026-04-20T20:00:00+00:00",
+        },
+    ]
+    compiled = compile_notification_events(events, congress_cluster_window_days=7, congress_cluster_min_members=2)
+    clusters = [event for event in compiled if event["signal_type"] == "politician_cluster"]
+    assert len(clusters) == 1
+    assert clusters[0]["ticker"] == "NVDA"
+    assert clusters[0]["payload"]["cluster_clocked_at"] == "2026-03-19"
 
 
 def test_congress_cluster_skips_unpublishable_tickers():
@@ -414,13 +480,13 @@ def test_cross_source_accumulation_event_created():
     ]
     compiled = compile_notification_events(events, cross_source_window_days=30, fund_window_days=120)
     clusters = [event for event in compiled if event["signal_type"] == "cross_source_accumulation"]
-    assert len(clusters) == 1
-    assert clusters[0]["payload"]["congress_actor_count"] == 1
-    assert clusters[0]["payload"]["insider_actor_count"] == 1
-    assert clusters[0]["payload"]["fund_actor_count"] == 1
-    assert clusters[0]["payload"]["includes_fund_source"] is True
-    assert clusters[0]["payload"]["cluster_combined_lower_bound"] == 5100001
-    assert clusters[0]["payload"]["cluster_clocked_at"] == "2026-03-18"
+    assert len(clusters) == 2
+    full_stack = [event for event in clusters if event["payload"]["cluster_clocked_at"] == "2026-03-18"][0]
+    assert full_stack["payload"]["congress_actor_count"] == 1
+    assert full_stack["payload"]["insider_actor_count"] == 1
+    assert full_stack["payload"]["fund_actor_count"] == 1
+    assert full_stack["payload"]["includes_fund_source"] is True
+    assert full_stack["payload"]["cluster_combined_lower_bound"] == 5100001
 
 
 def test_cross_source_accumulation_allows_congress_fund_alignment():
@@ -564,6 +630,136 @@ def test_insider_cluster_skips_small_two_actor_noise():
     assert len(clusters) == 0
 
 
+def test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is_noise():
+    events = [
+        {
+            "id": "early-i1",
+            "source": "insider",
+            "signal_type": "insider_trade",
+            "source_document_id": "0001104659-26-032683::CRWV",
+            "ticker": "CRWV",
+            "actor_name": "First Insider",
+            "actor_type": "insider",
+            "direction": "sell",
+            "occurred_at": "2026-05-20",
+            "published_at": "2026-05-21",
+            "importance_score": 0.74,
+            "title": "Insider trade",
+            "summary": "Early material cluster leg",
+            "source_url": "https://example.com/insider1",
+            "payload": {"filer_name": "First Insider", "value": 750000},
+            "created_at": "2026-05-21T20:00:00+00:00",
+        },
+        {
+            "id": "early-i2",
+            "source": "insider",
+            "signal_type": "insider_trade",
+            "source_document_id": "0001104659-26-032684::CRWV",
+            "ticker": "CRWV",
+            "actor_name": "Second Insider",
+            "actor_type": "insider",
+            "direction": "sell",
+            "occurred_at": "2026-05-20",
+            "published_at": "2026-05-22",
+            "importance_score": 0.74,
+            "title": "Insider trade",
+            "summary": "Early material cluster leg",
+            "source_url": "https://example.com/insider2",
+            "payload": {"filer_name": "Second Insider", "value": 500000},
+            "created_at": "2026-05-22T20:00:00+00:00",
+        },
+        {
+            "id": "late-i-noise",
+            "source": "insider",
+            "signal_type": "insider_trade",
+            "source_document_id": "0001104659-26-032699::CRWV",
+            "ticker": "CRWV",
+            "actor_name": "Third Insider",
+            "actor_type": "insider",
+            "direction": "sell",
+            "occurred_at": "2026-06-15",
+            "published_at": "2026-06-16",
+            "importance_score": 0.74,
+            "title": "Insider trade",
+            "summary": "Latest ticker event is not a cluster",
+            "source_url": "https://example.com/insider3",
+            "payload": {"filer_name": "Third Insider", "value": 10000},
+            "created_at": "2026-06-16T20:00:00+00:00",
+        },
+    ]
+    compiled = compile_notification_events(events, insider_cluster_window_days=10, insider_cluster_min_members=2)
+    clusters = [event for event in compiled if event["signal_type"] == "insider_cluster"]
+    assert len(clusters) == 1
+    assert clusters[0]["ticker"] == "CRWV"
+    assert clusters[0]["payload"]["cluster_clocked_at"] == "2026-05-22"
+    assert clusters[0]["payload"]["cluster_total_value"] == 1250000
+
+
+def test_cross_source_cluster_keeps_older_fund_alignment_window():
+    events = [
+        {
+            "id": "p-early",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "source_document_id": "house-2026-20034188-0",
+            "ticker": "AMD",
+            "actor_name": "Josh Gottheimer",
+            "actor_type": "politician",
+            "direction": "buy",
+            "occurred_at": "2026-03-01",
+            "published_at": "2026-03-01",
+            "importance_score": 0.72,
+            "title": "Congress trade",
+            "summary": "Congress buy",
+            "source_url": "https://example.com/congress",
+            "payload": {"member_id": "G000583", "amount_range": "$15,001 - $50,000", "asset_type": "Stock"},
+            "created_at": "2026-03-01T20:00:00+00:00",
+        },
+        {
+            "id": "f-early",
+            "source": "hedge_fund",
+            "signal_type": "fund_position_change",
+            "source_document_id": "fund::amd::2026-03-31",
+            "ticker": "AMD",
+            "actor_name": "Situational Awareness LP",
+            "actor_type": "fund",
+            "direction": "increase",
+            "occurred_at": "2026-03-31",
+            "published_at": "2026-03-02",
+            "importance_score": 0.78,
+            "title": "13F update",
+            "summary": "Fund increase",
+            "source_url": "https://example.com/fund",
+            "payload": {"fund_name": "Situational Awareness LP", "change_type": "increase", "qoq_change_percent": 22.5},
+            "created_at": "2026-03-02T20:00:00+00:00",
+        },
+        {
+            "id": "i-late",
+            "source": "insider",
+            "signal_type": "insider_trade",
+            "source_document_id": "0001104659-26-032683::AMD",
+            "ticker": "AMD",
+            "actor_name": "Later Insider",
+            "actor_type": "insider",
+            "direction": "buy",
+            "occurred_at": "2026-05-20",
+            "published_at": "2026-05-20",
+            "importance_score": 0.81,
+            "title": "Insider trade",
+            "summary": "Later source family on same ticker",
+            "source_url": "https://example.com/insider",
+            "payload": {"filer_name": "Later Insider", "value": 500000},
+            "created_at": "2026-05-20T20:00:00+00:00",
+        },
+    ]
+    compiled = compile_notification_events(events, cross_source_window_days=30, fund_window_days=120)
+    clusters = [event for event in compiled if event["signal_type"] == "cross_source_accumulation"]
+    cluster_dates = {event["payload"]["cluster_clocked_at"] for event in clusters}
+    assert cluster_dates == {"2026-03-02", "2026-05-20"}
+    early_cluster = [event for event in clusters if event["payload"]["cluster_clocked_at"] == "2026-03-02"][0]
+    assert early_cluster["payload"]["cluster_sources"] == ["congress", "hedge_fund"]
+
+
 def test_cross_source_accumulation_skips_unpublishable_tickers():
     events = [
         {
@@ -620,6 +816,9 @@ def main():
     test_cross_source_accumulation_allows_congress_fund_alignment()
     test_cross_source_distribution_allows_congress_fund_alignment()
     test_insider_cluster_skips_small_two_actor_noise()
+    test_congress_cluster_keeps_older_window_when_latest_ticker_event_is_noise()
+    test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is_noise()
+    test_cross_source_cluster_keeps_older_fund_alignment_window()
     test_cross_source_accumulation_skips_unpublishable_tickers()
     print("notification compiler tests passed")
 

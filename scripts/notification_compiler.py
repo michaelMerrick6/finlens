@@ -70,6 +70,16 @@ def events_in_published_window(events: list[dict], anchor: date, window_days: in
     return windowed
 
 
+def published_anchor_dates(events: list[dict]) -> list[date]:
+    return sorted(
+        {
+            published
+            for event in events
+            if (published := parse_iso_date(event.get("published_at")))
+        }
+    )
+
+
 def distinct_actor_keys(events: list[dict]) -> set[str]:
     return {actor_match_key(event) for event in events if actor_match_key(event)}
 
@@ -493,14 +503,17 @@ def compile_congress_cluster_events(
         buckets[(ticker, direction)].append(event)
 
     for (ticker, direction), events in buckets.items():
-        anchor = latest_published_date(events)
-        if not anchor:
-            continue
-        window_events = events_in_published_window(events, anchor, window_days)
-        actor_keys = distinct_actor_keys(window_events)
-        if len(actor_keys) < min_members:
-            continue
-        cluster_candidates.append(build_cluster_event(ticker, direction, window_events, window_days=window_days))
+        seen_cluster_keys: set[tuple[str, str, str, tuple[str, ...]]] = set()
+        for anchor in published_anchor_dates(events):
+            window_events = events_in_published_window(events, anchor, window_days)
+            actor_keys = distinct_actor_keys(window_events)
+            if len(actor_keys) < min_members:
+                continue
+            cluster_key = (ticker, direction, anchor.isoformat(), tuple(sorted(actor_keys)))
+            if cluster_key in seen_cluster_keys:
+                continue
+            seen_cluster_keys.add(cluster_key)
+            cluster_candidates.append(build_cluster_event(ticker, direction, window_events, window_days=window_days))
 
     return cluster_candidates
 
@@ -657,36 +670,46 @@ def compile_cross_source_accumulation_events(
 
     compiled: list[dict] = []
     for ticker, grouped in buckets.items():
-        anchor = latest_published_date(grouped["congress"] + grouped["insider"] + grouped["hedge_fund"])
-        if not anchor:
-            continue
-        congress_events = events_in_published_window(grouped["congress"], anchor, window_days)
-        insider_events = events_in_published_window(grouped["insider"], anchor, window_days)
-        fund_events = events_in_published_window(grouped["hedge_fund"], anchor, fund_window_days)
-        congress_actors = distinct_actor_keys(congress_events)
-        insider_actors = distinct_actor_keys(insider_events)
-        fund_actors = distinct_actor_keys(fund_events)
-        source_family_count = sum(1 for actors in (congress_actors, insider_actors, fund_actors) if actors)
+        seen_cluster_keys: set[tuple[str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]]] = set()
+        for anchor in published_anchor_dates(grouped["congress"] + grouped["insider"] + grouped["hedge_fund"]):
+            congress_events = events_in_published_window(grouped["congress"], anchor, window_days)
+            insider_events = events_in_published_window(grouped["insider"], anchor, window_days)
+            fund_events = events_in_published_window(grouped["hedge_fund"], anchor, fund_window_days)
+            congress_actors = distinct_actor_keys(congress_events)
+            insider_actors = distinct_actor_keys(insider_events)
+            fund_actors = distinct_actor_keys(fund_events)
+            source_family_count = sum(1 for actors in (congress_actors, insider_actors, fund_actors) if actors)
 
-        if source_family_count < 2:
-            continue
-        if not (congress_actors or insider_actors):
-            continue
-        if not fund_actors and (not congress_actors or not insider_actors):
-            continue
-        if fund_actors and not (congress_actors and insider_actors) and not strong_fund_alignment(fund_events):
-            continue
+            if source_family_count < 2:
+                continue
+            if not (congress_actors or insider_actors):
+                continue
+            if not fund_actors and (not congress_actors or not insider_actors):
+                continue
+            if fund_actors and not (congress_actors and insider_actors) and not strong_fund_alignment(fund_events):
+                continue
 
-        compiled.append(
-            build_cross_source_accumulation_event(
+            cluster_key = (
+                anchor.isoformat(),
                 ticker,
-                [event for event in congress_events if actor_match_key(event) in congress_actors],
-                [event for event in insider_events if actor_match_key(event) in insider_actors],
-                [event for event in fund_events if actor_match_key(event) in fund_actors],
-                window_days=window_days,
-                fund_window_days=fund_window_days,
+                tuple(sorted(congress_actors)),
+                tuple(sorted(insider_actors)),
+                tuple(sorted(fund_actors)),
             )
-        )
+            if cluster_key in seen_cluster_keys:
+                continue
+            seen_cluster_keys.add(cluster_key)
+
+            compiled.append(
+                build_cross_source_accumulation_event(
+                    ticker,
+                    [event for event in congress_events if actor_match_key(event) in congress_actors],
+                    [event for event in insider_events if actor_match_key(event) in insider_actors],
+                    [event for event in fund_events if actor_match_key(event) in fund_actors],
+                    window_days=window_days,
+                    fund_window_days=fund_window_days,
+                )
+            )
     return compiled
 
 
@@ -820,35 +843,46 @@ def compile_cross_source_sell_events(
 
     compiled: list[dict] = []
     for ticker, grouped in buckets.items():
-        anchor = latest_published_date(grouped["congress"] + grouped["insider"] + grouped["hedge_fund"])
-        if not anchor:
-            continue
-        congress_events = events_in_published_window(grouped["congress"], anchor, window_days)
-        insider_events = events_in_published_window(grouped["insider"], anchor, window_days)
-        fund_events = events_in_published_window(grouped["hedge_fund"], anchor, fund_window_days)
-        congress_actors = distinct_actor_keys(congress_events)
-        insider_actors = distinct_actor_keys(insider_events)
-        fund_actors = distinct_actor_keys(fund_events)
-        source_family_count = sum(1 for actors in (congress_actors, insider_actors, fund_actors) if actors)
+        seen_cluster_keys: set[tuple[str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]]] = set()
+        for anchor in published_anchor_dates(grouped["congress"] + grouped["insider"] + grouped["hedge_fund"]):
+            congress_events = events_in_published_window(grouped["congress"], anchor, window_days)
+            insider_events = events_in_published_window(grouped["insider"], anchor, window_days)
+            fund_events = events_in_published_window(grouped["hedge_fund"], anchor, fund_window_days)
+            congress_actors = distinct_actor_keys(congress_events)
+            insider_actors = distinct_actor_keys(insider_events)
+            fund_actors = distinct_actor_keys(fund_events)
+            source_family_count = sum(1 for actors in (congress_actors, insider_actors, fund_actors) if actors)
 
-        if source_family_count < 2:
-            continue
-        if not (congress_actors or insider_actors):
-            continue
-        if not fund_actors and (not congress_actors or not insider_actors):
-            continue
-        if fund_actors and not (congress_actors and insider_actors) and not strong_fund_alignment(fund_events):
-            continue
-        compiled.append(
-            build_cross_source_sell_event(
+            if source_family_count < 2:
+                continue
+            if not (congress_actors or insider_actors):
+                continue
+            if not fund_actors and (not congress_actors or not insider_actors):
+                continue
+            if fund_actors and not (congress_actors and insider_actors) and not strong_fund_alignment(fund_events):
+                continue
+
+            cluster_key = (
+                anchor.isoformat(),
                 ticker,
-                [event for event in congress_events if actor_match_key(event) in congress_actors],
-                [event for event in insider_events if actor_match_key(event) in insider_actors],
-                [event for event in fund_events if actor_match_key(event) in fund_actors],
-                window_days=window_days,
-                fund_window_days=fund_window_days,
+                tuple(sorted(congress_actors)),
+                tuple(sorted(insider_actors)),
+                tuple(sorted(fund_actors)),
             )
-        )
+            if cluster_key in seen_cluster_keys:
+                continue
+            seen_cluster_keys.add(cluster_key)
+
+            compiled.append(
+                build_cross_source_sell_event(
+                    ticker,
+                    [event for event in congress_events if actor_match_key(event) in congress_actors],
+                    [event for event in insider_events if actor_match_key(event) in insider_actors],
+                    [event for event in fund_events if actor_match_key(event) in fund_actors],
+                    window_days=window_days,
+                    fund_window_days=fund_window_days,
+                )
+            )
     return compiled
 
 
@@ -936,16 +970,19 @@ def compile_insider_cluster_events(
         buckets[(ticker, direction)].append(event)
 
     for (ticker, direction), events in buckets.items():
-        anchor = latest_published_date(events)
-        if not anchor:
-            continue
-        window_events = events_in_published_window(events, anchor, window_days)
-        actor_keys = distinct_actor_keys(window_events)
-        if len(actor_keys) < min_members:
-            continue
-        if not insider_cluster_is_material(window_events):
-            continue
-        cluster_candidates.append(build_insider_cluster_event(ticker, direction, window_events, window_days=window_days))
+        seen_cluster_keys: set[tuple[str, str, str, tuple[str, ...]]] = set()
+        for anchor in published_anchor_dates(events):
+            window_events = events_in_published_window(events, anchor, window_days)
+            actor_keys = distinct_actor_keys(window_events)
+            if len(actor_keys) < min_members:
+                continue
+            if not insider_cluster_is_material(window_events):
+                continue
+            cluster_key = (ticker, direction, anchor.isoformat(), tuple(sorted(actor_keys)))
+            if cluster_key in seen_cluster_keys:
+                continue
+            seen_cluster_keys.add(cluster_key)
+            cluster_candidates.append(build_insider_cluster_event(ticker, direction, window_events, window_days=window_days))
 
     return cluster_candidates
 
