@@ -18,7 +18,7 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: '/', label: 'Dashboard' },
+  { href: '/dashboard', label: 'Dashboard' },
   {
     href: '/data',
     label: 'Data',
@@ -36,7 +36,7 @@ const NAV_ITEMS: NavItem[] = [
 
 function VailMark() {
   return (
-    <Link href="/landing" className="group flex items-center gap-2.5">
+    <Link href="/" className="group flex items-center gap-2.5">
       <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-visible transition-transform duration-300 group-hover:scale-110">
         <div className="absolute -inset-3 rounded-full bg-[radial-gradient(circle,rgba(52,211,153,0.34),rgba(16,185,129,0.18)_38%,transparent_70%)] opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-100" />
         <Image
@@ -143,7 +143,7 @@ function NavPills() {
 
   /* Determine which nav item is active */
   function isItemActive(item: NavItem) {
-    if (item.href === '/') return pathname === '/';
+    if (item.href === '/dashboard') return pathname === '/dashboard';
     if (item.children) {
       return item.children.some((child) => pathname.startsWith(child.href));
     }
@@ -153,8 +153,8 @@ function NavPills() {
   const activeItem = NAV_ITEMS.find(isItemActive) || null;
   const dashboardParams = new URLSearchParams(locationSearch);
   const dashboardWorkspaceOpen =
-    pathname === '/' && (dashboardParams.has('ticker') || dashboardParams.has('memberId'));
-  const animateIndicator = pathname === '/' && !dashboardWorkspaceOpen;
+    pathname === '/dashboard' && (dashboardParams.has('ticker') || dashboardParams.has('memberId'));
+  const animateIndicator = pathname === '/dashboard' && !dashboardWorkspaceOpen;
 
   /* Slide indicator to active tab */
   useEffect(() => {

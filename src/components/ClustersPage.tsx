@@ -318,7 +318,7 @@ export default function ClustersPage({ signals }: { signals: ClusterSignal[] }) 
                     type="button"
                     onClick={(event) => {
                       event.stopPropagation();
-                      router.push(`/?ticker=${encodeURIComponent(signal.ticker)}`);
+                      router.push(`/dashboard?ticker=${encodeURIComponent(signal.ticker)}`);
                     }}
                     className="shrink-0 rounded-full transition hover:ring-2 hover:ring-cyan-400/20"
                     aria-label={`Open ${signal.ticker}`}

@@ -37,7 +37,7 @@ export default function LandingPage() {
       <div className="lp">
         {/* ── NAV ── */}
         <header className="lp-nav">
-          <Link className="lp-brand" href="/landing">
+          <Link className="lp-brand" href="/">
             <Image
               src="/vail-logo-mark.svg"
               alt=""
@@ -52,7 +52,7 @@ export default function LandingPage() {
             <Link href="/politicians">Politicians</Link>
             <Link href="/clusters">Clusters</Link>
             <Link href="/alerts">Alerts</Link>
-            <Link className="lp-open" href="/">Open App</Link>
+            <Link className="lp-open" href="/dashboard">Open App</Link>
           </nav>
         </header>
 
@@ -75,7 +75,7 @@ export default function LandingPage() {
             </p>
             <div className="lp-hero-ctas">
               <Link className="lp-btn-primary" href="/auth?mode=signup">Start alerts</Link>
-              <Link className="lp-btn-ghost" href="/">View dashboard</Link>
+              <Link className="lp-btn-ghost" href="/dashboard">View dashboard</Link>
             </div>
           </div>
 
@@ -128,7 +128,7 @@ export default function LandingPage() {
             </p>
             <div className="lp-cta-btns">
               <Link className="lp-btn-primary lp-btn-lg" href="/auth?mode=signup">Start tracking</Link>
-              <Link className="lp-btn-ghost lp-btn-lg" href="/">Browse the data</Link>
+              <Link className="lp-btn-ghost lp-btn-lg" href="/dashboard">Browse the data</Link>
             </div>
             <p className="lp-fine">
               Data sourced from official government and regulatory filings. Third-party datasets are validator-only. Not investment advice.

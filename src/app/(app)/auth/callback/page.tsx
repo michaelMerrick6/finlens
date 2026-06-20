@@ -14,14 +14,14 @@ export default function AuthCallbackPage() {
     // We just need to wait for the auth state to settle, then redirect.
     supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        router.replace('/');
+        router.replace('/dashboard');
       }
     });
 
     // Also check if session already exists (in case the event already fired)
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
-        router.replace('/');
+        router.replace('/dashboard');
       }
     });
 

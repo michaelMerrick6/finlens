@@ -145,7 +145,7 @@ function DashboardHome({
             <div className="relative">
               <h1 className="text-[22px] font-semibold tracking-tight text-white sm:text-[26px] leading-snug">
                 Follow any Congress member, company,{' '}
-                <span className="text-zinc-500">or</span> hedge&nbsp;fund
+                <span className="text-zinc-500">or hedge&nbsp;fund</span>
               </h1>
               <p className="mt-2 text-[13px] text-zinc-500">
                 Get alerted the moment any politician, insider, or institution makes a move.

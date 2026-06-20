@@ -356,14 +356,14 @@ export function AuthPanel() {
     supabase.auth.getSession().then(({ data }) => {
       if (mounted) {
         if (data.session) {
-          router.replace('/');
+          router.replace('/dashboard');
         }
       }
     });
 
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (nextSession) {
-        router.replace('/');
+        router.replace('/dashboard');
       }
     });
 
@@ -438,7 +438,7 @@ export function AuthPanel() {
         }
 
         if (response.data.session) {
-          router.replace('/');
+          router.replace('/dashboard');
           return;
         }
 
@@ -453,7 +453,7 @@ export function AuthPanel() {
           throw response.error;
         }
 
-        router.replace('/');
+        router.replace('/dashboard');
       }
     } catch (value) {
       setError(value instanceof Error ? value.message : 'Authentication failed.');
@@ -573,9 +573,9 @@ export function AuthPanel() {
               {googleBusy ? 'Redirecting...' : 'Continue with Google'}
             </button>
 
-            <div className="my-5 flex items-center gap-3">
+            <div className="my-6 flex items-center gap-4">
               <div className="h-px flex-1 bg-white/[0.08]" />
-              <span className="text-xs text-zinc-600">or continue with email</span>
+              <span className="shrink-0 px-2 text-xs text-zinc-600">or continue with email</span>
               <div className="h-px flex-1 bg-white/[0.08]" />
             </div>
 

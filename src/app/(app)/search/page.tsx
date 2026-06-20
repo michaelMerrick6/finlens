@@ -6,5 +6,5 @@ export default async function SearchResultsPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   await searchParams;
-  redirect('/');
+  redirect('/dashboard');
 }

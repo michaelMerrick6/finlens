@@ -385,7 +385,7 @@ export default function ClusterOpsBoard({ data }: { data: ClusterOpsData }) {
                   type="button"
                   onClick={(event) => {
                     event.stopPropagation();
-                    router.push(`/?ticker=${encodeURIComponent(story.ticker)}`);
+                    router.push(`/dashboard?ticker=${encodeURIComponent(story.ticker)}`);
                   }}
                   className="inline-flex w-fit shrink-0 items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-cyan-200 transition hover:border-cyan-400/20 hover:bg-cyan-400/10 hover:text-white"
                 >
