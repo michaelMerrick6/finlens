@@ -1,16 +1,16 @@
 export type AlertMode = 'activity' | 'unusual' | 'both';
-export type ActorType = 'politician' | 'insider';
+export type ActorType = 'politician' | 'insider' | 'fund';
 export type BillingPlanKey = 'free' | 'pro';
+export type ClusterAlertChannel = 'email' | 'sms';
 
 export type AccountProfileState = {
   id: string;
   email: string | null;
   displayName: string | null;
   alertEmail: string | null;
-  telegramUsername: string | null;
-  telegramChatId: string | null;
+  textPhone: string | null;
   emailEnabled: boolean;
-  telegramEnabled: boolean;
+  textEnabled: boolean;
   followLimit: number;
 };
 
@@ -31,9 +31,15 @@ export type AccountActorFollow = {
   metadata: Record<string, unknown>;
 };
 
+export type AccountClusterFollow = {
+  id: 'cluster-feed';
+  label: 'Clusters';
+  channels: ClusterAlertChannel[];
+};
+
 export type AccountSubscriptionState = {
   id: string | null;
-  channel: 'email' | 'telegram';
+  channel: 'email' | 'sms';
   destination: string | null;
   active: boolean;
   minimumImportance: number | null;
@@ -56,6 +62,7 @@ export type AccountBillingState = {
 
 export type AccountAlertHistoryItem = {
   id: string;
+  signalEventId: string | null;
   channel: string;
   destination: string | null;
   status: string;
@@ -68,6 +75,45 @@ export type AccountAlertHistoryItem = {
   actorName: string | null;
   sourceUrl: string | null;
   publishedAt: string | null;
+};
+
+export type AccountMatchedSignal = {
+  id: string;
+  title: string;
+  summary: string | null;
+  ticker: string | null;
+  actorName: string | null;
+  actorMemberId?: string | null;
+  signalType: string;
+  source: string | null;
+  direction: string | null;
+  importanceScore: number;
+  occurredAt: string | null;
+  publishedAt: string | null;
+  sourceUrl: string | null;
+  matchReasons: string[];
+  behaviorLabels: string[];
+  isCluster: boolean;
+};
+
+export type AccountFollowSignalPreview = {
+  followKind: 'ticker' | 'actor';
+  followId: string;
+  followLabel: string;
+  followType: 'stock' | ActorType;
+  alertMode: AlertMode;
+  matchedCount: number;
+  latestMatchedAt: string | null;
+  recentSignals: AccountMatchedSignal[];
+  clusterSignals: AccountMatchedSignal[];
+};
+
+export type AccountAlertPreview = {
+  scanLimit: number;
+  matchedSignalCount: number;
+  clusterSignalCount: number;
+  followPreviews: AccountFollowSignalPreview[];
+  timeline: AccountMatchedSignal[];
 };
 
 export type AccountFollowSuggestion = {
@@ -96,14 +142,15 @@ export type AccountState = {
   };
   followCount: number;
   followLimit: number;
-  telegramBotUsername: string | null;
   subscriptions: {
     email: AccountSubscriptionState;
-    telegram: AccountSubscriptionState;
+    sms: AccountSubscriptionState;
   };
   follows: {
     tickers: AccountTickerFollow[];
     actors: AccountActorFollow[];
+    cluster: AccountClusterFollow | null;
   };
   history: AccountAlertHistoryItem[];
+  alertPreview: AccountAlertPreview;
 };

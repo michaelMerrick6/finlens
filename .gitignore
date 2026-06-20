@@ -52,7 +52,14 @@ venv/
 
 # project specific
 *.log
+ocr_*.log
+/artifacts/
+/data/*.db
 scripts/backlog_state.db
 supabase_schema_update.sql
 .tmp/
 senate_*.png
+*FD.txt
+*FD.xml
+*FD.zip
+test.json

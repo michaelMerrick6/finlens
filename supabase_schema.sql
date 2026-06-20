@@ -26,9 +26,10 @@ CREATE TABLE IF NOT EXISTS public.congress_members (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 3. Politician Trades Table (Drop and Recreate for Schema Migration)
-DROP TABLE IF EXISTS public.politician_trades;
-CREATE TABLE public.politician_trades (
+-- 3. Politician Trades Table
+-- Keep schema setup non-destructive. Production data must never be replaced
+-- when the idempotent schema bootstrap is rerun.
+CREATE TABLE IF NOT EXISTS public.politician_trades (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     member_id VARCHAR(50) REFERENCES public.congress_members(id),
     politician_name VARCHAR(255) NOT NULL, -- Fallback string
@@ -45,6 +46,8 @@ CREATE TABLE public.politician_trades (
     doc_id VARCHAR(255), -- Reference to the specific bulk document to prevent duplicates
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+ALTER TABLE public.politician_trades
+ADD COLUMN IF NOT EXISTS asset_name VARCHAR(255);
 
 -- 4. Insider Trades (Form 4) Table
 CREATE TABLE IF NOT EXISTS public.insider_trades (

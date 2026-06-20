@@ -12,7 +12,7 @@ export function getFreeFollowLimit() {
 }
 
 export function getProFollowLimit() {
-  return parsePositiveInteger(process.env.BILLING_PRO_FOLLOW_LIMIT, 10);
+  return parsePositiveInteger(process.env.BILLING_PRO_FOLLOW_LIMIT, 25);
 }
 
 export function normalizeBillingPlanKey(value: string | null | undefined): BillingPlanKey {

@@ -1,0 +1,20 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="56" fill="#050505"/>
+  <path d="M69 100L93 119L191 58L183 92L96 149L58 123L50 79L89 107L199 39L188 73L94 132L75 118L69 100Z" fill="url(#red-ribbon)"/>
+  <path d="M78 140L100 158L178 111L171 143L105 187L66 161L58 123L94 149L188 91L180 123L100 174L82 159L78 140Z" fill="url(#navy-ribbon)"/>
+  <path d="M91 180L110 195L150 171L145 200L114 220L85 199L78 163L109 187L158 157L153 185L111 211L94 199L91 180Z" fill="url(#blue-ribbon)"/>
+  <defs>
+    <linearGradient id="red-ribbon" x1="53" y1="121" x2="198" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF2635"/>
+      <stop offset="1" stop-color="#D90919"/>
+    </linearGradient>
+    <linearGradient id="navy-ribbon" x1="61" y1="162" x2="184" y2="101" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06396C"/>
+      <stop offset="1" stop-color="#062344"/>
+    </linearGradient>
+    <linearGradient id="blue-ribbon" x1="81" y1="197" x2="157" y2="159" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0586E8"/>
+      <stop offset="1" stop-color="#0060B8"/>
+    </linearGradient>
+  </defs>
+</svg>

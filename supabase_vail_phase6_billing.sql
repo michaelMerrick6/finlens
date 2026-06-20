@@ -30,7 +30,7 @@ SET billing_plan_key = COALESCE(NULLIF(billing_plan_key, ''), 'free'),
     follow_limit = CASE
       WHEN COALESCE(NULLIF(billing_plan_key, ''), 'free') = 'pro'
        AND COALESCE(NULLIF(billing_status, ''), 'free') IN ('active', 'trialing', 'past_due')
-        THEN 10
+        THEN 25
       ELSE 3
     END
 WHERE TRUE;

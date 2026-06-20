@@ -1,0 +1,250 @@
+[
+  {
+    "year": 2015,
+    "doc_id": "9110284",
+    "first_name": "Diane",
+    "last_name": "Black",
+    "filing_date": "12/9/2016",
+    "trades": [
+      {
+        "asset_name": "Baxter",
+        "ticker": "BAX",
+        "transaction_type": "buy",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$15,001 - $50,000"
+      },
+      {
+        "asset_name": "Berkshire Hathaway Inc",
+        "ticker": "BRKB",
+        "transaction_type": "buy",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$15,001 - $50,000"
+      },
+      {
+        "asset_name": "Chubb Corp",
+        "ticker": "CB",
+        "transaction_type": "buy",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$50,001 - $100,000"
+      },
+      {
+        "asset_name": "Diageo",
+        "ticker": "DEO",
+        "transaction_type": "buy",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$15,001 - $50,000"
+      },
+      {
+        "asset_name": "EOG",
+        "ticker": "EOG",
+        "transaction_type": "buy",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$15,001 - $50,000"
+      },
+      {
+        "asset_name": "Praxair",
+        "ticker": "PX",
+        "transaction_type": "buy",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$50,001 - $100,000"
+      },
+      {
+        "asset_name": "Zoetis",
+        "ticker": "ZTS",
+        "transaction_type": "sell",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$15,001 - $50,000"
+      },
+      {
+        "asset_name": "Target",
+        "ticker": "TGT",
+        "transaction_type": "sell",
+        "transaction_date": "2/24/2015",
+        "amount_range": "$50,001 - $100,000"
+      },
+      {
+        "asset_name": "California Resources Corp",
+        "ticker": "CRC",
+        "transaction_type": "sell",
+        "transaction_date": "3/2/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Target",
+        "ticker": "TGT",
+        "transaction_type": "sell",
+        "transaction_date": "3/9/2015",
+        "amount_range": "$100,001 - $250,000"
+      },
+      {
+        "asset_name": "Target",
+        "ticker": "TGT",
+        "transaction_type": "sell",
+        "transaction_date": "3/10/2015",
+        "amount_range": "$100,001 - $250,000"
+      },
+      {
+        "asset_name": "Oracle Corp",
+        "ticker": "ORCL",
+        "transaction_type": "buy",
+        "transaction_date": "3/13/2015",
+        "amount_range": "$100,001 - $250,000"
+      }
+    ]
+  },
+  {
+    "year": 2015,
+    "doc_id": "9108394",
+    "first_name": "Rodney P.",
+    "last_name": "Frelinghuysen",
+    "filing_date": "2/29/2016",
+    "trades": [
+      {
+        "asset_name": "Hospira, Inc.",
+        "ticker": "HSP",
+        "transaction_type": "exchange",
+        "transaction_date": "9/3/2015",
+        "amount_range": "$1,001 - $15,000"
+      }
+    ]
+  },
+  {
+    "year": 2015,
+    "doc_id": "9110282",
+    "first_name": "Diane",
+    "last_name": "Black",
+    "filing_date": "3/4/2016",
+    "trades": [
+      {
+        "asset_name": "Holly Frontier Corp - CALL-HFC150918C44",
+        "ticker": "HFC",
+        "transaction_type": "buy",
+        "transaction_date": "4/2/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Holly Frontier (HFC)",
+        "ticker": "HFC",
+        "transaction_type": "sell",
+        "transaction_date": "4/14/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Apple Inc - CALL-AAPL150717C125",
+        "ticker": "AAPL",
+        "transaction_type": "buy",
+        "transaction_date": "4/14/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Caterpillar - CALL-CAT150821C82.5",
+        "ticker": "CAT",
+        "transaction_type": "buy",
+        "transaction_date": "4/17/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Apple Inc - CALL-AAPL150717C125",
+        "ticker": "AAPL",
+        "transaction_type": "sell",
+        "transaction_date": "4/23/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Caterpillar - CALL-CAT150821C82.5",
+        "ticker": "CAT",
+        "transaction_type": "sell",
+        "transaction_date": "4/23/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Anthem Inc - CALL-ANTM150619C150",
+        "ticker": "ANTM",
+        "transaction_type": "buy",
+        "transaction_date": "4/27/2015",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Caterpillar - PUT-CAT150619P85",
+        "ticker": "CAT",
+        "transaction_type": "buy",
+        "transaction_date": "4/27/2015",
+        "amount_range": "$1,001 - $15,000"
+      }
+    ]
+  },
+  {
+    "year": 2015,
+    "doc_id": "9108296",
+    "first_name": "Tom",
+    "last_name": "Cole",
+    "filing_date": "2/9/2016",
+    "trades": [
+      {
+        "asset_name": "Walmart Co. Stock",
+        "ticker": "WMT",
+        "transaction_type": "sell",
+        "transaction_date": "8/11/2015",
+        "amount_range": "$15,001 - $50,000"
+      },
+      {
+        "asset_name": "I.B.M. Inc Stock",
+        "ticker": "IBM",
+        "transaction_type": "sell",
+        "transaction_date": "8/13/2015",
+        "amount_range": "$15,001 - $50,000"
+      }
+    ]
+  },
+  {
+    "year": 2015,
+    "doc_id": "9108306",
+    "first_name": "Mike",
+    "last_name": "Kelly",
+    "filing_date": "2/11/2016",
+    "trades": [
+      {
+        "asset_name": "Anchorage, AK Electric Utility Bond",
+        "ticker": "N/A",
+        "transaction_type": "buy",
+        "transaction_date": "10/30/2014",
+        "amount_range": "$100,001 - $250,000"
+      },
+      {
+        "asset_name": "CA State General Obligation Bond",
+        "ticker": "N/A",
+        "transaction_type": "sell",
+        "transaction_date": "1/28/2014",
+        "amount_range": "$100,001 - $250,000"
+      },
+      {
+        "asset_name": "WI State General Obligation Bond",
+        "ticker": "N/A",
+        "transaction_type": "sell",
+        "transaction_date": "4/24/2014",
+        "amount_range": "$100,001 - $250,000"
+      },
+      {
+        "asset_name": "Best Buy Stock",
+        "ticker": "BBY",
+        "transaction_type": "sell",
+        "transaction_date": "11/17/2014",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "Ambarella, Inc Stock",
+        "ticker": "AMBA",
+        "transaction_type": "sell",
+        "transaction_date": "2/2/2014",
+        "amount_range": "$1,001 - $15,000"
+      },
+      {
+        "asset_name": "eBay, Inc Stock",
+        "ticker": "EBAY",
+        "transaction_type": "sell",
+        "transaction_date": "4/28/2014",
+        "amount_range": "$1,001 - $15,000"
+      }
+    ]
+  }
+]

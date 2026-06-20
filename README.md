@@ -90,7 +90,7 @@ GitHub Actions `schedule` is no longer the primary trigger for production captur
 - `/api/cron/github-dispatch/capture-13f`
 - `/api/cron/github-dispatch/daily-scraper`
 
-If you deploy on Vercel, set `ENABLE_VERCEL_PIPELINE_CRONS=1` and configure `CRON_SECRET` plus `GITHUB_ACTIONS_DISPATCH_TOKEN`. If you use another host, point any external scheduler at the same endpoints.
+If you deploy on Vercel, `vercel.json` registers these cron jobs for the Production deployment. Configure `CRON_SECRET` plus `GITHUB_ACTIONS_DISPATCH_TOKEN`. If you use another host, point any external scheduler at the same endpoints.
 
 ## Local Development
 

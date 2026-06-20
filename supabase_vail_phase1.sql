@@ -69,8 +69,16 @@ CREATE INDEX IF NOT EXISTS idx_scraper_errors_created_at ON public.scraper_error
 
 CREATE INDEX IF NOT EXISTS idx_politician_trades_created_at ON public.politician_trades(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_politician_trades_doc_id ON public.politician_trades(doc_id);
+CREATE INDEX IF NOT EXISTS idx_politician_trades_published_date ON public.politician_trades(published_date DESC);
+CREATE INDEX IF NOT EXISTS idx_politician_trades_transaction_date ON public.politician_trades(transaction_date DESC);
 CREATE INDEX IF NOT EXISTS idx_insider_trades_created_at ON public.insider_trades(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_insider_trades_published_date ON public.insider_trades(published_date DESC);
+CREATE INDEX IF NOT EXISTS idx_insider_trades_transaction_date ON public.insider_trades(transaction_date DESC);
 CREATE INDEX IF NOT EXISTS idx_institutional_holdings_created_at ON public.institutional_holdings(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_institutional_holdings_published_date ON public.institutional_holdings(published_date DESC);
+CREATE INDEX IF NOT EXISTS idx_institutional_holdings_report_period ON public.institutional_holdings(report_period DESC);
+CREATE INDEX IF NOT EXISTS idx_institutional_holdings_fund_period
+ON public.institutional_holdings(fund_name, report_period DESC);
 
 CREATE TABLE IF NOT EXISTS public.raw_filings (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -123,6 +131,9 @@ CREATE TABLE IF NOT EXISTS public.signal_events (
 CREATE INDEX IF NOT EXISTS idx_signal_events_ticker_published_at ON public.signal_events(ticker, published_at DESC);
 CREATE INDEX IF NOT EXISTS idx_signal_events_source_created_at ON public.signal_events(source, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_signal_events_importance ON public.signal_events(importance_score DESC);
+CREATE INDEX IF NOT EXISTS idx_signal_events_created_at ON public.signal_events(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_signal_events_type_published_at ON public.signal_events(signal_type, published_at DESC);
+CREATE INDEX IF NOT EXISTS idx_signal_events_type_occurred_at ON public.signal_events(signal_type, occurred_at DESC);
 
 DROP TRIGGER IF EXISTS set_signal_events_updated_at ON public.signal_events;
 CREATE TRIGGER set_signal_events_updated_at

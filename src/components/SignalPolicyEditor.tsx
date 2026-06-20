@@ -6,9 +6,16 @@ import { AlertTriangle, CheckCircle2, Save } from 'lucide-react';
 type SignalPolicyEditorProps = {
   initialText: string;
   policyPath: string;
+  canSave: boolean;
+  saveHelpText: string | null;
 };
 
-export function SignalPolicyEditor({ initialText, policyPath }: SignalPolicyEditorProps) {
+export function SignalPolicyEditor({
+  initialText,
+  policyPath,
+  canSave,
+  saveHelpText,
+}: SignalPolicyEditorProps) {
   const [rawText, setRawText] = useState(initialText);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -98,11 +105,11 @@ export function SignalPolicyEditor({ initialText, policyPath }: SignalPolicyEdit
             <button
               type="button"
               onClick={savePolicy}
-              disabled={status === 'saving'}
+              disabled={!canSave || status === 'saving'}
               className="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Save className="h-4 w-4" />
-              {status === 'saving' ? 'Saving...' : 'Save Policy'}
+              {status === 'saving' ? 'Saving...' : canSave ? 'Save Policy' : 'Read Only'}
             </button>
           </div>
         </div>
@@ -121,6 +128,13 @@ export function SignalPolicyEditor({ initialText, policyPath }: SignalPolicyEdit
             Notable Politicians: {parsedSummary.notablePoliticians}
           </span>
         </div>
+
+        {!canSave && saveHelpText ? (
+          <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{saveHelpText}</span>
+          </div>
+        ) : null}
 
         {message ? (
           <div
@@ -145,6 +159,7 @@ export function SignalPolicyEditor({ initialText, policyPath }: SignalPolicyEdit
             setStatus('idle');
             setMessage('');
           }}
+          readOnly={!canSave}
           spellCheck={false}
           className="min-h-[640px] w-full rounded-2xl border border-white/10 bg-[#0b1020] p-4 font-mono text-sm leading-6 text-zinc-100 outline-none transition focus:border-blue-400/40"
         />

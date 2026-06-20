@@ -4,7 +4,10 @@ import type { User } from '@supabase/supabase-js';
 
 import type {
   AccountActorFollow,
+  AccountAlertPreview,
   AccountAlertHistoryItem,
+  AccountFollowSignalPreview,
+  AccountMatchedSignal,
   AccountBillingState,
   AccountFollowSuggestion,
   AccountProfileState,
@@ -14,6 +17,7 @@ import type {
   AccountTickerFollow,
   ActorType,
   AlertMode,
+  ClusterAlertChannel,
 } from '@/lib/account-types';
 import {
   describeBillingSummary,
@@ -28,33 +32,48 @@ import {
 } from '@/lib/billing-config';
 import { type CongressMemberRecord, normalizeActorKey, resolvePoliticianTarget } from '@/lib/account-targets';
 import { sendEmailMessage } from '@/lib/mailer';
+import { normalizePhoneNumber, sendSmsMessage } from '@/lib/sms';
 import { getAdminSupabase } from '@/lib/supabase-admin';
-import { getTelegramBotUsername, normalizeTelegramUsername, resolveTelegramChatId, sendTelegramMessage } from '@/lib/telegram-bot';
+import { formatFundChangeLabel, getFundChangeKind } from '@/lib/fund-holdings';
+import {
+  buildIlikeOperands,
+  DIRTY_COMPANY_NAME_PATTERNS,
+  normalizeSearchText,
+  normalizeTickerCandidate,
+  queryTokens,
+} from '@/lib/shared-search-utils';
+import {
+  readSearchAliases,
+  type TickerSearchAlias,
+  type SearchAliases,
+} from '@/lib/signal-policy';
 
 const DEFAULT_WATCHLIST_NAME = 'My Signals';
 const DEFAULT_MIN_IMPORTANCE = 0.75;
 const DEFAULT_FOLLOW_LIMIT = getFreeFollowLimit();
 const ACCOUNT_HISTORY_LIMIT = 30;
+const ACCOUNT_SIGNAL_PREVIEW_SCAN_LIMIT = 150;
+const ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT = 20;
+const ACCOUNT_SIGNAL_PREVIEW_PER_FOLLOW_LIMIT = 4;
+const ACCOUNT_SIGNAL_PREVIEW_TIMELINE_LIMIT = 48;
+const ACCOUNT_ALERT_PREVIEW_CACHE_TTL_MS = 60 * 1000;
 const TEST_ALERT_TICKER = 'VAILTEST';
 const VALID_ALERT_MODES = new Set<AlertMode>(['activity', 'unusual', 'both']);
-const DIRTY_COMPANY_NAME_PATTERNS = [
-  'f s:',
-  's o:',
-  'subholding of',
-  'filing status',
-  ' fields law firm ',
-  ' ira fbo ',
-  ' morgan stanley ',
-  'etrade',
-  'e*trade',
-  'trust ',
-];
+const VALID_CLUSTER_ALERT_CHANNELS = new Set<ClusterAlertChannel>(['email', 'sms']);
+const FUND_FILING_SIGNAL_TYPES = ['fund_filing_deadline_reminder', 'fund_filing_received'] as const;
+const SIGNAL_EVENT_PREVIEW_SELECT =
+  'id,source,signal_type,ticker,actor_name,actor_type,direction,occurred_at,published_at,importance_score,title,summary,source_url,payload,created_at';
 
-type TickerSearchAlias = {
-  ticker: string;
-  companyName: string;
-  aliases: string[];
+const accountAlertPreviewCache = new Map<
+  string,
+  { expiresAt: number; preview: AccountAlertPreview }
+>();
+
+type AccountStateOptions = {
+  includeHistory?: boolean;
+  includeAlertPreview?: boolean;
 };
+
 
 type TickerSuggestionCandidate = {
   ticker: string;
@@ -88,80 +107,79 @@ type InsiderTradeRow = {
   transaction_date?: string | null;
 };
 
-const TICKER_SEARCH_ALIASES: TickerSearchAlias[] = [
-  { ticker: 'NVDA', companyName: 'NVIDIA Corporation', aliases: ['nvidia', 'nvidia corp', 'nvidia corporation'] },
-  { ticker: 'MSFT', companyName: 'Microsoft Corporation', aliases: ['microsoft', 'microsoft corporation'] },
-  { ticker: 'AAPL', companyName: 'Apple Inc.', aliases: ['apple', 'apple inc', 'apple inc.'] },
-  { ticker: 'AMZN', companyName: 'Amazon.com, Inc.', aliases: ['amazon', 'amazon.com', 'amazon inc', 'amazon.com inc'] },
-  { ticker: 'META', companyName: 'Meta Platforms, Inc.', aliases: ['meta', 'meta platforms', 'facebook'] },
-  { ticker: 'GOOGL', companyName: 'Alphabet Inc.', aliases: ['alphabet', 'google', 'google class a'] },
-  { ticker: 'TSLA', companyName: 'Tesla, Inc.', aliases: ['tesla', 'tesla inc', 'tesla inc.'] },
-  { ticker: 'AMD', companyName: 'Advanced Micro Devices', aliases: ['amd', 'advanced micro devices'] },
-  { ticker: 'AVGO', companyName: 'Broadcom Inc.', aliases: ['broadcom', 'broadcom inc'] },
-  { ticker: 'ARM', companyName: 'Arm Holdings plc', aliases: ['arm holdings', 'arm holdings plc'] },
-  { ticker: 'SMCI', companyName: 'Super Micro Computer', aliases: ['super micro', 'super micro computer', 'supermicro'] },
-  { ticker: 'PLTR', companyName: 'Palantir Technologies', aliases: ['palantir', 'palantir technologies'] },
-  { ticker: 'AI', companyName: 'C3.ai', aliases: ['c3 ai', 'c3.ai'] },
-  { ticker: 'SOUN', companyName: 'SoundHound AI', aliases: ['soundhound', 'soundhound ai'] },
-  { ticker: 'BBAI', companyName: 'BigBear.ai', aliases: ['bigbear', 'bigbear ai', 'bigbear.ai'] },
-  { ticker: 'IONQ', companyName: 'IonQ', aliases: ['ionq', 'ion q'] },
-  { ticker: 'QBTS', companyName: 'D-Wave Quantum', aliases: ['d wave', 'd-wave', 'dwave', 'd wave quantum', 'd-wave quantum'] },
-  { ticker: 'RGTI', companyName: 'Rigetti Computing', aliases: ['rigetti', 'rigetti computing'] },
-  { ticker: 'QUBT', companyName: 'Quantum Computing Inc.', aliases: ['quantum computing inc', 'quantum computing'] },
-  { ticker: 'QMCO', companyName: 'Quantum Corporation', aliases: ['quantum corporation'] },
-  { ticker: 'SKYT', companyName: 'SkyWater Technology', aliases: ['skywater', 'skywater technology'] },
-  { ticker: 'VLD', companyName: 'Velo3D', aliases: ['velo3d', 'velo 3d'] },
-  { ticker: 'SMR', companyName: 'NuScale Power', aliases: ['nuscale', 'nu scale', 'nuscale power'] },
-  { ticker: 'OKLO', companyName: 'Oklo', aliases: ['oklo'] },
-  { ticker: 'NNE', companyName: 'NANO Nuclear Energy', aliases: ['nano nuclear', 'nano nuclear energy'] },
-  { ticker: 'CCJ', companyName: 'Cameco', aliases: ['cameco'] },
-  { ticker: 'BWXT', companyName: 'BWX Technologies', aliases: ['bwx technologies'] },
-  { ticker: 'UEC', companyName: 'Uranium Energy Corp.', aliases: ['uranium energy', 'uranium energy corp'] },
-  { ticker: 'LEU', companyName: 'Centrus Energy', aliases: ['centrus', 'centrus energy'] },
-  { ticker: 'RXRX', companyName: 'Recursion Pharmaceuticals', aliases: ['recursion', 'recursion pharmaceuticals'] },
-  { ticker: 'DNA', companyName: 'Ginkgo Bioworks', aliases: ['ginkgo', 'ginkgo bioworks'] },
-  { ticker: 'CRSP', companyName: 'CRISPR Therapeutics', aliases: ['crispr', 'crispr therapeutics'] },
-  { ticker: 'BEAM', companyName: 'Beam Therapeutics', aliases: ['beam therapeutics'] },
-  { ticker: 'EDIT', companyName: 'Editas Medicine', aliases: ['editas', 'editas medicine'] },
-  { ticker: 'NTLA', companyName: 'Intellia Therapeutics', aliases: ['intellia', 'intellia therapeutics'] },
-  { ticker: 'TGTX', companyName: 'TG Therapeutics', aliases: ['tg therapeutics'] },
-  { ticker: 'MRNA', companyName: 'Moderna', aliases: ['moderna'] },
-  { ticker: 'SANA', companyName: 'Sana Biotechnology', aliases: ['sana biotech', 'sana biotechnology'] },
-  { ticker: 'RTX', companyName: 'RTX Corporation', aliases: ['rtx', 'raytheon', 'raytheon technologies'] },
-  { ticker: 'LMT', companyName: 'Lockheed Martin', aliases: ['lockheed', 'lockheed martin'] },
-  { ticker: 'NOC', companyName: 'Northrop Grumman', aliases: ['northrop', 'northrop grumman'] },
-  { ticker: 'GD', companyName: 'General Dynamics', aliases: ['general dynamics'] },
-  { ticker: 'LHX', companyName: 'L3Harris Technologies', aliases: ['l3harris', 'l3 harris'] },
-  { ticker: 'LDOS', companyName: 'Leidos', aliases: ['leidos'] },
-  { ticker: 'HII', companyName: 'Huntington Ingalls', aliases: ['huntington ingalls'] },
-  { ticker: 'KTOS', companyName: 'Kratos Defense', aliases: ['kratos', 'kratos defense'] },
-  { ticker: 'AVAV', companyName: 'AeroVironment', aliases: ['aerovironment'] },
-  { ticker: 'MRCY', companyName: 'Mercury Systems', aliases: ['mercury systems'] },
-  { ticker: 'MSTR', companyName: 'Strategy', aliases: ['microstrategy', 'micro strategy', 'strategy'] },
-  { ticker: 'COIN', companyName: 'Coinbase', aliases: ['coinbase', 'coinbase global'] },
-  { ticker: 'MARA', companyName: 'MARA Holdings', aliases: ['mara', 'mara holdings'] },
-  { ticker: 'RIOT', companyName: 'Riot Platforms', aliases: ['riot platforms'] },
-  { ticker: 'CLSK', companyName: 'CleanSpark', aliases: ['cleanspark', 'clean spark'] },
-  { ticker: 'IREN', companyName: 'IREN', aliases: ['iren', 'iris energy'] },
-  { ticker: 'HUT', companyName: 'Hut 8', aliases: ['hut 8', 'hut8'] },
-  { ticker: 'BTBT', companyName: 'Bit Digital', aliases: ['bit digital'] },
-  { ticker: 'CIFR', companyName: 'Cipher Mining', aliases: ['cipher mining'] },
-  { ticker: 'HIVE', companyName: 'HIVE Digital', aliases: ['hive digital', 'hive blockchain'] },
-];
+type PoliticianActivityRow = {
+  id: string;
+  member_id?: string | null;
+  politician_name?: string | null;
+  chamber?: string | null;
+  ticker?: string | null;
+  asset_name?: string | null;
+  transaction_type?: string | null;
+  amount_range?: string | null;
+  published_date?: string | null;
+  transaction_date?: string | null;
+  source_url?: string | null;
+};
 
-const TICKER_SEARCH_ALIAS_BY_TICKER = new Map(TICKER_SEARCH_ALIASES.map((entry) => [entry.ticker, entry]));
+type InsiderActivityRow = {
+  id: string;
+  ticker?: string | null;
+  filer_name?: string | null;
+  filer_relation?: string | null;
+  transaction_code?: string | null;
+  amount?: number | string | null;
+  price?: number | string | null;
+  value?: number | string | null;
+  published_date?: string | null;
+  transaction_date?: string | null;
+  source_url?: string | null;
+};
+
+type FundActivityRow = {
+  id: string;
+  fund_name?: string | null;
+  ticker?: string | null;
+  report_period?: string | null;
+  published_date?: string | null;
+  shares_held?: number | string | null;
+  value_held?: number | string | null;
+  qoq_change_shares?: number | string | null;
+  qoq_change_percent?: number | string | null;
+  source_url?: string | null;
+};
+
+// Lazy-loaded search aliases from signal-policy.json
+let _aliasesCache: SearchAliases | null = null;
+async function getSearchAliases(): Promise<SearchAliases> {
+  if (!_aliasesCache) {
+    _aliasesCache = await readSearchAliases();
+  }
+  return _aliasesCache;
+}
+
+async function getTickerSearchAliases(): Promise<TickerSearchAlias[]> {
+  return (await getSearchAliases()).tickerAliases;
+}
+
+async function getTickerAliasByTicker(): Promise<Map<string, TickerSearchAlias>> {
+  const aliases = await getTickerSearchAliases();
+  return new Map(aliases.map((entry) => [entry.ticker, entry]));
+}
+
+async function getNotablePoliticianAliases(): Promise<Array<{ actorKey: string; aliases: string[] }>> {
+  return (await getSearchAliases()).politicianAliases;
+}
+
+async function getNotableInsiderAliases(): Promise<Array<{ actorKey: string; canonicalName: string; aliases: string[] }>> {
+  const aliases = (await getSearchAliases()).insiderAliases;
+  return aliases.map((entry) => ({
+    actorKey: normalizeActorKey(entry.canonicalName),
+    canonicalName: entry.canonicalName,
+    aliases: entry.aliases,
+  }));
+}
+
 const PRIORITY_TICKER_SET = new Set(['NVDA', 'PLTR', 'IONQ', 'QBTS', 'RGTI', 'SKYT', 'VLD', 'OKLO', 'SMR', 'NNE']);
-const NOTABLE_POLITICIAN_ALIASES: Array<{ actorKey: string; aliases: string[] }> = [
-  { actorKey: 'p000197', aliases: ['pelosi', 'nancy pelosi'] },
-  { actorKey: 'o000172', aliases: ['aoc', 'alexandria ocasio cortez', 'ocasio cortez'] },
-  { actorKey: 'm000355', aliases: ['mitch mcconnell', 'mcconnell'] },
-  { actorKey: 'j000299', aliases: ['mike johnson'] },
-  { actorKey: 'm001190', aliases: ['markwayne mullin', 'markwayne'] },
-];
-const NOTABLE_INSIDER_ALIASES: Array<{ actorKey: string; canonicalName: string; aliases: string[] }> = [
-  { actorKey: normalizeActorKey('Huang Jen Hsun'), canonicalName: 'Huang Jen Hsun', aliases: ['jensen huang', 'jen hsun huang', 'jensen', 'nvidia ceo'] },
-  { actorKey: normalizeActorKey('Saylor Michael J'), canonicalName: 'Saylor Michael J', aliases: ['michael saylor', 'saylor', 'microstrategy chairman'] },
-];
 
 export class AccountSchemaError extends Error {
   code: string;
@@ -177,10 +195,7 @@ type ProfileRow = {
   email: string | null;
   display_name: string | null;
   alert_email: string | null;
-  telegram_username: string | null;
-  telegram_chat_id: string | null;
   email_enabled: boolean;
-  telegram_enabled: boolean;
   follow_limit: number;
   billing_plan_key: string | null;
   billing_status: string | null;
@@ -202,6 +217,24 @@ type SubscriptionRow = {
   destination: string;
   active: boolean;
   minimum_importance: number | null;
+};
+
+type SignalEventPreviewRow = {
+  id: string;
+  source: string | null;
+  signal_type: string | null;
+  ticker: string | null;
+  actor_name: string | null;
+  actor_type: string | null;
+  direction: string | null;
+  occurred_at: string | null;
+  published_at: string | null;
+  importance_score: number | string | null;
+  title: string | null;
+  summary: string | null;
+  source_url: string | null;
+  payload: Record<string, unknown> | null;
+  created_at: string | null;
 };
 
 function getErrorCode(error: unknown) {
@@ -275,44 +308,7 @@ function normalizeAlertEmail(value: string | null | undefined) {
   return normalized || null;
 }
 
-function normalizeSearchText(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
-function normalizeTickerCandidate(value: string) {
-  return value.trim().toUpperCase().replace(/[^A-Z0-9.\-]/g, '').slice(0, 15);
-}
-
-function queryTokens(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .split(/\s+/)
-    .map((token) => token.trim())
-    .filter(Boolean);
-}
-
-function escapeSearchOperand(value: string) {
-  return value.replace(/[%(),]/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-function buildIlikeOperands(column: string, values: string[], mode: 'contains' | 'prefix' = 'contains') {
-  const operands: string[] = [];
-  for (const value of values) {
-    const normalized = escapeSearchOperand(value);
-    if (!normalized) {
-      continue;
-    }
-    operands.push(mode === 'prefix' ? `${column}.ilike.${normalized}%` : `${column}.ilike.%${normalized}%`);
-  }
-  return operands;
-}
 
 function aliasMatchScore(aliases: string[], query: string) {
   const normalizedQuery = normalizeSearchText(query);
@@ -346,8 +342,9 @@ function isDirtyCompanyName(value: string | null | undefined) {
   return DIRTY_COMPANY_NAME_PATTERNS.some((pattern) => normalized.includes(pattern.trim()));
 }
 
-function cleanCompanyDisplayName(ticker: string, rawName: string | null | undefined) {
-  const alias = TICKER_SEARCH_ALIAS_BY_TICKER.get(ticker);
+async function cleanCompanyDisplayName(ticker: string, rawName: string | null | undefined) {
+  const aliasMap = await getTickerAliasByTicker();
+  const alias = aliasMap.get(ticker);
   const name = String(rawName || '').trim();
   if (!name || isDirtyCompanyName(name)) {
     return alias?.companyName || ticker;
@@ -391,7 +388,7 @@ async function ensureUserProfile(user: User): Promise<ProfileRow> {
   const existing = await supabase
     .from('profiles')
     .select(
-      'id,email,display_name,alert_email,telegram_username,telegram_chat_id,email_enabled,telegram_enabled,follow_limit,billing_plan_key,billing_status,stripe_customer_id,stripe_subscription_id,stripe_price_id,billing_current_period_end,billing_cancel_at_period_end'
+      'id,email,display_name,alert_email,email_enabled,follow_limit,billing_plan_key,billing_status,stripe_customer_id,stripe_subscription_id,stripe_price_id,billing_current_period_end,billing_cancel_at_period_end'
     )
     .eq('id', user.id)
     .maybeSingle();
@@ -413,7 +410,7 @@ async function ensureUserProfile(user: User): Promise<ProfileRow> {
         billing_status: 'free',
       })
       .select(
-        'id,email,display_name,alert_email,telegram_username,telegram_chat_id,email_enabled,telegram_enabled,follow_limit,billing_plan_key,billing_status,stripe_customer_id,stripe_subscription_id,stripe_price_id,billing_current_period_end,billing_cancel_at_period_end'
+        'id,email,display_name,alert_email,email_enabled,follow_limit,billing_plan_key,billing_status,stripe_customer_id,stripe_subscription_id,stripe_price_id,billing_current_period_end,billing_cancel_at_period_end'
       )
       .single();
 
@@ -447,7 +444,7 @@ async function ensureUserProfile(user: User): Promise<ProfileRow> {
     })
     .eq('id', user.id)
     .select(
-      'id,email,display_name,alert_email,telegram_username,telegram_chat_id,email_enabled,telegram_enabled,follow_limit,billing_plan_key,billing_status,stripe_customer_id,stripe_subscription_id,stripe_price_id,billing_current_period_end,billing_cancel_at_period_end'
+      'id,email,display_name,alert_email,email_enabled,follow_limit,billing_plan_key,billing_status,stripe_customer_id,stripe_subscription_id,stripe_price_id,billing_current_period_end,billing_cancel_at_period_end'
     )
     .single();
 
@@ -523,7 +520,60 @@ async function ensureUserWatchlist(userId: string): Promise<WatchlistRow> {
 
 async function ensureUserWorkspace(user: User) {
   const [profile, watchlist] = await Promise.all([ensureUserProfile(user), ensureUserWatchlist(user.id)]);
+  await ensureDefaultEmailSubscription(profile, watchlist, user);
   return { profile, watchlist };
+}
+
+async function ensureDefaultEmailSubscription(profile: ProfileRow, watchlist: WatchlistRow, user: User) {
+  const normalizedEmail = normalizeAlertEmail(profile.alert_email || user.email || '');
+  if (!profile.email_enabled || !normalizedEmail) {
+    return;
+  }
+
+  const supabase = getAdminSupabase();
+  const existing = await supabase
+    .from('alert_subscriptions')
+    .select('id,destination,active')
+    .eq('watchlist_id', watchlist.id)
+    .eq('channel', 'email')
+    .order('created_at', { ascending: true });
+
+  if (existing.error) {
+    handleSupabaseError(existing.error);
+  }
+
+  const rows = existing.data || [];
+  if (!rows.length) {
+    const inserted = await supabase.from('alert_subscriptions').insert({
+      watchlist_id: watchlist.id,
+      channel: 'email',
+      destination: normalizedEmail,
+      active: true,
+      minimum_importance: DEFAULT_MIN_IMPORTANCE,
+      event_types: [],
+    });
+    if (inserted.error) {
+      handleSupabaseError(inserted.error);
+    }
+    return;
+  }
+
+  const primary = rows[0];
+  if (primary.destination !== normalizedEmail || !primary.active) {
+    const updated = await supabase
+      .from('alert_subscriptions')
+      .update({
+        destination: normalizedEmail,
+        active: true,
+        minimum_importance: DEFAULT_MIN_IMPORTANCE,
+        event_types: [],
+      })
+      .eq('id', primary.id);
+
+    if (updated.error) {
+      handleSupabaseError(updated.error);
+    }
+  }
 }
 
 async function fetchWatchlistTickers(watchlistId: string): Promise<AccountTickerFollow[]> {
@@ -575,7 +625,7 @@ async function fetchSubscriptions(watchlistId: string) {
     .from('alert_subscriptions')
     .select('id,channel,destination,active,minimum_importance,updated_at,created_at')
     .eq('watchlist_id', watchlistId)
-    .in('channel', ['email', 'telegram'])
+    .in('channel', ['email', 'sms'])
     .order('updated_at', { ascending: false });
 
   if (response.error) {
@@ -587,7 +637,7 @@ async function fetchSubscriptions(watchlistId: string) {
 
 function pickChannelState(
   rows: SubscriptionRow[],
-  channel: 'email' | 'telegram',
+  channel: 'email' | 'sms',
   fallbackDestination: string | null,
   fallbackActive: boolean
 ): AccountSubscriptionState {
@@ -602,7 +652,7 @@ function pickChannelState(
   };
 }
 
-function pickChannelSubscription(rows: SubscriptionRow[], channel: 'email' | 'telegram') {
+function pickChannelSubscription(rows: SubscriptionRow[], channel: 'email' | 'sms') {
   return rows.find((row) => row.channel === channel && row.active) || rows.find((row) => row.channel === channel) || null;
 }
 
@@ -612,21 +662,49 @@ async function fetchAlertHistory(subscriptionIds: string[]): Promise<AccountAler
   }
 
   const supabase = getAdminSupabase();
-  const response = await supabase
-    .from('alert_deliveries')
-    .select('id,channel,destination,status,last_error,queued_at,sent_at,signal_events(title,summary,ticker,actor_name,source_url,published_at)')
-    .in('subscription_id', subscriptionIds)
-    .order('queued_at', { ascending: false })
-    .limit(ACCOUNT_HISTORY_LIMIT);
+  const selectColumns =
+    'id,signal_event_id,channel,destination,status,last_error,queued_at,sent_at,signal_events(title,summary,ticker,actor_name,source_url,published_at)';
+  const [sentResponse, recentResponse] = await Promise.all([
+    supabase
+      .from('alert_deliveries')
+      .select(selectColumns)
+      .in('subscription_id', subscriptionIds)
+      .eq('status', 'sent')
+      .order('sent_at', { ascending: false })
+      .limit(ACCOUNT_HISTORY_LIMIT),
+    supabase
+      .from('alert_deliveries')
+      .select(selectColumns)
+      .in('subscription_id', subscriptionIds)
+      .neq('status', 'sent')
+      .order('queued_at', { ascending: false })
+      .limit(ACCOUNT_HISTORY_LIMIT),
+  ]);
 
-  if (response.error) {
-    handleSupabaseError(response.error);
+  if (sentResponse.error) {
+    handleSupabaseError(sentResponse.error);
+  }
+  if (recentResponse.error) {
+    handleSupabaseError(recentResponse.error);
   }
 
-  return (response.data || []).map((row) => {
+  const rowsById = new Map<string, NonNullable<typeof sentResponse.data>[number]>();
+  for (const row of [...(sentResponse.data || []), ...(recentResponse.data || [])]) {
+    rowsById.set(String(row.id), row);
+  }
+
+  return [...rowsById.values()]
+    .sort((left, right) => {
+      const leftDate = String(left.sent_at || left.queued_at || '');
+      const rightDate = String(right.sent_at || right.queued_at || '');
+      return rightDate.localeCompare(leftDate);
+    })
+    .slice(0, ACCOUNT_HISTORY_LIMIT * 2)
+    .map((row) => {
     const signalEvent = Array.isArray(row.signal_events) ? row.signal_events[0] : row.signal_events;
     return {
       id: String(row.id),
+      signalEventId: row.signal_event_id ? String(row.signal_event_id) : null,
       channel: String(row.channel),
       destination: row.destination ? String(row.destination) : null,
       status: String(row.status),
@@ -643,16 +721,728 @@ async function fetchAlertHistory(subscriptionIds: string[]): Promise<AccountAler
   });
 }
 
+function signalDate(row: SignalEventPreviewRow) {
+  return String(row.published_at || row.occurred_at || row.created_at || '').trim() || null;
+}
+
+function latestPreviewDate(signals: AccountMatchedSignal[]) {
+  return signals.reduce<string | null>((latest, signal) => {
+    const value = signal.publishedAt || signal.occurredAt;
+    if (!value) {
+      return latest;
+    }
+    return !latest || value > latest ? value : latest;
+  }, null);
+}
+
+function compactDollarValue(value: unknown) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return null;
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(numeric);
+}
+
+function compactNumberValue(value: unknown) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return null;
+  }
+  return new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(numeric);
+}
+
+function normalizeActivityTicker(value: string | null | undefined) {
+  const ticker = String(value || '').trim().toUpperCase();
+  return ticker && ticker !== 'N/A' && ticker !== 'UNKNOWN' ? ticker : null;
+}
+
+function activityDate(...values: Array<string | null | undefined>) {
+  return values.map((value) => String(value || '').trim()).find(Boolean) || null;
+}
+
+function politicianTradeDirection(value: string | null | undefined) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized.includes('purchase') || normalized === 'buy' || normalized === 'p') {
+    return { direction: 'buy' as const, verb: 'bought', label: 'Buy' };
+  }
+  if (normalized.includes('sale') || normalized.includes('sell') || normalized === 's') {
+    return { direction: 'sell' as const, verb: 'sold', label: 'Sell' };
+  }
+  return { direction: 'other' as const, verb: 'reported activity in', label: titleCaseLabel(normalized || 'activity') };
+}
+
+function insiderTradeDirection(value: string | null | undefined) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (['p', 'a', 'buy', 'purchase'].includes(normalized)) {
+    return { direction: 'buy' as const, verb: 'bought', label: 'Buy' };
+  }
+  if (['s', 'd', 'sell', 'sale'].includes(normalized)) {
+    return { direction: 'sell' as const, verb: 'sold', label: 'Sell' };
+  }
+  return { direction: 'other' as const, verb: 'filed activity in', label: titleCaseLabel(normalized || 'activity') };
+}
+
+function fundChangeLabel(row: FundActivityRow) {
+  const kind = getFundChangeKind(row);
+  const changeLabel = formatFundChangeLabel(row);
+
+  if (kind === 'exit') {
+    return { direction: 'sell' as const, title: 'exited', label: 'Fund exit' };
+  }
+  if (kind === 'new') {
+    return { direction: 'buy' as const, title: 'started a position in', label: 'New fund position' };
+  }
+  if (kind === 'increase') {
+    return { direction: 'buy' as const, title: 'increased its position in', label: changeLabel };
+  }
+  if (kind === 'decrease') {
+    return { direction: 'sell' as const, title: 'reduced its position in', label: changeLabel };
+  }
+  return { direction: 'other' as const, title: 'reported holdings in', label: 'Fund holding' };
+}
+
+function titleCaseLabel(value: string) {
+  return value
+    .split(/[_\s-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function payloadString(payload: Record<string, unknown> | null | undefined, key: string) {
+  const value = payload?.[key];
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function isClusterSignal(row: SignalEventPreviewRow) {
+  const signalType = String(row.signal_type || '').toLowerCase();
+  const actorType = String(row.actor_type || '').toLowerCase();
+  const payload = row.payload || {};
+  return (
+    actorType === 'cluster' ||
+    signalType.includes('cluster') ||
+    signalType === 'cross_source_accumulation' ||
+    Array.isArray(payload.cluster_event_ids) ||
+    Array.isArray(payload.cluster_actors)
+  );
+}
+
+const CLUSTER_ALERT_EXCLUDED_TICKERS = new Set(['', 'N/A', 'NA', 'UNKNOWN', 'MULTI']);
+
+function isClusterAlertPreviewSignal(row: SignalEventPreviewRow) {
+  if (!isClusterSignal(row)) {
+    return false;
+  }
+
+  const ticker = String(row.ticker || payloadString(row.payload, 'ticker')).trim().toUpperCase();
+  if (CLUSTER_ALERT_EXCLUDED_TICKERS.has(ticker)) {
+    return false;
+  }
+
+  return true;
+}
+
+function signalBehavior(row: SignalEventPreviewRow) {
+  const signalType = String(row.signal_type || '').toLowerCase();
+  const importance = Number(row.importance_score || 0);
+  const payload = row.payload || {};
+  const cluster = isClusterSignal(row);
+  const labels = new Set<string>();
+
+  if (cluster) {
+    labels.add(signalType === 'cross_source_accumulation' ? 'Cross-source cluster' : 'Cluster');
+  }
+  if (importance >= 0.9) {
+    labels.add('High-confidence signal');
+  } else if (importance >= 0.8) {
+    labels.add('Unusual signal');
+  }
+  if (signalType.includes('gain')) {
+    labels.add('Performance update');
+  }
+  if (signalType.includes('filing_summary') || signalType.includes('grouped')) {
+    labels.add('Grouped filing');
+  }
+  if (signalType.includes('insider')) {
+    labels.add('Insider activity');
+  }
+  if (signalType.includes('politician') || String(row.source || '').toLowerCase() === 'congress') {
+    labels.add('Congress activity');
+  }
+  if ((FUND_FILING_SIGNAL_TYPES as readonly string[]).includes(signalType)) {
+    labels.add('13F filing');
+  } else if (signalType.includes('fund')) {
+    labels.add('Fund positioning');
+  }
+  if (payload.summary_contains_unusual) {
+    labels.add('Unusual filing');
+  }
+
+  const unusual =
+    cluster ||
+    importance >= 0.8 ||
+    Boolean(payload.summary_contains_unusual) ||
+    /(large|substantial|notable|committee|first|theme|meaningful|gain)/.test(signalType);
+
+  return {
+    activity: true,
+    unusual,
+    labels: [...labels].slice(0, 4),
+  };
+}
+
+function clusterActors(payload: Record<string, unknown> | null | undefined) {
+  const actors = payload?.cluster_actors;
+  return Array.isArray(actors) ? actors.filter((actor): actor is Record<string, unknown> => Boolean(actor && typeof actor === 'object')) : [];
+}
+
+function signalActorKeys(row: SignalEventPreviewRow) {
+  const actorType = String(row.actor_type || '').trim().toLowerCase();
+  const signalType = String(row.signal_type || '').trim().toLowerCase();
+  const payload = row.payload || {};
+  const keys = new Set<string>();
+
+  const addNormalizedKey = (targetActorType: string, value: unknown) => {
+    const normalized = normalizeActorKey(String(value || ''));
+    if (normalized) {
+      keys.add(`${targetActorType}:${normalized}`);
+    }
+  };
+
+  const addExactKey = (targetActorType: string, value: unknown) => {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (normalized) {
+      keys.add(`${targetActorType}:${normalized}`);
+    }
+  };
+
+  if (actorType === 'politician') {
+    addExactKey('politician', payload.member_id);
+    addNormalizedKey('politician', payload.politician_name);
+    addNormalizedKey('politician', row.actor_name);
+  } else if (actorType === 'insider') {
+    addNormalizedKey('insider', payload.filer_name);
+    addNormalizedKey('insider', row.actor_name);
+  } else if (actorType === 'fund' && (FUND_FILING_SIGNAL_TYPES as readonly string[]).includes(signalType)) {
+    addNormalizedKey('fund', payload.fund_name);
+    addNormalizedKey('fund', row.actor_name);
+  } else if (actorType === 'cluster') {
+    const baseSignalType = payloadString(payload, 'base_signal_type').toLowerCase();
+    for (const actor of clusterActors(payload)) {
+      const clusterActorType = String(actor.actor_type || '').trim().toLowerCase();
+      if (clusterActorType === 'politician' || baseSignalType === 'politician_trade') {
+        addExactKey('politician', actor.member_id);
+        addNormalizedKey('politician', actor.name);
+      } else if (clusterActorType === 'insider' || baseSignalType === 'insider_trade') {
+        addNormalizedKey('insider', actor.name);
+      }
+    }
+  }
+
+  return keys;
+}
+
+function followActorKeys(follow: AccountActorFollow) {
+  const keys = new Set<string>();
+  const actorType = follow.actorType;
+  const actorKey = String(follow.actorKey || '').trim().toLowerCase();
+  if (actorKey) {
+    keys.add(`${actorType}:${actorKey}`);
+    keys.add(`${actorType}:${normalizeActorKey(actorKey)}`);
+  }
+  const normalizedName = normalizeActorKey(follow.actorName);
+  if (normalizedName) {
+    keys.add(`${actorType}:${normalizedName}`);
+  }
+  const memberId = typeof follow.metadata.member_id === 'string' ? follow.metadata.member_id.trim().toLowerCase() : '';
+  if (follow.actorType === 'politician' && memberId) {
+    keys.add(`politician:${memberId}`);
+  }
+  return keys;
+}
+
+function eventMatchesTickerFollow(row: SignalEventPreviewRow, follow: AccountTickerFollow) {
+  const ticker = String(follow.ticker || '').trim().toUpperCase();
+  const eventTicker = String(row.ticker || payloadString(row.payload, 'ticker')).trim().toUpperCase();
+  if (!ticker || eventTicker !== ticker) {
+    return null;
+  }
+  return ['ticker'];
+}
+
+function eventMatchesActorFollow(row: SignalEventPreviewRow, follow: AccountActorFollow) {
+  const followKeys = followActorKeys(follow);
+  const eventKeys = signalActorKeys(row);
+  const matched = [...followKeys].some((key) => eventKeys.has(key));
+  return matched ? [follow.actorType] : null;
+}
+
+function toMatchedSignal(row: SignalEventPreviewRow, matchReasons: string[]): AccountMatchedSignal {
+  const behavior = signalBehavior(row);
+  const fallbackSignalType = String(row.signal_type || 'signal').trim();
+  const actorMemberId = payloadString(row.payload, 'member_id');
+  return {
+    id: String(row.id),
+    title: String(row.title || titleCaseLabel(fallbackSignalType) || 'Signal alert'),
+    summary: row.summary ? String(row.summary) : null,
+    ticker: row.ticker ? String(row.ticker) : null,
+    actorName: row.actor_name ? String(row.actor_name) : null,
+    actorMemberId: actorMemberId || null,
+    signalType: fallbackSignalType,
+    source: row.source ? String(row.source) : null,
+    direction: row.direction ? String(row.direction) : null,
+    importanceScore: Number(row.importance_score || 0),
+    occurredAt: row.occurred_at ? String(row.occurred_at) : null,
+    publishedAt: signalDate(row),
+    sourceUrl: row.source_url ? String(row.source_url) : null,
+    matchReasons,
+    behaviorLabels: behavior.labels.length ? behavior.labels : [titleCaseLabel(fallbackSignalType)],
+    isCluster: isClusterSignal(row),
+  };
+}
+
+function toPoliticianActivitySignal(row: PoliticianActivityRow, matchReasons: string[]): AccountMatchedSignal {
+  const trade = politicianTradeDirection(row.transaction_type);
+  const ticker = normalizeActivityTicker(row.ticker);
+  const actorName = String(row.politician_name || '').trim() || 'Congress member';
+  const assetLabel = String(row.asset_name || '').trim();
+  const amountLabel = String(row.amount_range || '').trim();
+  const summaryParts = [
+    amountLabel,
+    assetLabel && assetLabel !== ticker ? assetLabel : null,
+    row.chamber ? `${row.chamber} filing` : 'Congress filing',
+    row.transaction_date ? `Trade date ${row.transaction_date}` : null,
+  ].filter(Boolean);
+
+  return {
+    id: `politician-trade:${row.id}`,
+    title: `${actorName} ${trade.verb} ${ticker || assetLabel || 'a security'}`,
+    summary: summaryParts.length ? summaryParts.join(' • ') : null,
+    ticker,
+    actorName,
+    actorMemberId: row.member_id ? String(row.member_id) : null,
+    signalType: 'politician_trade',
+    source: 'politician_trades',
+    direction: trade.direction,
+    importanceScore: trade.direction === 'buy' ? 0.72 : 0.66,
+    occurredAt: activityDate(row.transaction_date),
+    publishedAt: activityDate(row.published_date, row.transaction_date),
+    sourceUrl: row.source_url ? String(row.source_url) : null,
+    matchReasons,
+    behaviorLabels: ['Congress trade', trade.label],
+    isCluster: false,
+  };
+}
+
+function toInsiderActivitySignal(row: InsiderActivityRow, matchReasons: string[]): AccountMatchedSignal {
+  const trade = insiderTradeDirection(row.transaction_code);
+  const ticker = normalizeActivityTicker(row.ticker);
+  const actorName = String(row.filer_name || '').trim() || 'Corporate insider';
+  const valueLabel = compactDollarValue(row.value);
+  const amountLabel = compactNumberValue(row.amount);
+  const priceLabel = compactDollarValue(row.price);
+  const summaryParts = [
+    row.filer_relation ? String(row.filer_relation) : 'Insider filing',
+    amountLabel ? `${amountLabel} shares` : null,
+    priceLabel ? `at ${priceLabel}` : null,
+    valueLabel ? `${valueLabel} value` : null,
+    row.transaction_date ? `Trade date ${row.transaction_date}` : null,
+  ].filter(Boolean);
+
+  return {
+    id: `insider-trade:${row.id}`,
+    title: `${actorName} ${trade.verb} ${ticker || 'a security'}`,
+    summary: summaryParts.length ? summaryParts.join(' • ') : null,
+    ticker,
+    actorName,
+    signalType: 'insider_trade',
+    source: 'insider_trades',
+    direction: trade.direction,
+    importanceScore: trade.direction === 'buy' ? 0.7 : 0.64,
+    occurredAt: activityDate(row.transaction_date),
+    publishedAt: activityDate(row.published_date, row.transaction_date),
+    sourceUrl: row.source_url ? String(row.source_url) : null,
+    matchReasons,
+    behaviorLabels: ['Insider filing', trade.label],
+    isCluster: false,
+  };
+}
+
+function toFundActivitySignal(row: FundActivityRow, matchReasons: string[]): AccountMatchedSignal {
+  const change = fundChangeLabel(row);
+  const ticker = normalizeActivityTicker(row.ticker);
+  const actorName = String(row.fund_name || '').trim() || 'Hedge fund';
+  const valueLabel = compactDollarValue(Number(row.value_held || 0) / 1_000);
+  const shareLabel = compactNumberValue(row.shares_held);
+  const summaryParts = [
+    row.report_period ? `Report period ${row.report_period}` : '13F filing',
+    shareLabel ? `${shareLabel} shares held` : null,
+    valueLabel ? `${valueLabel} position` : null,
+    row.published_date ? `Filed ${row.published_date}` : null,
+  ].filter(Boolean);
+
+  return {
+    id: `fund-holding:${row.id}`,
+    title: `${actorName} ${change.title} ${ticker || 'a security'}`,
+    summary: summaryParts.length ? summaryParts.join(' • ') : null,
+    ticker,
+    actorName,
+    signalType: 'fund_position_change',
+    source: 'institutional_holdings',
+    direction: change.direction,
+    importanceScore: change.direction === 'buy' ? 0.68 : 0.62,
+    occurredAt: activityDate(row.report_period),
+    publishedAt: activityDate(row.published_date, row.report_period),
+    sourceUrl: row.source_url ? String(row.source_url) : null,
+    matchReasons,
+    behaviorLabels: ['Fund 13F', change.label],
+    isCluster: false,
+  };
+}
+
+function sortMatchedSignals(signals: AccountMatchedSignal[]) {
+  return [...signals].sort((left, right) => {
+    const leftDate = left.publishedAt || left.occurredAt || '';
+    const rightDate = right.publishedAt || right.occurredAt || '';
+    if (leftDate !== rightDate) {
+      return rightDate.localeCompare(leftDate);
+    }
+    return right.importanceScore - left.importanceScore;
+  });
+}
+
+function dedupeMatchedSignals(signals: AccountMatchedSignal[]) {
+  const deduped = new Map<string, AccountMatchedSignal>();
+  for (const signal of sortMatchedSignals(signals)) {
+    if (!deduped.has(signal.id)) {
+      deduped.set(signal.id, signal);
+    }
+  }
+  return [...deduped.values()];
+}
+
+async function fetchRecentSignalEvents(): Promise<SignalEventPreviewRow[]> {
+  const supabase = getAdminSupabase();
+  const response = await supabase
+    .from('signal_events')
+    .select(SIGNAL_EVENT_PREVIEW_SELECT)
+    .order('published_at', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(ACCOUNT_SIGNAL_PREVIEW_SCAN_LIMIT);
+
+  if (response.error) {
+    handleSupabaseError(response.error);
+  }
+
+  return (response.data || []) as SignalEventPreviewRow[];
+}
+
+const POLITICIAN_ACTIVITY_SELECT =
+  'id,member_id,politician_name,chamber,ticker,asset_name,transaction_type,amount_range,published_date,transaction_date,source_url';
+const INSIDER_ACTIVITY_SELECT =
+  'id,ticker,filer_name,filer_relation,transaction_code,amount,price,value,published_date,transaction_date,source_url';
+const FUND_ACTIVITY_SELECT =
+  'id,fund_name,ticker,report_period,published_date,shares_held,value_held,qoq_change_shares,qoq_change_percent,source_url';
+
+function followPreviewKey(kind: 'ticker' | 'actor', id: string) {
+  return `${kind}:${id}`;
+}
+
+function accountAlertPreviewCacheKey(
+  userId: string,
+  tickers: AccountTickerFollow[],
+  actors: AccountActorFollow[],
+  clusterFeedEnabled: boolean,
+) {
+  const tickerKey = tickers
+    .map((follow) => `${follow.id}:${follow.ticker}:${follow.alertMode}`)
+    .sort()
+    .join('|');
+  const actorKey = actors
+    .map((follow) => `${follow.id}:${follow.actorType}:${follow.actorKey}:${follow.alertMode}`)
+    .sort()
+    .join('|');
+  return `${userId}::cluster=${Number(clusterFeedEnabled)}::tickers=${tickerKey}::actors=${actorKey}`;
+}
+
+function politicianMemberIdForFollow(follow: AccountActorFollow) {
+  const metadataMemberId = typeof follow.metadata.member_id === 'string' ? follow.metadata.member_id.trim() : '';
+  const actorKey = String(follow.actorKey || '').trim();
+  const candidate = metadataMemberId || actorKey;
+  return /^[a-z]\d{6}$/i.test(candidate) ? candidate.toUpperCase() : null;
+}
+
+async function fetchTickerRawActivity(follow: AccountTickerFollow): Promise<AccountMatchedSignal[]> {
+  const ticker = String(follow.ticker || '').trim().toUpperCase();
+  if (!ticker) {
+    return [];
+  }
+
+  const supabase = getAdminSupabase();
+  const [politicianResponse, insiderResponse, fundResponse] = await Promise.all([
+    supabase
+      .from('politician_trades')
+      .select(POLITICIAN_ACTIVITY_SELECT)
+      .eq('ticker', ticker)
+      .order('published_date', { ascending: false })
+      .order('transaction_date', { ascending: false })
+      .limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT),
+    supabase
+      .from('insider_trades')
+      .select(INSIDER_ACTIVITY_SELECT)
+      .eq('ticker', ticker)
+      .order('published_date', { ascending: false })
+      .order('transaction_date', { ascending: false })
+      .limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT),
+    supabase
+      .from('institutional_holdings')
+      .select(FUND_ACTIVITY_SELECT)
+      .eq('ticker', ticker)
+      .order('published_date', { ascending: false })
+      .order('report_period', { ascending: false })
+      .limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT),
+  ]);
+
+  if (politicianResponse.error) handleSupabaseError(politicianResponse.error);
+  if (insiderResponse.error) handleSupabaseError(insiderResponse.error);
+  if (fundResponse.error) handleSupabaseError(fundResponse.error);
+
+  return dedupeMatchedSignals([
+    ...((politicianResponse.data || []) as PoliticianActivityRow[]).map((row) => toPoliticianActivitySignal(row, ['ticker'])),
+    ...((insiderResponse.data || []) as InsiderActivityRow[]).map((row) => toInsiderActivitySignal(row, ['ticker'])),
+    ...((fundResponse.data || []) as FundActivityRow[]).map((row) => toFundActivitySignal(row, ['ticker'])),
+  ]);
+}
+
+async function fetchActorRawActivity(follow: AccountActorFollow): Promise<AccountMatchedSignal[]> {
+  const supabase = getAdminSupabase();
+
+  if (follow.actorType === 'politician') {
+    const memberId = politicianMemberIdForFollow(follow);
+    const tokens = queryTokens(follow.actorName);
+    if (!memberId && !tokens.length) {
+      return [];
+    }
+
+    let query = supabase
+      .from('politician_trades')
+      .select(POLITICIAN_ACTIVITY_SELECT)
+      .order('published_date', { ascending: false })
+      .order('transaction_date', { ascending: false })
+      .limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT);
+
+    if (memberId) {
+      query = query.eq('member_id', memberId);
+    } else {
+      for (const token of tokens) {
+        query = query.ilike('politician_name', `%${token}%`);
+      }
+    }
+
+    const response = await query;
+    if (response.error) {
+      handleSupabaseError(response.error);
+    }
+    return dedupeMatchedSignals(
+      ((response.data || []) as PoliticianActivityRow[]).map((row) => toPoliticianActivitySignal(row, ['politician'])),
+    );
+  }
+
+  if (follow.actorType === 'fund') {
+    const tokens = queryTokens(follow.actorName);
+    if (!tokens.length) {
+      return [];
+    }
+
+    let query = supabase
+      .from('signal_events')
+      .select(SIGNAL_EVENT_PREVIEW_SELECT)
+      .eq('actor_type', 'fund')
+      .in('signal_type', Array.from(FUND_FILING_SIGNAL_TYPES))
+      .order('published_at', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT);
+
+    for (const token of tokens) {
+      query = query.ilike('actor_name', `%${token}%`);
+    }
+
+    const response = await query;
+    if (response.error) {
+      handleSupabaseError(response.error);
+    }
+    return dedupeMatchedSignals(
+      ((response.data || []) as SignalEventPreviewRow[]).map((row) => toMatchedSignal(row, ['fund'])),
+    );
+  }
+
+  const tokens = queryTokens(follow.actorName);
+  if (!tokens.length) {
+    return [];
+  }
+
+  let query = supabase
+    .from('insider_trades')
+    .select(INSIDER_ACTIVITY_SELECT)
+    .order('published_date', { ascending: false })
+    .order('transaction_date', { ascending: false })
+    .limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT);
+
+  for (const token of tokens) {
+    query = query.ilike('filer_name', `%${token}%`);
+  }
+
+  const response = await query;
+  if (response.error) {
+    handleSupabaseError(response.error);
+  }
+  return dedupeMatchedSignals(
+    ((response.data || []) as InsiderActivityRow[]).map((row) => toInsiderActivitySignal(row, ['insider'])),
+  );
+}
+
+async function fetchRawActivityByFollow(
+  tickers: AccountTickerFollow[],
+  actors: AccountActorFollow[],
+): Promise<Map<string, AccountMatchedSignal[]>> {
+  const entries = await Promise.all([
+    ...tickers.map(async (follow) => {
+      const key = followPreviewKey('ticker', follow.id);
+      return [key, await fetchTickerRawActivity(follow).catch(() => [])] as const;
+    }),
+    ...actors.map(async (follow) => {
+      const key = followPreviewKey('actor', follow.id);
+      return [key, await fetchActorRawActivity(follow).catch(() => [])] as const;
+    }),
+  ]);
+
+  return new Map(entries);
+}
+
+async function buildAccountAlertPreview(
+  tickers: AccountTickerFollow[],
+  actors: AccountActorFollow[],
+  clusterFeedEnabled = false,
+): Promise<AccountAlertPreview> {
+  const [events, rawActivityByFollow] = await Promise.all([
+    fetchRecentSignalEvents().catch(() => []),
+    fetchRawActivityByFollow(tickers, actors),
+  ]);
+  const timelineById = new Map<string, AccountMatchedSignal>();
+  if (clusterFeedEnabled) {
+    for (const event of events.filter(isClusterAlertPreviewSignal)) {
+      const signal = toMatchedSignal(event, ['cluster-feed']);
+      timelineById.set(signal.id, signal);
+    }
+  }
+
+  const tickerPreviews: AccountFollowSignalPreview[] = tickers.map((follow) => {
+    const eventMatches = events
+      .map((event) => {
+        const reasons = eventMatchesTickerFollow(event, follow);
+        return reasons ? toMatchedSignal(event, reasons) : null;
+      })
+      .filter((signal): signal is AccountMatchedSignal => Boolean(signal));
+    const matched = dedupeMatchedSignals([
+      ...eventMatches,
+      ...(rawActivityByFollow.get(followPreviewKey('ticker', follow.id)) || []),
+    ]);
+
+    for (const signal of matched) {
+      timelineById.set(signal.id, signal);
+    }
+
+    const clusterSignals = matched.filter((signal) => signal.isCluster);
+    return {
+      followKind: 'ticker',
+      followId: follow.id,
+      followLabel: follow.ticker,
+      followType: 'stock',
+      alertMode: follow.alertMode,
+      matchedCount: matched.length,
+      latestMatchedAt: latestPreviewDate(matched),
+      recentSignals: matched.filter((signal) => !signal.isCluster).slice(0, ACCOUNT_SIGNAL_PREVIEW_PER_FOLLOW_LIMIT),
+      clusterSignals: clusterSignals.slice(0, ACCOUNT_SIGNAL_PREVIEW_PER_FOLLOW_LIMIT),
+    };
+  });
+
+  const actorPreviews: AccountFollowSignalPreview[] = actors.map((follow) => {
+    const eventMatches = events
+      .map((event) => {
+        const reasons = eventMatchesActorFollow(event, follow);
+        return reasons ? toMatchedSignal(event, reasons) : null;
+      })
+      .filter((signal): signal is AccountMatchedSignal => Boolean(signal));
+    const matched = dedupeMatchedSignals([
+      ...eventMatches,
+      ...(rawActivityByFollow.get(followPreviewKey('actor', follow.id)) || []),
+    ]);
+
+    for (const signal of matched) {
+      timelineById.set(signal.id, signal);
+    }
+
+    const clusterSignals = matched.filter((signal) => signal.isCluster);
+    return {
+      followKind: 'actor',
+      followId: follow.id,
+      followLabel: follow.actorName,
+      followType: follow.actorType,
+      alertMode: follow.alertMode,
+      matchedCount: matched.length,
+      latestMatchedAt: latestPreviewDate(matched),
+      recentSignals: matched.filter((signal) => !signal.isCluster).slice(0, ACCOUNT_SIGNAL_PREVIEW_PER_FOLLOW_LIMIT),
+      clusterSignals: clusterSignals.slice(0, ACCOUNT_SIGNAL_PREVIEW_PER_FOLLOW_LIMIT),
+    };
+  });
+
+  const followPreviews = [...tickerPreviews, ...actorPreviews].sort((left, right) => {
+    const leftDate = left.latestMatchedAt || '';
+    const rightDate = right.latestMatchedAt || '';
+    if (leftDate !== rightDate) {
+      return rightDate.localeCompare(leftDate);
+    }
+    return right.matchedCount - left.matchedCount;
+  });
+  const allMatchedSignals = sortMatchedSignals([...timelineById.values()]);
+  const timeline = allMatchedSignals.slice(0, ACCOUNT_SIGNAL_PREVIEW_TIMELINE_LIMIT);
+
+  return {
+    scanLimit: ACCOUNT_SIGNAL_PREVIEW_SCAN_LIMIT,
+    matchedSignalCount: timelineById.size,
+    clusterSignalCount: allMatchedSignals.filter((signal) => signal.isCluster).length,
+    followPreviews,
+    timeline,
+  };
+}
+
+function emptyAccountAlertPreview(): AccountAlertPreview {
+  return {
+    scanLimit: ACCOUNT_SIGNAL_PREVIEW_SCAN_LIMIT,
+    matchedSignalCount: 0,
+    clusterSignalCount: 0,
+    followPreviews: [],
+    timeline: [],
+  };
+}
+
 function toAccountProfile(profile: ProfileRow): AccountProfileState {
   return {
     id: profile.id,
     email: profile.email,
     displayName: profile.display_name,
     alertEmail: profile.alert_email,
-    telegramUsername: profile.telegram_username,
-    telegramChatId: profile.telegram_chat_id,
+    textPhone: null,
     emailEnabled: Boolean(profile.email_enabled),
-    telegramEnabled: Boolean(profile.telegram_enabled),
+    textEnabled: false,
     followLimit: Number(profile.follow_limit || DEFAULT_FOLLOW_LIMIT),
   };
 }
@@ -670,49 +1460,89 @@ function toAccountBilling(profile: ProfileRow): AccountBillingState {
   };
 }
 
-export async function getAccountState(user: User): Promise<AccountState> {
+export async function getAccountAlertPreview(user: User): Promise<AccountAlertPreview> {
+  const watchlist = await ensureUserWatchlist(user.id);
+  const [tickers, actors, clusterAlerts] = await Promise.all([
+    fetchWatchlistTickers(watchlist.id),
+    fetchWatchlistActors(watchlist.id),
+    fetchClusterAlertPreference(user.id),
+  ]);
+
+  const cacheKey = accountAlertPreviewCacheKey(user.id, tickers, actors, clusterAlerts.enabled);
+  const cached = accountAlertPreviewCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.preview;
+  }
+
+  const preview = await buildAccountAlertPreview(tickers, actors, clusterAlerts.enabled);
+  accountAlertPreviewCache.set(cacheKey, {
+    expiresAt: Date.now() + ACCOUNT_ALERT_PREVIEW_CACHE_TTL_MS,
+    preview,
+  });
+  return preview;
+}
+
+export async function getAccountAlertHistory(user: User): Promise<AccountAlertHistoryItem[]> {
+  const watchlist = await ensureUserWatchlist(user.id);
+  const subscriptionRows = await fetchSubscriptions(watchlist.id);
+  return fetchAlertHistory(subscriptionRows.map((row) => String(row.id)));
+}
+
+export async function getAccountState(user: User, options: AccountStateOptions = {}): Promise<AccountState> {
+  const includeHistory = options.includeHistory ?? true;
+  const includeAlertPreview = options.includeAlertPreview ?? true;
   const { profile, watchlist } = await ensureUserWorkspace(user);
-  const [tickers, actors, subscriptionRows, telegramBotUsername] = await Promise.all([
+  const [tickers, actors, subscriptionRows, clusterAlerts] = await Promise.all([
     fetchWatchlistTickers(watchlist.id),
     fetchWatchlistActors(watchlist.id),
     fetchSubscriptions(watchlist.id),
-    getTelegramBotUsername(),
+    fetchClusterAlertPreference(user.id),
   ]);
 
   const subscriptionIds = subscriptionRows.map((row) => String(row.id));
-  const history = await fetchAlertHistory(subscriptionIds);
+  const [history, alertPreview] = await Promise.all([
+    includeHistory ? fetchAlertHistory(subscriptionIds) : Promise.resolve([]),
+    includeAlertPreview ? buildAccountAlertPreview(tickers, actors, clusterAlerts.enabled) : Promise.resolve(emptyAccountAlertPreview()),
+  ]);
 
   const emailState = pickChannelState(subscriptionRows, 'email', profile.alert_email || user.email || null, profile.email_enabled);
-  const telegramState = pickChannelState(
-    subscriptionRows,
-    'telegram',
-    profile.telegram_username ? `@${normalizeTelegramUsername(profile.telegram_username)}` : null,
-    profile.telegram_enabled
-  );
+  const smsState = pickChannelState(subscriptionRows, 'sms', null, false);
+  const accountProfile = {
+    ...toAccountProfile(profile),
+    textPhone: smsState.destination,
+    textEnabled: smsState.active,
+  };
 
   return {
     user: {
       id: user.id,
       email: user.email || null,
     },
-    profile: toAccountProfile(profile),
+    profile: accountProfile,
     billing: toAccountBilling(profile),
     watchlist: {
       id: watchlist.id,
       name: watchlist.name,
     },
-    followCount: tickers.length + actors.length,
+    followCount: tickers.length + actors.length + Number(clusterAlerts.enabled),
     followLimit: profile.follow_limit || DEFAULT_FOLLOW_LIMIT,
-    telegramBotUsername,
     subscriptions: {
       email: emailState,
-      telegram: telegramState,
+      sms: smsState,
     },
     follows: {
       tickers,
       actors,
+      cluster: clusterAlerts.enabled
+        ? {
+            id: 'cluster-feed',
+            label: 'Clusters',
+            channels: clusterAlerts.channels,
+          }
+        : null,
     },
     history,
+    alertPreview,
   };
 }
 
@@ -731,12 +1561,13 @@ async function fetchCongressMembers(): Promise<CongressMemberRecord[]> {
   return (response.data || []) as CongressMemberRecord[];
 }
 
-function politicianSuggestionScore(member: CongressMemberRecord, query: string) {
+async function politicianSuggestionScore(member: CongressMemberRecord, query: string) {
   const fullName = `${member.first_name || ''} ${member.last_name || ''}`.trim();
   const normalizedFullName = fullName.toLowerCase();
   const normalizedQuery = query.trim().toLowerCase();
   const tokens = queryTokens(normalizedQuery);
-  const aliasEntry = NOTABLE_POLITICIAN_ALIASES.find((entry) => entry.actorKey === String(member.id).toLowerCase());
+  const politicianAliases = await getNotablePoliticianAliases();
+  const aliasEntry = politicianAliases.find((entry) => entry.actorKey === String(member.id).toLowerCase());
 
   let score = 0;
   if (normalizedFullName === normalizedQuery) score += 120;
@@ -757,13 +1588,14 @@ function politicianSuggestionScore(member: CongressMemberRecord, query: string) 
   return score;
 }
 
-function insiderSuggestionScore(actorName: string, query: string) {
+async function insiderSuggestionScore(actorName: string, query: string) {
   const normalizedName = actorName.trim().toLowerCase();
   const normalizedQuery = query.trim().toLowerCase();
   const tokens = queryTokens(normalizedQuery);
   const actorTokens = queryTokens(normalizedName);
   const actorKey = normalizeActorKey(actorName);
-  const aliasEntry = NOTABLE_INSIDER_ALIASES.find((entry) => entry.actorKey === actorKey);
+  const insiderAliases = await getNotableInsiderAliases();
+  const aliasEntry = insiderAliases.find((entry) => entry.actorKey === actorKey);
   const aliases = mergeAliases(aliasEntry?.aliases);
 
   let score = 0;
@@ -849,7 +1681,8 @@ async function searchTickerSuggestionsDetailed(query: string): Promise<TickerSug
     }
   >();
 
-  for (const alias of TICKER_SEARCH_ALIASES) {
+  const tickerAliases = await getTickerSearchAliases();
+  for (const alias of tickerAliases) {
     const aliasTerms = mergeAliases(alias.aliases, [alias.companyName, alias.ticker]);
     const matched =
       alias.ticker === tickerQuery ||
@@ -887,8 +1720,9 @@ async function searchTickerSuggestionsDetailed(query: string): Promise<TickerSug
       continue;
     }
 
-    const alias = TICKER_SEARCH_ALIAS_BY_TICKER.get(ticker);
-    const companyName = cleanCompanyDisplayName(ticker, row.name ? String(row.name) : null);
+    const aliasMap = await getTickerAliasByTicker();
+    const alias = aliasMap.get(ticker);
+    const companyName = await cleanCompanyDisplayName(ticker, row.name ? String(row.name) : null);
     const existing = candidates.get(ticker);
     candidates.set(ticker, {
       ticker,
@@ -925,9 +1759,10 @@ async function searchTickerSuggestionsDetailed(query: string): Promise<TickerSug
       return left.ticker.localeCompare(right.ticker);
     });
 
-  const canonicalAliasMatches = ranked.filter((candidate) => TICKER_SEARCH_ALIAS_BY_TICKER.has(candidate.ticker));
+  const aliasMapFinal = await getTickerAliasByTicker();
+  const canonicalAliasMatches = ranked.filter((candidate) => aliasMapFinal.has(candidate.ticker));
   const filtered = ranked.filter((candidate) => {
-    if (TICKER_SEARCH_ALIAS_BY_TICKER.has(candidate.ticker)) {
+    if (aliasMapFinal.has(candidate.ticker)) {
       return true;
     }
 
@@ -971,7 +1806,8 @@ async function injectNotableInsiderAliasMatches(
   query: string
 ) {
   const normalizedQuery = normalizeSearchText(query);
-  const matchingAliases = NOTABLE_INSIDER_ALIASES.filter((entry) => aliasMatchScore(entry.aliases, normalizedQuery) > 0);
+  const notableInsiders = await getNotableInsiderAliases();
+  const matchingAliases = notableInsiders.filter((entry) => aliasMatchScore(entry.aliases, normalizedQuery) > 0);
   if (!matchingAliases.length) {
     return;
   }
@@ -1036,7 +1872,8 @@ async function resolveTickerTarget(value: string) {
     if (exactTicker) {
       return exactTicker.ticker;
     }
-    if (TICKER_SEARCH_ALIAS_BY_TICKER.has(normalizedTicker)) {
+    const aliasMap = await getTickerAliasByTicker();
+    if (aliasMap.has(normalizedTicker)) {
       return normalizedTicker;
     }
   }
@@ -1089,12 +1926,15 @@ export async function searchPoliticianSuggestions(query: string): Promise<Accoun
   }
 
   const members = await fetchCongressMembers();
-  const ranked = members
-    .filter((member) => !String(member.id || '').startsWith('unknown-'))
-    .map((member) => ({
-      member,
-      score: politicianSuggestionScore(member, trimmedQuery),
-    }))
+  const scoredEntries = await Promise.all(
+    members
+      .filter((member) => !String(member.id || '').startsWith('unknown-'))
+      .map(async (member) => ({
+        member,
+        score: await politicianSuggestionScore(member, trimmedQuery),
+      }))
+  );
+  const ranked = scoredEntries
     .filter((entry) => entry.score > 0)
     .sort((left, right) => {
       if (right.score !== left.score) return right.score - left.score;
@@ -1189,22 +2029,26 @@ async function searchInsiderSuggestionsDetailed(query: string): Promise<InsiderS
 
   await injectNotableInsiderAliasMatches(deduped, normalizedQuery);
 
-  return [...deduped.entries()]
-    .map(([actorKey, row]) => ({
+  const insiderAliases = await getNotableInsiderAliases();
+  const scoredInsiders = await Promise.all(
+    [...deduped.entries()].map(async ([actorKey, row]) => ({
       actorName: row.actor_name,
       actorKey,
       subtitle: row.ticker ? `Recent trade in ${row.ticker}` : null,
-      score: insiderSuggestionScore(row.actor_name, trimmedQuery),
+      score: await insiderSuggestionScore(row.actor_name, trimmedQuery),
       recency: row.created_at || '',
       exactMatch: normalizeSearchText(row.actor_name) === normalizedQuery,
       strongMatch:
         normalizeSearchText(row.actor_name).startsWith(normalizedQuery) ||
         Boolean(
-          NOTABLE_INSIDER_ALIASES.find((entry) => entry.actorKey === actorKey)?.aliases.some(
+          insiderAliases.find((entry) => entry.actorKey === actorKey)?.aliases.some(
             (alias) => normalizeSearchText(alias) === normalizedQuery || normalizeSearchText(alias).startsWith(normalizedQuery)
           )
         ),
     }))
+  );
+
+  return scoredInsiders
     .filter((row) => row.score > 0)
     .sort((left, right) => {
       if (right.score !== left.score) return right.score - left.score;
@@ -1223,6 +2067,49 @@ export async function searchInsiderSuggestions(query: string): Promise<AccountFo
     }));
 }
 
+export async function searchFundSuggestions(query: string): Promise<AccountFollowSuggestion[]> {
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length < 2) {
+    return [];
+  }
+
+  const tokens = queryTokens(trimmedQuery);
+  const supabase = getAdminSupabase();
+  let request = supabase
+    .from('institutional_holdings')
+    .select('fund_name,report_period,published_date')
+    .order('published_date', { ascending: false })
+    .order('report_period', { ascending: false })
+    .limit(120);
+
+  for (const token of tokens.length ? tokens : [trimmedQuery]) {
+    request = request.ilike('fund_name', `%${token}%`);
+  }
+
+  const response = await request;
+  if (response.error) {
+    handleSupabaseError(response.error);
+  }
+
+  const deduped = new Map<string, AccountFollowSuggestion>();
+  for (const row of (response.data || []) as Array<{ fund_name: string | null; report_period: string | null; published_date: string | null }>) {
+    const fundName = String(row.fund_name || '').trim();
+    const actorKey = normalizeActorKey(fundName);
+    if (!fundName || !actorKey || deduped.has(actorKey)) {
+      continue;
+    }
+
+    deduped.set(actorKey, {
+      actorType: 'fund',
+      actorName: fundName,
+      actorKey,
+      subtitle: row.report_period ? `Latest ${row.report_period}` : row.published_date ? `Filed ${row.published_date}` : '13F fund',
+    });
+  }
+
+  return [...deduped.values()].slice(0, 8);
+}
+
 async function countCurrentFollows(watchlistId: string) {
   const [tickers, actors] = await Promise.all([fetchWatchlistTickers(watchlistId), fetchWatchlistActors(watchlistId)]);
   return tickers.length + actors.length;
@@ -1230,7 +2117,7 @@ async function countCurrentFollows(watchlistId: string) {
 
 function assertCanAddFollow(count: number, limit: number) {
   if (count >= limit) {
-    throw new Error(`Follow limit reached. Your current plan supports ${limit} follows.`);
+    throw new Error(`${Math.min(count, limit)}/${limit} free follows used.`);
   }
 }
 
@@ -1275,7 +2162,7 @@ export async function addActorFollow(
   const supabase = getAdminSupabase();
   const trimmedName = actorName.trim();
   if (!trimmedName) {
-    throw new Error('Enter a person name.');
+    throw new Error('Enter a name.');
   }
 
   let actorKey = '';
@@ -1298,6 +2185,16 @@ export async function addActorFollow(
       state: resolved.state,
       party: resolved.party,
       resolved_from: trimmedName,
+    };
+  } else if (actorType === 'fund') {
+    actorKey = normalizeActorKey(preferredActorKey || trimmedName);
+    if (!actorKey) {
+      throw new Error('Enter a fund name.');
+    }
+    resolvedName = trimmedName;
+    metadata = {
+      resolved_from: trimmedName,
+      fund_name: resolvedName,
     };
   } else {
     const resolved = await resolveInsiderTarget(trimmedName, preferredActorKey);
@@ -1401,7 +2298,7 @@ export async function deleteActorFollow(user: User, followId: string) {
 
 async function setSubscriptionState(
   watchlistId: string,
-  channel: 'email' | 'telegram',
+  channel: 'email' | 'sms',
   destination: string | null,
   active: boolean
 ) {
@@ -1486,33 +2383,91 @@ export async function updateEmailDelivery(user: User, alertEmail: string | null,
   await setSubscriptionState(watchlist.id, 'email', normalizedEmail, enabled);
 }
 
-export async function updateTelegramDelivery(user: User, telegramUsername: string | null, enabled: boolean) {
-  const { profile, watchlist } = await ensureUserWorkspace(user);
-  const supabase = getAdminSupabase();
-  const normalizedUsername = normalizeTelegramUsername(telegramUsername || profile.telegram_username || '');
+export async function updateSmsDelivery(user: User, phoneNumber: string | null, enabled: boolean) {
+  const { watchlist } = await ensureUserWorkspace(user);
+  const normalizedPhone = normalizePhoneNumber(phoneNumber || '');
 
-  let chatId = profile.telegram_chat_id || null;
-  if (enabled) {
-    if (!normalizedUsername) {
-      throw new Error('Enter your Telegram username and message the Vail bot first.');
-    }
-    chatId = await resolveTelegramChatId(normalizedUsername);
+  if (enabled && !normalizedPhone) {
+    throw new Error('Add a phone number before enabling text alerts.');
   }
 
-  const profileUpdate = await supabase
+  await setSubscriptionState(watchlist.id, 'sms', normalizedPhone || null, enabled);
+}
+
+function normalizeClusterAlertChannels(value: unknown): ClusterAlertChannel[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return [...new Set(value.map((channel) => String(channel).trim().toLowerCase()).filter((channel) => VALID_CLUSTER_ALERT_CHANNELS.has(channel as ClusterAlertChannel)))] as ClusterAlertChannel[];
+}
+
+async function fetchClusterAlertPreference(userId: string) {
+  const supabase = getAdminSupabase();
+  const response = await supabase
+    .from('profiles')
+    .select('cluster_alerts_enabled,cluster_alert_channels')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (response.error) {
+    handleSupabaseError(response.error);
+  }
+
+  return {
+    enabled: Boolean(response.data?.cluster_alerts_enabled),
+    channels: normalizeClusterAlertChannels(response.data?.cluster_alert_channels),
+  };
+}
+
+function availableClusterAlertChannels(subscriptions: SubscriptionRow[]) {
+  return subscriptions
+    .filter((subscription) => subscription.active && Boolean(subscription.destination?.trim()))
+    .map((subscription) => subscription.channel)
+    .filter((channel): channel is ClusterAlertChannel => VALID_CLUSTER_ALERT_CHANNELS.has(channel as ClusterAlertChannel));
+}
+
+export async function getClusterAlertsState(user: User) {
+  const { watchlist } = await ensureUserWorkspace(user);
+  const [preference, subscriptions] = await Promise.all([
+    fetchClusterAlertPreference(user.id),
+    fetchSubscriptions(watchlist.id),
+  ]);
+  const availableChannels = availableClusterAlertChannels(subscriptions);
+
+  return {
+    enabled: preference.enabled,
+    channels: preference.channels.length ? preference.channels : availableChannels.slice(0, 1),
+    availableChannels,
+    deliveryReady: availableChannels.length > 0,
+  };
+}
+
+export async function updateClusterAlerts(user: User, enabled: boolean, channels: ClusterAlertChannel[] = []) {
+  await ensureUserWorkspace(user);
+  const state = await getClusterAlertsState(user);
+  const normalizedChannels = normalizeClusterAlertChannels(channels);
+  const preferredChannels = normalizedChannels.length ? normalizedChannels : state.channels;
+  const selectedChannels = preferredChannels.length ? preferredChannels : (['email'] as ClusterAlertChannel[]);
+
+  const supabase = getAdminSupabase();
+  const response = await supabase
     .from('profiles')
     .update({
-      telegram_username: normalizedUsername || null,
-      telegram_chat_id: chatId,
-      telegram_enabled: enabled,
+      cluster_alerts_enabled: enabled,
+      cluster_alert_channels: selectedChannels,
     })
     .eq('id', user.id);
 
-  if (profileUpdate.error) {
-    handleSupabaseError(profileUpdate.error);
+  if (response.error) {
+    handleSupabaseError(response.error);
   }
 
-  await setSubscriptionState(watchlist.id, 'telegram', enabled ? chatId : chatId, enabled);
+  return {
+    ...state,
+    enabled,
+    channels: selectedChannels,
+  };
 }
 
 function testAlertCopy(displayName: string | null | undefined) {
@@ -1550,21 +2505,21 @@ function testAlertCopy(displayName: string | null | undefined) {
     </div>
   `.trim();
 
-  const telegram = [
+  const sms = [
     'Vail test alert',
     '',
     'Your private alert delivery is working.',
     'Live signals for your follows will arrive here when something matches.',
   ].join('\n');
 
-  return { subject, summary, title, text, html, telegram };
+  return { subject, summary, title, text, html, sms };
 }
 
 export async function sendAccountTestAlert(user: User) {
   const { profile, watchlist } = await ensureUserWorkspace(user);
   const subscriptionRows = await fetchSubscriptions(watchlist.id);
   const emailSubscription = pickChannelSubscription(subscriptionRows, 'email');
-  const telegramSubscription = pickChannelSubscription(subscriptionRows, 'telegram');
+  const smsSubscription = pickChannelSubscription(subscriptionRows, 'sms');
   const copy = testAlertCopy(profile.display_name || user.email || null);
   const now = new Date();
   const today = now.toISOString().slice(0, 10);
@@ -1584,15 +2539,15 @@ export async function sendAccountTestAlert(user: User) {
     skippedChannels.push('email');
   }
 
-  if (profile.telegram_enabled && telegramSubscription?.destination) {
-    await sendTelegramMessage(telegramSubscription.destination, copy.telegram);
-    sentChannels.push('telegram');
+  if (smsSubscription?.active && smsSubscription.destination) {
+    await sendSmsMessage(smsSubscription.destination, copy.sms);
+    sentChannels.push('text');
   } else {
-    skippedChannels.push('telegram');
+    skippedChannels.push('text');
   }
 
   if (!sentChannels.length) {
-    throw new Error('Enable email or Telegram first so Vail has a destination for the test alert.');
+    throw new Error('Enable email or text first so Vail has a destination for the test alert.');
   }
 
   const supabase = getAdminSupabase();
@@ -1610,7 +2565,7 @@ export async function sendAccountTestAlert(user: User) {
       importance_score: 1,
       title: copy.title,
       summary: `${copy.summary} Channels: ${sentChannels.join(', ')}.`,
-      source_url: '/alerts',
+      source_url: '/account',
       payload: {
         sent_channels: sentChannels,
         skipped_channels: skippedChannels,
@@ -1638,13 +2593,13 @@ export async function sendAccountTestAlert(user: User) {
       sent_at: now.toISOString(),
     });
   }
-  if (sentChannels.includes('telegram') && telegramSubscription) {
+  if (sentChannels.includes('text') && smsSubscription) {
     deliveries.push({
       signal_event_id: signalInsert.data.id,
-      subscription_id: telegramSubscription.id,
-      delivery_key: `test:${sourceDocumentId}:${telegramSubscription.id}`,
-      channel: 'telegram',
-      destination: telegramSubscription.destination,
+      subscription_id: smsSubscription.id,
+      delivery_key: `test:${sourceDocumentId}:${smsSubscription.id}`,
+      channel: 'sms',
+      destination: smsSubscription.destination,
       status: 'sent',
       attempts: 1,
       payload: { kind: 'account_test' },
