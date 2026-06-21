@@ -10,8 +10,10 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   try {
     const user = await requireApiUser(request);
-    await requireClusterAccess(user);
-    const clusters = await getPublicClusterSignals();
+    const [clusters] = await Promise.all([
+      getPublicClusterSignals(),
+      requireClusterAccess(user),
+    ]);
     return NextResponse.json({ clusters });
   } catch (error) {
     if (error instanceof ApiRouteError) {

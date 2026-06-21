@@ -10,6 +10,79 @@ import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
+const CLUSTER_FEED_CACHE_VERSION = 'v2';
+const CLUSTER_FEED_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
+
+let clusterFeedMemoryCache: {
+  userId: string;
+  clusters: ClusterSignal[];
+  cachedAt: number;
+} | null = null;
+
+function clusterFeedCacheKey(userId: string) {
+  return `vail:cluster-feed:${CLUSTER_FEED_CACHE_VERSION}:${userId}`;
+}
+
+function isFreshClusterFeedCache(cachedAt: number) {
+  return Date.now() - cachedAt < CLUSTER_FEED_CACHE_MAX_AGE_MS;
+}
+
+function readCachedClusterFeed(userId: string) {
+  if (
+    clusterFeedMemoryCache?.userId === userId &&
+    isFreshClusterFeedCache(clusterFeedMemoryCache.cachedAt)
+  ) {
+    return clusterFeedMemoryCache.clusters;
+  }
+
+  try {
+    const raw = window.sessionStorage.getItem(clusterFeedCacheKey(userId));
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw) as { clusters?: ClusterSignal[]; cachedAt?: number };
+    if (!Array.isArray(parsed.clusters) || !parsed.cachedAt || !isFreshClusterFeedCache(parsed.cachedAt)) {
+      return null;
+    }
+
+    clusterFeedMemoryCache = {
+      userId,
+      clusters: parsed.clusters,
+      cachedAt: parsed.cachedAt,
+    };
+    return parsed.clusters;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedClusterFeed(userId: string, clusters: ClusterSignal[]) {
+  const cachedAt = Date.now();
+  clusterFeedMemoryCache = { userId, clusters, cachedAt };
+
+  try {
+    window.sessionStorage.setItem(
+      clusterFeedCacheKey(userId),
+      JSON.stringify({ clusters, cachedAt }),
+    );
+  } catch {
+    // If storage is unavailable, the in-memory cache still speeds up same-session navigation.
+  }
+}
+
+function clearCachedClusterFeed(userId: string) {
+  if (clusterFeedMemoryCache?.userId === userId) {
+    clusterFeedMemoryCache = null;
+  }
+
+  try {
+    window.sessionStorage.removeItem(clusterFeedCacheKey(userId));
+  } catch {
+    // Ignore storage cleanup failures.
+  }
+}
+
 function ProClusterGateCard({
   mode,
   error,
@@ -113,7 +186,13 @@ export default function ClusterAccessGate() {
     let cancelled = false;
 
     async function load() {
-      setLoadState('loading-clusters');
+      const cachedClusters = readCachedClusterFeed(activeSession.user.id);
+      if (cachedClusters) {
+        setSignals(cachedClusters);
+        setLoadState('ready');
+      } else {
+        setLoadState('loading-clusters');
+      }
       setError('');
 
       try {
@@ -130,6 +209,8 @@ export default function ClusterAccessGate() {
         if (!clusterResponse.ok) {
           if (clusterPayload.code === 'PRO_REQUIRED') {
             if (!cancelled) {
+              clearCachedClusterFeed(activeSession.user.id);
+              setSignals([]);
               setLoadState('free');
             }
             return;
@@ -138,7 +219,9 @@ export default function ClusterAccessGate() {
         }
 
         if (!cancelled) {
-          setSignals(clusterPayload.clusters || []);
+          const nextClusters = clusterPayload.clusters || [];
+          writeCachedClusterFeed(activeSession.user.id, nextClusters);
+          setSignals(nextClusters);
           setLoadState('ready');
         }
       } catch (value) {
