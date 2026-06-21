@@ -172,6 +172,8 @@ type FetchStoryOptions = {
   category?: string | null;
   queryText?: string | null;
   sort?: string | null;
+  resolveAmounts?: boolean;
+  ruleKeys?: string[] | null;
 };
 
 type FetchStoryByKeyOptions = {
@@ -882,45 +884,65 @@ export async function tweetCandidatesEnabled() {
 export async function fetchTweetCandidateStories(options: FetchStoryOptions) {
   const supabase = getAdminSupabase();
   const storyLimit = Number.isFinite(options.storyLimit) ? options.storyLimit : 60;
-  const rowLimit = Math.max(Math.min(storyLimit * 8, 1000), 240);
+  const rowLimit = Math.max(Math.min(storyLimit * 8, 5000), 240);
+  const pageSize = 1000;
   const normalizedSort = trim(options.sort).toLowerCase() || 'score';
   const statuses = Array.isArray(options.status)
     ? uniqueStrings(options.status)
     : uniqueStrings([options.status]);
+  const ruleKeys = uniqueStrings(options.ruleKeys || []);
 
-  let query = supabase
-    .from('tweet_candidates')
-    .select(
-      'id, candidate_key, channel, status, rule_key, score, title, draft_text, rationale, payload, created_at, reviewed_at, posted_at, review_notes, external_post_id, signal_event_id, signal_events!inner(ticker, actor_name, signal_type, source_url, occurred_at, published_at)'
-    )
-    .limit(rowLimit);
+  const buildQuery = (from: number, to: number) => {
+    let query = supabase
+      .from('tweet_candidates')
+      .select(
+        'id, candidate_key, channel, status, rule_key, score, title, draft_text, rationale, payload, created_at, reviewed_at, posted_at, review_notes, external_post_id, signal_event_id, signal_events!inner(ticker, actor_name, signal_type, source_url, occurred_at, published_at)'
+      )
+      .range(from, to);
 
-  if (normalizedSort === 'newest') {
-    query = query
-      .order('created_at', { ascending: false })
-      .order('score', { ascending: false });
-  } else {
-    query = query
-      .order('score', { ascending: false })
-      .order('created_at', { ascending: false });
+    if (normalizedSort === 'newest') {
+      query = query
+        .order('created_at', { ascending: false })
+        .order('score', { ascending: false });
+    } else {
+      query = query
+        .order('score', { ascending: false })
+        .order('created_at', { ascending: false });
+    }
+
+    if (statuses.length === 1) {
+      query = query.eq('status', statuses[0]);
+    } else if (statuses.length > 1) {
+      query = query.in('status', statuses);
+    }
+
+    if (ruleKeys.length === 1) {
+      query = query.eq('rule_key', ruleKeys[0]);
+    } else if (ruleKeys.length > 1) {
+      query = query.in('rule_key', ruleKeys);
+    }
+
+    if (options.sinceDate) {
+      query = query.gte('signal_events.published_at', options.sinceDate);
+    }
+
+    return query;
+  };
+
+  const rows: TweetCandidateRow[] = [];
+  for (let offset = 0; offset < rowLimit; offset += pageSize) {
+    const response = await buildQuery(offset, Math.min(offset + pageSize - 1, rowLimit - 1));
+    if (response.error) {
+      throw response.error;
+    }
+
+    const pageRows = (response.data ?? []) as TweetCandidateRow[];
+    rows.push(...pageRows);
+    if (pageRows.length < pageSize) {
+      break;
+    }
   }
 
-  if (statuses.length === 1) {
-    query = query.eq('status', statuses[0]);
-  } else if (statuses.length > 1) {
-    query = query.in('status', statuses);
-  }
-
-  if (options.sinceDate) {
-    query = query.gte('signal_events.published_at', options.sinceDate);
-  }
-
-  const response = await query;
-  if (response.error) {
-    throw response.error;
-  }
-
-  const rows = (response.data ?? []) as TweetCandidateRow[];
   let stories = groupRows(rows);
 
   stories = stories.filter((story) => storyMatchesCategory(story, options.category));
@@ -931,16 +953,23 @@ export async function fetchTweetCandidateStories(options: FetchStoryOptions) {
   }
 
   stories = stories.filter(storyIsCuratable);
-  const resolvedAmountFloors = await resolveStoryAmountFloors(stories);
-  stories = stories.map((story) => {
-    const amountFloor = Math.max(story.amountFloor, resolvedAmountFloors.get(story.candidateKey) || 0);
-    return {
+  if (options.resolveAmounts !== false) {
+    const resolvedAmountFloors = await resolveStoryAmountFloors(stories);
+    stories = stories.map((story) => {
+      const amountFloor = Math.max(story.amountFloor, resolvedAmountFloors.get(story.candidateKey) || 0);
+      return {
+        ...story,
+        amountFloor,
+        amountLabel: moneyLabel(amountFloor),
+        amountRanges: uniqueStrings(story.amountRanges),
+      };
+    });
+  } else {
+    stories = stories.map((story) => ({
       ...story,
-      amountFloor,
-      amountLabel: moneyLabel(amountFloor),
       amountRanges: uniqueStrings(story.amountRanges),
-    };
-  });
+    }));
+  }
 
   return sortStories(stories, options.sort).slice(0, storyLimit);
 }

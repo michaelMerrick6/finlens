@@ -44,7 +44,7 @@ const DASHBOARD_SIGNAL_CANDIDATE_LIMIT = 24;
 const DASHBOARD_SIGNAL_LOOKBACK_DAYS = 30;
 const DASHBOARD_CLUSTER_PREVIEW_LIMIT = 4;
 const DASHBOARD_RETURN_TICKER_LIMIT = 8;
-const CLUSTER_PAGE_SIGNAL_LIMIT = 180;
+const CLUSTER_PAGE_SIGNAL_LIMIT = 750;
 const DASHBOARD_MIN_SIGNAL_SCORE = 0.72;
 const MATERIAL_INSIDER_CLUSTER_MIN_SCORE = 0.68;
 const MATERIAL_INSIDER_CLUSTER_MIN_VALUE = 1_000_000;
@@ -269,6 +269,7 @@ function sourceMixLabel(story: {
 
 type DashboardSignalEventRow = {
   id: string;
+  actor_name?: string | null;
   payload?: Record<string, unknown> | null;
 };
 
@@ -349,6 +350,33 @@ function uniqueEconomicLeafRows(rows: DashboardSignalEventRow[]) {
   return [...rowsByEconomicKey.values()];
 }
 
+function insiderEconomicActorSignature(row: DashboardSignalEventRow) {
+  const payload = row.payload || {};
+  return trim(payload.filer_name || payload.politician_name || payload.fund_name || row.actor_name).toLowerCase() || row.id;
+}
+
+function uniqueEconomicActorCount(rows: DashboardSignalEventRow[]) {
+  const rowsByActor = new Map<string, DashboardSignalEventRow[]>();
+  for (const row of rows) {
+    const actorKey = insiderEconomicActorSignature(row);
+    const existingRows = rowsByActor.get(actorKey) || [];
+    existingRows.push(row);
+    rowsByActor.set(actorKey, existingRows);
+  }
+
+  const actorEconomicSignatures = new Set<string>();
+  for (const actorRows of rowsByActor.values()) {
+    const economicKeys = uniqueEconomicLeafRows(actorRows)
+      .map((row) => insiderEconomicTransactionKey(row))
+      .sort();
+    if (economicKeys.length) {
+      actorEconomicSignatures.add(economicKeys.join('|'));
+    }
+  }
+
+  return actorEconomicSignatures.size;
+}
+
 function storyEconomicStats(story: BroadcastStory, rowsById: Map<string, DashboardSignalEventRow>) {
   const allLeafRows = collectLeafSignalRows(story.supportingEventIds, rowsById);
   const uniqueLeafRows = uniqueEconomicLeafRows(allLeafRows);
@@ -361,19 +389,9 @@ function storyEconomicStats(story: BroadcastStory, rowsById: Map<string, Dashboa
     };
   }
 
-  const economicActorSignatures = new Set<string>();
-  for (const rootId of story.supportingEventIds) {
-    const rootLeafRows = uniqueEconomicLeafRows(collectLeafSignalRows([rootId], rowsById));
-    if (!rootLeafRows.length) {
-      continue;
-    }
-
-    economicActorSignatures.add(rootLeafRows.map((row) => insiderEconomicTransactionKey(row)).sort().join('|'));
-  }
-
   return {
     amountFloor,
-    economicActorCount: economicActorSignatures.size || null,
+    economicActorCount: uniqueEconomicActorCount(allLeafRows) || null,
   };
 }
 
@@ -392,7 +410,7 @@ async function loadSignalEventRowsById(eventIds: string[]) {
       continue;
     }
 
-    const { data, error } = await supabase.from('signal_events').select('id, payload').in('id', batch);
+    const { data, error } = await supabase.from('signal_events').select('id, actor_name, payload').in('id', batch);
     if (error) {
       throw new Error(error.message);
     }
@@ -1066,9 +1084,11 @@ async function loadClusterSignals({
     storyLimit: Math.max(limit * 5, 60),
     category: 'cluster_feed',
     sort,
+    resolveAmounts: false,
+    ruleKeys: [...CLUSTER_FEED_RULES],
   });
 
-  const selectedStories = dedupeClusterFeedStories(
+  const candidateStories = dedupeClusterFeedStories(
     stories.filter((story) => {
       const ticker = trim(story.ticker).toUpperCase();
       if (!ticker || ['N/A', 'UNKNOWN', 'MULTI'].includes(ticker)) {
@@ -1097,19 +1117,19 @@ async function loadClusterSignals({
         return (right.latestPublishedAt || right.createdAt).localeCompare(left.latestPublishedAt || left.createdAt);
       }
       return right.score - left.score || (right.latestPublishedAt || right.createdAt).localeCompare(left.latestPublishedAt || left.createdAt);
-    })
-    .slice(0, limit);
+    });
 
-  const economicStatsByStory = await resolveStoryEconomicStats(selectedStories).catch(
+  const validationPool = candidateStories.slice(0, Math.max(limit * 3, limit + 120));
+  const economicStatsByStory = await resolveStoryEconomicStats(validationPool).catch(
     () => new Map<string, ClusterStoryResolvedStats>(),
   );
-  const filteredStories = selectedStories.filter((story) => {
+  const filteredStories = validationPool.filter((story) => {
     const stats = economicStatsByStory.get(story.candidateKey);
     if (story.ruleKey !== 'insider_cluster') {
       return true;
     }
     return (stats?.economicActorCount ?? story.actorCount) >= 2;
-  });
+  }).slice(0, limit);
   const actorPreviewsByStory = await resolveStoryActorPreviews(filteredStories).catch(
     () => new Map<string, DashboardSignalActorPreview[]>(),
   );
@@ -1283,7 +1303,7 @@ const loadClusterFeedSignals = unstable_cache(
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
       sort: 'newest',
     }),
-  ['public-cluster-feed'],
+  ['public-cluster-feed-v2'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 
@@ -1296,7 +1316,7 @@ const loadDashboardClusterPreviewSignals = unstable_cache(
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
       sort: 'newest',
     }),
-  ['dashboard-cluster-preview'],
+  ['dashboard-cluster-preview-v2'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 

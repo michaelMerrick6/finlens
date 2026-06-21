@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { routeErrorMessage } from '@/lib/api-errors';
 import { requireClusterAccess } from '@/lib/account-server';
 import { ApiRouteError, requireApiUser } from '@/lib/auth-server';
-import { getDashboardRecentClusterSignals } from '@/lib/public-data';
+import { getPublicClusterSignals } from '@/lib/public-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const user = await requireApiUser(request);
     await requireClusterAccess(user);
-    const clusters = await getDashboardRecentClusterSignals();
+    const clusters = await getPublicClusterSignals();
     return NextResponse.json({ clusters });
   } catch (error) {
     if (error instanceof ApiRouteError) {

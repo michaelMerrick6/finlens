@@ -7,10 +7,8 @@ import { Lock, Sparkles } from 'lucide-react';
 
 import ClustersPage, { type ClusterSignal } from '@/components/ClustersPage';
 import { supabase } from '@/lib/supabase';
-import type { AccountState } from '@/lib/account-types';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
-const PAID_BILLING_STATUSES = new Set(['active', 'trialing', 'past_due']);
 
 function ProClusterGateCard({
   mode,
@@ -115,33 +113,10 @@ export default function ClusterAccessGate() {
     let cancelled = false;
 
     async function load() {
-      setLoadState('loading-account');
+      setLoadState('loading-clusters');
       setError('');
 
       try {
-        const accountResponse = await fetch('/api/account/state?history=0&preview=0', {
-          signal: controller.signal,
-          headers: { Authorization: `Bearer ${activeSession.access_token}` },
-        });
-        const accountPayload = (await accountResponse.json()) as { state?: AccountState; error?: string };
-        if (!accountResponse.ok || !accountPayload.state) {
-          throw new Error(accountPayload.error || 'Could not load your account.');
-        }
-
-        if (
-          accountPayload.state.billing.planKey !== 'pro' ||
-          !PAID_BILLING_STATUSES.has(String(accountPayload.state.billing.status || '').toLowerCase())
-        ) {
-          if (!cancelled) {
-            setLoadState('free');
-          }
-          return;
-        }
-
-        if (!cancelled) {
-          setLoadState('loading-clusters');
-        }
-
         const clusterResponse = await fetch('/api/dashboard-clusters', {
           signal: controller.signal,
           headers: { Authorization: `Bearer ${activeSession.access_token}` },
