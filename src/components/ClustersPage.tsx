@@ -10,7 +10,7 @@ import { getTickerLogoUrl } from '@/lib/company-logos';
 import type { DashboardClusterDetail } from '@/lib/dashboard-cluster-types';
 import { formatCalendarDate } from '@/lib/date-format';
 
-type ClusterSignal = {
+export type ClusterSignal = {
   id: string;
   ticker: string;
   title: string;
@@ -117,7 +117,7 @@ function formatDateShort(value: string | null | undefined) {
   return formatCalendarDate(value, 'UTC');
 }
 
-export default function ClustersPage({ signals }: { signals: ClusterSignal[] }) {
+export default function ClustersPage({ signals, accessToken }: { signals: ClusterSignal[]; accessToken?: string }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
@@ -175,6 +175,7 @@ export default function ClustersPage({ signals }: { signals: ClusterSignal[] }) 
 
     fetch(`/api/dashboard-cluster?key=${encodeURIComponent(selectedCluster.id)}`, {
       signal: controller.signal,
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
     })
       .then(async (response) => {
         if (!response.ok) {
@@ -204,7 +205,7 @@ export default function ClustersPage({ signals }: { signals: ClusterSignal[] }) 
       cancelled = true;
       controller.abort();
     };
-  }, [selectedCluster]);
+  }, [accessToken, selectedCluster]);
 
   return (
     <>

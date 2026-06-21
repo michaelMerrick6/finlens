@@ -695,11 +695,13 @@ function RecentFollowActivity({
   loading,
   historyLoading,
   error,
+  accessToken,
 }: {
   state: AccountState;
   loading?: boolean;
   historyLoading?: boolean;
   error?: string;
+  accessToken?: string;
 }) {
   const [mode, setMode] = useState<"matched" | "sent">("matched");
   const [filter, setFilter] = useState<"all" | "trades" | "clusters">("all");
@@ -760,6 +762,7 @@ function RecentFollowActivity({
       `/api/dashboard-cluster?key=${encodeURIComponent(selectedCluster.id)}`,
       {
         signal: controller.signal,
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
       },
     )
       .then(async (response) => {
@@ -801,7 +804,7 @@ function RecentFollowActivity({
       cancelled = true;
       controller.abort();
     };
-  }, [selectedCluster]);
+  }, [accessToken, selectedCluster]);
 
   function openCluster(signal: AccountMatchedSignal) {
     setClusterDetail(null);
@@ -1941,6 +1944,7 @@ export function SignalsPage({
                   loading={activityLoading}
                   historyLoading={historyLoading}
                   error={activityError}
+                  accessToken={session?.access_token}
                 />
               ) : (
                 <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.015]">

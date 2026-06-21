@@ -37,6 +37,7 @@ export default function ClusterAlertButton() {
   const [saving, setSaving] = useState(false);
   const [added, setAdded] = useState(false);
   const [error, setError] = useState('');
+  const [hasClusterAccess, setHasClusterAccess] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -61,6 +62,7 @@ export default function ClusterAlertButton() {
     if (!session) {
       setEnabled(false);
       setSelectedChannels([]);
+      setHasClusterAccess(false);
       return;
     }
 
@@ -68,13 +70,15 @@ export default function ClusterAlertButton() {
       headers: { Authorization: `Bearer ${session.access_token}` },
     })
       .then((response) => response.json())
-      .then((payload: { enabled?: boolean; channels?: ClusterAlertChannel[] }) => {
+      .then((payload: { enabled?: boolean; channels?: ClusterAlertChannel[]; hasClusterAccess?: boolean }) => {
         setEnabled(Boolean(payload.enabled));
         setSelectedChannels(payload.channels || []);
+        setHasClusterAccess(Boolean(payload.hasClusterAccess));
       })
       .catch(() => {
         setEnabled(false);
         setSelectedChannels([]);
+        setHasClusterAccess(false);
       });
   }, [session]);
 
@@ -112,6 +116,12 @@ export default function ClusterAlertButton() {
       return;
     }
 
+    if (!hasClusterAccess) {
+      setModalOpen(false);
+      router.push('/pricing');
+      return;
+    }
+
     setSaving(true);
     setAdded(false);
     setError('');
@@ -145,6 +155,11 @@ export default function ClusterAlertButton() {
           setModalOpen(false);
         }
       } else {
+        if (payload.code === 'PRO_REQUIRED') {
+          setModalOpen(false);
+          router.push('/pricing');
+          return;
+        }
         setError(payload.error || 'Could not update cluster alerts right now.');
       }
     } catch {
@@ -234,11 +249,12 @@ export default function ClusterAlertButton() {
               ) : (
                 <>
                   <h2 id="cluster-alert-title" className="text-2xl font-semibold tracking-tight text-white">
-                    {enabled ? 'You are following clusters.' : 'Follow clusters.'}
+                    {!hasClusterAccess && session ? 'Clusters are Pro.' : enabled ? 'You are following clusters.' : 'Follow clusters.'}
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-zinc-400">
-                    A cluster is grouped movement around one stock from multiple politicians, insiders, or hedge funds
-                    inside a short window. Follow the feed to track each new one from Alerts.
+                    {!hasClusterAccess && session
+                      ? 'Upgrade to Pro to follow the cluster feed and receive cluster alerts.'
+                      : 'A cluster is grouped movement around one stock from multiple politicians, insiders, or hedge funds inside a short window. Follow the feed to track each new one from Alerts.'}
                   </p>
 
                   <div className="mt-5 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-3.5">
@@ -281,7 +297,7 @@ export default function ClusterAlertButton() {
                       : 'bg-white text-black hover:bg-emerald-200'
                   }`}
                 >
-                  {saving ? 'Saving...' : actionLabel}
+                  {saving ? 'Saving...' : !hasClusterAccess && session ? 'View Pro' : actionLabel}
                 </button>
               </div>
             ) : null}

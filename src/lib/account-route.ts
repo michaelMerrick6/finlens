@@ -29,6 +29,7 @@ function safeAccountErrorMessage(error: unknown) {
     'Enter ',
     'Invalid ',
     'Missing ',
+    'Upgrade ',
   ];
 
   if (safePrefixes.some((prefix) => message.startsWith(prefix)) || /\d+\/\d+ free follows used\./.test(message)) {

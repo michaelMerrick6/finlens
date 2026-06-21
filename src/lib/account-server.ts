@@ -26,6 +26,7 @@ import {
 } from '@/lib/billing-server';
 import {
   getFreeFollowLimit,
+  hasProBillingAccess,
   normalizeBillingPlanKey,
   normalizeBillingStatus,
   resolveBillingFollowLimit,
@@ -1331,6 +1332,7 @@ async function buildAccountAlertPreview(
   tickers: AccountTickerFollow[],
   actors: AccountActorFollow[],
   clusterFeedEnabled = false,
+  includeClusterSignals = true,
 ): Promise<AccountAlertPreview> {
   const [events, rawActivityByFollow] = await Promise.all([
     fetchRecentSignalEvents().catch(() => []),
@@ -1354,7 +1356,7 @@ async function buildAccountAlertPreview(
     const matched = dedupeMatchedSignals([
       ...eventMatches,
       ...(rawActivityByFollow.get(followPreviewKey('ticker', follow.id)) || []),
-    ]);
+    ]).filter((signal) => includeClusterSignals || !signal.isCluster);
 
     for (const signal of matched) {
       timelineById.set(signal.id, signal);
@@ -1384,7 +1386,7 @@ async function buildAccountAlertPreview(
     const matched = dedupeMatchedSignals([
       ...eventMatches,
       ...(rawActivityByFollow.get(followPreviewKey('actor', follow.id)) || []),
-    ]);
+    ]).filter((signal) => includeClusterSignals || !signal.isCluster);
 
     for (const signal of matched) {
       timelineById.set(signal.id, signal);
@@ -1460,21 +1462,38 @@ function toAccountBilling(profile: ProfileRow): AccountBillingState {
   };
 }
 
+function profileHasProAccess(profile: ProfileRow) {
+  return hasProBillingAccess(profile.billing_plan_key, profile.billing_status);
+}
+
+export async function userHasClusterAccess(user: User) {
+  const profile = await ensureUserProfile(user);
+  return profileHasProAccess(profile);
+}
+
+export async function requireClusterAccess(user: User) {
+  if (!(await userHasClusterAccess(user))) {
+    throw new Error('Upgrade to Pro to use clusters.');
+  }
+}
+
 export async function getAccountAlertPreview(user: User): Promise<AccountAlertPreview> {
-  const watchlist = await ensureUserWatchlist(user.id);
+  const { profile, watchlist } = await ensureUserWorkspace(user);
   const [tickers, actors, clusterAlerts] = await Promise.all([
     fetchWatchlistTickers(watchlist.id),
     fetchWatchlistActors(watchlist.id),
     fetchClusterAlertPreference(user.id),
   ]);
+  const hasClusterAccess = profileHasProAccess(profile);
+  const clusterFeedEnabled = hasClusterAccess && clusterAlerts.enabled;
 
-  const cacheKey = accountAlertPreviewCacheKey(user.id, tickers, actors, clusterAlerts.enabled);
+  const cacheKey = accountAlertPreviewCacheKey(user.id, tickers, actors, clusterFeedEnabled);
   const cached = accountAlertPreviewCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) {
     return cached.preview;
   }
 
-  const preview = await buildAccountAlertPreview(tickers, actors, clusterAlerts.enabled);
+  const preview = await buildAccountAlertPreview(tickers, actors, clusterFeedEnabled, hasClusterAccess);
   accountAlertPreviewCache.set(cacheKey, {
     expiresAt: Date.now() + ACCOUNT_ALERT_PREVIEW_CACHE_TTL_MS,
     preview,
@@ -1499,10 +1518,14 @@ export async function getAccountState(user: User, options: AccountStateOptions =
     fetchClusterAlertPreference(user.id),
   ]);
 
+  const hasClusterAccess = profileHasProAccess(profile);
+  const clusterFeedEnabled = hasClusterAccess && clusterAlerts.enabled;
   const subscriptionIds = subscriptionRows.map((row) => String(row.id));
   const [history, alertPreview] = await Promise.all([
     includeHistory ? fetchAlertHistory(subscriptionIds) : Promise.resolve([]),
-    includeAlertPreview ? buildAccountAlertPreview(tickers, actors, clusterAlerts.enabled) : Promise.resolve(emptyAccountAlertPreview()),
+    includeAlertPreview
+      ? buildAccountAlertPreview(tickers, actors, clusterFeedEnabled, hasClusterAccess)
+      : Promise.resolve(emptyAccountAlertPreview()),
   ]);
 
   const emailState = pickChannelState(subscriptionRows, 'email', profile.alert_email || user.email || null, profile.email_enabled);
@@ -1524,7 +1547,7 @@ export async function getAccountState(user: User, options: AccountStateOptions =
       id: watchlist.id,
       name: watchlist.name,
     },
-    followCount: tickers.length + actors.length + Number(clusterAlerts.enabled),
+    followCount: tickers.length + actors.length + Number(clusterFeedEnabled),
     followLimit: profile.follow_limit || DEFAULT_FOLLOW_LIMIT,
     subscriptions: {
       email: emailState,
@@ -1533,7 +1556,7 @@ export async function getAccountState(user: User, options: AccountStateOptions =
     follows: {
       tickers,
       actors,
-      cluster: clusterAlerts.enabled
+      cluster: clusterFeedEnabled
         ? {
             id: 'cluster-feed',
             label: 'Clusters',
@@ -2428,23 +2451,29 @@ function availableClusterAlertChannels(subscriptions: SubscriptionRow[]) {
 }
 
 export async function getClusterAlertsState(user: User) {
-  const { watchlist } = await ensureUserWorkspace(user);
+  const { profile, watchlist } = await ensureUserWorkspace(user);
   const [preference, subscriptions] = await Promise.all([
     fetchClusterAlertPreference(user.id),
     fetchSubscriptions(watchlist.id),
   ]);
   const availableChannels = availableClusterAlertChannels(subscriptions);
+  const hasClusterAccess = profileHasProAccess(profile);
 
   return {
-    enabled: preference.enabled,
+    enabled: hasClusterAccess && preference.enabled,
     channels: preference.channels.length ? preference.channels : availableChannels.slice(0, 1),
     availableChannels,
     deliveryReady: availableChannels.length > 0,
+    hasClusterAccess,
   };
 }
 
 export async function updateClusterAlerts(user: User, enabled: boolean, channels: ClusterAlertChannel[] = []) {
-  await ensureUserWorkspace(user);
+  const { profile } = await ensureUserWorkspace(user);
+  if (enabled && !profileHasProAccess(profile)) {
+    throw new Error('Upgrade to Pro to follow cluster alerts.');
+  }
+
   const state = await getClusterAlertsState(user);
   const normalizedChannels = normalizeClusterAlertChannels(channels);
   const preferredChannels = normalizedChannels.length ? normalizedChannels : state.channels;

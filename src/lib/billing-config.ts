@@ -28,6 +28,13 @@ export function isPaidBillingStatus(value: string | null | undefined) {
   return PAID_BILLING_STATUSES.has(normalizeBillingStatus(value));
 }
 
+export function hasProBillingAccess(
+  planKey: string | null | undefined,
+  status: string | null | undefined
+) {
+  return normalizeBillingPlanKey(planKey) === 'pro' && isPaidBillingStatus(status);
+}
+
 export function getBillingPlanName(planKey: BillingPlanKey) {
   return planKey === 'pro' ? 'Vail Pro' : 'Free';
 }

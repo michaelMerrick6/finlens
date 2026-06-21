@@ -1,14 +1,11 @@
 import { Info } from 'lucide-react';
 
 import ClusterAlertButton from '@/components/ClusterAlertButton';
-import ClustersPage from '@/components/ClustersPage';
-import { getPublicClusterSignals } from '@/lib/public-data';
+import ClusterAccessGate from '@/components/ClusterAccessGate';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function ClusterSignalsPage() {
-  const signals = await getPublicClusterSignals();
-
   return (
     <div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -38,7 +35,7 @@ export default async function ClusterSignalsPage() {
         <ClusterAlertButton />
       </div>
 
-      <ClustersPage signals={signals} />
+      <ClusterAccessGate />
     </div>
   );
 }
