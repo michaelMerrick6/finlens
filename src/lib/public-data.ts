@@ -141,6 +141,7 @@ export type DashboardFeaturedSignal = {
 };
 
 export type PublicClusterSignal = DashboardFeaturedSignal & {
+  amountFloor: number;
   ruleKey: string;
   sourceGroup: 'congress' | 'insiders' | 'cross-source';
   score: number;
@@ -1071,12 +1072,14 @@ async function loadClusterSignals({
   sinceDate,
   statuses,
   sort,
+  includeActorPreviews = true,
 }: {
   limit: number;
   buyOnly: boolean;
   sinceDate: string | null;
   statuses: string[];
   sort: 'score' | 'newest';
+  includeActorPreviews?: boolean;
 }): Promise<PublicClusterSignal[]> {
   const stories = await fetchTweetCandidateStories({
     status: statuses,
@@ -1120,7 +1123,8 @@ async function loadClusterSignals({
     });
 
   const validationPool = candidateStories.slice(0, Math.max(limit * 3, limit + 120));
-  const economicStatsByStory = await resolveStoryEconomicStats(validationPool).catch(
+  const storiesRequiringEconomicValidation = validationPool.filter((story) => story.ruleKey === 'insider_cluster');
+  const economicStatsByStory = await resolveStoryEconomicStats(storiesRequiringEconomicValidation).catch(
     () => new Map<string, ClusterStoryResolvedStats>(),
   );
   const filteredStories = validationPool.filter((story) => {
@@ -1130,9 +1134,11 @@ async function loadClusterSignals({
     }
     return (stats?.economicActorCount ?? story.actorCount) >= 2;
   }).slice(0, limit);
-  const actorPreviewsByStory = await resolveStoryActorPreviews(filteredStories).catch(
-    () => new Map<string, DashboardSignalActorPreview[]>(),
-  );
+  const actorPreviewsByStory = includeActorPreviews
+    ? await resolveStoryActorPreviews(filteredStories).catch(
+        () => new Map<string, DashboardSignalActorPreview[]>(),
+      )
+    : new Map<string, DashboardSignalActorPreview[]>();
 
   return filteredStories.map((story) => {
       const normalizedDirection = trim(story.direction).toLowerCase();
@@ -1158,6 +1164,7 @@ async function loadClusterSignals({
         actorPreviews: actorPreviewsByStory.get(story.candidateKey) || [],
         actorCount,
         amountLabel,
+        amountFloor,
         sourceLabel: sourceMixLabel(story),
         publishedAt: story.latestPublishedAt,
         ruleKey: story.ruleKey,
@@ -1302,8 +1309,9 @@ const loadClusterFeedSignals = unstable_cache(
       sinceDate: null,
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
       sort: 'newest',
+      includeActorPreviews: false,
     }),
-  ['public-cluster-feed-v2'],
+  ['public-cluster-feed-v3'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 

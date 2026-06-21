@@ -3,7 +3,7 @@
 import Image, { type ImageLoaderProps } from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, Search } from 'lucide-react';
+import { ChevronRight, Filter, Search } from 'lucide-react';
 
 import DashboardClusterModal from '@/components/DashboardClusterModal';
 import { getTickerLogoUrl } from '@/lib/company-logos';
@@ -19,6 +19,7 @@ export type ClusterSignal = {
   actorPreview: string | null;
   actorCount: number;
   amountLabel: string | null;
+  amountFloor: number;
   sourceLabel: string;
   publishedAt: string | null;
   direction: 'buy' | 'sell' | null;
@@ -36,8 +37,31 @@ const SOURCE_OPTIONS = [
 
 type SourceFilter = (typeof SOURCE_OPTIONS)[number]['value'];
 type DirectionFilter = 'all' | 'buy' | 'sell';
+type SortMode = 'newest' | 'amount' | 'actors' | 'score';
 
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
+
+function parseCompactNumber(value: string) {
+  const raw = value.trim().toLowerCase().replace(/[$,\s]/g, '');
+  if (!raw) {
+    return 0;
+  }
+
+  const multiplier = raw.endsWith('b')
+    ? 1_000_000_000
+    : raw.endsWith('m')
+      ? 1_000_000
+      : raw.endsWith('k')
+        ? 1_000
+        : 1;
+  const numeric = Number(raw.replace(/[bmk]$/, ''));
+  return Number.isFinite(numeric) ? numeric * multiplier : 0;
+}
+
+function dateRank(value: string | null | undefined) {
+  const time = value ? new Date(value).getTime() : 0;
+  return Number.isFinite(time) ? time : 0;
+}
 
 function FilterPill({
   active,
@@ -122,6 +146,10 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
   const [searchQuery, setSearchQuery] = useState('');
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [directionFilter, setDirectionFilter] = useState<DirectionFilter>('all');
+  const [sortMode, setSortMode] = useState<SortMode>('newest');
+  const [minAmount, setMinAmount] = useState('');
+  const [minActors, setMinActors] = useState('');
+  const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(18);
   const [selectedCluster, setSelectedCluster] = useState<ClusterSignal | null>(null);
   const [clusterDetail, setClusterDetail] = useState<DashboardClusterDetail | null>(null);
@@ -130,13 +158,23 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
 
   const filteredSignals = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
+    const minimumAmount = parseCompactNumber(minAmount);
+    const minimumActors = Number.parseInt(minActors.trim(), 10) || 0;
 
-    return signals.filter((signal) => {
+    const filtered = signals.filter((signal) => {
       if (sourceFilter !== 'all' && signal.sourceGroup !== sourceFilter) {
         return false;
       }
 
       if (directionFilter !== 'all' && signal.direction !== directionFilter) {
+        return false;
+      }
+
+      if (minimumAmount > 0 && (signal.amountFloor || 0) < minimumAmount) {
+        return false;
+      }
+
+      if (minimumActors > 0 && signal.actorCount < minimumActors) {
         return false;
       }
 
@@ -156,14 +194,29 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
 
       return haystack.includes(query);
     });
-  }, [directionFilter, searchQuery, signals, sourceFilter]);
+
+    return filtered.sort((left, right) => {
+      if (sortMode === 'amount') {
+        return (right.amountFloor || 0) - (left.amountFloor || 0) || dateRank(right.publishedAt) - dateRank(left.publishedAt);
+      }
+      if (sortMode === 'actors') {
+        return right.actorCount - left.actorCount || (right.amountFloor || 0) - (left.amountFloor || 0);
+      }
+      if (sortMode === 'score') {
+        return right.score - left.score || dateRank(right.publishedAt) - dateRank(left.publishedAt);
+      }
+      return dateRank(right.publishedAt) - dateRank(left.publishedAt) || right.score - left.score;
+    });
+  }, [directionFilter, minActors, minAmount, searchQuery, signals, sortMode, sourceFilter]);
 
   const visibleSignals = filteredSignals.slice(0, visibleCount);
 
   const crossSourceCount = useMemo(
-    () => signals.filter((signal) => signal.sourceGroup === 'cross-source').length,
-    [signals],
+    () => filteredSignals.filter((signal) => signal.sourceGroup === 'cross-source').length,
+    [filteredSignals],
   );
+
+  const hasAdvancedFilters = sortMode !== 'newest' || Boolean(minAmount.trim()) || Boolean(minActors.trim());
 
   useEffect(() => {
     if (!selectedCluster) {
@@ -245,7 +298,7 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
 
             <div className="hidden h-5 w-px bg-white/[0.08] lg:block" />
 
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="relative flex flex-wrap items-center gap-1.5">
               <FilterPill
                 active={directionFilter === 'all'}
                 tone="neutral"
@@ -276,6 +329,87 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
               >
                 Sell
               </FilterPill>
+              <button
+                type="button"
+                onClick={() => setAdvancedFiltersOpen((value) => !value)}
+                className={`ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full border transition ${
+                  advancedFiltersOpen || hasAdvancedFilters
+                    ? 'border-emerald-500/25 bg-emerald-500/[0.1] text-emerald-300'
+                    : 'border-white/[0.06] bg-white/[0.015] text-zinc-500 hover:border-white/[0.12] hover:text-zinc-300'
+                }`}
+                aria-label="Open cluster filters"
+                aria-expanded={advancedFiltersOpen}
+              >
+                <Filter className="h-3.5 w-3.5" />
+              </button>
+
+              {advancedFiltersOpen ? (
+                <div className="absolute right-0 top-10 z-20 w-[280px] rounded-2xl border border-white/[0.08] bg-[#090b0a]/95 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-xs font-semibold text-zinc-200">Filter clusters</div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSortMode('newest');
+                        setMinAmount('');
+                        setMinActors('');
+                        setVisibleCount(18);
+                      }}
+                      className="text-[11px] text-zinc-500 transition hover:text-zinc-200"
+                    >
+                      Reset
+                    </button>
+                  </div>
+
+                  <div className="mt-3 space-y-3">
+                    <label className="block">
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-600">Sort by</span>
+                      <select
+                        value={sortMode}
+                        onChange={(event) => {
+                          setSortMode(event.target.value as SortMode);
+                          setVisibleCount(18);
+                        }}
+                        className="mt-1 h-9 w-full rounded-lg border border-white/[0.08] bg-white/[0.035] px-3 text-xs text-zinc-200 outline-none transition focus:border-emerald-500/30"
+                      >
+                        <option value="newest">Newest first</option>
+                        <option value="amount">Largest amount</option>
+                        <option value="actors">Most actors</option>
+                        <option value="score">Highest score</option>
+                      </select>
+                    </label>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <label className="block">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-600">Min amount</span>
+                        <input
+                          value={minAmount}
+                          onChange={(event) => {
+                            setMinAmount(event.target.value);
+                            setVisibleCount(18);
+                          }}
+                          placeholder="$1M"
+                          className="mt-1 h-9 w-full rounded-lg border border-white/[0.08] bg-white/[0.035] px-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-700 focus:border-emerald-500/30"
+                        />
+                      </label>
+
+                      <label className="block">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-600">Min actors</span>
+                        <input
+                          value={minActors}
+                          onChange={(event) => {
+                            setMinActors(event.target.value.replace(/[^\d]/g, ''));
+                            setVisibleCount(18);
+                          }}
+                          placeholder="2"
+                          inputMode="numeric"
+                          className="mt-1 h-9 w-full rounded-lg border border-white/[0.08] bg-white/[0.035] px-3 text-xs text-zinc-200 outline-none transition placeholder:text-zinc-700 focus:border-emerald-500/30"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
 
