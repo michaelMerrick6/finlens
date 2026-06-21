@@ -421,6 +421,47 @@ type SupportingSignalEventRow = {
   payload?: TweetCandidatePayload | null;
 };
 
+function normalizedMoneyComponent(value: unknown) {
+  const numeric = toNumber(value);
+  if (!numeric) {
+    return '';
+  }
+  return numeric.toFixed(4).replace(/\.?0+$/, '');
+}
+
+function insiderEconomicTransactionKey(row: SupportingSignalEventRow) {
+  const payload = row.payload || {};
+  const sourceUrl = trim(payload.source_url);
+  const hasInsiderFilingShape = Boolean(sourceUrl.includes('sec.gov') || trim(payload.transaction_code));
+  if (!hasInsiderFilingShape) {
+    return row.id;
+  }
+
+  const ticker = trim(payload.ticker).toUpperCase();
+  const direction = trim(payload.transaction_type || payload.transaction_code).toLowerCase();
+  const transactionDate = trim(payload.transaction_date || payload.occurred_at).slice(0, 10);
+  const amount = normalizedMoneyComponent(payload.amount);
+  const price = normalizedMoneyComponent(payload.price);
+  const value = normalizedMoneyComponent(payload.value);
+
+  if (!ticker || !direction || !transactionDate || (!amount && !value)) {
+    return row.id;
+  }
+
+  return ['insider-economic', ticker, direction, transactionDate, amount, price, value].join('::');
+}
+
+function uniqueEconomicLeafRows(rows: SupportingSignalEventRow[]) {
+  const rowsByEconomicKey = new Map<string, SupportingSignalEventRow>();
+  for (const row of rows) {
+    const key = insiderEconomicTransactionKey(row);
+    if (!rowsByEconomicKey.has(key)) {
+      rowsByEconomicKey.set(key, row);
+    }
+  }
+  return [...rowsByEconomicKey.values()];
+}
+
 function eventAmountFloor(row: SupportingSignalEventRow) {
   const payload = row.payload || {};
   return Math.max(
@@ -655,7 +696,7 @@ async function resolveStoryAmountFloors(stories: BroadcastStory[]) {
     stories.map((story) => {
       const seen = new Set<string>();
       const queue = [...story.supportingEventIds];
-      let fallbackFloor = 0;
+      const leafRows: SupportingSignalEventRow[] = [];
 
       while (queue.length) {
         const eventId = queue.shift();
@@ -680,10 +721,12 @@ async function resolveStoryAmountFloors(stories: BroadcastStory[]) {
           continue;
         }
 
-        fallbackFloor += eventAmountFloor(row);
+        leafRows.push(row);
       }
 
-      return [story.candidateKey, Math.max(story.amountFloor, fallbackFloor)];
+      const fallbackFloor = uniqueEconomicLeafRows(leafRows).reduce((total, row) => total + eventAmountFloor(row), 0);
+
+      return [story.candidateKey, fallbackFloor > 0 ? fallbackFloor : story.amountFloor];
     })
   );
 }

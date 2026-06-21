@@ -1504,6 +1504,51 @@ def can_participate_in_insider_cluster(event: dict) -> bool:
     return change_pct >= MEANINGFUL_INSIDER_CHANGE_MIN_PCT and value >= MEANINGFUL_INSIDER_CHANGE_MIN_VALUE
 
 
+def insider_cluster_event_value(event: dict) -> float:
+    payload = event.get("payload") or {}
+    direction = event_direction(event)
+    return float(
+        payload.get("group_combined_lower_bound")
+        or payload.get("insider_total_buy_value" if direction == "buy" else "insider_total_sell_value")
+        or payload.get("insider_change_value")
+        or payload.get("value")
+        or 0
+    )
+
+
+def normalized_numeric_component(value) -> str:
+    try:
+        numeric = float(value or 0)
+    except (TypeError, ValueError):
+        return ""
+    if not numeric:
+        return ""
+    return f"{numeric:.4f}".rstrip("0").rstrip(".")
+
+
+def insider_cluster_economic_signature(event: dict) -> tuple[str, ...]:
+    payload = event.get("payload") or {}
+    ticker = event_ticker(event)
+    direction = event_direction(event)
+    group_value = normalized_numeric_component(payload.get("group_combined_lower_bound"))
+    group_count = str(payload.get("group_row_count") or "").strip()
+    group_start = str(payload.get("group_trade_date_start") or event.get("occurred_at") or "").strip()[:10]
+    group_end = str(payload.get("group_trade_date_end") or event.get("occurred_at") or "").strip()[:10]
+
+    if group_value and group_count:
+        return ("group", ticker, direction, group_start, group_end, group_count, group_value)
+
+    return (
+        "single",
+        ticker,
+        direction,
+        str(event.get("occurred_at") or "").strip()[:10],
+        normalized_numeric_component(payload.get("amount")),
+        normalized_numeric_component(payload.get("price")),
+        normalized_numeric_component(payload.get("value") or insider_cluster_event_value(event)),
+    )
+
+
 def build_insider_cluster_candidates(
     events: list[dict], *, window_days: int = INSIDER_CLUSTER_WINDOW_DAYS
 ) -> tuple[list[dict], set[str]]:
@@ -1535,8 +1580,7 @@ def build_insider_cluster_candidates(
 
         for window_end, _anchor_event in dated_events:
             window_start = window_end - timedelta(days=window_days - 1)
-            distinct_actors: dict[str, dict] = {}
-            total_value = 0.0
+            distinct_economic_groups: dict[tuple[str, ...], dict] = {}
             max_score = 0.0
 
             for event_date, event in dated_events:
@@ -1545,22 +1589,27 @@ def build_insider_cluster_candidates(
                 actor_name = str(event.get("actor_name") or "").strip()
                 if not actor_name:
                     continue
-                distinct_actors[actor_name] = event
-                payload = event.get("payload") or {}
-                if direction == "buy":
-                    total_value += float(payload.get("insider_total_buy_value") or payload.get("value") or 0)
-                else:
-                    total_value += float(payload.get("insider_total_sell_value") or payload.get("value") or 0)
+
+                signature = insider_cluster_economic_signature(event)
+                existing = distinct_economic_groups.get(signature)
+                if existing is None or float(event.get("importance_score") or 0) > float(existing.get("importance_score") or 0):
+                    distinct_economic_groups[signature] = event
                 max_score = max(max_score, float(event.get("importance_score") or 0))
 
-            if len(distinct_actors) < 2:
+            if len(distinct_economic_groups) < 2:
                 continue
 
-            actor_names = sorted(distinct_actors.keys())
+            distinct_events = list(distinct_economic_groups.values())
+            total_value = sum(insider_cluster_event_value(event) for event in distinct_events)
+            actor_names = sorted(
+                str(event.get("actor_name") or "").strip()
+                for event in distinct_events
+                if str(event.get("actor_name") or "").strip()
+            )
             actor_rows = [
                 {
                     "name": name,
-                    "relation": insider_relation(distinct_actors[name]),
+                    "relation": insider_relation(next(event for event in distinct_events if str(event.get("actor_name") or "").strip() == name)),
                 }
                 for name in actor_names
             ]
@@ -1589,10 +1638,10 @@ def build_insider_cluster_candidates(
             )
             grouped_source_ids = sorted(
                 str(event.get("source_document_id") or event.get("id") or "")
-                for event in distinct_actors.values()
+                for event in distinct_events
                 if str(event.get("source_document_id") or event.get("id") or "").strip()
             )
-            representative = max(distinct_actors.values(), key=lambda item: float(item.get("importance_score") or 0))
+            representative = max(distinct_events, key=lambda item: float(item.get("importance_score") or 0))
             actor_key = ",".join(name.lower() for name in actor_names)
             candidate = {
                 "channel": "twitter",
@@ -1621,7 +1670,7 @@ def build_insider_cluster_candidates(
                     "cluster_actor_count": len(actor_names),
                     "cluster_window_days": window_days,
                     "cluster_actors": actor_rows,
-                    "cluster_event_ids": [str(event["id"]) for event in distinct_actors.values()],
+                    "cluster_event_ids": [str(event["id"]) for event in distinct_events],
                     "cluster_total_value": total_value,
                     "cluster_source_document_ids": grouped_source_ids,
                     "published_at": latest_date,
@@ -1629,7 +1678,7 @@ def build_insider_cluster_candidates(
                 },
             }
             candidates.append(candidate)
-            suppressed_signal_event_ids.update(str(event["id"]) for event in distinct_actors.values())
+            suppressed_signal_event_ids.update(str(event["id"]) for event in distinct_events)
 
     return candidates, suppressed_signal_event_ids
 

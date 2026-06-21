@@ -272,6 +272,11 @@ type DashboardSignalEventRow = {
   payload?: Record<string, unknown> | null;
 };
 
+type ClusterStoryResolvedStats = {
+  amountFloor: number;
+  economicActorCount: number | null;
+};
+
 type DashboardSignalActorPreview = {
   memberId: string | null;
   name: string;
@@ -301,6 +306,75 @@ function eventAmountLowerBound(row: DashboardSignalEventRow) {
     toNumber(payload.value),
     toNumber(payload.amount),
   );
+}
+
+function normalizedMoneyComponent(value: unknown) {
+  const numeric = toNumber(value);
+  if (!numeric) {
+    return '';
+  }
+  return numeric.toFixed(4).replace(/\.?0+$/, '');
+}
+
+function insiderEconomicTransactionKey(row: DashboardSignalEventRow) {
+  const payload = row.payload || {};
+  const sourceUrl = trim(payload.source_url);
+  const hasInsiderFilingShape = Boolean(sourceUrl.includes('sec.gov') || trim(payload.transaction_code));
+  if (!hasInsiderFilingShape) {
+    return row.id;
+  }
+
+  const ticker = trim(payload.ticker).toUpperCase();
+  const direction = trim(payload.transaction_type || payload.transaction_code).toLowerCase();
+  const transactionDate = trim(payload.transaction_date || payload.occurred_at).slice(0, 10);
+  const amount = normalizedMoneyComponent(payload.amount);
+  const price = normalizedMoneyComponent(payload.price);
+  const value = normalizedMoneyComponent(payload.value);
+
+  if (!ticker || !direction || !transactionDate || (!amount && !value)) {
+    return row.id;
+  }
+
+  return ['insider-economic', ticker, direction, transactionDate, amount, price, value].join('::');
+}
+
+function uniqueEconomicLeafRows(rows: DashboardSignalEventRow[]) {
+  const rowsByEconomicKey = new Map<string, DashboardSignalEventRow>();
+  for (const row of rows) {
+    const key = insiderEconomicTransactionKey(row);
+    if (!rowsByEconomicKey.has(key)) {
+      rowsByEconomicKey.set(key, row);
+    }
+  }
+  return [...rowsByEconomicKey.values()];
+}
+
+function storyEconomicStats(story: BroadcastStory, rowsById: Map<string, DashboardSignalEventRow>) {
+  const allLeafRows = collectLeafSignalRows(story.supportingEventIds, rowsById);
+  const uniqueLeafRows = uniqueEconomicLeafRows(allLeafRows);
+  const amountFloor = uniqueLeafRows.reduce((total, row) => total + eventAmountLowerBound(row), 0);
+
+  if (story.ruleKey !== 'insider_cluster') {
+    return {
+      amountFloor,
+      economicActorCount: null,
+    };
+  }
+
+  const economicActorSignatures = new Set<string>();
+  for (const rootId of story.supportingEventIds) {
+    const rootLeafRows = uniqueEconomicLeafRows(collectLeafSignalRows([rootId], rowsById));
+    if (!rootLeafRows.length) {
+      continue;
+    }
+
+    economicActorSignatures.add(rootLeafRows.map((row) => insiderEconomicTransactionKey(row)).sort().join('|'));
+  }
+
+  return {
+    amountFloor,
+    economicActorCount: economicActorSignatures.size || null,
+  };
 }
 
 async function loadSignalEventRowsById(eventIds: string[]) {
@@ -750,21 +824,18 @@ async function loadDashboardFeaturedPoliticians(
     .slice(0, DASHBOARD_SIGNAL_LIMIT);
 }
 
-async function resolveStoryAmountFloors(stories: BroadcastStory[]) {
+async function resolveStoryEconomicStats(stories: BroadcastStory[]) {
   const eventIds = Array.from(new Set(stories.flatMap((story) => story.supportingEventIds).filter(Boolean)));
 
   if (!eventIds.length) {
-    return new Map<string, number>();
+    return new Map<string, ClusterStoryResolvedStats>();
   }
 
   const rowsById = await loadSignalEventRowsById(eventIds);
 
   return new Map(
     stories.map((story) => {
-      const leafRows = collectLeafSignalRows(story.supportingEventIds, rowsById);
-      const fallbackFloor = leafRows.reduce((total, row) => total + eventAmountLowerBound(row), 0);
-
-      return [story.candidateKey, Math.max(story.amountFloor, fallbackFloor)];
+      return [story.candidateKey, storyEconomicStats(story, rowsById)];
     })
   );
 }
@@ -1029,28 +1100,43 @@ async function loadClusterSignals({
     })
     .slice(0, limit);
 
-  const amountFloors = await resolveStoryAmountFloors(selectedStories).catch(() => new Map<string, number>());
-  const actorPreviewsByStory = await resolveStoryActorPreviews(selectedStories).catch(
+  const economicStatsByStory = await resolveStoryEconomicStats(selectedStories).catch(
+    () => new Map<string, ClusterStoryResolvedStats>(),
+  );
+  const filteredStories = selectedStories.filter((story) => {
+    const stats = economicStatsByStory.get(story.candidateKey);
+    if (story.ruleKey !== 'insider_cluster') {
+      return true;
+    }
+    return (stats?.economicActorCount ?? story.actorCount) >= 2;
+  });
+  const actorPreviewsByStory = await resolveStoryActorPreviews(filteredStories).catch(
     () => new Map<string, DashboardSignalActorPreview[]>(),
   );
 
-  return selectedStories.map((story) => {
+  return filteredStories.map((story) => {
       const normalizedDirection = trim(story.direction).toLowerCase();
-      const amountLabel = moneyFloorLabel(amountFloors.get(story.candidateKey) || story.amountFloor);
+      const stats = economicStatsByStory.get(story.candidateKey);
+      const amountFloor = stats?.amountFloor && stats.amountFloor > 0 ? stats.amountFloor : story.amountFloor;
+      const actorCount =
+        story.ruleKey === 'insider_cluster'
+          ? stats?.economicActorCount ?? story.actorCount
+          : story.actorCount;
+      const amountLabel = moneyFloorLabel(amountFloor);
       return {
         id: story.candidateKey,
         ticker: trim(story.ticker).toUpperCase(),
-        title: storyTitle(story),
+        title: storyTitle({ ...story, actorCount }),
         summary: storySummary({
           ruleKey: story.ruleKey,
-          actorCount: story.actorCount,
+          actorCount,
           clusterWindowDays: story.clusterWindowDays,
           sourceMix: story.sourceMix,
         }),
         ruleLabel: ruleLabel(story.ruleKey, normalizedDirection),
         actorPreview: storyPreview(story.actorLabels),
         actorPreviews: actorPreviewsByStory.get(story.candidateKey) || [],
-        actorCount: story.actorCount,
+        actorCount,
         amountLabel,
         sourceLabel: sourceMixLabel(story),
         publishedAt: story.latestPublishedAt,

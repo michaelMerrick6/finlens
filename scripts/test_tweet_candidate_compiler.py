@@ -626,6 +626,43 @@ def test_insider_cluster_finds_multiple_windows_for_same_ticker() -> None:
     assert len(cluster_keys) == 2
 
 
+def test_related_form4_reporting_owners_do_not_create_fake_cluster() -> None:
+    events = []
+    for index, actor_name in enumerate(
+        [
+            "BCP Buzz Holdings L.P.",
+            "BTOA - NQ L.L.C.",
+            "BX Buzz ML-1 GP LLC",
+            "BX Buzz ML-1 Holdco L.P.",
+            "Blackstone Holdings III GP Management L.L.C.",
+        ]
+    ):
+        events.append(
+            {
+                "id": f"bmbl-related-{index}",
+                "source": "insider",
+                "signal_type": "insider_trade_grouped",
+                "ticker": "BMBL",
+                "actor_name": actor_name,
+                "direction": "sell",
+                "occurred_at": "2026-06-16",
+                "published_at": "2026-06-18",
+                "importance_score": 0.84,
+                "payload": {
+                    "group_row_count": 7,
+                    "group_combined_lower_bound": 28228310.0,
+                    "group_trade_date_start": "2026-06-16",
+                    "group_trade_date_end": "2026-06-16",
+                    "insider_holding_reduction_pct": 0.5,
+                    "value": 9419587.99,
+                },
+            }
+        )
+
+    rows = build_broadcast_candidates(events, minimum_importance=0.88)
+    assert "insider_cluster" not in {row["rule_key"] for row in rows}
+
+
 def main() -> None:
     test_congress_cluster_candidate()
     test_compiled_insider_cluster_candidate()
@@ -649,6 +686,7 @@ def main() -> None:
     test_meaningful_insider_change_candidate_added_at_25_percent()
     test_insider_cluster_suppresses_individual_broadcasts()
     test_insider_cluster_finds_multiple_windows_for_same_ticker()
+    test_related_form4_reporting_owners_do_not_create_fake_cluster()
     print("tweet candidate compiler tests passed")
 
 

@@ -209,6 +209,48 @@ async function loadPoliticianTradeMetadata(docIds: string[]) {
   return metadataByDocId;
 }
 
+function normalizedMoneyComponent(value: unknown) {
+  const numeric = toNumber(value);
+  if (!numeric) {
+    return '';
+  }
+  return numeric.toFixed(4).replace(/\.?0+$/, '');
+}
+
+function insiderEconomicTransactionKey(row: SignalEventRow) {
+  const payload = row.payload || {};
+  const source = trim(row.source).toLowerCase();
+  const sourceUrl = trim(payload.source_url || row.source_url);
+  const hasInsiderFilingShape = source === 'insider' || sourceUrl.includes('sec.gov') || Boolean(trim(payload.transaction_code));
+  if (!hasInsiderFilingShape) {
+    return row.id;
+  }
+
+  const ticker = trim(payload.ticker || row.ticker).toUpperCase();
+  const direction = trim(payload.transaction_type || payload.transaction_code || row.signal_type).toLowerCase();
+  const transactionDate = trim(payload.transaction_date || row.published_at).slice(0, 10);
+  const amount = normalizedMoneyComponent(payload.amount);
+  const price = normalizedMoneyComponent(payload.price);
+  const value = normalizedMoneyComponent(payload.value);
+
+  if (!ticker || !direction || !transactionDate || (!amount && !value)) {
+    return row.id;
+  }
+
+  return ['insider-economic', ticker, direction, transactionDate, amount, price, value].join('::');
+}
+
+function uniqueEconomicLeafRows(rows: SignalEventRow[]) {
+  const rowsByEconomicKey = new Map<string, SignalEventRow>();
+  for (const row of rows) {
+    const key = insiderEconomicTransactionKey(row);
+    if (!rowsByEconomicKey.has(key)) {
+      rowsByEconomicKey.set(key, row);
+    }
+  }
+  return [...rowsByEconomicKey.values()];
+}
+
 function collectLeafRows(rootIds: string[], rowsById: Map<string, SignalEventRow>) {
   const seen = new Set<string>();
   const queue = [...rootIds];
@@ -239,7 +281,7 @@ function collectLeafRows(rootIds: string[], rowsById: Map<string, SignalEventRow
     leaves.push(row);
   }
 
-  return leaves.sort((left, right) => {
+  return uniqueEconomicLeafRows(leaves).sort((left, right) => {
     const leftPayload = left.payload || {};
     const rightPayload = right.payload || {};
     const leftDate = trim(leftPayload.transaction_date || leftPayload.report_period || leftPayload.published_date || left.published_at);
