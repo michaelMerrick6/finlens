@@ -71,6 +71,12 @@ const CLUSTER_SPOTLIGHT = [
 
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
 
+function authCallbackUrl() {
+  const configuredOrigin = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/+$/, '');
+  const origin = configuredOrigin || window.location.origin;
+  return `${origin}/auth/callback`;
+}
+
 function formatCompactNumber(value: number) {
   return new Intl.NumberFormat('en-US', {
     notation: value >= 1000 ? 'compact' : 'standard',
@@ -341,6 +347,10 @@ export function AuthPanel() {
 
   useEffect(() => {
     const requestedMode = searchParams.get('mode');
+    const callbackError = searchParams.get('error');
+    if (callbackError) {
+      setError(callbackError);
+    }
     if (requestedMode === 'signup') {
       setMode('signup');
       return;
@@ -401,7 +411,7 @@ export function AuthPanel() {
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: authCallbackUrl(),
         },
       });
       if (oauthError) throw oauthError;

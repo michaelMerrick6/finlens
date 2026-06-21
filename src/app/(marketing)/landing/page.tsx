@@ -1180,8 +1180,9 @@ const CSS = `
   margin: 22px auto 0;
   text-align: center;
   font-size: clamp(32px, 4vw, 46px);
+  font-weight: 700;
   line-height: 1.03;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.035em;
   color: var(--text);
 }
 .lp-signal-sub {

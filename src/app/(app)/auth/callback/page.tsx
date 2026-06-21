@@ -9,28 +9,67 @@ export default function AuthCallbackPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // The Supabase JS client automatically detects the hash fragment
-    // tokens from the implicit OAuth flow and stores them.
-    // We just need to wait for the auth state to settle, then redirect.
-    supabase.auth.onAuthStateChange((event, session) => {
+    let mounted = true;
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+
+    const finish = () => {
+      if (mounted) {
+        router.replace('/dashboard');
+      }
+    };
+
+    const fail = (message: string) => {
+      if (!mounted) return;
+      router.replace(`/auth?error=${encodeURIComponent(message)}`);
+    };
+
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        router.replace('/dashboard');
+        finish();
       }
     });
 
-    // Also check if session already exists (in case the event already fired)
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) {
-        router.replace('/dashboard');
+    const completeOAuth = async () => {
+      const url = new URL(window.location.href);
+      const oauthError = url.searchParams.get('error_description') || url.searchParams.get('error');
+      if (oauthError) {
+        fail(oauthError);
+        return;
       }
-    });
 
-    // Fallback: if nothing happens after 5s, send them back to auth
-    const timeout = setTimeout(() => {
-      router.replace('/auth?error=callback_timeout');
-    }, 5000);
+      const code = url.searchParams.get('code');
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+          fail(error.message);
+          return;
+        }
+        finish();
+        return;
+      }
 
-    return () => clearTimeout(timeout);
+      const { data: sessionData, error } = await supabase.auth.getSession();
+      if (error) {
+        fail(error.message);
+        return;
+      }
+      if (sessionData.session) {
+        finish();
+        return;
+      }
+
+      timeout = setTimeout(() => {
+        fail('callback_timeout');
+      }, 5000);
+    };
+
+    void completeOAuth();
+
+    return () => {
+      mounted = false;
+      if (timeout) clearTimeout(timeout);
+      data.subscription.unsubscribe();
+    };
   }, [router]);
 
   return (
