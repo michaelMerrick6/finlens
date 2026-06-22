@@ -271,6 +271,12 @@ function sourceMixLabel(story: {
 type DashboardSignalEventRow = {
   id: string;
   actor_name?: string | null;
+  source?: string | null;
+  signal_type?: string | null;
+  ticker?: string | null;
+  source_url?: string | null;
+  occurred_at?: string | null;
+  published_at?: string | null;
   payload?: Record<string, unknown> | null;
 };
 
@@ -320,15 +326,16 @@ function normalizedMoneyComponent(value: unknown) {
 
 function insiderEconomicTransactionKey(row: DashboardSignalEventRow) {
   const payload = row.payload || {};
-  const sourceUrl = trim(payload.source_url);
-  const hasInsiderFilingShape = Boolean(sourceUrl.includes('sec.gov') || trim(payload.transaction_code));
+  const source = trim(row.source).toLowerCase();
+  const sourceUrl = trim(payload.source_url || row.source_url);
+  const hasInsiderFilingShape = Boolean(source === 'insider' || sourceUrl.includes('sec.gov') || trim(payload.transaction_code));
   if (!hasInsiderFilingShape) {
     return row.id;
   }
 
-  const ticker = trim(payload.ticker).toUpperCase();
-  const direction = trim(payload.transaction_type || payload.transaction_code).toLowerCase();
-  const transactionDate = trim(payload.transaction_date || payload.occurred_at).slice(0, 10);
+  const ticker = trim(payload.ticker || row.ticker).toUpperCase();
+  const direction = trim(payload.transaction_type || payload.transaction_code || row.signal_type).toLowerCase();
+  const transactionDate = trim(payload.transaction_date || payload.occurred_at || row.occurred_at || row.published_at).slice(0, 10);
   const amount = normalizedMoneyComponent(payload.amount);
   const price = normalizedMoneyComponent(payload.price);
   const value = normalizedMoneyComponent(payload.value);
@@ -411,7 +418,10 @@ async function loadSignalEventRowsById(eventIds: string[]) {
       continue;
     }
 
-    const { data, error } = await supabase.from('signal_events').select('id, actor_name, payload').in('id', batch);
+    const { data, error } = await supabase
+      .from('signal_events')
+      .select('id, actor_name, source, signal_type, ticker, source_url, occurred_at, published_at, payload')
+      .in('id', batch);
     if (error) {
       throw new Error(error.message);
     }
@@ -944,8 +954,8 @@ function storyTitle(story: {
     return `${ticker} drew ${story.actorCount} congressional ${action}`;
   }
   if (story.ruleKey === 'insider_cluster') {
-    const action = normalizedDirection === 'sell' ? 'sellers' : 'buyers';
-    return `${ticker} drew ${story.actorCount} insider ${action}`;
+    const action = normalizedDirection === 'sell' ? 'selling' : 'buying';
+    return `${ticker} drew ${story.actorCount} insider ${action} group${story.actorCount === 1 ? '' : 's'}`;
   }
   if (story.ruleKey === 'cross_source_accumulation') {
     if (normalizedDirection === 'sell') {
@@ -978,8 +988,10 @@ function storySummary(story: {
     ? ` inside ${clusterWindowDays} day${clusterWindowDays === 1 ? '' : 's'}`
     : '';
 
-  if (story.ruleKey === 'congress_cluster' || story.ruleKey === 'insider_cluster') {
+  if (story.ruleKey === 'congress_cluster') {
     parts.push(`${story.actorCount} actors${windowLabel}`);
+  } else if (story.ruleKey === 'insider_cluster') {
+    parts.push(`${story.actorCount} economic group${story.actorCount === 1 ? '' : 's'}${windowLabel}`);
   } else if (story.ruleKey === 'grouped_congress_buy' || story.ruleKey === 'grouped_insider_buy') {
     parts.push('Repeated buys landed in one filing');
   } else if (story.ruleKey === 'cross_source_accumulation') {

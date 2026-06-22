@@ -420,6 +420,12 @@ function nestedEventIds(value: unknown) {
 
 type SupportingSignalEventRow = {
   id: string;
+  source?: string | null;
+  signal_type?: string | null;
+  ticker?: string | null;
+  source_url?: string | null;
+  occurred_at?: string | null;
+  published_at?: string | null;
   payload?: TweetCandidatePayload | null;
 };
 
@@ -433,15 +439,16 @@ function normalizedMoneyComponent(value: unknown) {
 
 function insiderEconomicTransactionKey(row: SupportingSignalEventRow) {
   const payload = row.payload || {};
-  const sourceUrl = trim(payload.source_url);
-  const hasInsiderFilingShape = Boolean(sourceUrl.includes('sec.gov') || trim(payload.transaction_code));
+  const source = trim(row.source).toLowerCase();
+  const sourceUrl = trim(payload.source_url || row.source_url);
+  const hasInsiderFilingShape = Boolean(source === 'insider' || sourceUrl.includes('sec.gov') || trim(payload.transaction_code));
   if (!hasInsiderFilingShape) {
     return row.id;
   }
 
-  const ticker = trim(payload.ticker).toUpperCase();
-  const direction = trim(payload.transaction_type || payload.transaction_code).toLowerCase();
-  const transactionDate = trim(payload.transaction_date || payload.occurred_at).slice(0, 10);
+  const ticker = trim(payload.ticker || row.ticker).toUpperCase();
+  const direction = trim(payload.transaction_type || payload.transaction_code || row.signal_type).toLowerCase();
+  const transactionDate = trim(payload.transaction_date || payload.occurred_at || row.occurred_at || row.published_at).slice(0, 10);
   const amount = normalizedMoneyComponent(payload.amount);
   const price = normalizedMoneyComponent(payload.price);
   const value = normalizedMoneyComponent(payload.value);
@@ -678,7 +685,10 @@ async function resolveStoryAmountFloors(stories: BroadcastStory[]) {
       continue;
     }
 
-    const response = await supabase.from('signal_events').select('id, payload').in('id', batch);
+    const response = await supabase
+      .from('signal_events')
+      .select('id, source, signal_type, ticker, source_url, occurred_at, published_at, payload')
+      .in('id', batch);
     if (response.error) {
       throw response.error;
     }

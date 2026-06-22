@@ -491,12 +491,12 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
     filed_label = short_date(event.get("published_at"))
     direction_word = "buying" if direction == "buy" else "selling"
     title = f"Insider cluster on {ticker}"
-    rationale = f"{actor_count} insiders reported {direction_word} in {ticker} within {window_days} days."
+    rationale = f"{actor_count} unique insider economic groups reported {direction_word} in {ticker} within {window_days} days."
     draft = truncate_tweet(
         "\n".join(
             line
             for line in [
-                f"Insider cluster: {actor_count} insiders reported {ticker} {direction_word} within {window_days} days.",
+                f"Insider cluster: {actor_count} unique economic groups reported {ticker} {direction_word} within {window_days} days.",
                 f"Actors: {comma_names(actor_labels)}" if actor_labels else "",
                 f"Estimated total value: {total_value_label}" if total_value_label else "",
                 f"Latest filing: {filed_label}" if filed_label else "",
@@ -525,6 +525,10 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
             "cluster_actors": actor_rows,
             "cluster_total_value": total_value,
             "cluster_event_ids": payload.get("cluster_event_ids") or [],
+            "cluster_raw_event_ids": payload.get("cluster_raw_event_ids") or [],
+            "cluster_reporting_actor_count": payload.get("cluster_reporting_actor_count"),
+            "cluster_economic_transaction_count": payload.get("cluster_economic_transaction_count"),
+            "cluster_deduped_related_form4s": payload.get("cluster_deduped_related_form4s"),
             "published_at": event.get("published_at"),
         },
     }
@@ -1623,12 +1627,13 @@ def build_insider_cluster_candidates(
             direction_word = "buying" if direction == "buy" else "selling"
             value_label = f"${total_value:,.0f}" if total_value else None
             title = f"Insider cluster on {ticker}"
-            rationale = f"{len(actor_names)} insiders reported {direction_word} in {ticker} within {window_days} days."
+            economic_group_count = len(actor_names)
+            rationale = f"{economic_group_count} unique insider economic groups reported {direction_word} in {ticker} within {window_days} days."
             draft = truncate_tweet(
                 "\n".join(
                     line
                     for line in [
-                        f"Insider cluster: {len(actor_names)} insiders reported {ticker} {direction_word} within {window_days} days.",
+                        f"Insider cluster: {economic_group_count} unique economic groups reported {ticker} {direction_word} within {window_days} days.",
                         f"Actors: {comma_names(actor_labels)}" if actor_labels else "",
                         f"Estimated total value: {value_label}" if value_label else "",
                         f"Latest filing: {short_date(latest_date)}" if latest_date else "",
@@ -1667,7 +1672,8 @@ def build_insider_cluster_candidates(
                     "broadcast_category": candidate_category("insider_cluster"),
                     "ticker": ticker,
                     "direction": direction,
-                    "cluster_actor_count": len(actor_names),
+                    "cluster_actor_count": economic_group_count,
+                    "cluster_economic_transaction_count": economic_group_count,
                     "cluster_window_days": window_days,
                     "cluster_actors": actor_rows,
                     "cluster_event_ids": [str(event["id"]) for event in distinct_events],

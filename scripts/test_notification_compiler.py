@@ -630,6 +630,94 @@ def test_insider_cluster_skips_small_two_actor_noise():
     assert len(clusters) == 0
 
 
+def test_related_form4_reporting_owners_do_not_inflate_insider_cluster():
+    related_events = []
+    for index, actor_name in enumerate(
+        [
+            "BCP Buzz Holdings L.P.",
+            "BTOA - NQ L.L.C.",
+            "BX Buzz ML-1 GP LLC",
+            "BX Buzz ML-1 Holdco L.P.",
+            "Blackstone Holdings III GP Management L.L.C.",
+        ]
+    ):
+        related_events.append(
+            {
+                "id": f"bmbl-related-{index}",
+                "source": "insider",
+                "signal_type": "insider_trade",
+                "source_document_id": f"0001193125-26-16{index:04d}::BMBL",
+                "ticker": "BMBL",
+                "actor_name": actor_name,
+                "actor_type": "insider",
+                "direction": "sell",
+                "occurred_at": "2026-06-16",
+                "published_at": "2026-06-18",
+                "importance_score": 0.84,
+                "title": "Insider trade",
+                "summary": "Related Blackstone reporting owner sale",
+                "source_url": f"https://www.sec.gov/Archives/edgar/data/0000000000/00011931252616{index:04d}/xslF345X05/form4.xml",
+                "payload": {
+                    "amount": 7477500,
+                    "price": 3.7751,
+                    "value": 28228310.25,
+                    "transaction_date": "2026-06-16",
+                    "transaction_code": "S",
+                    "filer_relation": "10% Owner",
+                },
+                "created_at": "2026-06-18T20:00:00+00:00",
+            }
+        )
+
+    compiled_without_distinct_leg = compile_notification_events(
+        related_events,
+        insider_cluster_window_days=10,
+        insider_cluster_min_members=2,
+    )
+    assert [event for event in compiled_without_distinct_leg if event["signal_type"] == "insider_cluster"] == []
+
+    distinct_event = {
+        "id": "bmbl-distinct-1",
+        "source": "insider",
+        "signal_type": "insider_trade",
+        "source_document_id": "0001193125-26-169999::BMBL",
+        "ticker": "BMBL",
+        "actor_name": "Independent Insider",
+        "actor_type": "insider",
+        "direction": "sell",
+        "occurred_at": "2026-06-17",
+        "published_at": "2026-06-18",
+        "importance_score": 0.84,
+        "title": "Insider trade",
+        "summary": "Separate economic sale",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/0000000000/000119312526169999/xslF345X05/form4.xml",
+        "payload": {
+            "amount": 100000,
+            "price": 20,
+            "value": 2000000,
+            "transaction_date": "2026-06-17",
+            "transaction_code": "S",
+            "filer_relation": "Director",
+        },
+        "created_at": "2026-06-18T21:00:00+00:00",
+    }
+
+    compiled = compile_notification_events(
+        related_events + [distinct_event],
+        insider_cluster_window_days=10,
+        insider_cluster_min_members=2,
+    )
+    clusters = [event for event in compiled if event["signal_type"] == "insider_cluster"]
+    assert len(clusters) == 1
+    cluster = clusters[0]
+    assert cluster["payload"]["cluster_actor_count"] == 2
+    assert cluster["payload"]["cluster_reporting_actor_count"] == 6
+    assert cluster["payload"]["cluster_deduped_related_form4s"] is True
+    assert cluster["payload"]["cluster_total_value"] == 30228310.25
+    assert len(cluster["payload"]["cluster_event_ids"]) == 2
+    assert len(cluster["payload"]["cluster_raw_event_ids"]) == 6
+
+
 def test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is_noise():
     events = [
         {
@@ -816,6 +904,7 @@ def main():
     test_cross_source_accumulation_allows_congress_fund_alignment()
     test_cross_source_distribution_allows_congress_fund_alignment()
     test_insider_cluster_skips_small_two_actor_noise()
+    test_related_form4_reporting_owners_do_not_inflate_insider_cluster()
     test_congress_cluster_keeps_older_window_when_latest_ticker_event_is_noise()
     test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is_noise()
     test_cross_source_cluster_keeps_older_fund_alignment_window()
