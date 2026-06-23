@@ -3,6 +3,7 @@
 import Image, { type ImageLoaderProps } from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
 import { ExternalLink, Loader2, Shield, UserRound, X } from 'lucide-react';
 
 import OptionTradeBadge from '@/components/OptionTradeBadge';
@@ -159,9 +160,10 @@ export default function DashboardClusterModal({
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    // Trigger animation after mount
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    // Trigger animation after the portal is mounted.
+    let innerFrame = 0;
+    const outerFrame = requestAnimationFrame(() => {
+      innerFrame = requestAnimationFrame(() => {
         setIsVisible(true);
       });
     });
@@ -174,12 +176,14 @@ export default function DashboardClusterModal({
 
     window.addEventListener('keydown', onKeyDown);
     return () => {
+      cancelAnimationFrame(outerFrame);
+      cancelAnimationFrame(innerFrame);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [open, onClose]);
 
-  if (!open || !cluster) {
+  if (!open || !cluster || typeof document === 'undefined') {
     return null;
   }
 
@@ -187,9 +191,9 @@ export default function DashboardClusterModal({
   const resolvedActorCount = transactions.length ? uniqueActorCount(transactions) : cluster.actorCount;
   const isBuy = cluster.direction !== 'sell';
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto px-4 py-4 backdrop-blur-sm sm:py-8"
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden px-4 py-6 backdrop-blur-sm sm:py-8"
       style={{
         backgroundColor: isVisible ? 'rgba(0,0,0,0.68)' : 'rgba(0,0,0,0)',
         transition: 'background-color 0.28s cubic-bezier(0.16,1,0.3,1)',
@@ -205,7 +209,9 @@ export default function DashboardClusterModal({
 
       <div
         ref={panelRef}
-        className="cluster-detail-panel relative z-[81] max-h-[calc(100dvh-2rem)] w-full max-w-[640px] overflow-y-auto rounded-2xl pb-3 sm:max-h-[calc(100dvh-4rem)]"
+        role="dialog"
+        aria-modal="true"
+        className="cluster-detail-panel relative z-[201] max-h-[calc(100dvh-3rem)] w-full max-w-[640px] overflow-y-auto overscroll-contain rounded-2xl pb-3 sm:max-h-[calc(100dvh-4rem)]"
         style={{
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.975)',
@@ -394,6 +400,7 @@ export default function DashboardClusterModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
