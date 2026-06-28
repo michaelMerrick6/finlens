@@ -4,6 +4,7 @@ import Image, { type ImageLoaderProps } from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
 import {
   BellPlus,
   ExternalLink,
@@ -392,7 +393,7 @@ export default function PoliticianProfileModal({
     return () => clearTimeout(timer);
   }, [signalMessage]);
 
-  if (!open) {
+  if (!open || typeof document === 'undefined') {
     return null;
   }
 
@@ -422,10 +423,10 @@ export default function PoliticianProfileModal({
     { id: 'holdings', label: 'Est. Holdings', icon: Briefcase },
   ];
 
-  return (
+  return createPortal(
     <>
       <div
-        className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto px-4 py-6 sm:py-10"
+        className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden px-4 py-6 sm:py-8"
         style={{
           backgroundColor: isVisible ? 'rgba(0,0,0,0.65)' : 'rgba(0,0,0,0)',
           transition: 'background-color 0.25s ease',
@@ -434,7 +435,9 @@ export default function PoliticianProfileModal({
         <button className="absolute inset-0" aria-label="Close profile overlay" onClick={onClose} />
 
         <div
-          className="relative z-[71] w-full max-w-[860px]"
+          role="dialog"
+          aria-modal="true"
+          className="relative z-[201] w-full max-w-[860px]"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(12px) scale(0.98)',
@@ -442,7 +445,7 @@ export default function PoliticianProfileModal({
           }}
         >
           <div
-            className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border border-white/[0.08]"
+            className="flex max-h-[calc(100dvh-3rem)] flex-col overflow-hidden overscroll-contain rounded-2xl border border-white/[0.08] sm:max-h-[calc(100dvh-4rem)]"
             style={{
               background: 'linear-gradient(180deg, rgba(16,22,30,0.98) 0%, rgba(10,14,20,0.98) 100%)',
               boxShadow: '0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset',
@@ -696,13 +699,14 @@ export default function PoliticianProfileModal({
               : null,
           }}
           lockActorContext
-          zIndex={90}
+          zIndex={220}
           onCreated={() => {
             setSignalMessage(`Signals enabled for ${headerName}.`);
           }}
           onClose={() => setShowCreateSignal(false)}
         />
       ) : null}
-    </>
+    </>,
+    document.body,
   );
 }
