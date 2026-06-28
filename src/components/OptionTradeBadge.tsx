@@ -88,7 +88,7 @@ export default function OptionTradeBadge({
       {isOpen && position && typeof document !== 'undefined'
         ? createPortal(
             <div
-              className="pointer-events-none fixed z-[120]"
+              className="pointer-events-none fixed z-[260]"
               style={{
                 left: position.left,
                 top: position.top,
