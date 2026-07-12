@@ -293,6 +293,21 @@ async function recordWebhookEvent(event: Stripe.Event) {
   throw response.error;
 }
 
+async function webhookEventWasProcessed(eventId: string) {
+  const supabase = getAdminSupabase();
+  const response = await supabase
+    .from('stripe_webhook_events')
+    .select('id')
+    .eq('id', eventId)
+    .maybeSingle();
+
+  if (response.error) {
+    throw response.error;
+  }
+
+  return Boolean(response.data?.id);
+}
+
 export async function constructStripeEvent(signature: string | null, payload: string) {
   if (!signature) {
     throw new ApiRouteError(400, 'BILLING_BAD_SIGNATURE', 'Missing Stripe signature.');
@@ -360,25 +375,23 @@ export async function syncBillingFromCheckoutSession(session: Stripe.Checkout.Se
 }
 
 export async function syncBillingFromStripeEvent(event: Stripe.Event) {
-  const recorded = await recordWebhookEvent(event);
-  if (!recorded) {
+  if (await webhookEventWasProcessed(event.id)) {
     return { processed: false, duplicate: true };
   }
 
   if (event.type === 'checkout.session.completed') {
     await syncBillingFromCheckoutSession(event.data.object as Stripe.Checkout.Session);
-    return { processed: true, duplicate: false };
-  }
-
-  if (
+  } else if (
     event.type === 'customer.subscription.created' ||
     event.type === 'customer.subscription.updated' ||
     event.type === 'customer.subscription.deleted'
   ) {
     await syncBillingFromStripeSubscription(event.data.object as Stripe.Subscription);
-    return { processed: true, duplicate: false };
   }
 
+  // Record only after the billing update succeeds. Stripe can then safely retry
+  // transient failures instead of having a failed event treated as a duplicate.
+  await recordWebhookEvent(event);
   return { processed: true, duplicate: false };
 }
 

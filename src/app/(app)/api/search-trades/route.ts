@@ -16,6 +16,9 @@ const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 50;
 const PAGE_SORT_BUFFER = 80;
 const BROWSE_RESULT_LIMIT = 1000;
+const MAX_SEARCH_LENGTH = 100;
+const VALID_CHAMBERS = new Set(['All', 'House', 'Senate']);
+const VALID_DIRECTIONS = new Set(['All', 'buy', 'sell']);
 
 type TradeRow = {
   id: string;
@@ -112,9 +115,11 @@ function sortTrades(rows: TradeRow[], tickerScores: Map<string, number>, memberS
 export async function GET(request: NextRequest) {
   const supabase = getPublicSupabase();
   const { searchParams } = new URL(request.url);
-  const query = searchParams.get('q') || '';
-  const chamber = searchParams.get('chamber') || 'All';
-  const direction = searchParams.get('direction') || 'All';
+  const query = (searchParams.get('q') || '').slice(0, MAX_SEARCH_LENGTH);
+  const requestedChamber = searchParams.get('chamber') || 'All';
+  const requestedDirection = searchParams.get('direction') || 'All';
+  const chamber = VALID_CHAMBERS.has(requestedChamber) ? requestedChamber : 'All';
+  const direction = VALID_DIRECTIONS.has(requestedDirection) ? requestedDirection : 'All';
   const limit = readBoundedInteger(searchParams.get('limit'), DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, 1);
   const offset = readBoundedInteger(searchParams.get('offset'), 0);
   const trimmedQuery = query.trim();

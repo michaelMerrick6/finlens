@@ -125,24 +125,13 @@ TO authenticated
 USING (auth.uid() = id);
 
 DROP POLICY IF EXISTS "Profiles self insert" ON public.profiles;
-CREATE POLICY "Profiles self insert"
-ON public.profiles
-FOR INSERT
-TO authenticated
-WITH CHECK (auth.uid() = id);
-
 DROP POLICY IF EXISTS "Profiles self update" ON public.profiles;
-CREATE POLICY "Profiles self update"
-ON public.profiles
-FOR UPDATE
-TO authenticated
-USING (auth.uid() = id)
-WITH CHECK (auth.uid() = id);
 
 DROP POLICY IF EXISTS "Auth users manage own watchlists" ON public.watchlists;
-CREATE POLICY "Auth users manage own watchlists"
+DROP POLICY IF EXISTS "Auth users read own watchlists" ON public.watchlists;
+CREATE POLICY "Auth users read own watchlists"
 ON public.watchlists
-FOR ALL
+FOR SELECT
 TO authenticated
 USING (
     user_id = auth.uid()
@@ -151,41 +140,31 @@ USING (
         AND owner_type = 'auth_user'
         AND owner_key = auth.uid()::TEXT
     )
-)
-WITH CHECK (
-    user_id = auth.uid()
-    OR (
-        owner_type = 'auth_user'
-        AND owner_key = auth.uid()::TEXT
-    )
 );
 
 DROP POLICY IF EXISTS "Auth users manage own ticker follows" ON public.watchlist_tickers;
-CREATE POLICY "Auth users manage own ticker follows"
+DROP POLICY IF EXISTS "Auth users read own ticker follows" ON public.watchlist_tickers;
+CREATE POLICY "Auth users read own ticker follows"
 ON public.watchlist_tickers
-FOR ALL
+FOR SELECT
 TO authenticated
-USING (public.watchlist_belongs_to_auth_user(watchlist_id))
-WITH CHECK (public.watchlist_belongs_to_auth_user(watchlist_id));
+USING (public.watchlist_belongs_to_auth_user(watchlist_id));
 
 DROP POLICY IF EXISTS "Auth users manage own actor follows" ON public.watchlist_actors;
-CREATE POLICY "Auth users manage own actor follows"
+DROP POLICY IF EXISTS "Auth users read own actor follows" ON public.watchlist_actors;
+CREATE POLICY "Auth users read own actor follows"
 ON public.watchlist_actors
-FOR ALL
+FOR SELECT
 TO authenticated
-USING (public.watchlist_belongs_to_auth_user(watchlist_id))
-WITH CHECK (public.watchlist_belongs_to_auth_user(watchlist_id));
+USING (public.watchlist_belongs_to_auth_user(watchlist_id));
 
 DROP POLICY IF EXISTS "Auth users manage own subscriptions" ON public.alert_subscriptions;
-CREATE POLICY "Auth users manage own subscriptions"
+DROP POLICY IF EXISTS "Auth users read own subscriptions" ON public.alert_subscriptions;
+CREATE POLICY "Auth users read own subscriptions"
 ON public.alert_subscriptions
-FOR ALL
+FOR SELECT
 TO authenticated
 USING (
-    watchlist_id IS NOT NULL
-    AND public.watchlist_belongs_to_auth_user(watchlist_id)
-)
-WITH CHECK (
     watchlist_id IS NOT NULL
     AND public.watchlist_belongs_to_auth_user(watchlist_id)
 );

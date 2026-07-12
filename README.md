@@ -94,7 +94,7 @@ If you deploy on Vercel, `vercel.json` registers these cron jobs for the Product
 
 ## Local Development
 
-1. Use Node `20.9.0` or newer
+1. Use Node `22.13.0` or newer (the version pinned by `.nvmrc` and `.node-version`)
 2. Create your env from `.env.example`
 3. Install frontend dependencies with `npm install`
 4. Install pipeline dependencies with `pip install -r scripts/requirements.txt`
@@ -104,9 +104,8 @@ If you deploy on Vercel, `vercel.json` registers these cron jobs for the Product
 ```bash
 npm run lint
 npm run typecheck
-PYTHONPATH=scripts python3 scripts/test_notification_compiler.py
-PYTHONPATH=scripts python3 scripts/test_alert_rules.py
-PYTHONPATH=scripts python3 scripts/test_tweet_candidate_compiler.py
+npm run build
+npm run test:python
 ```
 
 ## Repo Boundary

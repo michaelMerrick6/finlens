@@ -139,7 +139,7 @@ def event_actor_match_keys(event: dict) -> set[str]:
             elif cluster_actor_type == "insider" or base_signal_type == "insider_trade":
                 add_normalized_key("insider", actor.get("name"))
             elif cluster_actor_type == "fund":
-                continue
+                add_normalized_key("fund", actor.get("name"))
 
     if actor_type != "cluster" and (actor_type != "fund" or signal_type in FUND_FILING_FOLLOW_SIGNAL_TYPES):
         add_normalized_key(actor_type, event.get("actor_name"))

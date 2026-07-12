@@ -4,8 +4,6 @@ import subprocess
 import json
 from datetime import datetime, timezone
 
-SCRAPER_TIMEOUT_SECONDS = int(os.environ.get("SCRAPER_TIMEOUT_SECONDS", "900"))
-
 from pipeline_support import (
     finish_scraper_run,
     get_supabase_client,
@@ -13,6 +11,9 @@ from pipeline_support import (
     merge_metadata,
     start_scraper_run,
 )
+from shared_utils import positive_int_env
+
+SCRAPER_TIMEOUT_SECONDS = positive_int_env("SCRAPER_TIMEOUT_SECONDS", 900)
 
 # Unified logging output
 def log(msg: str):
@@ -250,7 +251,7 @@ def run_script(
         if critical:
             sys.exit(1)
         return False
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as exc:
         log(f"!!! Timeout executing {script_path} ({SCRAPER_TIMEOUT_SECONDS}s limit) !!!")
         log_scraper_error(
             supabase,
@@ -264,7 +265,11 @@ def run_script(
             status="timed_out",
             started_at=started_at,
             metadata={"script_path": script_path},
+            stdout_excerpt=exc.stdout,
+            stderr_excerpt=exc.stderr,
         )
+        if critical:
+            sys.exit(1)
         return False
 
 def main():

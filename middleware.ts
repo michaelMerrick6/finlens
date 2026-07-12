@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { getOpsBasicAuthConfig, isOpsEnabled } from '@/lib/ops-access';
+import { getOpsBasicAuthConfig, isOpsEnabled, secretsMatch } from '@/lib/ops-access';
 
 function decodeBasicAuthHeader(value: string | null) {
   if (!value) {
@@ -58,8 +58,8 @@ export function middleware(request: NextRequest) {
   const credentials = decodeBasicAuthHeader(request.headers.get('authorization'));
   if (
     !credentials ||
-    credentials.username !== authConfig.username ||
-    credentials.password !== authConfig.password
+    !secretsMatch(credentials.username, authConfig.username) ||
+    !secretsMatch(credentials.password, authConfig.password)
   ) {
     return unauthorizedResponse();
   }

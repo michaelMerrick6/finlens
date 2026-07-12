@@ -42,5 +42,7 @@ CREATE TABLE IF NOT EXISTS public.stripe_webhook_events (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
+ALTER TABLE public.stripe_webhook_events ENABLE ROW LEVEL SECURITY;
+
 CREATE INDEX IF NOT EXISTS idx_stripe_webhook_events_type
 ON public.stripe_webhook_events(event_type, created_at DESC);

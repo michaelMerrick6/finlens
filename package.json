@@ -7,7 +7,8 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:python": "python3 scripts/run_tests.py"
   },
   "engines": {
     "node": ">=22.13.0"

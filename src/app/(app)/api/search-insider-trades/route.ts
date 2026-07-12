@@ -5,6 +5,7 @@ import { getPublicSupabase } from '@/lib/supabase-server';
 export const dynamic = 'force-dynamic';
 
 const SEARCH_RESULT_LIMIT = 250;
+const MAX_SEARCH_LENGTH = 100;
 const TRADE_SELECT = 'id,ticker,filer_name,filer_relation,transaction_date,published_date,transaction_code,amount,price,value,source_url';
 
 function sanitizeSearchValue(value: string): string {
@@ -14,8 +15,9 @@ function sanitizeSearchValue(value: string): string {
 export async function GET(request: NextRequest) {
     const supabase = getPublicSupabase();
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q') || '';
-    const direction = searchParams.get('direction') || 'All';
+    const query = (searchParams.get('q') || '').slice(0, MAX_SEARCH_LENGTH);
+    const requestedDirection = searchParams.get('direction') || 'All';
+    const direction = requestedDirection === 'buy' || requestedDirection === 'sell' ? requestedDirection : 'All';
     const sanitizedQuery = sanitizeSearchValue(query);
 
     let q = supabase

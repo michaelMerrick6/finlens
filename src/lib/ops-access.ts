@@ -23,3 +23,14 @@ export function getOpsBasicAuthConfig() {
 
   return { username, password };
 }
+
+export function secretsMatch(actual: string, expected: string) {
+  const length = Math.max(actual.length, expected.length);
+  let mismatch = actual.length ^ expected.length;
+
+  for (let index = 0; index < length; index += 1) {
+    mismatch |= (actual.charCodeAt(index) || 0) ^ (expected.charCodeAt(index) || 0);
+  }
+
+  return mismatch === 0;
+}

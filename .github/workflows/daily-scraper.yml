@@ -45,21 +45,7 @@ jobs:
 
     - name: Run Tests
       if: github.event_name == 'workflow_dispatch'
-      working-directory: scripts
-      run: |
-        python test_alert_rules.py
-        python test_notification_compiler.py
-        python test_politician_gain_signals.py
-        python test_queue_alert_deliveries.py
-        python test_queue_tweet_candidates.py
-        python test_tweet_candidate_compiler.py
-        python -m pytest test_house_parser_regressions.py -v || python test_house_parser_regressions.py
-        python test_recent_congress_audit_smoke.py
-        python -m pytest test_senate_parser_regressions.py -v || python test_senate_parser_regressions.py
-        python -m pytest test_capitol_trades_support.py -v || python test_capitol_trades_support.py
-        python -m pytest test_sec_form4_support.py -v || python test_sec_form4_support.py
-        python -m pytest test_sec_13f_support.py -v || python test_sec_13f_support.py
-        python test_schema_performance_indexes.py
+      run: python scripts/run_tests.py
 
     - name: Run Full Scraper Pipeline
       env:

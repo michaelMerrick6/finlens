@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { secretsMatch } from '@/lib/ops-access';
+
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
@@ -43,7 +45,7 @@ function authorized(request: NextRequest) {
   const authHeader = request.headers.get('authorization') || '';
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice('Bearer '.length).trim() : '';
   const headerSecret = request.headers.get('x-cron-secret')?.trim() || '';
-  return bearer === expected || headerSecret === expected;
+  return secretsMatch(bearer, expected) || secretsMatch(headerSecret, expected);
 }
 
 function repoFullName() {
