@@ -30,3 +30,9 @@ ON public.signal_events(signal_type, published_at DESC);
 
 CREATE INDEX IF NOT EXISTS idx_signal_events_type_occurred_at
 ON public.signal_events(signal_type, occurred_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_tweet_candidates_cluster_feed
+ON public.tweet_candidates(status, rule_key, created_at DESC, score DESC);
+
+CREATE INDEX IF NOT EXISTS idx_tweet_candidates_cluster_score_feed
+ON public.tweet_candidates(status, rule_key, score DESC, created_at DESC);

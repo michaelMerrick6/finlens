@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight, Filter, Search } from 'lucide-react';
 
 import DashboardClusterModal from '@/components/DashboardClusterModal';
+import { isHighConvictionCluster } from '@/lib/cluster-quality';
 import { getTickerLogoUrl } from '@/lib/company-logos';
 import type { DashboardClusterDetail } from '@/lib/dashboard-cluster-types';
 import { formatCalendarDate } from '@/lib/date-format';
@@ -36,8 +37,6 @@ const SOURCE_OPTIONS = [
   { value: 'insiders', label: 'Insiders' },
   { value: 'cross-source', label: 'Cross-Source' },
 ] as const;
-
-const HIGH_CONVICTION_SCORE = 0.9;
 
 type SourceFilter = (typeof SOURCE_OPTIONS)[number]['value'];
 type DirectionFilter = 'all' | 'buy' | 'sell';
@@ -151,10 +150,10 @@ function formatDateShort(value: string | null | undefined) {
 export default function ClustersPage({ signals, accessToken }: { signals: ClusterSignal[]; accessToken?: string }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [sourceFilter, setSourceFilter] = useState<SourceFilter>('politician-cross-source');
+  const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [directionFilter, setDirectionFilter] = useState<DirectionFilter>('all');
-  const [highConvictionOnly, setHighConvictionOnly] = useState(false);
-  const [sortMode, setSortMode] = useState<SortMode>('newest');
+  const [highConvictionOnly, setHighConvictionOnly] = useState(true);
+  const [sortMode, setSortMode] = useState<SortMode>('score');
   const [minAmount, setMinAmount] = useState('');
   const [minActors, setMinActors] = useState('');
   const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(false);
@@ -189,7 +188,7 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
         return false;
       }
 
-      if (highConvictionOnly && signal.score < HIGH_CONVICTION_SCORE) {
+      if (highConvictionOnly && !isHighConvictionCluster(signal)) {
         return false;
       }
 
@@ -239,7 +238,7 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
     [filteredSignals],
   );
 
-  const hasAdvancedFilters = sortMode !== 'newest' || Boolean(minAmount.trim()) || Boolean(minActors.trim());
+  const hasAdvancedFilters = sortMode !== 'score' || Boolean(minAmount.trim()) || Boolean(minActors.trim());
 
   useEffect(() => {
     if (!selectedCluster) {
@@ -383,7 +382,7 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
                     <button
                       type="button"
                       onClick={() => {
-                        setSortMode('newest');
+                        setSortMode('score');
                         setMinAmount('');
                         setMinActors('');
                         setVisibleCount(18);

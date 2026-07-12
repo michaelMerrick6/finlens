@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { Lock, Sparkles } from 'lucide-react';
 
@@ -10,8 +10,10 @@ import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
-const CLUSTER_FEED_CACHE_VERSION = 'v4';
-const CLUSTER_FEED_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
+const CLUSTER_FEED_CACHE_VERSION = 'v5';
+const CLUSTER_FEED_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
+
+let clusterAuthSessionCache: Session | null = null;
 
 let clusterFeedMemoryCache: {
   userId: string;
@@ -83,6 +85,22 @@ function clearCachedClusterFeed(userId: string) {
   }
 }
 
+function initialClusterGateState() {
+  const session = clusterAuthSessionCache;
+  const cachedClusters =
+    session &&
+    clusterFeedMemoryCache?.userId === session.user.id &&
+    isFreshClusterFeedCache(clusterFeedMemoryCache.cachedAt)
+      ? clusterFeedMemoryCache.clusters
+      : [];
+  return {
+    session,
+    accessToken: session?.access_token || '',
+    signals: cachedClusters,
+    loadState: (cachedClusters.length ? 'ready' : session ? 'loading-account' : 'loading-session') as LoadState,
+  };
+}
+
 function ProClusterGateCard({
   mode,
   error,
@@ -146,28 +164,39 @@ function ClusterLoadingState({ label }: { label: string }) {
 }
 
 export default function ClusterAccessGate() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [accessToken, setAccessToken] = useState('');
-  const [loadState, setLoadState] = useState<LoadState>('loading-session');
-  const [signals, setSignals] = useState<ClusterSignal[]>([]);
+  const [initialState] = useState(initialClusterGateState);
+  const [session, setSession] = useState<Session | null>(initialState.session);
+  const [accessToken, setAccessToken] = useState(initialState.accessToken);
+  const [loadState, setLoadState] = useState<LoadState>(initialState.loadState);
+  const [signals, setSignals] = useState<ClusterSignal[]>(initialState.signals);
   const [error, setError] = useState('');
+  const userIdRef = useRef(initialState.session?.user.id || '');
 
   useEffect(() => {
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
+    function applySession(nextSession: Session | null) {
       if (!mounted) return;
-      setSession(data.session);
-      setAccessToken(data.session?.access_token || '');
-      setLoadState(data.session ? 'loading-account' : 'signed-out');
-    });
-
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      const previousUserId = userIdRef.current;
+      const nextUserId = nextSession?.user.id || '';
+      clusterAuthSessionCache = nextSession;
       setSession(nextSession);
       setAccessToken(nextSession?.access_token || '');
-      setSignals([]);
+      if (previousUserId === nextUserId) {
+        return;
+      }
+
+      userIdRef.current = nextUserId;
+      const cachedClusters = nextSession ? readCachedClusterFeed(nextUserId) : null;
+      setSignals(cachedClusters || []);
       setError('');
-      setLoadState(nextSession ? 'loading-account' : 'signed-out');
+      setLoadState(cachedClusters ? 'ready' : nextSession ? 'loading-account' : 'signed-out');
+    }
+
+    supabase.auth.getSession().then(({ data }) => applySession(data.session));
+
+    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      applySession(nextSession);
     });
 
     return () => {
@@ -197,6 +226,7 @@ export default function ClusterAccessGate() {
 
       try {
         const clusterResponse = await fetch('/api/dashboard-clusters', {
+          cache: 'no-store',
           signal: controller.signal,
           headers: { Authorization: `Bearer ${activeSession.access_token}` },
         });
@@ -228,8 +258,12 @@ export default function ClusterAccessGate() {
         if (cancelled || (value instanceof Error && value.name === 'AbortError')) {
           return;
         }
-        setError(value instanceof Error ? value.message : 'Could not load clusters.');
-        setLoadState('error');
+        if (cachedClusters) {
+          setLoadState('ready');
+        } else {
+          setError(value instanceof Error ? value.message : 'Could not load clusters.');
+          setLoadState('error');
+        }
       }
     }
 

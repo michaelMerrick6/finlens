@@ -30,6 +30,7 @@ MINIMUM_GROUP_COUNT = int(TWEET_POLICY.get("minimum_group_count") or os.environ.
 QUEUE_STAGE_TOTAL = 10
 CANDIDATE_KEY_LOOKUP_CHUNK_SIZE = int(os.environ.get("TWEET_CANDIDATE_KEY_LOOKUP_CHUNK_SIZE", "25"))
 CANDIDATE_UPSERT_CHUNK_SIZE = int(os.environ.get("TWEET_CANDIDATE_UPSERT_CHUNK_SIZE", "100"))
+PENDING_CANDIDATE_PAGE_SIZE = int(os.environ.get("TWEET_CANDIDATE_PENDING_PAGE_SIZE", "1000"))
 UPSTREAM_SIGNAL_TABLES = {
     "politician_trades": "published_date",
     "insider_trades": "published_date",
@@ -359,21 +360,29 @@ def preserve_review_state(candidates: list[dict], existing_candidates: dict[tupl
 
 
 def prune_stale_pending_candidates(supabase, *, valid_candidate_keys: set[str], published_since: str) -> int:
-    response = (
-        supabase.table("tweet_candidates")
-        .select("id,candidate_key,signal_events!inner(published_at)")
-        .eq("status", "pending_review")
-        .execute()
-    )
-    rows = response.data or []
     stale_ids: list[str] = []
-    for row in rows:
-        signal_event = row.get("signal_events") or {}
-        published_at = str(signal_event.get("published_at") or "").strip()[:10]
-        if not published_at or published_at < published_since:
-            continue
-        if str(row.get("candidate_key") or "") not in valid_candidate_keys:
-            stale_ids.append(str(row["id"]))
+    start = 0
+    page_size = max(1, PENDING_CANDIDATE_PAGE_SIZE)
+    while True:
+        response = (
+            supabase.table("tweet_candidates")
+            .select("id,candidate_key,signal_events!inner(published_at)")
+            .eq("status", "pending_review")
+            .order("id")
+            .range(start, start + page_size - 1)
+            .execute()
+        )
+        rows = response.data or []
+        for row in rows:
+            signal_event = row.get("signal_events") or {}
+            published_at = str(signal_event.get("published_at") or "").strip()[:10]
+            if not published_at or published_at < published_since:
+                continue
+            if str(row.get("candidate_key") or "") not in valid_candidate_keys:
+                stale_ids.append(str(row["id"]))
+        if len(rows) < page_size:
+            break
+        start += page_size
 
     deleted = 0
     for index in range(0, len(stale_ids), 100):

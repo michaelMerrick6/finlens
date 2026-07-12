@@ -13,8 +13,7 @@ GROUPABLE_SIGNAL_TYPES = {"politician_trade", "insider_trade"}
 FILING_SUMMARY_SIGNAL_TYPES = {"politician_filing_summary", "insider_filing_summary"}
 UNPUBLISHABLE_CLUSTER_TICKERS = {"", "N/A", "NA", "UNKNOWN", "US-TREAS", "MULTI"}
 TICKER_PATTERN = re.compile(r"^[A-Z][A-Z0-9]{0,4}(?:[.-][A-Z])?$")
-INSIDER_CLUSTER_TWO_ACTOR_MIN_VALUE = 1_000_000
-INSIDER_CLUSTER_THREE_ACTOR_MIN_VALUE = 100_000
+DEFAULT_INSIDER_CLUSTER_MIN_MEMBERS = 5
 
 def stable_uuid(parts: list[str]) -> str:
     return str(uuid5(NAMESPACE_URL, "|".join(parts)))
@@ -80,6 +79,30 @@ def published_anchor_dates(events: list[dict]) -> list[date]:
     )
 
 
+def non_overlapping_published_windows(events: list[dict], window_days: int) -> list[tuple[date, list[dict]]]:
+    """Partition events into deterministic fixed windows with no overlapping subsets."""
+    dated_events = sorted(
+        (
+            (published, event)
+            for event in events
+            if (published := parse_iso_date(event.get("published_at")))
+        ),
+        key=lambda item: (item[0], str(item[1].get("id") or "")),
+    )
+    windows: list[tuple[date, list[dict]]] = []
+    index = 0
+    duration = max(1, int(window_days))
+    while index < len(dated_events):
+        window_start = dated_events[index][0]
+        window_end = window_start + timedelta(days=duration - 1)
+        window_events: list[dict] = []
+        while index < len(dated_events) and dated_events[index][0] <= window_end:
+            window_events.append(dated_events[index][1])
+            index += 1
+        windows.append((window_start, window_events))
+    return windows
+
+
 def distinct_actor_keys(events: list[dict]) -> set[str]:
     return {actor_match_key(event) for event in events if actor_match_key(event)}
 
@@ -112,17 +135,6 @@ def unique_actor_events(events: list[dict]) -> list[dict]:
         if key and key not in by_actor:
             by_actor[key] = event
     return list(by_actor.values())
-
-
-def insider_cluster_is_material(events: list[dict]) -> bool:
-    economic_events = unique_insider_economic_events(events)
-    economic_count = len(economic_events)
-    total_value = sum(event_amount_floor(event) for event in economic_events)
-    if economic_count >= 4:
-        return True
-    if economic_count >= 3 and total_value >= INSIDER_CLUSTER_THREE_ACTOR_MIN_VALUE:
-        return True
-    return economic_count >= 2 and total_value >= INSIDER_CLUSTER_TWO_ACTOR_MIN_VALUE
 
 
 def filing_group_key(event: dict) -> str:
@@ -933,7 +945,14 @@ def compile_cross_source_sell_events(
     return compiled
 
 
-def build_insider_cluster_event(ticker: str, direction: str, events: list[dict], *, window_days: int) -> dict:
+def build_insider_cluster_event(
+    ticker: str,
+    direction: str,
+    events: list[dict],
+    *,
+    window_days: int,
+    window_start: date,
+) -> dict:
     economic_events = unique_insider_economic_events(events)
     actor_rows = []
     economic_signatures: set[str] = set()
@@ -972,6 +991,8 @@ def build_insider_cluster_event(ticker: str, direction: str, events: list[dict],
         "cluster_type": "insider_same_ticker_same_direction",
         "cluster_actor_count": actor_count,
         "cluster_window_days": window_days,
+        "cluster_window_start": window_start.isoformat(),
+        "cluster_window_end": (window_start + timedelta(days=max(1, window_days) - 1)).isoformat(),
         "cluster_clocked_at": latest_published,
         "cluster_actors": actor_rows,
         "cluster_total_value": total_value,
@@ -981,9 +1002,7 @@ def build_insider_cluster_event(ticker: str, direction: str, events: list[dict],
         "cluster_reporting_actor_count": reporting_actor_count,
         "cluster_deduped_related_form4s": reporting_actor_count > actor_count,
     }
-    actor_hash = stable_id(sorted(economic_signatures))
-    cluster_anchor = latest_published or "unknown"
-    source_document_id = f"insider-cluster::{ticker}::{direction}::{window_days}d::{cluster_anchor}::{actor_hash}"
+    source_document_id = f"insider-cluster::{ticker}::{direction}::{window_days}d::{window_start.isoformat()}"
 
     return {
         "id": stable_uuid(["notification", "insider_cluster", source_document_id]),
@@ -1006,9 +1025,13 @@ def build_insider_cluster_event(ticker: str, direction: str, events: list[dict],
 
 
 def compile_insider_cluster_events(
-    grouped_events: list[dict], *, window_days: int = 10, min_members: int = 2
+    grouped_events: list[dict],
+    *,
+    window_days: int = 10,
+    min_members: int = DEFAULT_INSIDER_CLUSTER_MIN_MEMBERS,
 ) -> list[dict]:
     cluster_candidates = []
+    required_members = max(DEFAULT_INSIDER_CLUSTER_MIN_MEMBERS, int(min_members))
     buckets: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for event in grouped_events:
         if str(event.get("source") or "").lower() != "insider":
@@ -1024,20 +1047,20 @@ def compile_insider_cluster_events(
         buckets[(ticker, direction)].append(event)
 
     for (ticker, direction), events in buckets.items():
-        seen_cluster_keys: set[tuple[str, str, str, tuple[str, ...]]] = set()
-        for anchor in published_anchor_dates(events):
-            window_events = events_in_published_window(events, anchor, window_days)
+        for window_start, window_events in non_overlapping_published_windows(events, window_days):
             economic_events = unique_insider_economic_events(window_events)
             economic_keys = {":".join(insider_economic_signature(event)) for event in economic_events}
-            if len(economic_keys) < min_members:
+            if len(economic_keys) < required_members:
                 continue
-            if not insider_cluster_is_material(window_events):
-                continue
-            cluster_key = (ticker, direction, anchor.isoformat(), tuple(sorted(economic_keys)))
-            if cluster_key in seen_cluster_keys:
-                continue
-            seen_cluster_keys.add(cluster_key)
-            cluster_candidates.append(build_insider_cluster_event(ticker, direction, window_events, window_days=window_days))
+            cluster_candidates.append(
+                build_insider_cluster_event(
+                    ticker,
+                    direction,
+                    window_events,
+                    window_days=window_days,
+                    window_start=window_start,
+                )
+            )
 
     return cluster_candidates
 
@@ -1048,7 +1071,7 @@ def compile_notification_events(
     congress_cluster_window_days: int = 10,
     congress_cluster_min_members: int = 2,
     insider_cluster_window_days: int = 10,
-    insider_cluster_min_members: int = 2,
+    insider_cluster_min_members: int = DEFAULT_INSIDER_CLUSTER_MIN_MEMBERS,
     cross_source_window_days: int = 45,
     fund_window_days: int = 120,
 ) -> list[dict]:

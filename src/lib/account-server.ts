@@ -58,6 +58,7 @@ const ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT = 20;
 const ACCOUNT_SIGNAL_PREVIEW_PER_FOLLOW_LIMIT = 4;
 const ACCOUNT_SIGNAL_PREVIEW_TIMELINE_LIMIT = 48;
 const ACCOUNT_ALERT_PREVIEW_CACHE_TTL_MS = 60 * 1000;
+const CLUSTER_ACCESS_CACHE_TTL_MS = 60 * 1000;
 const TEST_ALERT_TICKER = 'VAILTEST';
 const VALID_ALERT_MODES = new Set<AlertMode>(['activity', 'unusual', 'both']);
 const VALID_CLUSTER_ALERT_CHANNELS = new Set<ClusterAlertChannel>(['email', 'sms']);
@@ -69,6 +70,7 @@ const accountAlertPreviewCache = new Map<
   string,
   { expiresAt: number; preview: AccountAlertPreview }
 >();
+const clusterAccessCache = new Map<string, number>();
 
 type AccountStateOptions = {
   includeHistory?: boolean;
@@ -1472,9 +1474,14 @@ export async function userHasClusterAccess(user: User) {
 }
 
 export async function requireClusterAccess(user: User) {
+  const cachedUntil = clusterAccessCache.get(user.id) || 0;
+  if (cachedUntil > Date.now()) {
+    return;
+  }
   if (!(await userHasClusterAccess(user))) {
     throw new Error('Upgrade to Pro to use clusters.');
   }
+  clusterAccessCache.set(user.id, Date.now() + CLUSTER_ACCESS_CACHE_TTL_MS);
 }
 
 export async function getAccountAlertPreview(user: User): Promise<AccountAlertPreview> {

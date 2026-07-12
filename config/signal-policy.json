@@ -31,6 +31,8 @@
   "tweet_candidates": {
     "minimum_importance": 0.88,
     "minimum_group_count": 2,
+    "insider_cluster_window_days": 10,
+    "insider_cluster_min_members": 5,
     "always_actor_keys": [
       "Nancy Pelosi",
       "P000197"

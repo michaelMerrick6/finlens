@@ -3,8 +3,6 @@ import { Info } from 'lucide-react';
 import ClusterAlertButton from '@/components/ClusterAlertButton';
 import ClusterAccessGate from '@/components/ClusterAccessGate';
 
-export const dynamic = 'force-dynamic';
-
 export default async function ClusterSignalsPage() {
   return (
     <div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-6 lg:px-8">

@@ -708,14 +708,7 @@ def test_related_form4_reporting_owners_do_not_inflate_insider_cluster():
         insider_cluster_min_members=2,
     )
     clusters = [event for event in compiled if event["signal_type"] == "insider_cluster"]
-    assert len(clusters) == 1
-    cluster = clusters[0]
-    assert cluster["payload"]["cluster_actor_count"] == 2
-    assert cluster["payload"]["cluster_reporting_actor_count"] == 6
-    assert cluster["payload"]["cluster_deduped_related_form4s"] is True
-    assert cluster["payload"]["cluster_total_value"] == 30228310.25
-    assert len(cluster["payload"]["cluster_event_ids"]) == 2
-    assert len(cluster["payload"]["cluster_raw_event_ids"]) == 6
+    assert clusters == []
 
 
 def test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is_noise():
@@ -775,12 +768,35 @@ def test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is
             "created_at": "2026-06-16T20:00:00+00:00",
         },
     ]
+    for index in range(3, 6):
+        events.insert(
+            -1,
+            {
+                "id": f"early-i{index}",
+                "source": "insider",
+                "signal_type": "insider_trade",
+                "source_document_id": f"0001104659-26-03268{index}::CRWV",
+                "ticker": "CRWV",
+                "actor_name": f"Insider {index}",
+                "actor_type": "insider",
+                "direction": "sell",
+                "occurred_at": "2026-05-20",
+                "published_at": f"2026-05-{20 + index}",
+                "importance_score": 0.78,
+                "title": "Insider trade",
+                "summary": "Early material cluster leg",
+                "source_url": f"https://example.com/insider{index}",
+                "payload": {"filer_name": f"Insider {index}", "value": 100000 + index},
+                "created_at": f"2026-05-{20 + index}T20:00:00+00:00",
+            },
+        )
     compiled = compile_notification_events(events, insider_cluster_window_days=10, insider_cluster_min_members=2)
     clusters = [event for event in compiled if event["signal_type"] == "insider_cluster"]
     assert len(clusters) == 1
     assert clusters[0]["ticker"] == "CRWV"
-    assert clusters[0]["payload"]["cluster_clocked_at"] == "2026-05-22"
-    assert clusters[0]["payload"]["cluster_total_value"] == 1250000
+    assert clusters[0]["payload"]["cluster_clocked_at"] == "2026-05-25"
+    assert clusters[0]["payload"]["cluster_actor_count"] == 5
+    assert clusters[0]["payload"]["cluster_window_start"] == "2026-05-21"
 
 
 def test_cross_source_cluster_keeps_older_fund_alignment_window():

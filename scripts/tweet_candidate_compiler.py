@@ -1,7 +1,8 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from alert_rules import classify_event_behavior, parse_amount_lower_bound
+from notification_compiler import non_overlapping_published_windows
 from shared_utils import extract_sec_accession
 from notification_targets import normalize_actor_key
 from signal_policy import load_signal_policy
@@ -32,6 +33,11 @@ MEANINGFUL_INSIDER_CHANGE_MIN_VALUE = float(TWEET_POLICY.get("meaningful_insider
 MEANINGFUL_INSIDER_CHANGE_SCORE_MULTIPLIER = float(TWEET_POLICY.get("meaningful_insider_change_score_multiplier") or 0.8)
 MATERIAL_INSIDER_CLUSTER_MIN_VALUE = float(TWEET_POLICY.get("material_insider_cluster_min_value") or 1000000)
 INSIDER_CLUSTER_WINDOW_DAYS = int(TWEET_POLICY.get("insider_cluster_window_days") or 10)
+INSIDER_CLUSTER_MIN_MEMBERS = int(TWEET_POLICY.get("insider_cluster_min_members") or 5)
+CANONICAL_INSIDER_CLUSTER_SOURCE_ID = re.compile(
+    r"^insider-cluster::[^:]+::(?:buy|sell)::\d+d::\d{4}-\d{2}-\d{2}$",
+    re.IGNORECASE,
+)
 SCORE_GATED_RULE_KEYS = {
     "grouped_congress_buy",
     "grouped_insider_buy",
@@ -477,7 +483,7 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
     direction = event_direction(event)
     actor_rows = payload.get("cluster_actors") or []
     actor_count = int(payload.get("cluster_actor_count") or len(actor_rows) or 0)
-    if actor_count < 2:
+    if actor_count < INSIDER_CLUSTER_MIN_MEMBERS:
         return None
 
     window_days = int(payload.get("cluster_window_days") or 7)
@@ -490,6 +496,7 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
     total_value_label = exact_money_label(total_value)
     filed_label = short_date(event.get("published_at"))
     direction_word = "buying" if direction == "buy" else "selling"
+    window_start = str(payload.get("cluster_window_start") or event.get("published_at") or "").strip()[:10]
     title = f"Insider cluster on {ticker}"
     rationale = f"{actor_count} unique insider economic groups reported {direction_word} in {ticker} within {window_days} days."
     draft = truncate_tweet(
@@ -507,7 +514,9 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
 
     return {
         "channel": "twitter",
-        "candidate_key": semantic_candidate_key("insider_cluster", event, ticker, direction, str(window_days)),
+        "candidate_key": "::".join(
+            ["broadcast", "insider_cluster", ticker.lower(), direction, window_start]
+        ),
         "rule_key": "insider_cluster",
         "signal_event_id": event["id"],
         "status": "pending_review",
@@ -522,6 +531,7 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
             "ticker": ticker,
             "cluster_actor_count": actor_count,
             "cluster_window_days": window_days,
+            "cluster_window_start": window_start,
             "cluster_actors": actor_rows,
             "cluster_total_value": total_value,
             "cluster_event_ids": payload.get("cluster_event_ids") or [],
@@ -1566,30 +1576,11 @@ def build_insider_cluster_candidates(
     candidates: list[dict] = []
     suppressed_signal_event_ids: set[str] = set()
     for (ticker, direction), grouped_events in grouped.items():
-        dated_events: list[tuple[datetime, dict]] = []
-        for event in grouped_events:
-            published_at = str(event.get("published_at") or "").strip()[:10]
-            if not published_at:
-                continue
-            try:
-                dated_events.append((datetime.fromisoformat(published_at), event))
-            except ValueError:
-                continue
-
-        if len(dated_events) < 2:
-            continue
-
-        dated_events.sort(key=lambda item: (item[0], str(item[1].get("actor_name") or "").strip().lower()))
-        seen_cluster_keys: set[tuple[str, str, str, tuple[str, ...]]] = set()
-
-        for window_end, _anchor_event in dated_events:
-            window_start = window_end - timedelta(days=window_days - 1)
+        for window_start, window_events in non_overlapping_published_windows(grouped_events, window_days):
             distinct_economic_groups: dict[tuple[str, ...], dict] = {}
             max_score = 0.0
 
-            for event_date, event in dated_events:
-                if event_date < window_start or event_date > window_end:
-                    continue
+            for event in window_events:
                 actor_name = str(event.get("actor_name") or "").strip()
                 if not actor_name:
                     continue
@@ -1600,7 +1591,7 @@ def build_insider_cluster_candidates(
                     distinct_economic_groups[signature] = event
                 max_score = max(max_score, float(event.get("importance_score") or 0))
 
-            if len(distinct_economic_groups) < 2:
+            if len(distinct_economic_groups) < INSIDER_CLUSTER_MIN_MEMBERS:
                 continue
 
             distinct_events = list(distinct_economic_groups.values())
@@ -1618,11 +1609,10 @@ def build_insider_cluster_candidates(
                 for name in actor_names
             ]
             actor_labels = [insider_actor_label(row.get("name"), row.get("relation")) for row in actor_rows]
-            latest_date = window_end.date().isoformat()
-            cluster_key = (ticker, direction, latest_date, tuple(actor_names))
-            if cluster_key in seen_cluster_keys:
-                continue
-            seen_cluster_keys.add(cluster_key)
+            latest_date = max(
+                str(event.get("published_at") or "").strip()[:10]
+                for event in distinct_events
+            )
 
             direction_word = "buying" if direction == "buy" else "selling"
             value_label = f"${total_value:,.0f}" if total_value else None
@@ -1647,7 +1637,6 @@ def build_insider_cluster_candidates(
                 if str(event.get("source_document_id") or event.get("id") or "").strip()
             )
             representative = max(distinct_events, key=lambda item: float(item.get("importance_score") or 0))
-            actor_key = ",".join(name.lower() for name in actor_names)
             candidate = {
                 "channel": "twitter",
                 "candidate_key": "::".join(
@@ -1656,8 +1645,7 @@ def build_insider_cluster_candidates(
                         "insider_cluster",
                         ticker.lower(),
                         direction,
-                        latest_date,
-                        actor_key,
+                        window_start.isoformat(),
                     ]
                 ),
                 "rule_key": "insider_cluster",
@@ -1680,7 +1668,7 @@ def build_insider_cluster_candidates(
                     "cluster_total_value": total_value,
                     "cluster_source_document_ids": grouped_source_ids,
                     "published_at": latest_date,
-                    "cluster_window_start": window_start.date().isoformat(),
+                    "cluster_window_start": window_start.isoformat(),
                 },
             }
             candidates.append(candidate)
@@ -1695,8 +1683,16 @@ def build_broadcast_candidates(
     minimum_importance: float = 0.88,
     minimum_group_count: int = 2,
 ) -> list[dict]:
+    candidate_events = [
+        event
+        for event in events
+        if normalize_signal_type(event.get("signal_type")) != "insider_cluster"
+        or CANONICAL_INSIDER_CLUSTER_SOURCE_ID.fullmatch(
+            str(event.get("source_document_id") or "").strip()
+        )
+    ]
     twitter_candidates = build_tweet_candidates(
-        events,
+        candidate_events,
         minimum_importance=minimum_importance,
         minimum_group_count=minimum_group_count,
     )

@@ -41,14 +41,16 @@ def test_compiled_insider_cluster_candidate() -> None:
         "importance_score": 0.9,
         "payload": {
             "compiled_notification_event": True,
-            "cluster_actor_count": 3,
+            "cluster_actor_count": 5,
             "cluster_window_days": 7,
             "cluster_total_value": 950000,
-            "cluster_event_ids": ["a", "b", "c"],
+            "cluster_event_ids": ["a", "b", "c", "d", "e"],
             "cluster_actors": [
                 {"name": "Alice Example", "relation": "Director"},
                 {"name": "Bob Example", "relation": "CEO"},
                 {"name": "Cara Example", "relation": "CFO"},
+                {"name": "Dan Example", "relation": "Director"},
+                {"name": "Eve Example", "relation": "Officer"},
             ],
         },
     }
@@ -58,7 +60,56 @@ def test_compiled_insider_cluster_candidate() -> None:
     assert candidate["rule_key"] == "insider_cluster"
     assert "AVBC" in candidate["draft_text"]
     assert "Estimated total value: $950,000" in candidate["draft_text"]
-    assert candidate["payload"]["cluster_event_ids"] == ["a", "b", "c"]
+    assert candidate["payload"]["cluster_event_ids"] == ["a", "b", "c", "d", "e"]
+
+
+def test_broadcast_queue_ignores_legacy_compiled_insider_clusters() -> None:
+    event = {
+        "id": "legacy-insider-cluster",
+        "source": "insider",
+        "signal_type": "insider_cluster",
+        "ticker": "AVBC",
+        "direction": "buy",
+        "published_at": "2026-04-30",
+        "importance_score": 0.94,
+        "payload": {
+            "compiled_notification_event": True,
+            "cluster_actor_count": 8,
+            "cluster_window_days": 10,
+            "cluster_actors": [{"name": f"Insider {index}"} for index in range(8)],
+        },
+    }
+
+    rows = build_broadcast_candidates([event])
+
+    assert rows == []
+
+
+def test_broadcast_queue_keeps_canonical_compiled_insider_cluster() -> None:
+    event = {
+        "id": "canonical-insider-cluster",
+        "source": "insider",
+        "source_document_id": "insider-cluster::AVBC::buy::10d::2026-04-21",
+        "signal_type": "insider_cluster",
+        "ticker": "AVBC",
+        "direction": "buy",
+        "published_at": "2026-04-30",
+        "importance_score": 0.94,
+        "payload": {
+            "compiled_notification_event": True,
+            "cluster_actor_count": 5,
+            "cluster_window_days": 10,
+            "cluster_window_start": "2026-04-21",
+            "cluster_actors": [{"name": f"Insider {index}"} for index in range(5)],
+        },
+    }
+
+    rows = build_broadcast_candidates([event])
+
+    assert {row["channel"] for row in rows} == {"twitter", "discord_premium"}
+    assert {row["candidate_key"] for row in rows} == {
+        "broadcast::insider_cluster::avbc::buy::2026-04-21"
+    }
 
 
 def test_notable_politician_trade_candidate() -> None:
@@ -556,10 +607,28 @@ def test_insider_cluster_suppresses_individual_broadcasts() -> None:
             },
         },
     ]
+    for index in range(3, 6):
+        events.append(
+            {
+                "id": f"jan-{index}",
+                "source": "insider",
+                "signal_type": "insider_trade",
+                "ticker": "JAN",
+                "actor_name": f"Example Insider {index}",
+                "direction": "buy",
+                "published_at": "2026-03-24",
+                "importance_score": 0.8,
+                "payload": {
+                    "insider_holding_increase_pct": 0.5,
+                    "insider_total_buy_value": 1000000 + index,
+                },
+            }
+        )
     rows = build_broadcast_candidates(events, minimum_importance=0.88)
     rule_keys = {row["rule_key"] for row in rows}
     assert "insider_cluster" in rule_keys
     assert "substantial_insider_buy" not in rule_keys
+    assert len({row["candidate_key"] for row in rows if row["rule_key"] == "insider_cluster"}) == 1
 
 
 def test_insider_cluster_finds_multiple_windows_for_same_ticker() -> None:
@@ -621,6 +690,27 @@ def test_insider_cluster_finds_multiple_windows_for_same_ticker() -> None:
             },
         },
     ]
+    for window_name, published_at, start_value in (
+        ("early", "2026-03-05", 2000000),
+        ("late", "2026-03-25", 3000000),
+    ):
+        for index in range(3):
+            events.append(
+                {
+                    "id": f"jan-window-{window_name}-{index}",
+                    "source": "insider",
+                    "signal_type": "insider_trade",
+                    "ticker": "JAN",
+                    "actor_name": f"{window_name.title()} Insider {index}",
+                    "direction": "buy",
+                    "published_at": published_at,
+                    "importance_score": 0.82,
+                    "payload": {
+                        "insider_holding_increase_pct": 0.5,
+                        "insider_total_buy_value": start_value + index,
+                    },
+                }
+            )
     rows = build_broadcast_candidates(events, minimum_importance=0.88)
     cluster_keys = {row["candidate_key"] for row in rows if row["rule_key"] == "insider_cluster"}
     assert len(cluster_keys) == 2
@@ -666,6 +756,8 @@ def test_related_form4_reporting_owners_do_not_create_fake_cluster() -> None:
 def main() -> None:
     test_congress_cluster_candidate()
     test_compiled_insider_cluster_candidate()
+    test_broadcast_queue_ignores_legacy_compiled_insider_clusters()
+    test_broadcast_queue_keeps_canonical_compiled_insider_cluster()
     test_notable_politician_trade_candidate()
     test_committee_relevance_candidate()
     test_first_quantum_politician_buy_candidate()

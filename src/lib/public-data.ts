@@ -44,20 +44,18 @@ const DASHBOARD_SIGNAL_CANDIDATE_LIMIT = 24;
 const DASHBOARD_SIGNAL_LOOKBACK_DAYS = 30;
 const DASHBOARD_CLUSTER_PREVIEW_LIMIT = 4;
 const DASHBOARD_RETURN_TICKER_LIMIT = 8;
-const CLUSTER_PAGE_SIGNAL_LIMIT = 120;
-const CLUSTER_PAGE_CANDIDATE_ROW_LIMIT = 360;
-const CLUSTER_PAGE_PREFERRED_ROW_LIMIT = 240;
-const CLUSTER_PAGE_PREFERRED_SIGNAL_LIMIT = 80;
+const CLUSTER_PAGE_SIGNAL_LIMIT = 60;
+const CLUSTER_PAGE_CANDIDATE_ROW_LIMIT = 240;
+const CLUSTER_PAGE_LOOKBACK_DAYS = 90;
 const DASHBOARD_MIN_SIGNAL_SCORE = 0.72;
 const MATERIAL_INSIDER_CLUSTER_MIN_SCORE = 0.68;
 const MATERIAL_INSIDER_CLUSTER_MIN_VALUE = 1_000_000;
 const CLUSTER_FEED_RULES = new Set([
   'congress_cluster',
   'cross_source_accumulation',
-  'grouped_congress_buy',
-  'grouped_insider_buy',
   'insider_cluster',
 ]);
+const CLUSTER_FEED_RULE_ORDER = Array.from(CLUSTER_FEED_RULES);
 const TRACKED_13F_FUNDS_CONFIG_PATH = path.join(process.cwd(), 'config', 'tracked_13f_funds.json');
 
 async function getFundDirectoryCacheVersion() {
@@ -219,6 +217,46 @@ function dashboardSinceDate() {
   const now = new Date();
   now.setUTCDate(now.getUTCDate() - (DASHBOARD_SIGNAL_LOOKBACK_DAYS - 1));
   return now.toISOString().slice(0, 10);
+}
+
+function clusterPageSinceDate() {
+  const now = new Date();
+  now.setUTCDate(now.getUTCDate() - (CLUSTER_PAGE_LOOKBACK_DAYS - 1));
+  return now.toISOString().slice(0, 10);
+}
+
+function selectClusterFeedStories(stories: BroadcastStory[], limit: number) {
+  if (stories.length <= limit || limit < CLUSTER_FEED_RULE_ORDER.length * 2) {
+    return stories.slice(0, limit);
+  }
+
+  const reservedPerRule = Math.min(8, Math.floor(limit / CLUSTER_FEED_RULE_ORDER.length));
+  const selectedKeys = new Set<string>();
+  for (const ruleKey of CLUSTER_FEED_RULE_ORDER) {
+    let reserved = 0;
+    for (const story of stories) {
+      if (
+        story.ruleKey !== ruleKey ||
+        selectedKeys.has(story.candidateKey)
+      ) {
+        continue;
+      }
+      selectedKeys.add(story.candidateKey);
+      reserved += 1;
+      if (reserved >= reservedPerRule) {
+        break;
+      }
+    }
+  }
+
+  for (const story of stories) {
+    if (selectedKeys.size >= limit) {
+      break;
+    }
+    selectedKeys.add(story.candidateKey);
+  }
+
+  return stories.filter((story) => selectedKeys.has(story.candidateKey)).slice(0, limit);
 }
 
 function trim(value: unknown) {
@@ -940,10 +978,6 @@ function sourceGroupForRule(ruleKey: string): PublicClusterSignal['sourceGroup']
   return 'congress';
 }
 
-function isPoliticianCrossSourceStory(story: BroadcastStory) {
-  return story.ruleKey === 'cross_source_accumulation' && story.sourceMix.congress > 0;
-}
-
 function storyTitle(story: {
   ruleKey: string;
   ticker: string | null;
@@ -1068,11 +1102,63 @@ function strongerClusterStory(left: BroadcastStory, right: BroadcastStory) {
   return (left.latestPublishedAt || left.createdAt) >= (right.latestPublishedAt || right.createdAt) ? left : right;
 }
 
+function strongerInsiderClusterStory(left: BroadcastStory, right: BroadcastStory) {
+  if (left.actorCount !== right.actorCount) {
+    return left.actorCount > right.actorCount ? left : right;
+  }
+  return strongerClusterStory(left, right);
+}
+
+function clusterStoryTime(story: BroadcastStory) {
+  const value = story.latestPublishedAt || story.createdAt;
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+function dedupeInsiderClusterWindows(stories: BroadcastStory[]) {
+  const byTickerDirection = new Map<string, BroadcastStory[]>();
+  for (const story of stories) {
+    const key = `${trim(story.ticker).toUpperCase()}::${trim(story.direction).toLowerCase()}`;
+    byTickerDirection.set(key, [...(byTickerDirection.get(key) || []), story]);
+  }
+
+  const deduped: BroadcastStory[] = [];
+  for (const groupedStories of byTickerDirection.values()) {
+    const ordered = [...groupedStories].sort((left, right) => clusterStoryTime(left) - clusterStoryTime(right));
+    let windowStart = 0;
+    let windowDays = 10;
+    let strongest: BroadcastStory | null = null;
+
+    for (const story of ordered) {
+      const storyTime = clusterStoryTime(story);
+      if (!strongest || storyTime - windowStart >= windowDays * 24 * 60 * 60 * 1000) {
+        if (strongest) {
+          deduped.push(strongest);
+        }
+        strongest = story;
+        windowStart = storyTime;
+        windowDays = Math.max(1, story.clusterWindowDays || 10);
+        continue;
+      }
+      strongest = strongerInsiderClusterStory(story, strongest);
+    }
+    if (strongest) {
+      deduped.push(strongest);
+    }
+  }
+  return deduped;
+}
+
 function dedupeClusterFeedStories(stories: BroadcastStory[]) {
   const passthrough: BroadcastStory[] = [];
   const storyByKey = new Map<string, BroadcastStory>();
+  const insiderStories: BroadcastStory[] = [];
 
   for (const story of stories) {
+    if (story.ruleKey === 'insider_cluster') {
+      insiderStories.push(story);
+      continue;
+    }
     const key = redundantClusterStoryKey(story);
     if (!key) {
       passthrough.push(story);
@@ -1083,7 +1169,7 @@ function dedupeClusterFeedStories(stories: BroadcastStory[]) {
     storyByKey.set(key, existing ? strongerClusterStory(story, existing) : story);
   }
 
-  return [...passthrough, ...storyByKey.values()];
+  return [...passthrough, ...storyByKey.values(), ...dedupeInsiderClusterWindows(insiderStories)];
 }
 
 async function loadClusterSignals({
@@ -1095,7 +1181,6 @@ async function loadClusterSignals({
   includeActorPreviews = true,
   candidateRowLimit,
   validateEconomicActors = true,
-  prioritizePoliticianCrossSource = false,
 }: {
   limit: number;
   buyOnly: boolean;
@@ -1105,39 +1190,34 @@ async function loadClusterSignals({
   includeActorPreviews?: boolean;
   candidateRowLimit?: number;
   validateEconomicActors?: boolean;
-  prioritizePoliticianCrossSource?: boolean;
 }): Promise<PublicClusterSignal[]> {
-  const [generalStories, preferredStories] = await Promise.all([
-    fetchTweetCandidateStories({
-      status: statuses,
-      sinceDate,
-      storyLimit: Math.max(limit * 2, 60),
-      rowLimit: candidateRowLimit,
-      category: 'cluster_feed',
-      sort,
-      resolveAmounts: false,
-      ruleKeys: [...CLUSTER_FEED_RULES],
-    }),
-    prioritizePoliticianCrossSource
-      ? fetchTweetCandidateStories({
-          status: statuses,
-          sinceDate,
-          storyLimit: Math.max(limit, 60),
-          rowLimit: CLUSTER_PAGE_PREFERRED_ROW_LIMIT,
-          category: 'cluster_feed',
-          sort,
-          resolveAmounts: false,
-          ruleKeys: ['cross_source_accumulation'],
-        })
-      : Promise.resolve([]),
-  ]);
-  const stories = [
-    ...new Map(
-      [...preferredStories, ...generalStories].map((story) => [story.candidateKey, story]),
-    ).values(),
-  ];
+  const sharedStoryOptions = {
+    status: statuses,
+    sinceDate,
+    category: 'cluster_feed' as const,
+    sort,
+    resolveAmounts: false,
+  };
+  const stories = candidateRowLimit
+    ? (
+        await Promise.all(
+          CLUSTER_FEED_RULE_ORDER.map((ruleKey) =>
+            fetchTweetCandidateStories({
+              ...sharedStoryOptions,
+              storyLimit: Math.max(limit, 20),
+              rowLimit: Math.ceil(candidateRowLimit / CLUSTER_FEED_RULE_ORDER.length),
+              ruleKeys: [ruleKey],
+            }),
+          ),
+        )
+      ).flat()
+    : await fetchTweetCandidateStories({
+        ...sharedStoryOptions,
+        storyLimit: Math.max(limit * 2, 60),
+        ruleKeys: CLUSTER_FEED_RULE_ORDER,
+      });
 
-  let candidateStories = dedupeClusterFeedStories(
+  const candidateStories = dedupeClusterFeedStories(
     stories.filter((story) => {
       const ticker = trim(story.ticker).toUpperCase();
       if (!ticker || ['N/A', 'UNKNOWN', 'MULTI'].includes(ticker)) {
@@ -1168,17 +1248,6 @@ async function loadClusterSignals({
       return right.score - left.score || (right.latestPublishedAt || right.createdAt).localeCompare(left.latestPublishedAt || left.createdAt);
     });
 
-  if (prioritizePoliticianCrossSource) {
-    const preferred = candidateStories
-      .filter(isPoliticianCrossSourceStory)
-      .slice(0, Math.min(CLUSTER_PAGE_PREFERRED_SIGNAL_LIMIT, limit));
-    const preferredIds = new Set(preferred.map((story) => story.candidateKey));
-    candidateStories = [
-      ...preferred,
-      ...candidateStories.filter((story) => !preferredIds.has(story.candidateKey)),
-    ];
-  }
-
   const validationPool = candidateStories.slice(0, Math.max(limit * 3, limit + 120));
   const storiesRequiringEconomicValidation = validateEconomicActors
     ? validationPool.filter((story) => story.ruleKey === 'insider_cluster')
@@ -1188,15 +1257,16 @@ async function loadClusterSignals({
         () => new Map<string, ClusterStoryResolvedStats>(),
       )
     : new Map<string, ClusterStoryResolvedStats>();
-  const filteredStories = validationPool.filter((story) => {
+  const eligibleStories = validationPool.filter((story) => {
     const stats = economicStatsByStory.get(story.candidateKey);
     if (story.ruleKey !== 'insider_cluster') {
       return true;
     }
     return validateEconomicActors
-      ? (stats?.economicActorCount ?? story.actorCount) >= 2
-      : story.actorCount >= 2;
-  }).slice(0, limit);
+      ? (stats?.economicActorCount ?? story.actorCount) >= 5
+      : story.actorCount >= 5;
+  });
+  const filteredStories = selectClusterFeedStories(eligibleStories, limit);
   const actorPreviewsByStory = includeActorPreviews
     ? await resolveStoryActorPreviews(filteredStories).catch(
         () => new Map<string, DashboardSignalActorPreview[]>(),
@@ -1370,16 +1440,15 @@ const loadClusterFeedSignals = unstable_cache(
     loadClusterSignals({
       limit: CLUSTER_PAGE_SIGNAL_LIMIT,
       buyOnly: false,
-      sinceDate: null,
+      sinceDate: clusterPageSinceDate(),
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
-      sort: 'newest',
+      sort: 'score',
       includeActorPreviews: false,
       candidateRowLimit: CLUSTER_PAGE_CANDIDATE_ROW_LIMIT,
       // The compiler stores normalized actor counts; resolve the full event graph only for cluster detail.
       validateEconomicActors: false,
-      prioritizePoliticianCrossSource: true,
     }),
-  ['public-cluster-feed-v6'],
+  ['public-cluster-feed-v11'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 

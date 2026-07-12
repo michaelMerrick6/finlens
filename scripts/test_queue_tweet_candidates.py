@@ -1,4 +1,56 @@
-from queue_tweet_candidates import merge_signal_event_batches, signal_pipeline_stale_reason
+from queue_tweet_candidates import merge_signal_event_batches, prune_stale_pending_candidates, signal_pipeline_stale_reason
+
+
+class FakeResponse:
+    def __init__(self, data):
+        self.data = data
+
+
+class FakeCandidateQuery:
+    def __init__(self, rows, deleted_ids, operation="select"):
+        self.rows = rows
+        self.deleted_ids = deleted_ids
+        self.operation = operation
+        self.start = 0
+        self.end = len(rows) - 1
+        self.ids = []
+
+    def select(self, *_args, **_kwargs):
+        return self
+
+    def eq(self, *_args, **_kwargs):
+        return self
+
+    def order(self, *_args, **_kwargs):
+        return self
+
+    def range(self, start, end):
+        self.start = start
+        self.end = end
+        return self
+
+    def delete(self):
+        self.operation = "delete"
+        return self
+
+    def in_(self, _column, ids):
+        self.ids = list(ids)
+        return self
+
+    def execute(self):
+        if self.operation == "delete":
+            self.deleted_ids.extend(self.ids)
+            return FakeResponse([])
+        return FakeResponse(self.rows[self.start : self.end + 1])
+
+
+class FakeSupabase:
+    def __init__(self, rows):
+        self.rows = rows
+        self.deleted_ids = []
+
+    def table(self, _name):
+        return FakeCandidateQuery(self.rows, self.deleted_ids)
 
 
 def test_merge_signal_event_batches_dedupes_shared_rows() -> None:
@@ -85,11 +137,41 @@ def test_signal_pipeline_stale_reason_ignores_healthy_cases() -> None:
     assert signal_pipeline_stale_reason(0, {"politician_trades": None, "insider_trades": None}, lookback_hours=96) is None
 
 
+def test_prune_stale_pending_candidates_pages_past_first_thousand() -> None:
+    valid_keys = {f"valid-{index}" for index in range(1000)}
+    rows = [
+        {
+            "id": f"candidate-{index}",
+            "candidate_key": f"valid-{index}",
+            "signal_events": {"published_at": "2026-06-01"},
+        }
+        for index in range(1000)
+    ]
+    rows.append(
+        {
+            "id": "stale-after-page-one",
+            "candidate_key": "legacy-overlap",
+            "signal_events": {"published_at": "2026-06-01"},
+        }
+    )
+    supabase = FakeSupabase(rows)
+
+    deleted = prune_stale_pending_candidates(
+        supabase,
+        valid_candidate_keys=valid_keys,
+        published_since="2026-05-01",
+    )
+
+    assert deleted == 1
+    assert supabase.deleted_ids == ["stale-after-page-one"]
+
+
 def main() -> None:
     test_merge_signal_event_batches_dedupes_shared_rows()
     test_merge_signal_event_batches_falls_back_to_source_identity()
     test_signal_pipeline_stale_reason_flags_missing_canonical_events()
     test_signal_pipeline_stale_reason_ignores_healthy_cases()
+    test_prune_stale_pending_candidates_pages_past_first_thousand()
     print("queue tweet candidate tests passed")
 
 
