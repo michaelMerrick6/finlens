@@ -44,7 +44,10 @@ const DASHBOARD_SIGNAL_CANDIDATE_LIMIT = 24;
 const DASHBOARD_SIGNAL_LOOKBACK_DAYS = 30;
 const DASHBOARD_CLUSTER_PREVIEW_LIMIT = 4;
 const DASHBOARD_RETURN_TICKER_LIMIT = 8;
-const CLUSTER_PAGE_SIGNAL_LIMIT = 750;
+const CLUSTER_PAGE_SIGNAL_LIMIT = 120;
+const CLUSTER_PAGE_CANDIDATE_ROW_LIMIT = 360;
+const CLUSTER_PAGE_PREFERRED_ROW_LIMIT = 240;
+const CLUSTER_PAGE_PREFERRED_SIGNAL_LIMIT = 80;
 const DASHBOARD_MIN_SIGNAL_SCORE = 0.72;
 const MATERIAL_INSIDER_CLUSTER_MIN_SCORE = 0.68;
 const MATERIAL_INSIDER_CLUSTER_MIN_VALUE = 1_000_000;
@@ -142,6 +145,7 @@ export type DashboardFeaturedSignal = {
 
 export type PublicClusterSignal = DashboardFeaturedSignal & {
   amountFloor: number;
+  includesCongress: boolean;
   ruleKey: string;
   sourceGroup: 'congress' | 'insiders' | 'cross-source';
   score: number;
@@ -936,6 +940,10 @@ function sourceGroupForRule(ruleKey: string): PublicClusterSignal['sourceGroup']
   return 'congress';
 }
 
+function isPoliticianCrossSourceStory(story: BroadcastStory) {
+  return story.ruleKey === 'cross_source_accumulation' && story.sourceMix.congress > 0;
+}
+
 function storyTitle(story: {
   ruleKey: string;
   ticker: string | null;
@@ -1085,6 +1093,9 @@ async function loadClusterSignals({
   statuses,
   sort,
   includeActorPreviews = true,
+  candidateRowLimit,
+  validateEconomicActors = true,
+  prioritizePoliticianCrossSource = false,
 }: {
   limit: number;
   buyOnly: boolean;
@@ -1092,18 +1103,41 @@ async function loadClusterSignals({
   statuses: string[];
   sort: 'score' | 'newest';
   includeActorPreviews?: boolean;
+  candidateRowLimit?: number;
+  validateEconomicActors?: boolean;
+  prioritizePoliticianCrossSource?: boolean;
 }): Promise<PublicClusterSignal[]> {
-  const stories = await fetchTweetCandidateStories({
-    status: statuses,
-    sinceDate,
-    storyLimit: Math.max(limit * 5, 60),
-    category: 'cluster_feed',
-    sort,
-    resolveAmounts: false,
-    ruleKeys: [...CLUSTER_FEED_RULES],
-  });
+  const [generalStories, preferredStories] = await Promise.all([
+    fetchTweetCandidateStories({
+      status: statuses,
+      sinceDate,
+      storyLimit: Math.max(limit * 2, 60),
+      rowLimit: candidateRowLimit,
+      category: 'cluster_feed',
+      sort,
+      resolveAmounts: false,
+      ruleKeys: [...CLUSTER_FEED_RULES],
+    }),
+    prioritizePoliticianCrossSource
+      ? fetchTweetCandidateStories({
+          status: statuses,
+          sinceDate,
+          storyLimit: Math.max(limit, 60),
+          rowLimit: CLUSTER_PAGE_PREFERRED_ROW_LIMIT,
+          category: 'cluster_feed',
+          sort,
+          resolveAmounts: false,
+          ruleKeys: ['cross_source_accumulation'],
+        })
+      : Promise.resolve([]),
+  ]);
+  const stories = [
+    ...new Map(
+      [...preferredStories, ...generalStories].map((story) => [story.candidateKey, story]),
+    ).values(),
+  ];
 
-  const candidateStories = dedupeClusterFeedStories(
+  let candidateStories = dedupeClusterFeedStories(
     stories.filter((story) => {
       const ticker = trim(story.ticker).toUpperCase();
       if (!ticker || ['N/A', 'UNKNOWN', 'MULTI'].includes(ticker)) {
@@ -1134,17 +1168,34 @@ async function loadClusterSignals({
       return right.score - left.score || (right.latestPublishedAt || right.createdAt).localeCompare(left.latestPublishedAt || left.createdAt);
     });
 
+  if (prioritizePoliticianCrossSource) {
+    const preferred = candidateStories
+      .filter(isPoliticianCrossSourceStory)
+      .slice(0, Math.min(CLUSTER_PAGE_PREFERRED_SIGNAL_LIMIT, limit));
+    const preferredIds = new Set(preferred.map((story) => story.candidateKey));
+    candidateStories = [
+      ...preferred,
+      ...candidateStories.filter((story) => !preferredIds.has(story.candidateKey)),
+    ];
+  }
+
   const validationPool = candidateStories.slice(0, Math.max(limit * 3, limit + 120));
-  const storiesRequiringEconomicValidation = validationPool.filter((story) => story.ruleKey === 'insider_cluster');
-  const economicStatsByStory = await resolveStoryEconomicStats(storiesRequiringEconomicValidation).catch(
-    () => new Map<string, ClusterStoryResolvedStats>(),
-  );
+  const storiesRequiringEconomicValidation = validateEconomicActors
+    ? validationPool.filter((story) => story.ruleKey === 'insider_cluster')
+    : [];
+  const economicStatsByStory = validateEconomicActors
+    ? await resolveStoryEconomicStats(storiesRequiringEconomicValidation).catch(
+        () => new Map<string, ClusterStoryResolvedStats>(),
+      )
+    : new Map<string, ClusterStoryResolvedStats>();
   const filteredStories = validationPool.filter((story) => {
     const stats = economicStatsByStory.get(story.candidateKey);
     if (story.ruleKey !== 'insider_cluster') {
       return true;
     }
-    return (stats?.economicActorCount ?? story.actorCount) >= 2;
+    return validateEconomicActors
+      ? (stats?.economicActorCount ?? story.actorCount) >= 2
+      : story.actorCount >= 2;
   }).slice(0, limit);
   const actorPreviewsByStory = includeActorPreviews
     ? await resolveStoryActorPreviews(filteredStories).catch(
@@ -1177,6 +1228,7 @@ async function loadClusterSignals({
         actorCount,
         amountLabel,
         amountFloor,
+        includesCongress: story.sourceMix.congress > 0,
         sourceLabel: sourceMixLabel(story),
         publishedAt: story.latestPublishedAt,
         ruleKey: story.ruleKey,
@@ -1322,8 +1374,12 @@ const loadClusterFeedSignals = unstable_cache(
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
       sort: 'newest',
       includeActorPreviews: false,
+      candidateRowLimit: CLUSTER_PAGE_CANDIDATE_ROW_LIMIT,
+      // The compiler stores normalized actor counts; resolve the full event graph only for cluster detail.
+      validateEconomicActors: false,
+      prioritizePoliticianCrossSource: true,
     }),
-  ['public-cluster-feed-v3'],
+  ['public-cluster-feed-v6'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 

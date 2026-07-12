@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
-const CLUSTER_FEED_CACHE_VERSION = 'v2';
+const CLUSTER_FEED_CACHE_VERSION = 'v4';
 const CLUSTER_FEED_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 
 let clusterFeedMemoryCache: {

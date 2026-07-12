@@ -20,6 +20,7 @@ export type ClusterSignal = {
   actorCount: number;
   amountLabel: string | null;
   amountFloor: number;
+  includesCongress: boolean;
   sourceLabel: string;
   publishedAt: string | null;
   direction: 'buy' | 'sell' | null;
@@ -29,11 +30,14 @@ export type ClusterSignal = {
 };
 
 const SOURCE_OPTIONS = [
+  { value: 'politician-cross-source', label: 'Politician Cross-Source' },
   { value: 'all', label: 'All' },
   { value: 'congress', label: 'Congress' },
   { value: 'insiders', label: 'Insiders' },
   { value: 'cross-source', label: 'Cross-Source' },
 ] as const;
+
+const HIGH_CONVICTION_SCORE = 0.9;
 
 type SourceFilter = (typeof SOURCE_OPTIONS)[number]['value'];
 type DirectionFilter = 'all' | 'buy' | 'sell';
@@ -72,21 +76,24 @@ function FilterPill({
   active: boolean;
   children: string;
   onClick: () => void;
-  tone?: 'default' | 'neutral' | 'buy' | 'sell';
+  tone?: 'default' | 'neutral' | 'buy' | 'sell' | 'conviction';
 }) {
   const activeClass =
     tone === 'buy'
       ? 'border-emerald-500/25 bg-emerald-500/[0.1] text-emerald-300'
       : tone === 'sell'
         ? 'border-red-500/25 bg-red-500/[0.1] text-red-300'
-        : tone === 'neutral'
-          ? 'border-white/[0.12] bg-white/[0.045] text-zinc-200'
-          : 'border-emerald-500/25 bg-emerald-500/[0.1] text-emerald-300';
+        : tone === 'conviction'
+          ? 'border-amber-400/25 bg-amber-400/[0.1] text-amber-200'
+          : tone === 'neutral'
+            ? 'border-white/[0.12] bg-white/[0.045] text-zinc-200'
+            : 'border-emerald-500/25 bg-emerald-500/[0.1] text-emerald-300';
 
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={`rounded-full border px-3 py-1.5 text-[11px] font-medium transition ${
         active
           ? activeClass
@@ -144,8 +151,9 @@ function formatDateShort(value: string | null | undefined) {
 export default function ClustersPage({ signals, accessToken }: { signals: ClusterSignal[]; accessToken?: string }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
+  const [sourceFilter, setSourceFilter] = useState<SourceFilter>('politician-cross-source');
   const [directionFilter, setDirectionFilter] = useState<DirectionFilter>('all');
+  const [highConvictionOnly, setHighConvictionOnly] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>('newest');
   const [minAmount, setMinAmount] = useState('');
   const [minActors, setMinActors] = useState('');
@@ -162,11 +170,26 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
     const minimumActors = Number.parseInt(minActors.trim(), 10) || 0;
 
     const filtered = signals.filter((signal) => {
-      if (sourceFilter !== 'all' && signal.sourceGroup !== sourceFilter) {
+      if (
+        sourceFilter === 'politician-cross-source' &&
+        (signal.ruleKey !== 'cross_source_accumulation' || !signal.includesCongress)
+      ) {
+        return false;
+      }
+
+      if (
+        sourceFilter !== 'all' &&
+        sourceFilter !== 'politician-cross-source' &&
+        signal.sourceGroup !== sourceFilter
+      ) {
         return false;
       }
 
       if (directionFilter !== 'all' && signal.direction !== directionFilter) {
+        return false;
+      }
+
+      if (highConvictionOnly && signal.score < HIGH_CONVICTION_SCORE) {
         return false;
       }
 
@@ -207,7 +230,7 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
       }
       return dateRank(right.publishedAt) - dateRank(left.publishedAt) || right.score - left.score;
     });
-  }, [directionFilter, minActors, minAmount, searchQuery, signals, sortMode, sourceFilter]);
+  }, [directionFilter, highConvictionOnly, minActors, minAmount, searchQuery, signals, sortMode, sourceFilter]);
 
   const visibleSignals = filteredSignals.slice(0, visibleCount);
 
@@ -299,6 +322,16 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
             <div className="hidden h-5 w-px bg-white/[0.08] lg:block" />
 
             <div className="relative flex flex-wrap items-center gap-1.5">
+              <FilterPill
+                active={highConvictionOnly}
+                tone="conviction"
+                onClick={() => {
+                  setHighConvictionOnly((value) => !value);
+                  setVisibleCount(18);
+                }}
+              >
+                High conviction
+              </FilterPill>
               <FilterPill
                 active={directionFilter === 'all'}
                 tone="neutral"

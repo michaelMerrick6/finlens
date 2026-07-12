@@ -14,6 +14,7 @@ const CLUSTER_RULES = [
   ['Insiders', '2+ insiders'],
   ['Cross-source', 'Congress, insiders, or funds align'],
   ['Window', '10-45 days by source'],
+  ['Daily cap', '5 cluster events per UTC day'],
 ] as const;
 
 const CONFETTI = [
@@ -254,7 +255,7 @@ export default function ClusterAlertButton() {
                   <p className="mt-2 text-sm leading-6 text-zinc-400">
                     {!hasClusterAccess && session
                       ? 'Upgrade to Pro to follow the cluster feed and receive cluster alerts.'
-                      : 'A cluster is grouped movement around one stock from multiple politicians, insiders, or hedge funds inside a short window. Follow the feed to track each new one from Alerts.'}
+                      : 'A cluster is grouped movement around one stock from multiple politicians, insiders, or hedge funds inside a short window. Follow the feed for up to five cluster events per UTC day.'}
                   </p>
 
                   <div className="mt-5 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-3.5">

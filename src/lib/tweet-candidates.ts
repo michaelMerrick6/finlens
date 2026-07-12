@@ -169,6 +169,7 @@ type FetchStoryOptions = {
   status: string | string[];
   sinceDate: string | null;
   storyLimit: number;
+  rowLimit?: number;
   category?: string | null;
   queryText?: string | null;
   sort?: string | null;
@@ -894,7 +895,10 @@ export async function tweetCandidatesEnabled() {
 export async function fetchTweetCandidateStories(options: FetchStoryOptions) {
   const supabase = getAdminSupabase();
   const storyLimit = Number.isFinite(options.storyLimit) ? options.storyLimit : 60;
-  const rowLimit = Math.max(Math.min(storyLimit * 8, 5000), 240);
+  const requestedRowLimit = Number(options.rowLimit);
+  const rowLimit = Number.isFinite(requestedRowLimit) && requestedRowLimit > 0
+    ? Math.max(Math.min(Math.floor(requestedRowLimit), 5000), 240)
+    : Math.max(Math.min(storyLimit * 8, 5000), 240);
   const pageSize = 1000;
   const normalizedSort = trim(options.sort).toLowerCase() || 'score';
   const statuses = Array.isArray(options.status)

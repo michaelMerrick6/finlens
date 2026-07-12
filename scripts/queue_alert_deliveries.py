@@ -17,6 +17,7 @@ GLOBAL_MIN_IMPORTANCE = float(os.environ.get("DISCORD_GLOBAL_MIN_IMPORTANCE", "0
 GLOBAL_WEBHOOK_URL = os.environ.get("DISCORD_GLOBAL_WEBHOOK_URL", os.environ.get("DISCORD_WEBHOOK_URL", "")).strip()
 SMS_CLUSTER_PHONE = os.environ.get("SMS_CLUSTER_PHONE", "").strip()
 SMS_CLUSTER_MIN_IMPORTANCE = float(os.environ.get("SMS_CLUSTER_MIN_IMPORTANCE", "0.84"))
+CLUSTER_ALERT_DAILY_LIMIT = 5
 CONGRESS_CLUSTER_WINDOW_DAYS = int(os.environ.get("CONGRESS_CLUSTER_WINDOW_DAYS", "10"))
 CROSS_SOURCE_CLUSTER_WINDOW_DAYS = int(os.environ.get("CROSS_SOURCE_CLUSTER_WINDOW_DAYS", "45"))
 FUND_ALIGNMENT_WINDOW_DAYS = int(os.environ.get("FUND_ALIGNMENT_WINDOW_DAYS", "120"))
@@ -149,15 +150,18 @@ def fetch_cluster_alert_watchlists(supabase):
         return {}
 
     watchlists = supabase.table("watchlists").select("id,user_id,owner_type,owner_key").execute().data or []
-    return {
-        str(row["id"]): channels_by_user_id.get(str(row.get("user_id") or row.get("owner_key") or "").strip(), set())
-        for row in watchlists
-        if str(row.get("user_id") or "").strip() in user_ids
-        or (
-            str(row.get("owner_type") or "").strip() == "auth_user"
-            and str(row.get("owner_key") or "").strip() in user_ids
-        )
-    }
+    cluster_watchlists = {}
+    for row in watchlists:
+        user_id = str(row.get("user_id") or row.get("owner_key") or "").strip()
+        if not user_id or user_id not in user_ids:
+            continue
+        if not row.get("user_id") and str(row.get("owner_type") or "").strip() != "auth_user":
+            continue
+        cluster_watchlists[str(row["id"])] = {
+            "user_id": user_id,
+            "channels": channels_by_user_id.get(user_id, set()),
+        }
+    return cluster_watchlists
 
 
 def event_matches_subscription(event: dict, subscription: dict, *, behavior: dict, allow_activity_override: bool = False) -> bool:
@@ -231,13 +235,14 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
             if follow_mode_matches(follow_row.get("alert_mode"), behavior):
                 matched_by_watchlist[follow_row["watchlist_id"]].append(follow_row)
         if signal_type in CLUSTER_ALERT_SIGNAL_TYPES:
-            for watchlist_id, channels in (cluster_alert_watchlists or {}).items():
+            for watchlist_id, target in (cluster_alert_watchlists or {}).items():
                 matched_by_watchlist[watchlist_id].append(
                     {
                         "watchlist_id": watchlist_id,
                         "match_type": "cluster",
                         "alert_mode": "both",
-                        "channels": channels,
+                        "channels": target.get("channels") or set(),
+                        "user_id": target.get("user_id"),
                     }
                 )
 
@@ -274,6 +279,14 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
                         if str(row.get("actor_match_key") or "").strip()
                     }
                 )
+                cluster_user_id = next(
+                    (
+                        str(row.get("user_id") or "").strip()
+                        for row in channel_matched_rows
+                        if row.get("match_type") == "cluster" and str(row.get("user_id") or "").strip()
+                    ),
+                    "",
+                )
 
                 queued_by_key[delivery_key] = {
                     "signal_event_id": event["id"],
@@ -289,7 +302,45 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
                         "matched_actor_keys": actor_keys,
                     },
                 }
+                if cluster_user_id:
+                    queued_by_key[delivery_key]["_cluster_alert_user_id"] = cluster_user_id
+                    queued_by_key[delivery_key]["_importance_score"] = float(event.get("importance_score") or 0)
     return list(queued_by_key.values())
+
+
+def queue_capped_cluster_deliveries(supabase, deliveries: list[dict]) -> dict[str, int]:
+    if not deliveries:
+        return {
+            "deliveries_queued": 0,
+            "cluster_events_reserved": 0,
+            "cluster_events_suppressed": 0,
+        }
+
+    payload = [
+        {
+            "user_id": delivery["_cluster_alert_user_id"],
+            "importance_score": delivery.get("_importance_score") or 0,
+            **{
+                key: value
+                for key, value in delivery.items()
+                if key not in {"_cluster_alert_user_id", "_importance_score"}
+            },
+        }
+        for delivery in deliveries
+    ]
+    response = supabase.rpc(
+        "queue_cluster_alert_deliveries_capped",
+        {
+            "p_deliveries": payload,
+            "p_daily_limit": CLUSTER_ALERT_DAILY_LIMIT,
+        },
+    ).execute()
+    result = (response.data or [{}])[0]
+    return {
+        "deliveries_queued": int(result.get("deliveries_queued") or 0),
+        "cluster_events_reserved": int(result.get("cluster_events_reserved") or 0),
+        "cluster_events_suppressed": int(result.get("cluster_events_suppressed") or 0),
+    }
 
 
 def queue_global_discord_deliveries(events, subscriptions):
@@ -380,13 +431,26 @@ def main():
     cluster_alert_watchlists = fetch_cluster_alert_watchlists(supabase)
     owner_subscription_ids = owner_sms_subscription_ids(subscriptions)
 
-    deliveries = []
-    deliveries.extend(queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watchlist_actors, cluster_alert_watchlists))
-    deliveries.extend(queue_global_discord_deliveries(events, subscriptions))
-    deliveries.extend(queue_owner_sms_signal_deliveries(events))
+    subscription_deliveries = queue_subscription_deliveries(
+        events,
+        subscriptions,
+        watchlist_tickers,
+        watchlist_actors,
+        cluster_alert_watchlists,
+    )
+    cluster_deliveries = [
+        delivery for delivery in subscription_deliveries if delivery.get("_cluster_alert_user_id")
+    ]
+    standard_deliveries = [
+        delivery for delivery in subscription_deliveries if not delivery.get("_cluster_alert_user_id")
+    ]
+    standard_deliveries.extend(queue_global_discord_deliveries(events, subscriptions))
+    standard_deliveries.extend(queue_owner_sms_signal_deliveries(events))
 
-    if deliveries:
-        supabase.table("alert_deliveries").upsert(deliveries, on_conflict="delivery_key").execute()
+    if standard_deliveries:
+        supabase.table("alert_deliveries").upsert(standard_deliveries, on_conflict="delivery_key").execute()
+    capped_result = queue_capped_cluster_deliveries(supabase, cluster_deliveries)
+    deliveries_queued = len(standard_deliveries) + capped_result["deliveries_queued"]
 
     summary = {
         "raw_signal_events_seen": len(raw_events),
@@ -395,7 +459,10 @@ def main():
         "watchlist_subscriptions_seen": len(subscriptions),
         "cluster_alert_watchlists_seen": len(cluster_alert_watchlists),
         "watchlist_actor_targets_seen": sum(len(values) for values in watchlist_actors.values()),
-        "deliveries_queued": len(deliveries),
+        "deliveries_queued": deliveries_queued,
+        "cluster_alert_daily_limit": CLUSTER_ALERT_DAILY_LIMIT,
+        "cluster_alert_events_reserved": capped_result["cluster_events_reserved"],
+        "cluster_alert_events_suppressed": capped_result["cluster_events_suppressed"],
         "lookback_hours": LOOKBACK_HOURS,
         "congress_cluster_window_days": CONGRESS_CLUSTER_WINDOW_DAYS,
         "cross_source_cluster_window_days": CROSS_SOURCE_CLUSTER_WINDOW_DAYS,
@@ -416,7 +483,7 @@ def main():
         "owner_sms_min_importance": SMS_CLUSTER_MIN_IMPORTANCE,
         "owner_sms_deliveries_queued": sum(
             1
-            for delivery in deliveries
+            for delivery in standard_deliveries
             if delivery.get("channel") == "sms"
             and (
                 (delivery.get("payload") or {}).get("reason") == "owner_signal_sms"
@@ -425,7 +492,7 @@ def main():
         ),
     }
     emit_summary(summary)
-    print(f"Queued {len(deliveries)} deliveries from {len(events)} recent signal events.")
+    print(f"Queued {deliveries_queued} deliveries from {len(events)} recent signal events.")
 
 
 if __name__ == "__main__":

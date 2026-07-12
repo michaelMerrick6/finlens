@@ -82,11 +82,18 @@ def test_cluster_alert_watchlist_queues_clusters_without_individual_follow() -> 
         subscriptions,
         {},
         {},
-        {"watchlist-1": {"email"}},
+        {
+            "watchlist-1": {
+                "user_id": "user-1",
+                "channels": {"email"},
+            }
+        },
     )
 
     assert len(deliveries) == 1
     assert deliveries[0]["signal_event_id"] == "cluster-1"
+    assert deliveries[0]["_cluster_alert_user_id"] == "user-1"
+    assert deliveries[0]["_importance_score"] == 0.91
     assert (deliveries[0].get("payload") or {}).get("reasons") == ["watchlist_cluster_match"]
 
 
@@ -121,11 +128,80 @@ def test_cluster_alert_watchlist_only_queues_selected_channels() -> None:
         subscriptions,
         {},
         {},
-        {"watchlist-1": {"email"}},
+        {
+            "watchlist-1": {
+                "user_id": "user-1",
+                "channels": {"email"},
+            }
+        },
     )
 
     assert len(deliveries) == 1
     assert deliveries[0]["channel"] == "email"
+
+
+def test_capped_cluster_delivery_rpc_preserves_channels_and_limit() -> None:
+    class FakeResponse:
+        data = [
+            {
+                "deliveries_queued": 4,
+                "cluster_events_reserved": 2,
+                "cluster_events_suppressed": 1,
+            }
+        ]
+
+        def execute(self):
+            return self
+
+    class FakeSupabase:
+        rpc_name = ""
+        rpc_params = {}
+
+        def rpc(self, name, params):
+            self.rpc_name = name
+            self.rpc_params = params
+            return FakeResponse()
+
+    fake_supabase = FakeSupabase()
+    module.CLUSTER_ALERT_DAILY_LIMIT = 5
+    deliveries = [
+        {
+            "signal_event_id": "cluster-1",
+            "subscription_id": "subscription-email",
+            "delivery_key": "email-key",
+            "channel": "email",
+            "destination": "alerts@example.com",
+            "status": "pending",
+            "payload": {"reasons": ["watchlist_cluster_match"]},
+            "_cluster_alert_user_id": "user-1",
+            "_importance_score": 0.94,
+        },
+        {
+            "signal_event_id": "cluster-1",
+            "subscription_id": "subscription-sms",
+            "delivery_key": "sms-key",
+            "channel": "sms",
+            "destination": "+15551234567",
+            "status": "pending",
+            "payload": {"reasons": ["watchlist_cluster_match"]},
+            "_cluster_alert_user_id": "user-1",
+            "_importance_score": 0.94,
+        },
+    ]
+
+    result = module.queue_capped_cluster_deliveries(fake_supabase, deliveries)
+
+    assert fake_supabase.rpc_name == "queue_cluster_alert_deliveries_capped"
+    assert fake_supabase.rpc_params["p_daily_limit"] == 5
+    assert len(fake_supabase.rpc_params["p_deliveries"]) == 2
+    assert {row["channel"] for row in fake_supabase.rpc_params["p_deliveries"]} == {"email", "sms"}
+    assert all(row["user_id"] == "user-1" for row in fake_supabase.rpc_params["p_deliveries"])
+    assert all("_cluster_alert_user_id" not in row for row in fake_supabase.rpc_params["p_deliveries"])
+    assert result == {
+        "deliveries_queued": 4,
+        "cluster_events_reserved": 2,
+        "cluster_events_suppressed": 1,
+    }
 
 
 def test_politician_trade_matches_politician_follow_by_member_id() -> None:
@@ -399,6 +475,7 @@ def main() -> None:
     test_queue_owner_sms_signal_deliveries()
     test_cluster_alert_watchlist_queues_clusters_without_individual_follow()
     test_cluster_alert_watchlist_only_queues_selected_channels()
+    test_capped_cluster_delivery_rpc_preserves_channels_and_limit()
     test_politician_trade_matches_politician_follow_by_member_id()
     test_politician_filing_summary_matches_politician_follow_by_member_id()
     test_fund_filing_reminder_matches_fund_follow()
