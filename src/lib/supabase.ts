@@ -1,11 +1,28 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-// Ensure these exist at runtime
-if (!supabaseUrl || !supabaseKey) {
-  console.warn("Supabase URL or Key is missing. Check your .env.local file.");
+function createBrowserSupabase(supabaseUrl: string, supabaseKey: string) {
+  return createClient(supabaseUrl, supabaseKey);
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+let browserSupabase: ReturnType<typeof createBrowserSupabase> | null = null;
+
+function getBrowserSupabase() {
+  if (browserSupabase) {
+    return browserSupabase;
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase browser credentials.');
+  }
+
+  browserSupabase = createBrowserSupabase(supabaseUrl, supabaseKey);
+  return browserSupabase;
+}
+
+export const supabase = {
+  get auth() {
+    return getBrowserSupabase().auth;
+  },
+};
