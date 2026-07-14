@@ -415,6 +415,56 @@ def test_cross_source_accumulation_candidate() -> None:
     assert "Congress floor:" in rows[0]["draft_text"]
 
 
+def test_broadcast_queue_ignores_legacy_cross_source_clusters() -> None:
+    event = {
+        "id": "legacy-cross-source",
+        "source": "cross_source",
+        "source_document_id": "cross-source::TSM::buy::45d::120fd::2026-07-09::actor-hash",
+        "signal_type": "cross_source_accumulation",
+        "ticker": "TSM",
+        "direction": "buy",
+        "published_at": "2026-07-09",
+        "importance_score": 0.99,
+        "payload": {
+            "compiled_notification_event": True,
+            "cluster_actor_count": 24,
+            "insider_actor_count": 22,
+            "cluster_window_days": 45,
+        },
+    }
+
+    assert build_broadcast_candidates([event]) == []
+
+
+def test_broadcast_queue_keeps_one_canonical_cross_source_window() -> None:
+    event = {
+        "id": "canonical-cross-source",
+        "source": "cross_source",
+        "source_document_id": "cross-source::TSM::buy::45d::120fd::2026-06-23",
+        "signal_type": "cross_source_accumulation",
+        "ticker": "TSM",
+        "direction": "buy",
+        "published_at": "2026-07-09",
+        "importance_score": 0.99,
+        "payload": {
+            "compiled_notification_event": True,
+            "cluster_actor_count": 25,
+            "insider_actor_count": 23,
+            "congress_actor_count": 1,
+            "fund_actor_count": 1,
+            "cluster_window_days": 45,
+            "cluster_window_start": "2026-06-23",
+        },
+    }
+
+    rows = build_broadcast_candidates([event])
+
+    assert {row["channel"] for row in rows} == {"twitter", "discord_premium"}
+    assert {row["candidate_key"] for row in rows} == {
+        "broadcast::cross_source_accumulation::tsm::buy::2026-06-23"
+    }
+
+
 def test_politician_gain_milestone_candidate() -> None:
     event = {
         "id": "gain-1",
@@ -770,6 +820,8 @@ def main() -> None:
     test_substantial_insider_sell_candidate()
     test_substantial_insider_buy_candidate()
     test_cross_source_accumulation_candidate()
+    test_broadcast_queue_ignores_legacy_cross_source_clusters()
+    test_broadcast_queue_keeps_one_canonical_cross_source_window()
     test_politician_gain_milestone_candidate()
     test_politician_gain_milestone_does_not_become_large_buy()
     test_cluster_gain_milestone_candidate()

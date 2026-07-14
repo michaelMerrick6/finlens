@@ -43,9 +43,7 @@ function normalize13fCurrencyValue(value: number | null | undefined) {
     return 0;
   }
 
-  // 13F values in our holdings pipeline are stored in filing units that
-  // render 1,000x too large for the product UI unless normalized here.
-  return amount / 1_000;
+  return amount;
 }
 
 export function fundPath(name: string) {

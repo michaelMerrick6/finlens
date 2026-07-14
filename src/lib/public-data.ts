@@ -1069,26 +1069,6 @@ function passesClusterFeedScoreGate(story: BroadcastStory) {
   return false;
 }
 
-function redundantClusterStoryKey(story: BroadcastStory) {
-  if (!['congress_cluster', 'insider_cluster', 'cross_source_accumulation'].includes(story.ruleKey)) {
-    return null;
-  }
-
-  const ticker = trim(story.ticker).toUpperCase();
-  const direction = trim(story.direction).toLowerCase() || 'unknown';
-  const actorKey = story.actorLabels
-    .map((label) => trim(label).toLowerCase())
-    .filter(Boolean)
-    .sort()
-    .join('|');
-
-  if (!ticker || !actorKey) {
-    return null;
-  }
-
-  return `${story.ruleKey}::${ticker}::${direction}::${actorKey}`;
-}
-
 function strongerClusterStory(left: BroadcastStory, right: BroadcastStory) {
   if (left.score !== right.score) {
     return left.score > right.score ? left : right;
@@ -1102,7 +1082,13 @@ function strongerClusterStory(left: BroadcastStory, right: BroadcastStory) {
   return (left.latestPublishedAt || left.createdAt) >= (right.latestPublishedAt || right.createdAt) ? left : right;
 }
 
-function strongerInsiderClusterStory(left: BroadcastStory, right: BroadcastStory) {
+function strongerActorClusterStory(left: BroadcastStory, right: BroadcastStory) {
+  if (
+    left.ruleKey === 'cross_source_accumulation' &&
+    left.sourceMix.insiders !== right.sourceMix.insiders
+  ) {
+    return left.sourceMix.insiders > right.sourceMix.insiders ? left : right;
+  }
   if (left.actorCount !== right.actorCount) {
     return left.actorCount > right.actorCount ? left : right;
   }
@@ -1115,15 +1101,15 @@ function clusterStoryTime(story: BroadcastStory) {
   return Number.isFinite(time) ? time : 0;
 }
 
-function dedupeInsiderClusterWindows(stories: BroadcastStory[]) {
-  const byTickerDirection = new Map<string, BroadcastStory[]>();
+function dedupeClusterStoryWindows(stories: BroadcastStory[]) {
+  const byRuleTickerDirection = new Map<string, BroadcastStory[]>();
   for (const story of stories) {
-    const key = `${trim(story.ticker).toUpperCase()}::${trim(story.direction).toLowerCase()}`;
-    byTickerDirection.set(key, [...(byTickerDirection.get(key) || []), story]);
+    const key = `${story.ruleKey}::${trim(story.ticker).toUpperCase()}::${trim(story.direction).toLowerCase()}`;
+    byRuleTickerDirection.set(key, [...(byRuleTickerDirection.get(key) || []), story]);
   }
 
   const deduped: BroadcastStory[] = [];
-  for (const groupedStories of byTickerDirection.values()) {
+  for (const groupedStories of byRuleTickerDirection.values()) {
     const ordered = [...groupedStories].sort((left, right) => clusterStoryTime(left) - clusterStoryTime(right));
     let windowStart = 0;
     let windowDays = 10;
@@ -1140,7 +1126,7 @@ function dedupeInsiderClusterWindows(stories: BroadcastStory[]) {
         windowDays = Math.max(1, story.clusterWindowDays || 10);
         continue;
       }
-      strongest = strongerInsiderClusterStory(story, strongest);
+      strongest = strongerActorClusterStory(story, strongest);
     }
     if (strongest) {
       deduped.push(strongest);
@@ -1151,25 +1137,17 @@ function dedupeInsiderClusterWindows(stories: BroadcastStory[]) {
 
 function dedupeClusterFeedStories(stories: BroadcastStory[]) {
   const passthrough: BroadcastStory[] = [];
-  const storyByKey = new Map<string, BroadcastStory>();
-  const insiderStories: BroadcastStory[] = [];
+  const clusterStories: BroadcastStory[] = [];
 
   for (const story of stories) {
-    if (story.ruleKey === 'insider_cluster') {
-      insiderStories.push(story);
+    if (CLUSTER_FEED_RULES.has(story.ruleKey)) {
+      clusterStories.push(story);
       continue;
     }
-    const key = redundantClusterStoryKey(story);
-    if (!key) {
-      passthrough.push(story);
-      continue;
-    }
-
-    const existing = storyByKey.get(key);
-    storyByKey.set(key, existing ? strongerClusterStory(story, existing) : story);
+    passthrough.push(story);
   }
 
-  return [...passthrough, ...storyByKey.values(), ...dedupeInsiderClusterWindows(insiderStories)];
+  return [...passthrough, ...dedupeClusterStoryWindows(clusterStories)];
 }
 
 async function loadClusterSignals({
@@ -1448,7 +1426,7 @@ const loadClusterFeedSignals = unstable_cache(
       // The compiler stores normalized actor counts; resolve the full event graph only for cluster detail.
       validateEconomicActors: false,
     }),
-  ['public-cluster-feed-v11'],
+  ['public-cluster-feed-v12'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 
@@ -1470,7 +1448,7 @@ const loadCachedFundDirectory = unstable_cache(
     void configVersion;
     return loadFundDirectory();
   },
-  ['public-fund-directory-v7'],
+  ['public-fund-directory-v8'],
   { revalidate: HEDGE_FUNDS_REVALIDATE_SECONDS },
 );
 

@@ -11,6 +11,7 @@ from sec_13f_support import (
     load_available_13f_filings,
     normalize_issuer_name,
     normalize_share_class,
+    parse_13f_filing,
 )
 
 
@@ -122,6 +123,45 @@ class Sec13FSupportTests(unittest.TestCase):
 
         self.assertIsNotNone(root)
         self.assertEqual(root.findall(".//infoTable")[0].findtext("nameOfIssuer"), "NVIDIA CORPORATION")
+
+    def test_parses_modern_13f_values_as_dollars(self) -> None:
+        text = """
+        <SEC-DOCUMENT>
+        <XML>
+        <edgarSubmission>
+          <formData><coverPage><periodOfReport>2026-03-31</periodOfReport></coverPage></formData>
+        </edgarSubmission>
+        </XML>
+        <XML>
+        <informationTable xmlns="http://www.sec.gov/edgar/document/thirteenf/informationtable">
+          <infoTable>
+            <nameOfIssuer>TAIWAN SEMICONDUCTOR MANUFAC</nameOfIssuer>
+            <titleOfClass>SPONSORED ADS</titleOfClass>
+            <cusip>874039100</cusip>
+            <value>7577853</value>
+            <shrsOrPrnAmt><sshPrnamt>22423</sshPrnamt><sshPrnamtType>SH</sshPrnamtType></shrsOrPrnAmt>
+          </infoTable>
+        </informationTable>
+        </XML>
+        </SEC-DOCUMENT>
+        """
+        resolver = SecTickerResolver(
+            [{"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co Ltd", "exchange": "NYSE"}]
+        )
+        filing = {
+            "fund_name": "Situational Awareness LP",
+            "filed_date": "2026-05-18",
+            "source_url": "https://www.sec.gov/Archives/example.txt",
+            "accession": "0002045724-26-000008",
+        }
+
+        with patch("sec_13f_support.load_13f_filing_text", return_value=text):
+            parsed = parse_13f_filing(None, filing, resolver)
+
+        self.assertIsNotNone(parsed)
+        self.assertEqual(parsed["holdings"][0]["ticker"], "TSM")
+        self.assertEqual(parsed["holdings"][0]["value_held"], 7_577_853)
+        self.assertEqual(parsed["holdings"][0]["shares_held"], 22_423)
 
     def test_build_13f_filing_entries_dedupes_repeated_accessions(self) -> None:
         fund = {"cik": "0001167557", "name": "AQR CAPITAL MANAGEMENT LLC"}

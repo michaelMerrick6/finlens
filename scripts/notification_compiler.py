@@ -603,6 +603,7 @@ def build_cross_source_accumulation_event(
     *,
     window_days: int,
     fund_window_days: int,
+    window_start: date,
 ) -> dict:
     congress_actor_rows = [cluster_actor_row(event) for event in congress_events]
     insider_actor_rows = [cluster_actor_row(event) for event in insider_events]
@@ -639,15 +640,6 @@ def build_cross_source_accumulation_event(
     importance += min(0.05, 0.01 * max(total_actor_count - 2, 0))
     importance = round(min(0.99, importance), 2)
 
-    actor_hash = stable_id(
-        sorted(
-            {
-                f"{row.get('actor_type')}:{str(row.get('member_id') or row.get('name') or '').strip().lower()}"
-                for row in all_actor_rows
-                if row.get("member_id") or row.get("name")
-            }
-        )
-    )
     latest_published = latest_signal_date(congress_events + insider_events + fund_events)
     created_at = max(
         (
@@ -657,8 +649,7 @@ def build_cross_source_accumulation_event(
         ),
         default=None,
     )
-    cluster_anchor = latest_published or "unknown"
-    source_document_id = f"cross-source::{ticker}::buy::{window_days}d::{fund_window_days}fd::{cluster_anchor}::{actor_hash}"
+    source_document_id = f"cross-source::{ticker}::buy::{window_days}d::{fund_window_days}fd::{window_start.isoformat()}"
 
     payload = {
         "compiled_notification_event": True,
@@ -676,6 +667,8 @@ def build_cross_source_accumulation_event(
         ],
         "cluster_actor_count": total_actor_count,
         "cluster_window_days": window_days,
+        "cluster_window_start": window_start.isoformat(),
+        "cluster_window_end": (window_start + timedelta(days=max(1, window_days) - 1)).isoformat(),
         "fund_window_days": fund_window_days,
         "cluster_clocked_at": latest_published,
         "cluster_combined_lower_bound": combined_lower_bound,
@@ -729,11 +722,14 @@ def compile_cross_source_accumulation_events(
 
     compiled: list[dict] = []
     for ticker, grouped in buckets.items():
-        seen_cluster_keys: set[tuple[str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]]] = set()
-        for anchor in published_anchor_dates(grouped["congress"] + grouped["insider"] + grouped["hedge_fund"]):
-            congress_events = events_in_published_window(grouped["congress"], anchor, window_days)
-            insider_events = unique_insider_economic_events(events_in_published_window(grouped["insider"], anchor, window_days))
-            fund_events = events_in_published_window(grouped["hedge_fund"], anchor, fund_window_days)
+        primary_events = grouped["congress"] + grouped["insider"]
+        for window_start, window_events in non_overlapping_published_windows(primary_events, window_days):
+            window_end = window_start + timedelta(days=max(1, window_days) - 1)
+            congress_events = [event for event in window_events if str(event.get("source") or "").strip().lower() == "congress"]
+            insider_events = unique_insider_economic_events(
+                [event for event in window_events if str(event.get("source") or "").strip().lower() == "insider"]
+            )
+            fund_events = events_in_published_window(grouped["hedge_fund"], window_end, fund_window_days)
             congress_actors = distinct_actor_keys(congress_events)
             insider_actors = {":".join(insider_economic_signature(event)) for event in insider_events}
             fund_actors = distinct_actor_keys(fund_events)
@@ -748,17 +744,6 @@ def compile_cross_source_accumulation_events(
             if fund_actors and not (congress_actors and insider_actors) and not strong_fund_alignment(fund_events):
                 continue
 
-            cluster_key = (
-                anchor.isoformat(),
-                ticker,
-                tuple(sorted(congress_actors)),
-                tuple(sorted(insider_actors)),
-                tuple(sorted(fund_actors)),
-            )
-            if cluster_key in seen_cluster_keys:
-                continue
-            seen_cluster_keys.add(cluster_key)
-
             compiled.append(
                 build_cross_source_accumulation_event(
                     ticker,
@@ -767,6 +752,7 @@ def compile_cross_source_accumulation_events(
                     [event for event in fund_events if actor_match_key(event) in fund_actors],
                     window_days=window_days,
                     fund_window_days=fund_window_days,
+                    window_start=window_start,
                 )
             )
     return compiled
@@ -780,6 +766,7 @@ def build_cross_source_sell_event(
     *,
     window_days: int,
     fund_window_days: int,
+    window_start: date,
 ) -> dict:
     congress_actor_rows = [cluster_actor_row(event) for event in congress_events]
     insider_actor_rows = [cluster_actor_row(event) for event in insider_events]
@@ -813,15 +800,6 @@ def build_cross_source_sell_event(
     importance += min(0.05, 0.01 * max(total_actor_count - 2, 0))
     importance = round(min(0.99, importance), 2)
 
-    actor_hash = stable_id(
-        sorted(
-            {
-                f"{row.get('actor_type')}:{str(row.get('member_id') or row.get('name') or '').strip().lower()}"
-                for row in all_actor_rows
-                if row.get("member_id") or row.get("name")
-            }
-        )
-    )
     latest_published = latest_signal_date(congress_events + insider_events + fund_events)
     created_at = max(
         (
@@ -831,8 +809,7 @@ def build_cross_source_sell_event(
         ),
         default=None,
     )
-    cluster_anchor = latest_published or "unknown"
-    source_document_id = f"cross-source::{ticker}::sell::{window_days}d::{fund_window_days}fd::{cluster_anchor}::{actor_hash}"
+    source_document_id = f"cross-source::{ticker}::sell::{window_days}d::{fund_window_days}fd::{window_start.isoformat()}"
 
     payload = {
         "compiled_notification_event": True,
@@ -850,6 +827,8 @@ def build_cross_source_sell_event(
         ],
         "cluster_actor_count": total_actor_count,
         "cluster_window_days": window_days,
+        "cluster_window_start": window_start.isoformat(),
+        "cluster_window_end": (window_start + timedelta(days=max(1, window_days) - 1)).isoformat(),
         "fund_window_days": fund_window_days,
         "cluster_clocked_at": latest_published,
         "congress_actor_count": len(congress_actor_rows),
@@ -902,11 +881,14 @@ def compile_cross_source_sell_events(
 
     compiled: list[dict] = []
     for ticker, grouped in buckets.items():
-        seen_cluster_keys: set[tuple[str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]]] = set()
-        for anchor in published_anchor_dates(grouped["congress"] + grouped["insider"] + grouped["hedge_fund"]):
-            congress_events = events_in_published_window(grouped["congress"], anchor, window_days)
-            insider_events = unique_insider_economic_events(events_in_published_window(grouped["insider"], anchor, window_days))
-            fund_events = events_in_published_window(grouped["hedge_fund"], anchor, fund_window_days)
+        primary_events = grouped["congress"] + grouped["insider"]
+        for window_start, window_events in non_overlapping_published_windows(primary_events, window_days):
+            window_end = window_start + timedelta(days=max(1, window_days) - 1)
+            congress_events = [event for event in window_events if str(event.get("source") or "").strip().lower() == "congress"]
+            insider_events = unique_insider_economic_events(
+                [event for event in window_events if str(event.get("source") or "").strip().lower() == "insider"]
+            )
+            fund_events = events_in_published_window(grouped["hedge_fund"], window_end, fund_window_days)
             congress_actors = distinct_actor_keys(congress_events)
             insider_actors = {":".join(insider_economic_signature(event)) for event in insider_events}
             fund_actors = distinct_actor_keys(fund_events)
@@ -921,17 +903,6 @@ def compile_cross_source_sell_events(
             if fund_actors and not (congress_actors and insider_actors) and not strong_fund_alignment(fund_events):
                 continue
 
-            cluster_key = (
-                anchor.isoformat(),
-                ticker,
-                tuple(sorted(congress_actors)),
-                tuple(sorted(insider_actors)),
-                tuple(sorted(fund_actors)),
-            )
-            if cluster_key in seen_cluster_keys:
-                continue
-            seen_cluster_keys.add(cluster_key)
-
             compiled.append(
                 build_cross_source_sell_event(
                     ticker,
@@ -940,6 +911,7 @@ def compile_cross_source_sell_events(
                     [event for event in fund_events if actor_match_key(event) in fund_actors],
                     window_days=window_days,
                     fund_window_days=fund_window_days,
+                    window_start=window_start,
                 )
             )
     return compiled

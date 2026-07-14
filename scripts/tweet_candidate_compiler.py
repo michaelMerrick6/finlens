@@ -38,6 +38,10 @@ CANONICAL_INSIDER_CLUSTER_SOURCE_ID = re.compile(
     r"^insider-cluster::[^:]+::(?:buy|sell)::\d+d::\d{4}-\d{2}-\d{2}$",
     re.IGNORECASE,
 )
+CANONICAL_CROSS_SOURCE_CLUSTER_SOURCE_ID = re.compile(
+    r"^cross-source::[^:]+::(?:buy|sell)::\d+d::\d+fd::\d{4}-\d{2}-\d{2}$",
+    re.IGNORECASE,
+)
 SCORE_GATED_RULE_KEYS = {
     "grouped_congress_buy",
     "grouped_insider_buy",
@@ -409,6 +413,7 @@ def build_cross_source_accumulation_candidate(event: dict) -> dict | None:
     congress_floor = money_floor_label(congress_cluster_lower_bound(congress_actor_rows))
     combined_floor = money_floor_label(float(payload.get("cluster_combined_lower_bound") or 0))
     filed_label = short_date(event.get("published_at"))
+    window_start = str(payload.get("cluster_window_start") or event.get("published_at") or "").strip()[:10]
     is_sell_cluster = direction == "sell"
     source_parts = []
     count_parts = []
@@ -448,7 +453,9 @@ def build_cross_source_accumulation_candidate(event: dict) -> dict | None:
     )
     return {
         "channel": "twitter",
-        "candidate_key": semantic_candidate_key("cross_source_accumulation", event, ticker),
+        "candidate_key": "::".join(
+            ["broadcast", "cross_source_accumulation", ticker.lower(), direction, window_start]
+        ),
         "rule_key": "cross_source_accumulation",
         "signal_event_id": event["id"],
         "status": "pending_review",
@@ -466,6 +473,7 @@ def build_cross_source_accumulation_candidate(event: dict) -> dict | None:
             "fund_actor_count": fund_count,
             "cluster_actor_count": int(payload.get("cluster_actor_count") or 0),
             "cluster_window_days": int(payload.get("cluster_window_days") or 0),
+            "cluster_window_start": window_start,
             "cluster_actors": actor_rows,
             "cluster_combined_lower_bound": float(payload.get("cluster_combined_lower_bound") or 0),
             "cluster_amount_ranges": unique_nonempty_strings(congress_amount_ranges),
@@ -1683,14 +1691,15 @@ def build_broadcast_candidates(
     minimum_importance: float = 0.88,
     minimum_group_count: int = 2,
 ) -> list[dict]:
-    candidate_events = [
-        event
-        for event in events
-        if normalize_signal_type(event.get("signal_type")) != "insider_cluster"
-        or CANONICAL_INSIDER_CLUSTER_SOURCE_ID.fullmatch(
-            str(event.get("source_document_id") or "").strip()
-        )
-    ]
+    candidate_events: list[dict] = []
+    for event in events:
+        signal_type = normalize_signal_type(event.get("signal_type"))
+        source_document_id = str(event.get("source_document_id") or "").strip()
+        if signal_type == "insider_cluster" and not CANONICAL_INSIDER_CLUSTER_SOURCE_ID.fullmatch(source_document_id):
+            continue
+        if signal_type == "cross_source_accumulation" and not CANONICAL_CROSS_SOURCE_CLUSTER_SOURCE_ID.fullmatch(source_document_id):
+            continue
+        candidate_events.append(event)
     twitter_candidates = build_tweet_candidates(
         candidate_events,
         minimum_importance=minimum_importance,

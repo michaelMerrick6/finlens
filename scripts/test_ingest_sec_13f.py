@@ -81,6 +81,7 @@ class IngestSec13FTests(unittest.TestCase):
 
         self.assertEqual(by_ticker["NVDA"]["direction"], "increase")
         self.assertIn("initiated", by_ticker["NVDA"]["title"].lower())
+        self.assertIn("$25,000", by_ticker["NVDA"]["summary"])
         self.assertEqual(by_ticker["MSFT"]["direction"], "decrease")
         self.assertIn("exited", by_ticker["MSFT"]["title"].lower())
         self.assertEqual(filing_events[0]["actor_name"], "Example Capital")
@@ -90,7 +91,7 @@ class IngestSec13FTests(unittest.TestCase):
     def test_build_fund_events_treats_de_minimis_prior_as_material_new_position(self) -> None:
         rows = [
             {
-                **make_holding("INTC", 202_344, value_held=8_929_441_000, report_period="2026-03-31"),
+                **make_holding("INTC", 202_344, value_held=8_929_441, report_period="2026-03-31"),
                 "qoq_change_shares": 202_343,
                 "qoq_change_percent": 20_234_300.0,
             },

@@ -1083,7 +1083,7 @@ function toFundActivitySignal(row: FundActivityRow, matchReasons: string[]): Acc
   const change = fundChangeLabel(row);
   const ticker = normalizeActivityTicker(row.ticker);
   const actorName = String(row.fund_name || '').trim() || 'Hedge fund';
-  const valueLabel = compactDollarValue(Number(row.value_held || 0) / 1_000);
+  const valueLabel = compactDollarValue(Number(row.value_held || 0));
   const shareLabel = compactNumberValue(row.shares_held);
   const summaryParts = [
     row.report_period ? `Report period ${row.report_period}` : '13F filing',

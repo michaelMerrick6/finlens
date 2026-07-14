@@ -69,12 +69,12 @@ def fetch_signal_events_since(supabase, *, column: str, since_value: str) -> lis
         end = start + page_size - 1
         if SIGNAL_EVENTS_FETCH_LIMIT is not None:
             end = min(end, SIGNAL_EVENTS_FETCH_LIMIT - 1)
+        # Avoid a wide database sort over the recovery window. The merged
+        # batches are deterministically sorted in memory below.
         response = (
             supabase.table("signal_events")
             .select("*")
             .gte(column, since_value)
-            .order(column, desc=True)
-            .order("created_at", desc=True)
             .range(start, end)
             .execute()
         )

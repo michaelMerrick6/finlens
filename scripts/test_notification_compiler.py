@@ -480,13 +480,15 @@ def test_cross_source_accumulation_event_created():
     ]
     compiled = compile_notification_events(events, cross_source_window_days=30, fund_window_days=120)
     clusters = [event for event in compiled if event["signal_type"] == "cross_source_accumulation"]
-    assert len(clusters) == 2
-    full_stack = [event for event in clusters if event["payload"]["cluster_clocked_at"] == "2026-03-18"][0]
+    assert len(clusters) == 1
+    full_stack = clusters[0]
     assert full_stack["payload"]["congress_actor_count"] == 1
     assert full_stack["payload"]["insider_actor_count"] == 1
     assert full_stack["payload"]["fund_actor_count"] == 1
     assert full_stack["payload"]["includes_fund_source"] is True
     assert full_stack["payload"]["cluster_combined_lower_bound"] == 5100001
+    assert full_stack["payload"]["cluster_window_start"] == "2026-03-17"
+    assert full_stack["source_document_id"] == "cross-source::NVDA::buy::30d::120fd::2026-03-17"
 
 
 def test_cross_source_accumulation_allows_congress_fund_alignment():

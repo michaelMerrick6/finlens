@@ -539,7 +539,7 @@ def parse_13f_filing(session, filing: dict[str, str], resolver: SecTickerResolve
         share_amount_type = str(node.findtext(".//shrsOrPrnAmt/sshPrnamtType") or "").strip().upper()
         put_call = str(node.findtext("putCall") or "").strip().upper()
         shares_held = parse_int(node.findtext(".//shrsOrPrnAmt/sshPrnamt"))
-        value_held = parse_int(node.findtext("value")) * 1000
+        value_held = parse_int(node.findtext("value"))
 
         if not issuer_name or shares_held <= 0:
             rows_skipped += 1

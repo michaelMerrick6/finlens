@@ -170,7 +170,7 @@ def format_fund_change_label(holding: dict) -> str:
 
 def normalized_13f_value(value) -> float:
     amount = optional_float(value) or 0
-    return amount / 1_000
+    return amount
 
 
 def fund_change_type(holding: dict) -> str | None:
