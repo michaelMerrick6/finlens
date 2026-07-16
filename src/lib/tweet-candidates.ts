@@ -361,6 +361,30 @@ function candidateThemes(row: TweetCandidateRow) {
 }
 
 function sourceMixForCandidate(row: TweetCandidateRow, actorCount: number) {
+  if (row.rule_key === 'cross_source_accumulation') {
+    const actorSets = {
+      congress: new Set<string>(),
+      insiders: new Set<string>(),
+      funds: new Set<string>(),
+    };
+    for (const actor of row.payload?.cluster_actors || []) {
+      const actorKey = trim(actor?.name).toLowerCase();
+      const source = trim(actor?.source).toLowerCase();
+      if (!actorKey) continue;
+      if (source === 'congress') actorSets.congress.add(actorKey);
+      if (source === 'insider') actorSets.insiders.add(actorKey);
+      if (source === 'hedge_fund') actorSets.funds.add(actorKey);
+    }
+    const distinctCounts = {
+      congress: actorSets.congress.size,
+      insiders: actorSets.insiders.size,
+      funds: actorSets.funds.size,
+    };
+    if (distinctCounts.congress || distinctCounts.insiders || distinctCounts.funds) {
+      return distinctCounts;
+    }
+  }
+
   const congress = Math.max(0, toNumber(row.payload?.congress_actor_count));
   const insiders = Math.max(0, toNumber(row.payload?.insider_actor_count));
   const funds = Math.max(0, toNumber(row.payload?.fund_actor_count));

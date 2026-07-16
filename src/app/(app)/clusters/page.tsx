@@ -10,7 +10,7 @@ export default async function ClusterSignalsPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Cluster feed
+              High-conviction clusters
             </h1>
             <div className="group relative">
               <button
@@ -27,7 +27,7 @@ export default async function ClusterSignalsPage() {
             </div>
           </div>
           <p className="mt-1.5 max-w-3xl text-sm leading-6 text-zinc-500">
-            See when multiple smart-money moves start pointing at the same stock.
+            The strongest coordinated moves across Congress, company insiders, and institutional funds.
           </p>
         </div>
         <ClusterAlertButton />

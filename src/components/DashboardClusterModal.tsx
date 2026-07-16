@@ -8,6 +8,12 @@ import { ExternalLink, Loader2, Shield, UserRound, X } from 'lucide-react';
 
 import OptionTradeBadge from '@/components/OptionTradeBadge';
 import PoliticianHeadshot from '@/components/PoliticianHeadshot';
+import {
+  clusterCategoryLabel,
+  clusterEvidenceItems,
+  clusterHeadline,
+  clusterReason,
+} from '@/lib/cluster-presentation';
 import { getTickerLogoUrl } from '@/lib/company-logos';
 import type { DashboardClusterDetail, DashboardClusterTransaction } from '@/lib/dashboard-cluster-types';
 import { formatCalendarDate } from '@/lib/date-format';
@@ -22,9 +28,17 @@ type ClusterPreview = {
   actorPreview: string | null;
   actorCount: number;
   amountLabel: string | null;
+  amountFloor?: number;
   sourceLabel: string;
   publishedAt: string | null;
   direction: 'buy' | 'sell' | null;
+  ruleKey?: string;
+  sourceCounts?: {
+    congress: number;
+    insiders: number;
+    funds: number;
+  };
+  windowDays?: number | null;
 };
 
 type DashboardClusterModalProps = {
@@ -190,6 +204,27 @@ export default function DashboardClusterModal({
   const transactions = detail?.transactions || [];
   const resolvedActorCount = transactions.length ? uniqueActorCount(transactions) : cluster.actorCount;
   const isBuy = cluster.direction !== 'sell';
+  const inferredRuleKey = cluster.ruleKey || (
+    cluster.ruleLabel.toLowerCase().includes('cross')
+      ? 'cross_source_accumulation'
+      : cluster.ruleLabel.toLowerCase().includes('insider')
+        ? 'insider_cluster'
+        : 'congress_cluster'
+  );
+  const presentationCluster = {
+    ...cluster,
+    amountFloor: cluster.amountFloor || 0,
+    ruleKey: inferredRuleKey,
+    sourceCounts: cluster.sourceCounts || (
+      inferredRuleKey === 'insider_cluster'
+        ? { congress: 0, insiders: cluster.actorCount, funds: 0 }
+        : inferredRuleKey === 'congress_cluster'
+          ? { congress: cluster.actorCount, insiders: 0, funds: 0 }
+          : { congress: 0, insiders: 0, funds: 0 }
+    ),
+    windowDays: cluster.windowDays ?? null,
+  };
+  const evidence = clusterEvidenceItems(presentationCluster);
 
   return createPortal(
     <div
@@ -251,10 +286,10 @@ export default function DashboardClusterModal({
                           : 'bg-red-500/[0.12] text-red-400'
                       }`}
                     >
-                      {cluster.ruleLabel}
+                      {clusterCategoryLabel(presentationCluster)}
                     </span>
                   </div>
-                  <h3 className="mt-1.5 text-[17px] font-semibold leading-snug tracking-[-0.01em] text-white">{cluster.title}</h3>
+                  <h3 className="mt-1.5 text-[17px] font-semibold leading-snug tracking-[-0.01em] text-white">{clusterHeadline(presentationCluster)}</h3>
                 </div>
               </div>
 
@@ -270,11 +305,26 @@ export default function DashboardClusterModal({
             {/* Meta row */}
             <div className="mt-3.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-500">
               {cluster.amountLabel ? (
-                <span className="font-semibold text-white/80">{cluster.amountLabel}</span>
+                <span className="font-semibold text-white/80">Tracked floor {cluster.amountLabel}</span>
               ) : null}
               <span>{resolvedActorCount} actor{resolvedActorCount === 1 ? '' : 's'}</span>
               <span>{transactions.length || '—'} transaction{transactions.length === 1 ? '' : 's'}</span>
               <span>{formatDate(cluster.publishedAt)}</span>
+            </div>
+
+            <div className="mt-4 rounded-xl border border-white/[0.055] bg-white/[0.018] px-3.5 py-3">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-600">Why it matters</div>
+              <p className="mt-1.5 text-xs leading-5 text-zinc-400">{clusterReason(presentationCluster)}</p>
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {evidence.map((item) => (
+                  <span
+                    key={item.key}
+                    className="rounded-md border border-white/[0.065] bg-white/[0.025] px-2 py-1 text-[10px] font-medium text-zinc-400"
+                  >
+                    {item.label}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -284,7 +334,7 @@ export default function DashboardClusterModal({
           {/* Transactions section */}
           <div className="px-5 pb-5 pt-4 sm:px-6">
             <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
-              Transactions
+              Supporting filings
             </div>
 
             {loading ? (

@@ -803,6 +803,31 @@ def test_related_form4_reporting_owners_do_not_create_fake_cluster() -> None:
     assert "insider_cluster" not in {row["rule_key"] for row in rows}
 
 
+def test_repeated_moves_by_one_insider_do_not_create_candidate_cluster() -> None:
+    events = []
+    for index in range(6):
+        events.append(
+            {
+                "id": f"repeat-candidate-{index}",
+                "source": "insider",
+                "signal_type": "insider_trade",
+                "ticker": "RPT",
+                "actor_name": "Same Insider",
+                "direction": "buy",
+                "published_at": f"2026-03-{10 + index:02d}",
+                "importance_score": 0.8,
+                "payload": {
+                    "insider_holding_increase_pct": 0.5,
+                    "insider_total_buy_value": 500000 + index,
+                    "transaction_date": f"2026-03-{10 + index:02d}",
+                },
+            }
+        )
+
+    rows = build_broadcast_candidates(events, minimum_importance=0.88)
+    assert "insider_cluster" not in {row["rule_key"] for row in rows}
+
+
 def main() -> None:
     test_congress_cluster_candidate()
     test_compiled_insider_cluster_candidate()
@@ -831,6 +856,7 @@ def main() -> None:
     test_insider_cluster_suppresses_individual_broadcasts()
     test_insider_cluster_finds_multiple_windows_for_same_ticker()
     test_related_form4_reporting_owners_do_not_create_fake_cluster()
+    test_repeated_moves_by_one_insider_do_not_create_candidate_cluster()
     print("tweet candidate compiler tests passed")
 
 

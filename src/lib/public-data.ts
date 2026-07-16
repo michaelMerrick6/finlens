@@ -5,6 +5,7 @@ import path from 'node:path';
 
 import { unstable_cache } from 'next/cache';
 
+import { isHighConvictionCluster } from '@/lib/cluster-quality';
 import type { FundDirectoryEntry } from '@/lib/hedge-funds';
 import { loadFundDirectory, loadInstitutionalHoldingRows } from '@/lib/hedge-funds-server';
 import { getMarketPriceSeries, getMarketPriceSeriesMap, getPriceOnOrBefore } from '@/lib/market-data';
@@ -44,9 +45,10 @@ const DASHBOARD_SIGNAL_CANDIDATE_LIMIT = 24;
 const DASHBOARD_SIGNAL_LOOKBACK_DAYS = 30;
 const DASHBOARD_CLUSTER_PREVIEW_LIMIT = 4;
 const DASHBOARD_RETURN_TICKER_LIMIT = 8;
-const CLUSTER_PAGE_SIGNAL_LIMIT = 60;
-const CLUSTER_PAGE_CANDIDATE_ROW_LIMIT = 240;
-const CLUSTER_PAGE_LOOKBACK_DAYS = 90;
+const CLUSTER_PAGE_CANDIDATE_SIGNAL_LIMIT = 60;
+const CLUSTER_PAGE_SIGNAL_LIMIT = 24;
+const CLUSTER_PAGE_CANDIDATE_ROW_LIMIT = 180;
+const CLUSTER_PAGE_LOOKBACK_DAYS = 60;
 const DASHBOARD_MIN_SIGNAL_SCORE = 0.72;
 const MATERIAL_INSIDER_CLUSTER_MIN_SCORE = 0.68;
 const MATERIAL_INSIDER_CLUSTER_MIN_VALUE = 1_000_000;
@@ -146,7 +148,13 @@ export type PublicClusterSignal = DashboardFeaturedSignal & {
   includesCongress: boolean;
   ruleKey: string;
   sourceGroup: 'congress' | 'insiders' | 'cross-source';
+  sourceCounts: {
+    congress: number;
+    insiders: number;
+    funds: number;
+  };
   score: number;
+  windowDays: number | null;
 };
 
 export type DashboardFeaturedPolitician = {
@@ -406,25 +414,11 @@ function insiderEconomicActorSignature(row: DashboardSignalEventRow) {
 }
 
 function uniqueEconomicActorCount(rows: DashboardSignalEventRow[]) {
-  const rowsByActor = new Map<string, DashboardSignalEventRow[]>();
-  for (const row of rows) {
-    const actorKey = insiderEconomicActorSignature(row);
-    const existingRows = rowsByActor.get(actorKey) || [];
-    existingRows.push(row);
-    rowsByActor.set(actorKey, existingRows);
-  }
-
-  const actorEconomicSignatures = new Set<string>();
-  for (const actorRows of rowsByActor.values()) {
-    const economicKeys = uniqueEconomicLeafRows(actorRows)
-      .map((row) => insiderEconomicTransactionKey(row))
-      .sort();
-    if (economicKeys.length) {
-      actorEconomicSignatures.add(economicKeys.join('|'));
-    }
-  }
-
-  return actorEconomicSignatures.size;
+  return new Set(
+    uniqueEconomicLeafRows(rows)
+      .map((row) => insiderEconomicActorSignature(row))
+      .filter(Boolean),
+  ).size;
 }
 
 function storyEconomicStats(story: BroadcastStory, rowsById: Map<string, DashboardSignalEventRow>) {
@@ -1257,8 +1251,10 @@ async function loadClusterSignals({
       const amountFloor = stats?.amountFloor && stats.amountFloor > 0 ? stats.amountFloor : story.amountFloor;
       const actorCount =
         story.ruleKey === 'insider_cluster'
-          ? stats?.economicActorCount ?? story.actorCount
-          : story.actorCount;
+          ? stats?.economicActorCount ?? (story.sourceMix.insiders || story.actorCount)
+          : story.ruleKey === 'cross_source_accumulation'
+            ? story.sourceMix.congress + story.sourceMix.insiders + story.sourceMix.funds || story.actorCount
+            : story.actorCount;
       const amountLabel = moneyFloorLabel(amountFloor);
       return {
         id: story.candidateKey,
@@ -1281,7 +1277,13 @@ async function loadClusterSignals({
         publishedAt: story.latestPublishedAt,
         ruleKey: story.ruleKey,
         sourceGroup: sourceGroupForRule(story.ruleKey),
+        sourceCounts: {
+          congress: story.sourceMix.congress,
+          insiders: story.sourceMix.insiders,
+          funds: story.sourceMix.funds,
+        },
         score: story.score,
+        windowDays: story.clusterWindowDays,
         direction:
           normalizedDirection === 'buy'
             ? 'buy'
@@ -1290,6 +1292,39 @@ async function loadClusterSignals({
               : null,
       };
     });
+}
+
+function clusterConfidenceRank(signal: PublicClusterSignal) {
+  const sourceFamilyCount = [
+    signal.sourceCounts.congress,
+    signal.sourceCounts.insiders,
+    signal.sourceCounts.funds,
+  ].filter((count) => count > 0).length;
+  const ruleBoost = signal.ruleKey === 'cross_source_accumulation' ? 18 : signal.ruleKey === 'insider_cluster' ? 8 : 0;
+  const actorBoost = Math.min(signal.actorCount, 25) * 0.45;
+  const sizeBoost = signal.amountFloor > 0 ? Math.min(Math.log10(signal.amountFloor), 8) * 0.4 : 0;
+  return signal.score * 100 + sourceFamilyCount * 5 + ruleBoost + actorBoost + sizeBoost;
+}
+
+function curateClusterSignals(signals: PublicClusterSignal[]) {
+  const ranked = signals
+    .filter((signal) => isHighConvictionCluster(signal))
+    .sort((left, right) => {
+      const confidenceDelta = clusterConfidenceRank(right) - clusterConfidenceRank(left);
+      if (confidenceDelta !== 0) return confidenceDelta;
+      return (right.publishedAt || '').localeCompare(left.publishedAt || '');
+    });
+
+  const seenTickerDirections = new Set<string>();
+  const curated: PublicClusterSignal[] = [];
+  for (const signal of ranked) {
+    const key = `${signal.ticker}::${signal.direction || 'mixed'}`;
+    if (seenTickerDirections.has(key)) continue;
+    seenTickerDirections.add(key);
+    curated.push(signal);
+    if (curated.length >= CLUSTER_PAGE_SIGNAL_LIMIT) break;
+  }
+  return curated;
 }
 
 async function loadDashboardFeaturedSignals(): Promise<DashboardFeaturedSignal[]> {
@@ -1415,8 +1450,8 @@ async function loadInsiderFeedTrades() {
 
 const loadClusterFeedSignals = unstable_cache(
   async () =>
-    loadClusterSignals({
-      limit: CLUSTER_PAGE_SIGNAL_LIMIT,
+    curateClusterSignals(await loadClusterSignals({
+      limit: CLUSTER_PAGE_CANDIDATE_SIGNAL_LIMIT,
       buyOnly: false,
       sinceDate: clusterPageSinceDate(),
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
@@ -1425,8 +1460,8 @@ const loadClusterFeedSignals = unstable_cache(
       candidateRowLimit: CLUSTER_PAGE_CANDIDATE_ROW_LIMIT,
       // The compiler stores normalized actor counts; resolve the full event graph only for cluster detail.
       validateEconomicActors: false,
-    }),
-  ['public-cluster-feed-v12'],
+    })),
+  ['public-cluster-feed-v15'],
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 

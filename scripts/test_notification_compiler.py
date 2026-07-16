@@ -540,6 +540,56 @@ def test_cross_source_accumulation_allows_congress_fund_alignment():
     assert clusters[0]["payload"]["cluster_clocked_at"] == "2026-04-15"
 
 
+def test_cross_source_counts_distinct_actors_not_transactions():
+    events = [
+        {
+            "id": f"p{index}",
+            "source": "congress",
+            "signal_type": "politician_trade",
+            "source_document_id": f"house-2026-repeat-{index}",
+            "ticker": "NVDA",
+            "actor_name": "Thomas Kean",
+            "actor_type": "politician",
+            "direction": "buy",
+            "occurred_at": "2026-03-17",
+            "published_at": f"2026-03-{17 + index:02d}",
+            "importance_score": 0.72,
+            "title": "Congress trade",
+            "summary": "Repeated buy by one member",
+            "source_url": f"https://example.com/congress-{index}",
+            "payload": {"member_id": "K000398", "amount_range": "$1,001 - $15,000"},
+            "created_at": f"2026-03-{17 + index:02d}T20:00:00+00:00",
+        }
+        for index in range(2)
+    ]
+    events.append(
+        {
+            "id": "f1",
+            "source": "hedge_fund",
+            "signal_type": "fund_position_change",
+            "source_document_id": "fund::nvda::2026-03-31",
+            "ticker": "NVDA",
+            "actor_name": "Situational Awareness LP",
+            "actor_type": "fund",
+            "direction": "increase",
+            "occurred_at": "2026-03-31",
+            "published_at": "2026-04-15",
+            "importance_score": 0.78,
+            "title": "13F update",
+            "summary": "Fund increase",
+            "source_url": "https://example.com/fund",
+            "payload": {"fund_name": "Situational Awareness LP", "qoq_change_percent": 22.5},
+            "created_at": "2026-04-15T20:00:00+00:00",
+        }
+    )
+
+    compiled = compile_notification_events(events, cross_source_window_days=30, fund_window_days=120)
+    cluster = [event for event in compiled if event["signal_type"] == "cross_source_accumulation"][0]
+    assert cluster["payload"]["congress_actor_count"] == 1
+    assert cluster["payload"]["fund_actor_count"] == 1
+    assert cluster["payload"]["cluster_actor_count"] == 2
+
+
 def test_cross_source_distribution_allows_congress_fund_alignment():
     events = [
         {
@@ -630,6 +680,41 @@ def test_insider_cluster_skips_small_two_actor_noise():
     compiled = compile_notification_events(events, insider_cluster_window_days=10, insider_cluster_min_members=2)
     clusters = [event for event in compiled if event["signal_type"] == "insider_cluster"]
     assert len(clusters) == 0
+
+
+def test_repeated_transactions_from_one_insider_do_not_create_cluster():
+    events = []
+    for index in range(6):
+        events.append(
+            {
+                "id": f"repeat-{index}",
+                "source": "insider",
+                "signal_type": "insider_trade",
+                "source_document_id": f"repeat-accession-{index}::RPT",
+                "ticker": "RPT",
+                "actor_name": "Same Insider",
+                "actor_type": "insider",
+                "direction": "sell",
+                "occurred_at": f"2026-05-{10 + index:02d}",
+                "published_at": f"2026-05-{10 + index:02d}",
+                "importance_score": 0.84,
+                "title": "Insider trade",
+                "summary": "Repeated sale",
+                "source_url": f"https://example.com/repeat-{index}",
+                "payload": {
+                    "filer_name": "Same Insider",
+                    "transaction_date": f"2026-05-{10 + index:02d}",
+                    "transaction_code": "S",
+                    "amount": 1000 + index,
+                    "price": 10,
+                    "value": 10000 + index,
+                },
+                "created_at": f"2026-05-{10 + index:02d}T20:00:00+00:00",
+            }
+        )
+
+    compiled = compile_notification_events(events, insider_cluster_window_days=10)
+    assert [event for event in compiled if event["signal_type"] == "insider_cluster"] == []
 
 
 def test_related_form4_reporting_owners_do_not_inflate_insider_cluster():
@@ -920,8 +1005,10 @@ def main():
     test_actor_filing_summary_created()
     test_cross_source_accumulation_event_created()
     test_cross_source_accumulation_allows_congress_fund_alignment()
+    test_cross_source_counts_distinct_actors_not_transactions()
     test_cross_source_distribution_allows_congress_fund_alignment()
     test_insider_cluster_skips_small_two_actor_noise()
+    test_repeated_transactions_from_one_insider_do_not_create_cluster()
     test_related_form4_reporting_owners_do_not_inflate_insider_cluster()
     test_congress_cluster_keeps_older_window_when_latest_ticker_event_is_noise()
     test_insider_cluster_keeps_older_material_window_when_latest_ticker_event_is_noise()

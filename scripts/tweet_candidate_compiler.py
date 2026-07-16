@@ -506,12 +506,12 @@ def build_insider_cluster_candidate(event: dict) -> dict | None:
     direction_word = "buying" if direction == "buy" else "selling"
     window_start = str(payload.get("cluster_window_start") or event.get("published_at") or "").strip()[:10]
     title = f"Insider cluster on {ticker}"
-    rationale = f"{actor_count} unique insider economic groups reported {direction_word} in {ticker} within {window_days} days."
+    rationale = f"{actor_count} distinct insiders reported {direction_word} in {ticker} within {window_days} days."
     draft = truncate_tweet(
         "\n".join(
             line
             for line in [
-                f"Insider cluster: {actor_count} unique economic groups reported {ticker} {direction_word} within {window_days} days.",
+                f"Insider cluster: {actor_count} distinct insiders reported {ticker} {direction_word} within {window_days} days.",
                 f"Actors: {comma_names(actor_labels)}" if actor_labels else "",
                 f"Estimated total value: {total_value_label}" if total_value_label else "",
                 f"Latest filing: {filed_label}" if filed_label else "",
@@ -1599,20 +1599,30 @@ def build_insider_cluster_candidates(
                     distinct_economic_groups[signature] = event
                 max_score = max(max_score, float(event.get("importance_score") or 0))
 
-            if len(distinct_economic_groups) < INSIDER_CLUSTER_MIN_MEMBERS:
+            distinct_events = list(distinct_economic_groups.values())
+            actor_events: dict[str, dict] = {}
+            for event in distinct_events:
+                actor_name = str(event.get("actor_name") or "").strip()
+                actor_key = actor_name.casefold()
+                if not actor_key:
+                    continue
+                existing = actor_events.get(actor_key)
+                if existing is None or float(event.get("importance_score") or 0) > float(existing.get("importance_score") or 0):
+                    actor_events[actor_key] = event
+
+            if len(actor_events) < INSIDER_CLUSTER_MIN_MEMBERS:
                 continue
 
-            distinct_events = list(distinct_economic_groups.values())
             total_value = sum(insider_cluster_event_value(event) for event in distinct_events)
             actor_names = sorted(
                 str(event.get("actor_name") or "").strip()
-                for event in distinct_events
+                for event in actor_events.values()
                 if str(event.get("actor_name") or "").strip()
             )
             actor_rows = [
                 {
                     "name": name,
-                    "relation": insider_relation(next(event for event in distinct_events if str(event.get("actor_name") or "").strip() == name)),
+                    "relation": insider_relation(next(event for event in actor_events.values() if str(event.get("actor_name") or "").strip() == name)),
                 }
                 for name in actor_names
             ]
@@ -1625,13 +1635,13 @@ def build_insider_cluster_candidates(
             direction_word = "buying" if direction == "buy" else "selling"
             value_label = f"${total_value:,.0f}" if total_value else None
             title = f"Insider cluster on {ticker}"
-            economic_group_count = len(actor_names)
-            rationale = f"{economic_group_count} unique insider economic groups reported {direction_word} in {ticker} within {window_days} days."
+            distinct_actor_count = len(actor_names)
+            rationale = f"{distinct_actor_count} distinct insiders reported {direction_word} in {ticker} within {window_days} days."
             draft = truncate_tweet(
                 "\n".join(
                     line
                     for line in [
-                        f"Insider cluster: {economic_group_count} unique economic groups reported {ticker} {direction_word} within {window_days} days.",
+                        f"Insider cluster: {distinct_actor_count} distinct insiders reported {ticker} {direction_word} within {window_days} days.",
                         f"Actors: {comma_names(actor_labels)}" if actor_labels else "",
                         f"Estimated total value: {value_label}" if value_label else "",
                         f"Latest filing: {short_date(latest_date)}" if latest_date else "",
@@ -1659,7 +1669,7 @@ def build_insider_cluster_candidates(
                 "rule_key": "insider_cluster",
                 "signal_event_id": representative["id"],
                 "status": "pending_review",
-                "score": insider_cluster_score(max_score, total_value, len(actor_names)),
+                "score": insider_cluster_score(max_score, total_value, distinct_actor_count),
                 "title": title,
                 "draft_text": draft,
                 "rationale": rationale,
@@ -1668,8 +1678,8 @@ def build_insider_cluster_candidates(
                     "broadcast_category": candidate_category("insider_cluster"),
                     "ticker": ticker,
                     "direction": direction,
-                    "cluster_actor_count": economic_group_count,
-                    "cluster_economic_transaction_count": economic_group_count,
+                    "cluster_actor_count": distinct_actor_count,
+                    "cluster_economic_transaction_count": len(distinct_events),
                     "cluster_window_days": window_days,
                     "cluster_actors": actor_rows,
                     "cluster_event_ids": [str(event["id"]) for event in distinct_events],

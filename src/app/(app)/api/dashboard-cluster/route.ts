@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 
 import { requireClusterAccess } from '@/lib/account-server';
 import { getDashboardClusterDetail } from '@/lib/dashboard-cluster-detail';
@@ -7,6 +8,15 @@ import { ApiRouteError, requireApiUser } from '@/lib/auth-server';
 import { PUBLIC_BROADCAST_STORY_STATUSES } from '@/lib/tweet-candidates';
 
 export const dynamic = 'force-dynamic';
+
+const getCachedDashboardClusterDetail = unstable_cache(
+  (candidateKey: string) =>
+    getDashboardClusterDetail(candidateKey, {
+      statuses: PUBLIC_BROADCAST_STORY_STATUSES,
+    }),
+  ['dashboard-cluster-detail-v1'],
+  { revalidate: 5 * 60 },
+);
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -19,9 +29,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireApiUser(request);
     await requireClusterAccess(user);
-    const detail = await getDashboardClusterDetail(candidateKey, {
-      statuses: PUBLIC_BROADCAST_STORY_STATUSES,
-    });
+    const detail = await getCachedDashboardClusterDetail(candidateKey);
     if (!detail) {
       return NextResponse.json({ error: 'Cluster not found.' }, { status: 404 });
     }

@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
-const CLUSTER_FEED_CACHE_VERSION = 'v5';
+const CLUSTER_FEED_CACHE_VERSION = 'v8';
 const CLUSTER_FEED_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 
 let clusterAuthSessionCache: Session | null = null;
@@ -219,6 +219,8 @@ export default function ClusterAccessGate() {
       if (cachedClusters) {
         setSignals(cachedClusters);
         setLoadState('ready');
+        setError('');
+        return;
       } else {
         setLoadState('loading-clusters');
       }

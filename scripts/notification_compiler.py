@@ -605,9 +605,9 @@ def build_cross_source_accumulation_event(
     fund_window_days: int,
     window_start: date,
 ) -> dict:
-    congress_actor_rows = [cluster_actor_row(event) for event in congress_events]
-    insider_actor_rows = [cluster_actor_row(event) for event in insider_events]
-    fund_actor_rows = [cluster_actor_row(event) for event in fund_events]
+    congress_actor_rows = [cluster_actor_row(event) for event in unique_actor_events(congress_events)]
+    insider_actor_rows = [cluster_actor_row(event) for event in unique_actor_events(insider_events)]
+    fund_actor_rows = [cluster_actor_row(event) for event in unique_actor_events(fund_events)]
     all_actor_rows = congress_actor_rows + insider_actor_rows + fund_actor_rows
     actor_names = [str(row.get("name") or "").strip() for row in all_actor_rows if str(row.get("name") or "").strip()]
 
@@ -731,7 +731,7 @@ def compile_cross_source_accumulation_events(
             )
             fund_events = events_in_published_window(grouped["hedge_fund"], window_end, fund_window_days)
             congress_actors = distinct_actor_keys(congress_events)
-            insider_actors = {":".join(insider_economic_signature(event)) for event in insider_events}
+            insider_actors = distinct_actor_keys(insider_events)
             fund_actors = distinct_actor_keys(fund_events)
             source_family_count = sum(1 for actors in (congress_actors, insider_actors, fund_actors) if actors)
 
@@ -768,9 +768,9 @@ def build_cross_source_sell_event(
     fund_window_days: int,
     window_start: date,
 ) -> dict:
-    congress_actor_rows = [cluster_actor_row(event) for event in congress_events]
-    insider_actor_rows = [cluster_actor_row(event) for event in insider_events]
-    fund_actor_rows = [cluster_actor_row(event) for event in fund_events]
+    congress_actor_rows = [cluster_actor_row(event) for event in unique_actor_events(congress_events)]
+    insider_actor_rows = [cluster_actor_row(event) for event in unique_actor_events(insider_events)]
+    fund_actor_rows = [cluster_actor_row(event) for event in unique_actor_events(fund_events)]
     all_actor_rows = congress_actor_rows + insider_actor_rows + fund_actor_rows
     actor_names = [str(row.get("name") or "").strip() for row in all_actor_rows if str(row.get("name") or "").strip()]
 
@@ -890,7 +890,7 @@ def compile_cross_source_sell_events(
             )
             fund_events = events_in_published_window(grouped["hedge_fund"], window_end, fund_window_days)
             congress_actors = distinct_actor_keys(congress_events)
-            insider_actors = {":".join(insider_economic_signature(event)) for event in insider_events}
+            insider_actors = distinct_actor_keys(insider_events)
             fund_actors = distinct_actor_keys(fund_events)
             source_family_count = sum(1 for actors in (congress_actors, insider_actors, fund_actors) if actors)
 
@@ -926,34 +926,35 @@ def build_insider_cluster_event(
     window_start: date,
 ) -> dict:
     economic_events = unique_insider_economic_events(events)
-    actor_rows = []
-    economic_signatures: set[str] = set()
+    actor_rows_by_key: dict[str, dict] = {}
     for event in sorted(economic_events, key=lambda row: (row.get("published_at") or "", row.get("actor_name") or "")):
-        signature = ":".join(insider_economic_signature(event))
-        if not signature or signature in economic_signatures:
+        actor_key = actor_match_key(event)
+        if not actor_key:
             continue
-        economic_signatures.add(signature)
         payload = event.get("payload") or {}
-        actor_rows.append(
+        actor_row = actor_rows_by_key.setdefault(
+            actor_key,
             {
                 "name": event.get("actor_name"),
                 "relation": str(payload.get("filer_relation") or "").strip(),
-                "value": event_amount_floor(event),
+                "value": 0,
                 "published_at": event.get("published_at"),
                 "source_document_id": event.get("source_document_id"),
-                "economic_signature": signature,
-            }
+            },
         )
+        actor_row["value"] = float(actor_row.get("value") or 0) + event_amount_floor(event)
+
+    actor_rows = list(actor_rows_by_key.values())
 
     latest_published = latest_signal_date(events)
     created_at = max((event.get("created_at") for event in events if event.get("created_at")), default=None)
     actor_names = [row["name"] for row in actor_rows if row.get("name")]
     reporting_actor_count = len(distinct_actor_keys(events))
-    actor_count = len(economic_signatures)
-    total_value = sum(row.get("value") or 0 for row in actor_rows)
+    actor_count = len(actor_rows)
+    total_value = sum(event_amount_floor(event) for event in economic_events)
 
-    title = f"Insider cluster: {actor_count} economic {direction} group{'s' if actor_count != 1 else ''} in {ticker}"
-    summary = f"{actor_count} unique insider economic {direction} group{'s' if actor_count != 1 else ''} appeared in {ticker} within {window_days} days: {', '.join(actor_names[:5])}."
+    title = f"Insider cluster: {actor_count} insider{'s' if actor_count != 1 else ''} {direction}ing {ticker}"
+    summary = f"{actor_count} distinct insiders reported {direction}ing {ticker} within {window_days} days: {', '.join(actor_names[:5])}."
     importance = round(min(0.99, 0.82 + min(0.12, 0.04 * max(actor_count - 2, 0))), 2)
 
     payload = {
@@ -970,7 +971,7 @@ def build_insider_cluster_event(
         "cluster_total_value": total_value,
         "cluster_event_ids": [event["id"] for event in economic_events],
         "cluster_raw_event_ids": [event["id"] for event in events],
-        "cluster_economic_transaction_count": actor_count,
+        "cluster_economic_transaction_count": len(economic_events),
         "cluster_reporting_actor_count": reporting_actor_count,
         "cluster_deduped_related_form4s": reporting_actor_count > actor_count,
     }
@@ -1021,8 +1022,8 @@ def compile_insider_cluster_events(
     for (ticker, direction), events in buckets.items():
         for window_start, window_events in non_overlapping_published_windows(events, window_days):
             economic_events = unique_insider_economic_events(window_events)
-            economic_keys = {":".join(insider_economic_signature(event)) for event in economic_events}
-            if len(economic_keys) < required_members:
+            actor_keys = distinct_actor_keys(economic_events)
+            if len(actor_keys) < required_members:
                 continue
             cluster_candidates.append(
                 build_insider_cluster_event(
