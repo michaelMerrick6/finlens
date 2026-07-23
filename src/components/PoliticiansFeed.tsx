@@ -198,6 +198,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
   const [directionFilter, setDirectionFilter] = useState<(typeof DIRECTION_OPTIONS)[number]['value']>('All');
   const [isSearching, setIsSearching] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [loadMoreError, setLoadMoreError] = useState('');
   const [baseHasMore, setBaseHasMore] = useState(initialTrades.length >= PAGE_SIZE);
   const [baseNextOffset, setBaseNextOffset] = useState(initialTrades.length);
   const [filteredHasMore, setFilteredHasMore] = useState(false);
@@ -263,6 +264,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
   }, [baseTrades.length, hasFilters]);
 
   useEffect(() => {
+    setLoadMoreError('');
     if (!hasFilters) {
       setIsSearching(false);
       setFilteredHasMore(false);
@@ -454,6 +456,7 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
     }
 
     setIsLoadingMore(true);
+    setLoadMoreError('');
     try {
       const params = new URLSearchParams();
       if (searchQuery.trim()) params.set('q', searchQuery.trim());
@@ -468,18 +471,20 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
         throw new Error(json.error || 'Failed to load more filings.');
       }
       const nextTrades = (json.trades || []) as Trade[];
+      const nextHasMore = Boolean(json.hasMore) && nextTrades.length > 0;
 
       if (hasFilters) {
         setTrades((current) => appendUniqueTrades(current, nextTrades));
-        setFilteredHasMore(Boolean(json.hasMore));
+        setFilteredHasMore(nextHasMore);
         setFilteredNextOffset(Number(json.nextOffset) || filteredNextOffset + PAGE_SIZE);
       } else {
         setBaseTrades((current) => appendUniqueTrades(current, nextTrades));
-        setBaseHasMore(Boolean(json.hasMore));
+        setBaseHasMore(nextHasMore);
         setBaseNextOffset(Number(json.nextOffset) || baseNextOffset + PAGE_SIZE);
       }
     } catch (error) {
       console.error('Load more politician filings failed:', error);
+      setLoadMoreError(error instanceof Error ? error.message : 'Could not load more filings.');
     } finally {
       setIsLoadingMore(false);
     }
@@ -789,16 +794,23 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
             ) : null}
           </div>
           {hasMore ? (
-            <div className="flex justify-center border-t border-white/[0.06] px-4 py-3">
-              <button
-                type="button"
-                onClick={loadMore}
-                disabled={isLoadingMore}
-                className="inline-flex min-w-36 items-center justify-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium text-zinc-300 transition hover:border-white/[0.14] hover:bg-white/[0.06] hover:text-white disabled:cursor-wait disabled:opacity-60"
-              >
-                {isLoadingMore ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
-                {isLoadingMore ? 'Loading...' : 'Load 20 more'}
-              </button>
+            <div className="border-t border-white/[0.06] px-4 py-3 text-center">
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                  className="inline-flex min-w-36 items-center justify-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium text-zinc-300 transition hover:border-white/[0.14] hover:bg-white/[0.06] hover:text-white disabled:cursor-wait disabled:opacity-60"
+                >
+                  {isLoadingMore ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                  {isLoadingMore ? 'Loading...' : 'Load 20 more'}
+                </button>
+              </div>
+              {loadMoreError ? (
+                <p role="alert" className="mt-2 text-xs text-red-300">
+                  {loadMoreError}
+                </p>
+              ) : null}
             </div>
           ) : null}
         </div>

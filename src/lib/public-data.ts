@@ -1421,6 +1421,8 @@ async function loadPoliticianFeedTrades() {
     .not('ticker', 'in', '("N/A","NA","UNKNOWN","MULTI")')
     .gte('published_date', HOUSE_PRODUCT_START_DATE)
     .order('published_date', { ascending: false })
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: true })
     .limit(INITIAL_POLITICIAN_FEED_LIMIT + POLITICIAN_FEED_SORT_BUFFER);
 
   if (error) {

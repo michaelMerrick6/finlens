@@ -14,8 +14,6 @@ const TRADE_SELECT = `*, congress_members ( first_name, last_name, party, chambe
 const SEARCH_RESULT_LIMIT = 250;
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 50;
-const PAGE_SORT_BUFFER = 80;
-const BROWSE_RESULT_LIMIT = 1000;
 const MAX_SEARCH_LENGTH = 100;
 const VALID_CHAMBERS = new Set(['All', 'House', 'Senate']);
 const VALID_DIRECTIONS = new Set(['All', 'buy', 'sell']);
@@ -125,22 +123,27 @@ export async function GET(request: NextRequest) {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {
-    const fetchLimit = Math.min(offset + limit + PAGE_SORT_BUFFER, BROWSE_RESULT_LIMIT);
     const baseQuery = applyDisplayTradeScope(
       supabase
         .from('politician_trades')
         .select(TRADE_SELECT)
         .gte('published_date', HOUSE_PRODUCT_START_DATE)
         .order('published_date', { ascending: false })
-        .limit(fetchLimit),
+        .order('created_at', { ascending: false })
+        .order('id', { ascending: true })
+        .range(offset, offset + limit),
     );
 
     const { data, error } = await applyTradeFilters(baseQuery, chamber, direction);
     if (error) {
       return NextResponse.json({ trades: [], error: routeErrorMessage(error, 'Failed to load trades.', 'search-trades') }, { status: 500 });
     }
-    const trades = sortTrades(filterDisplayPoliticianTrades((data || []) as TradeRow[]), new Map(), new Map());
-    return pageResponse(trades, offset, limit, trades.length === fetchLimit && fetchLimit < BROWSE_RESULT_LIMIT);
+    const trades = filterDisplayPoliticianTrades((data || []) as TradeRow[]);
+    return NextResponse.json({
+      trades: trades.slice(0, limit),
+      hasMore: trades.length > limit,
+      nextOffset: offset + Math.min(limit, trades.length),
+    });
   }
 
   try {
@@ -167,6 +170,8 @@ export async function GET(request: NextRequest) {
               .select(TRADE_SELECT)
               .in('ticker', tickers)
               .order('published_date', { ascending: false })
+              .order('created_at', { ascending: false })
+              .order('id', { ascending: true })
               .limit(searchFetchLimit),
           ),
           chamber,
@@ -184,6 +189,8 @@ export async function GET(request: NextRequest) {
               .select(TRADE_SELECT)
               .in('member_id', memberIds)
               .order('published_date', { ascending: false })
+              .order('created_at', { ascending: false })
+              .order('id', { ascending: true })
               .limit(searchFetchLimit),
           ),
           chamber,
@@ -201,6 +208,8 @@ export async function GET(request: NextRequest) {
               .select(TRADE_SELECT)
               .or(`politician_name.ilike.%${sanitizedQuery}%,ticker.ilike.%${sanitizedQuery}%`)
               .order('published_date', { ascending: false })
+              .order('created_at', { ascending: false })
+              .order('id', { ascending: true })
               .limit(searchFetchLimit),
           ),
           chamber,
