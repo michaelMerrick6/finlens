@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      { error: routeErrorMessage(error, 'Failed to load the Congress cluster calendar.', 'congress-cluster-calendar') },
+      { error: routeErrorMessage(error, 'Failed to load Congress accumulation.', 'congress-cluster-calendar') },
       { status: 500 },
     );
   }

@@ -33,7 +33,7 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Clusters',
     children: [
       { href: '/clusters', label: 'High-Conviction Feed', desc: 'Coordinated moves across every source' },
-      { href: '/clusters/congress', label: 'Congress Calendar', desc: 'Top congressional buying by time period' },
+      { href: '/clusters/congress', label: 'Congress Accumulation', desc: 'Where lawmakers are concentrating their buys' },
     ],
   },
   { href: '/alerts', label: 'Alerts' },

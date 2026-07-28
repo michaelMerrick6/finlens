@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 
 import CongressClusterCalendar from '@/components/CongressClusterCalendar';
@@ -14,29 +14,57 @@ import { supabase } from '@/lib/supabase';
 type GateState = 'loading-session' | 'signed-out' | 'loading-data' | 'ready' | 'free' | 'error';
 
 const CACHE_MAX_AGE_MS = 5 * 60 * 1000;
+const CACHE_REVALIDATE_AFTER_MS = 2 * 60 * 1000;
+const CACHE_VERSION = 'v2';
 const calendarCache = new Map<string, { data: CongressClusterCalendarData; cachedAt: number }>();
 
 function cacheKey(userId: string, range: CongressClusterRange) {
-  return `${userId}:${range}`;
+  return `vail:congress-accumulation:${CACHE_VERSION}:${userId}:${range}`;
 }
 
 function readCache(userId: string, range: CongressClusterRange) {
-  const cached = calendarCache.get(cacheKey(userId, range));
-  return cached && Date.now() - cached.cachedAt < CACHE_MAX_AGE_MS ? cached.data : null;
+  const key = cacheKey(userId, range);
+  const memoryValue = calendarCache.get(key);
+  if (memoryValue && Date.now() - memoryValue.cachedAt < CACHE_MAX_AGE_MS) {
+    return memoryValue;
+  }
+
+  try {
+    const raw = window.sessionStorage.getItem(key);
+    if (!raw) return null;
+    const stored = JSON.parse(raw) as { data?: CongressClusterCalendarData; cachedAt?: number };
+    if (!stored.data || !stored.cachedAt || Date.now() - stored.cachedAt >= CACHE_MAX_AGE_MS) {
+      window.sessionStorage.removeItem(key);
+      return null;
+    }
+    const cached = { data: stored.data, cachedAt: stored.cachedAt };
+    calendarCache.set(key, cached);
+    return cached;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(userId: string, range: CongressClusterRange, data: CongressClusterCalendarData) {
+  const key = cacheKey(userId, range);
+  const cached = { data, cachedAt: Date.now() };
+  calendarCache.set(key, cached);
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify(cached));
+  } catch {
+    // The in-memory cache still provides instant same-session navigation.
+  }
 }
 
 function CalendarLoadingState() {
   return (
-    <div className="space-y-4">
-      <div className="h-40 animate-pulse rounded-3xl border border-white/[0.06] bg-white/[0.02]" />
-      <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="h-24 animate-pulse rounded-2xl border border-white/[0.05] bg-white/[0.015]" />
+    <div className="mx-auto max-w-[980px] space-y-5">
+      <div className="h-24 animate-pulse border-b border-white/[0.06] bg-white/[0.01]" />
+      <div className="h-44 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.018]" />
+      <div className="overflow-hidden rounded-2xl border border-white/[0.06]">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div key={index} className="h-[70px] animate-pulse border-b border-white/[0.045] bg-white/[0.012] last:border-0" />
         ))}
-      </div>
-      <div className="grid gap-4 xl:grid-cols-2">
-        <div className="h-[440px] animate-pulse rounded-2xl border border-white/[0.05] bg-white/[0.015]" />
-        <div className="h-[440px] animate-pulse rounded-2xl border border-white/[0.05] bg-white/[0.015]" />
       </div>
     </div>
   );
@@ -49,6 +77,11 @@ export default function CongressClusterCalendarGate() {
   const [state, setState] = useState<GateState>('loading-session');
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
+  const dataRef = useRef<CongressClusterCalendarData | null>(null);
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   useEffect(() => {
     let mounted = true;
@@ -73,15 +106,16 @@ export default function CongressClusterCalendarGate() {
 
     const cached = readCache(session.user.id, range);
     if (cached) {
-      setData(cached);
+      setData(cached.data);
       setState('ready');
       setError('');
-      return;
+      if (Date.now() - cached.cachedAt < CACHE_REVALIDATE_AFTER_MS) return;
     }
 
     const controller = new AbortController();
     let cancelled = false;
-    if (data) {
+    const currentData = cached?.data || dataRef.current;
+    if (currentData) {
       setRefreshing(true);
     } else {
       setState('loading-data');
@@ -105,18 +139,18 @@ export default function CongressClusterCalendarGate() {
             if (!cancelled) setState('free');
             return;
           }
-          throw new Error(payload.error || 'Could not load the Congress cluster calendar.');
+          throw new Error(payload.error || 'Could not load Congress accumulation.');
         }
 
         if (!cancelled) {
-          calendarCache.set(cacheKey(session.user.id, range), { data: payload, cachedAt: Date.now() });
+          writeCache(session.user.id, range, payload);
           setData(payload);
           setState('ready');
         }
       } catch (value) {
         if (cancelled || (value instanceof Error && value.name === 'AbortError')) return;
-        const message = value instanceof Error ? value.message : 'Could not load the Congress cluster calendar.';
-        if (data) {
+        const message = value instanceof Error ? value.message : 'Could not load Congress accumulation.';
+        if (currentData) {
           setError(message);
           setState('ready');
         } else {
@@ -132,7 +166,7 @@ export default function CongressClusterCalendarGate() {
       cancelled = true;
       controller.abort();
     };
-  }, [data, range, session]);
+  }, [range, session]);
 
   if (state === 'signed-out') return <ProClusterGateCard mode="signed-out" />;
   if (state === 'free') return <ProClusterGateCard mode="free" />;

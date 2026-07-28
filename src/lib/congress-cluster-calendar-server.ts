@@ -4,7 +4,6 @@ import { unstable_cache } from 'next/cache';
 
 import type {
   CongressClusterCalendarData,
-  CongressClusterDay,
   CongressClusterPlay,
   CongressClusterRange,
 } from '@/lib/congress-cluster-calendar-types';
@@ -18,6 +17,7 @@ const RANGE_DAYS: Record<CongressClusterRange, number> = {
   year: 365,
 };
 const PAGE_SIZE = 1_000;
+const PAGE_CONCURRENCY = 4;
 const MAX_ROWS = 20_000;
 const MIN_CLUSTER_ACTORS = 2;
 const HIGH_CONVICTION_ACTORS = 4;
@@ -28,26 +28,17 @@ type CongressBuyRow = {
   politician_name: string | null;
   ticker: string | null;
   asset_name: string | null;
-  transaction_type: string | null;
   amount_range: string | null;
   published_date: string | null;
-  transaction_date: string | null;
 };
 
 type MutablePlay = {
   ticker: string;
   companyNames: Map<string, number>;
-  actors: Map<string, string>;
+  actors: Set<string>;
   tradeCount: number;
   amountFloor: number;
   latestDisclosureDate: string;
-};
-
-type MutableDay = {
-  actors: Set<string>;
-  tickers: Map<string, { actors: Set<string>; tradeCount: number }>;
-  tradeCount: number;
-  amountFloor: number;
 };
 
 function toIsoDate(date: Date) {
@@ -79,13 +70,10 @@ function rangeDates(range: CongressClusterRange) {
   };
 }
 
-function actorIdentity(row: CongressBuyRow) {
+function actorKey(row: CongressBuyRow) {
   const memberId = String(row.member_id || '').trim().toLowerCase();
   const politicianName = String(row.politician_name || '').replace(/[,\s]+$/g, '').trim();
-  return {
-    key: memberId || politicianName.toLowerCase(),
-    name: politicianName || 'Member of Congress',
-  };
+  return memberId || politicianName.toLowerCase();
 }
 
 function normalizedCompanyName(row: CongressBuyRow) {
@@ -114,9 +102,8 @@ function preferredCompanyName(names: Map<string, number>) {
 
 async function loadCongressBuys(rangeStart: string, rangeEnd: string): Promise<CongressBuyRow[]> {
   const supabase = getPublicSupabase();
-  const rows: CongressBuyRow[] = [];
 
-  for (let offset = 0; offset < MAX_ROWS; offset += PAGE_SIZE) {
+  async function loadPage(offset: number) {
     const { data, error } = await supabase
       .from('politician_trades')
       .select(`
@@ -125,10 +112,8 @@ async function loadCongressBuys(rangeStart: string, rangeEnd: string): Promise<C
         politician_name,
         ticker,
         asset_name,
-        transaction_type,
         amount_range,
-        published_date,
-        transaction_date
+        published_date
       `)
       .gte('published_date', rangeStart)
       .lte('published_date', rangeEnd)
@@ -144,24 +129,30 @@ async function loadCongressBuys(rangeStart: string, rangeEnd: string): Promise<C
       throw new Error(error.message);
     }
 
-    const page = (data || []) as CongressBuyRow[];
-    rows.push(...page);
-    if (page.length < PAGE_SIZE) {
-      break;
-    }
+    return (data || []) as CongressBuyRow[];
+  }
+
+  const rows = await loadPage(0);
+  if (rows.length < PAGE_SIZE) return rows;
+
+  for (let offset = PAGE_SIZE; offset < MAX_ROWS; offset += PAGE_SIZE * PAGE_CONCURRENCY) {
+    const offsets = Array.from(
+      { length: PAGE_CONCURRENCY },
+      (_, index) => offset + index * PAGE_SIZE,
+    ).filter((pageOffset) => pageOffset < MAX_ROWS);
+    const pages = await Promise.all(offsets.map(loadPage));
+    pages.forEach((page) => rows.push(...page));
+    if (pages.some((page) => page.length < PAGE_SIZE)) break;
   }
 
   return rows;
 }
 
-function buildCalendarData(
+function buildAccumulationData(
   range: CongressClusterRange,
-  rangeStart: string,
-  rangeEnd: string,
   rows: CongressBuyRow[],
 ): CongressClusterCalendarData {
   const plays = new Map<string, MutablePlay>();
-  const daily = new Map<string, MutableDay>();
   const allActors = new Set<string>();
   const allTickers = new Set<string>();
   let processedTradeCount = 0;
@@ -170,8 +161,8 @@ function buildCalendarData(
   for (const row of rows) {
     const ticker = String(row.ticker || '').trim().toUpperCase();
     const publishedDate = String(row.published_date || '').slice(0, 10);
-    const actor = actorIdentity(row);
-    if (!ticker || !publishedDate || !actor.key) {
+    const politicianKey = actorKey(row);
+    if (!ticker || !publishedDate || !politicianKey) {
       continue;
     }
 
@@ -180,12 +171,12 @@ function buildCalendarData(
     const play = plays.get(ticker) || {
       ticker,
       companyNames: new Map<string, number>(),
-      actors: new Map<string, string>(),
+      actors: new Set<string>(),
       tradeCount: 0,
       amountFloor: 0,
       latestDisclosureDate: publishedDate,
     };
-    play.actors.set(actor.key, actor.name);
+    play.actors.add(politicianKey);
     play.tradeCount += 1;
     play.amountFloor += amountFloor;
     play.latestDisclosureDate =
@@ -195,29 +186,17 @@ function buildCalendarData(
     }
     plays.set(ticker, play);
 
-    const day = daily.get(publishedDate) || {
-      actors: new Set<string>(),
-      tickers: new Map<string, { actors: Set<string>; tradeCount: number }>(),
-      tradeCount: 0,
-      amountFloor: 0,
-    };
-    day.actors.add(actor.key);
-    const dayTicker = day.tickers.get(ticker) || { actors: new Set<string>(), tradeCount: 0 };
-    dayTicker.actors.add(actor.key);
-    dayTicker.tradeCount += 1;
-    day.tickers.set(ticker, dayTicker);
-    day.tradeCount += 1;
-    day.amountFloor += amountFloor;
-    daily.set(publishedDate, day);
-
-    allActors.add(actor.key);
+    allActors.add(politicianKey);
     allTickers.add(ticker);
     processedTradeCount += 1;
     totalAmountFloor += amountFloor;
   }
 
-  const topClusters: CongressClusterPlay[] = [...plays.values()]
-    .filter((play) => play.actors.size >= MIN_CLUSTER_ACTORS)
+  const qualifyingPlays = [...plays.values()].filter(
+    (play) => play.actors.size >= MIN_CLUSTER_ACTORS,
+  );
+
+  const topClusters: CongressClusterPlay[] = qualifyingPlays
     .sort((left, right) => {
       if (right.actors.size !== left.actors.size) return right.actors.size - left.actors.size;
       if (right.amountFloor !== left.amountFloor) return right.amountFloor - left.amountFloor;
@@ -229,48 +208,22 @@ function buildCalendarData(
       ticker: play.ticker,
       companyName: preferredCompanyName(play.companyNames),
       actorCount: play.actors.size,
+      lawmakersSharePct: allActors.size
+        ? Math.round((play.actors.size / allActors.size) * 100)
+        : 0,
       tradeCount: play.tradeCount,
       amountFloor: play.amountFloor,
       latestDisclosureDate: play.latestDisclosureDate,
-      politicianNames: [...play.actors.values()].sort().slice(0, 4),
       conviction: play.actors.size >= HIGH_CONVICTION_ACTORS ? 'high' : 'building',
     }));
 
-  const days: CongressClusterDay[] = [];
-  for (let date = rangeStart; date <= rangeEnd; date = addUtcDays(date, 1)) {
-    const value = daily.get(date);
-    const coordinatedTickers = value
-      ? [...value.tickers.entries()].filter(([, ticker]) => ticker.actors.size >= MIN_CLUSTER_ACTORS)
-      : [];
-    const topTicker = coordinatedTickers.length
-      ? coordinatedTickers
-          .sort((left, right) =>
-            right[1].actors.size - left[1].actors.size ||
-            right[1].tradeCount - left[1].tradeCount ||
-            left[0].localeCompare(right[0])
-          )[0]?.[0] || null
-      : null;
-    days.push({
-      date,
-      actorCount: value?.actors.size || 0,
-      clusterCount: coordinatedTickers.length,
-      tradeCount: value?.tradeCount || 0,
-      tickerCount: value?.tickers.size || 0,
-      amountFloor: value?.amountFloor || 0,
-      topTicker,
-    });
-  }
-
   return {
     range,
-    rangeStart,
-    rangeEnd,
     latestDisclosureDate: rows[0]?.published_date?.slice(0, 10) || null,
-    generatedAt: new Date().toISOString(),
     topClusters,
-    days,
     totals: {
       actorCount: allActors.size,
+      clusterCount: qualifyingPlays.length,
       tradeCount: processedTradeCount,
       tickerCount: allTickers.size,
       amountFloor: totalAmountFloor,
@@ -282,9 +235,9 @@ const loadCachedCongressClusterCalendar = unstable_cache(
   async (range: CongressClusterRange) => {
     const { rangeStart, rangeEnd } = rangeDates(range);
     const rows = await loadCongressBuys(rangeStart, rangeEnd);
-    return buildCalendarData(range, rangeStart, rangeEnd, rows);
+    return buildAccumulationData(range, rows);
   },
-  ['congress-cluster-calendar-v4'],
+  ['congress-cluster-accumulation-v2'],
   { revalidate: 2 * 60 },
 );
 
