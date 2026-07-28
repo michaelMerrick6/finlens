@@ -51,6 +51,7 @@ function VailMark() {
           alt=""
           width={36}
           height={36}
+          priority
           className="relative h-9 w-9 object-contain drop-shadow-[0_5px_12px_rgba(0,0,0,0.5)] transition duration-300 group-hover:brightness-125 group-hover:saturate-150 group-hover:drop-shadow-[0_0_16px_rgba(52,211,153,0.65)]"
         />
       </div>
