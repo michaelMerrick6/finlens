@@ -2,7 +2,7 @@
 
 import Image, { type ImageLoaderProps } from 'next/image';
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
-import { ChevronRight, Search, ShieldCheck } from 'lucide-react';
+import { ChevronRight, Loader2, Search, ShieldCheck } from 'lucide-react';
 
 import DashboardClusterModal from '@/components/DashboardClusterModal';
 import {
@@ -43,7 +43,7 @@ export type ClusterSignal = {
 
 type DirectionFilter = 'all' | 'buy' | 'sell';
 
-const CLUSTERS_PER_PAGE = 12;
+const CLUSTERS_PER_PAGE = 20;
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
 const clusterDetailCache = new Map<string, DashboardClusterDetail>();
 const clusterDetailRequests = new Map<string, Promise<DashboardClusterDetail>>();
@@ -160,7 +160,21 @@ function evidenceTone(key: ReturnType<typeof clusterEvidenceItems>[number]['key'
   return 'border-white/[0.07] bg-white/[0.025] text-zinc-500';
 }
 
-export default function ClustersPage({ signals, accessToken }: { signals: ClusterSignal[]; accessToken?: string }) {
+export default function ClustersPage({
+  signals,
+  accessToken,
+  archiveLoaded,
+  loadingMore,
+  loadMoreError,
+  onLoadMore,
+}: {
+  signals: ClusterSignal[];
+  accessToken?: string;
+  archiveLoaded: boolean;
+  loadingMore: boolean;
+  loadMoreError: string;
+  onLoadMore: () => Promise<void>;
+}) {
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
   const [directionFilter, setDirectionFilter] = useState<DirectionFilter>('all');
@@ -194,6 +208,7 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
   }, [curatedSignals, deferredSearchQuery, directionFilter]);
 
   const visibleSignals = filteredSignals.slice(0, visibleCount);
+  const hasMoreVisibleSignals = visibleSignals.length < filteredSignals.length;
 
   useEffect(() => {
     if (!selectedCluster) return;
@@ -238,6 +253,18 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
   function setDirection(direction: DirectionFilter) {
     setDirectionFilter(direction);
     setVisibleCount(CLUSTERS_PER_PAGE);
+  }
+
+  async function loadMoreSignals() {
+    if (hasMoreVisibleSignals) {
+      setVisibleCount((count) => count + CLUSTERS_PER_PAGE);
+      return;
+    }
+
+    if (!archiveLoaded) {
+      await onLoadMore();
+      setVisibleCount((count) => count + CLUSTERS_PER_PAGE);
+    }
   }
 
   return (
@@ -371,14 +398,25 @@ export default function ClustersPage({ signals, accessToken }: { signals: Cluste
           </div>
         )}
 
-        {visibleSignals.length < filteredSignals.length ? (
+        {hasMoreVisibleSignals || !archiveLoaded ? (
           <button
             type="button"
-            onClick={() => setVisibleCount((count) => count + CLUSTERS_PER_PAGE)}
-            className="rounded-xl border border-white/[0.08] bg-white/[0.018] px-4 py-2.5 text-xs font-medium text-zinc-400 transition hover:border-white/[0.14] hover:bg-white/[0.035] hover:text-white"
+            onClick={loadMoreSignals}
+            disabled={loadingMore}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.018] px-4 py-2.5 text-xs font-medium text-zinc-400 transition hover:border-white/[0.14] hover:bg-white/[0.035] hover:text-white disabled:cursor-wait disabled:opacity-60"
           >
-            Show more
+            {loadingMore ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+            {loadingMore
+              ? 'Loading older clusters…'
+              : hasMoreVisibleSignals
+                ? `Load ${Math.min(CLUSTERS_PER_PAGE, filteredSignals.length - visibleSignals.length)} more`
+                : 'Load older clusters'}
           </button>
+        ) : null}
+        {loadMoreError ? (
+          <p role="alert" className="text-xs text-red-300">
+            {loadMoreError}
+          </p>
         ) : null}
       </div>
 

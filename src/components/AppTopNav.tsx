@@ -28,7 +28,14 @@ const NAV_ITEMS: NavItem[] = [
       { href: '/hedge-funds', label: 'Hedge Funds', desc: '13F institutional filings' },
     ],
   },
-  { href: '/clusters', label: 'Clusters' },
+  {
+    href: '/clusters',
+    label: 'Clusters',
+    children: [
+      { href: '/clusters', label: 'High-Conviction Feed', desc: 'Coordinated moves across every source' },
+      { href: '/clusters/congress', label: 'Congress Calendar', desc: 'Top congressional buying by time period' },
+    ],
+  },
   { href: '/alerts', label: 'Alerts' },
 ];
 
@@ -55,9 +62,9 @@ function VailMark() {
   );
 }
 
-/* ── Data dropdown menu ────────────────────────── */
+/* ── Navigation dropdown menu ──────────────────── */
 
-function DataDropdown({
+function NavDropdown({
   items,
   open,
   onClose,
@@ -88,6 +95,8 @@ function DataDropdown({
   return (
     <div
       ref={dropdownRef}
+      role="menu"
+      aria-hidden={!open}
       className="nav-dropdown"
       style={{
         opacity: open ? 1 : 0,
@@ -99,6 +108,8 @@ function DataDropdown({
         <Link
           key={item.href}
           href={item.href}
+          role="menuitem"
+          tabIndex={open ? 0 : -1}
           onClick={onClose}
           className="group flex items-start gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 hover:bg-white/[0.04]"
         >
@@ -120,12 +131,14 @@ function DataDropdown({
 
 function NavPills() {
   const pathname = usePathname();
-  const [dataOpen, setDataOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [locationSearch, setLocationSearch] = useState('');
   const pillsRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLElement>>(new Map());
   const dataButtonRef = useRef<HTMLButtonElement>(null);
+  const clustersButtonRef = useRef<HTMLButtonElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -140,6 +153,13 @@ function NavPills() {
       window.removeEventListener('vail-dashboard-location-change', syncSearch);
     };
   }, [pathname]);
+
+  useEffect(
+    () => () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    },
+    [],
+  );
 
   /* Determine which nav item is active */
   function isItemActive(item: NavItem) {
@@ -182,6 +202,19 @@ function NavPills() {
     indicatorRef.current.style.width = `${width}px`;
   }, [pathname, activeItem]);
 
+  function openNavMenu(href: string) {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    setOpenMenu(href);
+  }
+
+  function scheduleMenuClose() {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => setOpenMenu(null), 140);
+  }
+
   return (
     <div className="relative" ref={pillsRef}>
       {/* Sliding holographic indicator */}
@@ -196,28 +229,46 @@ function NavPills() {
           const active = isItemActive(item);
 
           if (item.children) {
+            const triggerRef = item.href === '/clusters' ? clustersButtonRef : dataButtonRef;
+            const menuOpen = openMenu === item.href;
             return (
-              <div key={item.href} className="relative">
+              <div
+                key={item.href}
+                className="relative"
+                onMouseEnter={() => openNavMenu(item.href)}
+                onMouseLeave={scheduleMenuClose}
+                onFocusCapture={() => openNavMenu(item.href)}
+                onBlurCapture={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                    scheduleMenuClose();
+                  }
+                }}
+              >
                 <button
                   ref={(el) => {
-                    dataButtonRef.current = el;
+                    triggerRef.current = el;
                     if (el) itemRefs.current.set(item.href, el);
                   }}
                   type="button"
-                  onClick={() => setDataOpen((v) => !v)}
+                  aria-haspopup="menu"
+                  aria-expanded={menuOpen}
+                  onClick={() => setOpenMenu((current) => current === item.href ? null : item.href)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Escape') setOpenMenu(null);
+                  }}
                   className={`nav-pill-item ${active ? 'nav-pill-active' : ''}`}
                 >
                   {item.label}
                   <ChevronDown
                     className="h-3 w-3 transition-transform duration-200"
-                    style={{ transform: dataOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                    style={{ transform: menuOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
                   />
                 </button>
-                <DataDropdown
+                <NavDropdown
                   items={item.children}
-                  open={dataOpen}
-                  onClose={() => setDataOpen(false)}
-                  triggerRef={dataButtonRef}
+                  open={menuOpen}
+                  onClose={() => setOpenMenu(null)}
+                  triggerRef={triggerRef}
                 />
               </div>
             );

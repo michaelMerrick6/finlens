@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
-const CLUSTER_FEED_CACHE_VERSION = 'v8';
+const CLUSTER_FEED_CACHE_VERSION = 'v9';
 const CLUSTER_FEED_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 
 let clusterAuthSessionCache: Session | null = null;
@@ -18,6 +18,7 @@ let clusterAuthSessionCache: Session | null = null;
 let clusterFeedMemoryCache: {
   userId: string;
   clusters: ClusterSignal[];
+  archiveLoaded: boolean;
   cachedAt: number;
 } | null = null;
 
@@ -34,7 +35,10 @@ function readCachedClusterFeed(userId: string) {
     clusterFeedMemoryCache?.userId === userId &&
     isFreshClusterFeedCache(clusterFeedMemoryCache.cachedAt)
   ) {
-    return clusterFeedMemoryCache.clusters;
+    return {
+      clusters: clusterFeedMemoryCache.clusters,
+      archiveLoaded: clusterFeedMemoryCache.archiveLoaded,
+    };
   }
 
   try {
@@ -43,7 +47,11 @@ function readCachedClusterFeed(userId: string) {
       return null;
     }
 
-    const parsed = JSON.parse(raw) as { clusters?: ClusterSignal[]; cachedAt?: number };
+    const parsed = JSON.parse(raw) as {
+      clusters?: ClusterSignal[];
+      archiveLoaded?: boolean;
+      cachedAt?: number;
+    };
     if (!Array.isArray(parsed.clusters) || !parsed.cachedAt || !isFreshClusterFeedCache(parsed.cachedAt)) {
       return null;
     }
@@ -51,22 +59,26 @@ function readCachedClusterFeed(userId: string) {
     clusterFeedMemoryCache = {
       userId,
       clusters: parsed.clusters,
+      archiveLoaded: Boolean(parsed.archiveLoaded),
       cachedAt: parsed.cachedAt,
     };
-    return parsed.clusters;
+    return {
+      clusters: parsed.clusters,
+      archiveLoaded: Boolean(parsed.archiveLoaded),
+    };
   } catch {
     return null;
   }
 }
 
-function writeCachedClusterFeed(userId: string, clusters: ClusterSignal[]) {
+function writeCachedClusterFeed(userId: string, clusters: ClusterSignal[], archiveLoaded: boolean) {
   const cachedAt = Date.now();
-  clusterFeedMemoryCache = { userId, clusters, cachedAt };
+  clusterFeedMemoryCache = { userId, clusters, archiveLoaded, cachedAt };
 
   try {
     window.sessionStorage.setItem(
       clusterFeedCacheKey(userId),
-      JSON.stringify({ clusters, cachedAt }),
+      JSON.stringify({ clusters, archiveLoaded, cachedAt }),
     );
   } catch {
     // If storage is unavailable, the in-memory cache still speeds up same-session navigation.
@@ -87,21 +99,22 @@ function clearCachedClusterFeed(userId: string) {
 
 function initialClusterGateState() {
   const session = clusterAuthSessionCache;
-  const cachedClusters =
+  const cachedFeed =
     session &&
     clusterFeedMemoryCache?.userId === session.user.id &&
     isFreshClusterFeedCache(clusterFeedMemoryCache.cachedAt)
-      ? clusterFeedMemoryCache.clusters
-      : [];
+      ? clusterFeedMemoryCache
+      : null;
   return {
     session,
     accessToken: session?.access_token || '',
-    signals: cachedClusters,
-    loadState: (cachedClusters.length ? 'ready' : session ? 'loading-account' : 'loading-session') as LoadState,
+    signals: cachedFeed?.clusters || [],
+    archiveLoaded: cachedFeed?.archiveLoaded || false,
+    loadState: (cachedFeed?.clusters.length ? 'ready' : session ? 'loading-account' : 'loading-session') as LoadState,
   };
 }
 
-function ProClusterGateCard({
+export function ProClusterGateCard({
   mode,
   error,
 }: {
@@ -169,6 +182,9 @@ export default function ClusterAccessGate() {
   const [accessToken, setAccessToken] = useState(initialState.accessToken);
   const [loadState, setLoadState] = useState<LoadState>(initialState.loadState);
   const [signals, setSignals] = useState<ClusterSignal[]>(initialState.signals);
+  const [archiveLoaded, setArchiveLoaded] = useState(initialState.archiveLoaded);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [loadMoreError, setLoadMoreError] = useState('');
   const [error, setError] = useState('');
   const userIdRef = useRef(initialState.session?.user.id || '');
 
@@ -187,10 +203,12 @@ export default function ClusterAccessGate() {
       }
 
       userIdRef.current = nextUserId;
-      const cachedClusters = nextSession ? readCachedClusterFeed(nextUserId) : null;
-      setSignals(cachedClusters || []);
+      const cachedFeed = nextSession ? readCachedClusterFeed(nextUserId) : null;
+      setSignals(cachedFeed?.clusters || []);
+      setArchiveLoaded(cachedFeed?.archiveLoaded || false);
+      setLoadMoreError('');
       setError('');
-      setLoadState(cachedClusters ? 'ready' : nextSession ? 'loading-account' : 'signed-out');
+      setLoadState(cachedFeed ? 'ready' : nextSession ? 'loading-account' : 'signed-out');
     }
 
     supabase.auth.getSession().then(({ data }) => applySession(data.session));
@@ -215,9 +233,10 @@ export default function ClusterAccessGate() {
     let cancelled = false;
 
     async function load() {
-      const cachedClusters = readCachedClusterFeed(activeSession.user.id);
-      if (cachedClusters) {
-        setSignals(cachedClusters);
+      const cachedFeed = readCachedClusterFeed(activeSession.user.id);
+      if (cachedFeed) {
+        setSignals(cachedFeed.clusters);
+        setArchiveLoaded(cachedFeed.archiveLoaded);
         setLoadState('ready');
         setError('');
         return;
@@ -252,15 +271,16 @@ export default function ClusterAccessGate() {
 
         if (!cancelled) {
           const nextClusters = clusterPayload.clusters || [];
-          writeCachedClusterFeed(activeSession.user.id, nextClusters);
+          writeCachedClusterFeed(activeSession.user.id, nextClusters, false);
           setSignals(nextClusters);
+          setArchiveLoaded(false);
           setLoadState('ready');
         }
       } catch (value) {
         if (cancelled || (value instanceof Error && value.name === 'AbortError')) {
           return;
         }
-        if (cachedClusters) {
+        if (cachedFeed) {
           setLoadState('ready');
         } else {
           setError(value instanceof Error ? value.message : 'Could not load clusters.');
@@ -276,6 +296,39 @@ export default function ClusterAccessGate() {
       controller.abort();
     };
   }, [session]);
+
+  async function loadMoreClusters() {
+    if (!session || archiveLoaded || loadingMore) return;
+
+    setLoadingMore(true);
+    setLoadMoreError('');
+    try {
+      const response = await fetch('/api/dashboard-clusters?history=1', {
+        cache: 'no-store',
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      const payload = (await response.json()) as {
+        clusters?: ClusterSignal[];
+        error?: string;
+      };
+      if (!response.ok) {
+        throw new Error(payload.error || 'Could not load older clusters.');
+      }
+
+      const merged = new Map(signals.map((signal) => [signal.id, signal]));
+      for (const signal of payload.clusters || []) {
+        if (!merged.has(signal.id)) merged.set(signal.id, signal);
+      }
+      const nextSignals = [...merged.values()];
+      setSignals(nextSignals);
+      setArchiveLoaded(true);
+      writeCachedClusterFeed(session.user.id, nextSignals, true);
+    } catch (value) {
+      setLoadMoreError(value instanceof Error ? value.message : 'Could not load older clusters.');
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   if (loadState === 'signed-out') {
     return <ProClusterGateCard mode="signed-out" />;
@@ -297,5 +350,14 @@ export default function ClusterAccessGate() {
     );
   }
 
-  return <ClustersPage signals={signals} accessToken={accessToken} />;
+  return (
+    <ClustersPage
+      signals={signals}
+      accessToken={accessToken}
+      archiveLoaded={archiveLoaded}
+      loadingMore={loadingMore}
+      loadMoreError={loadMoreError}
+      onLoadMore={loadMoreClusters}
+    />
+  );
 }

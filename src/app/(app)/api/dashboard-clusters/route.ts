@@ -3,18 +3,19 @@ import { NextResponse } from 'next/server';
 import { routeErrorMessage } from '@/lib/api-errors';
 import { requireClusterAccess } from '@/lib/account-server';
 import { ApiRouteError, requireApiUser } from '@/lib/auth-server';
-import { getPublicClusterSignals } from '@/lib/public-data';
+import { getPublicClusterArchiveSignals, getPublicClusterSignals } from '@/lib/public-data';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
     const user = await requireApiUser(request);
+    const includeHistory = new URL(request.url).searchParams.get('history') === '1';
     const [clusters] = await Promise.all([
-      getPublicClusterSignals(),
+      includeHistory ? getPublicClusterArchiveSignals() : getPublicClusterSignals(),
       requireClusterAccess(user),
     ]);
-    return NextResponse.json({ clusters });
+    return NextResponse.json({ clusters, archiveLoaded: includeHistory });
   } catch (error) {
     if (error instanceof ApiRouteError) {
       return NextResponse.json({ clusters: [], code: error.code, error: error.message }, { status: error.status });

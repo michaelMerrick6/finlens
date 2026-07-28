@@ -49,6 +49,10 @@ const CLUSTER_PAGE_CANDIDATE_SIGNAL_LIMIT = 60;
 const CLUSTER_PAGE_SIGNAL_LIMIT = 24;
 const CLUSTER_PAGE_CANDIDATE_ROW_LIMIT = 180;
 const CLUSTER_PAGE_LOOKBACK_DAYS = 60;
+const CLUSTER_ARCHIVE_CANDIDATE_SIGNAL_LIMIT = 240;
+const CLUSTER_ARCHIVE_SIGNAL_LIMIT = 120;
+const CLUSTER_ARCHIVE_CANDIDATE_ROW_LIMIT = 720;
+const CLUSTER_ARCHIVE_LOOKBACK_DAYS = 365;
 const DASHBOARD_MIN_SIGNAL_SCORE = 0.72;
 const MATERIAL_INSIDER_CLUSTER_MIN_SCORE = 0.68;
 const MATERIAL_INSIDER_CLUSTER_MIN_VALUE = 1_000_000;
@@ -230,6 +234,12 @@ function dashboardSinceDate() {
 function clusterPageSinceDate() {
   const now = new Date();
   now.setUTCDate(now.getUTCDate() - (CLUSTER_PAGE_LOOKBACK_DAYS - 1));
+  return now.toISOString().slice(0, 10);
+}
+
+function clusterArchiveSinceDate() {
+  const now = new Date();
+  now.setUTCDate(now.getUTCDate() - (CLUSTER_ARCHIVE_LOOKBACK_DAYS - 1));
   return now.toISOString().slice(0, 10);
 }
 
@@ -1306,7 +1316,7 @@ function clusterConfidenceRank(signal: PublicClusterSignal) {
   return signal.score * 100 + sourceFamilyCount * 5 + ruleBoost + actorBoost + sizeBoost;
 }
 
-function curateClusterSignals(signals: PublicClusterSignal[]) {
+function curateClusterSignals(signals: PublicClusterSignal[], limit = CLUSTER_PAGE_SIGNAL_LIMIT) {
   const ranked = signals
     .filter((signal) => isHighConvictionCluster(signal))
     .sort((left, right) => {
@@ -1322,7 +1332,7 @@ function curateClusterSignals(signals: PublicClusterSignal[]) {
     if (seenTickerDirections.has(key)) continue;
     seenTickerDirections.add(key);
     curated.push(signal);
-    if (curated.length >= CLUSTER_PAGE_SIGNAL_LIMIT) break;
+    if (curated.length >= limit) break;
   }
   return curated;
 }
@@ -1467,6 +1477,25 @@ const loadClusterFeedSignals = unstable_cache(
   { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
 );
 
+const loadClusterArchiveSignals = unstable_cache(
+  async () =>
+    curateClusterSignals(
+      await loadClusterSignals({
+        limit: CLUSTER_ARCHIVE_CANDIDATE_SIGNAL_LIMIT,
+        buyOnly: false,
+        sinceDate: clusterArchiveSinceDate(),
+        statuses: PUBLIC_BROADCAST_STORY_STATUSES,
+        sort: 'score',
+        includeActorPreviews: false,
+        candidateRowLimit: CLUSTER_ARCHIVE_CANDIDATE_ROW_LIMIT,
+        validateEconomicActors: false,
+      }),
+      CLUSTER_ARCHIVE_SIGNAL_LIMIT,
+    ),
+  ['public-cluster-archive-v1'],
+  { revalidate: 5 * 60 },
+);
+
 const loadDashboardClusterPreviewSignals = unstable_cache(
   async () =>
     loadClusterSignals({
@@ -1510,6 +1539,10 @@ export async function getPublicInsiderFeedTrades() {
 
 export async function getPublicClusterSignals() {
   return loadClusterFeedSignals();
+}
+
+export async function getPublicClusterArchiveSignals() {
+  return loadClusterArchiveSignals();
 }
 
 export async function getDashboardRecentClusterSignals() {
