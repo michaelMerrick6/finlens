@@ -5,44 +5,45 @@ import { useEffect, useRef, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { Lock, Sparkles } from 'lucide-react';
 
-import ClustersPage, { type ClusterSignal } from '@/components/ClustersPage';
+import ClustersPage, {
+  type ClusterFeedSource,
+  type ClusterSignal,
+} from '@/components/ClustersPage';
 import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
-const CLUSTER_FEED_CACHE_VERSION = 'v9';
+const CLUSTER_FEED_CACHE_VERSION = 'v11';
 const CLUSTER_FEED_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
+const DEFAULT_CLUSTER_SOURCE: ClusterFeedSource = 'politicians';
 
 let clusterAuthSessionCache: Session | null = null;
 
-let clusterFeedMemoryCache: {
-  userId: string;
+type CachedClusterFeed = {
   clusters: ClusterSignal[];
   archiveLoaded: boolean;
   cachedAt: number;
-} | null = null;
+};
 
-function clusterFeedCacheKey(userId: string) {
-  return `vail:cluster-feed:${CLUSTER_FEED_CACHE_VERSION}:${userId}`;
+const clusterFeedMemoryCache = new Map<string, CachedClusterFeed>();
+
+function clusterFeedCacheKey(userId: string, source: ClusterFeedSource) {
+  return `vail:cluster-feed:${CLUSTER_FEED_CACHE_VERSION}:${userId}:${source}`;
 }
 
 function isFreshClusterFeedCache(cachedAt: number) {
   return Date.now() - cachedAt < CLUSTER_FEED_CACHE_MAX_AGE_MS;
 }
 
-function readCachedClusterFeed(userId: string) {
-  if (
-    clusterFeedMemoryCache?.userId === userId &&
-    isFreshClusterFeedCache(clusterFeedMemoryCache.cachedAt)
-  ) {
-    return {
-      clusters: clusterFeedMemoryCache.clusters,
-      archiveLoaded: clusterFeedMemoryCache.archiveLoaded,
-    };
+function readCachedClusterFeed(userId: string, source: ClusterFeedSource) {
+  const key = clusterFeedCacheKey(userId, source);
+  const memoryValue = clusterFeedMemoryCache.get(key);
+  if (memoryValue && isFreshClusterFeedCache(memoryValue.cachedAt)) {
+    return memoryValue;
   }
 
   try {
-    const raw = window.sessionStorage.getItem(clusterFeedCacheKey(userId));
+    const raw = window.sessionStorage.getItem(key);
     if (!raw) {
       return null;
     }
@@ -56,28 +57,31 @@ function readCachedClusterFeed(userId: string) {
       return null;
     }
 
-    clusterFeedMemoryCache = {
-      userId,
+    const cachedFeed = {
       clusters: parsed.clusters,
       archiveLoaded: Boolean(parsed.archiveLoaded),
       cachedAt: parsed.cachedAt,
     };
-    return {
-      clusters: parsed.clusters,
-      archiveLoaded: Boolean(parsed.archiveLoaded),
-    };
+    clusterFeedMemoryCache.set(key, cachedFeed);
+    return cachedFeed;
   } catch {
     return null;
   }
 }
 
-function writeCachedClusterFeed(userId: string, clusters: ClusterSignal[], archiveLoaded: boolean) {
+function writeCachedClusterFeed(
+  userId: string,
+  source: ClusterFeedSource,
+  clusters: ClusterSignal[],
+  archiveLoaded: boolean,
+) {
   const cachedAt = Date.now();
-  clusterFeedMemoryCache = { userId, clusters, archiveLoaded, cachedAt };
+  const key = clusterFeedCacheKey(userId, source);
+  clusterFeedMemoryCache.set(key, { clusters, archiveLoaded, cachedAt });
 
   try {
     window.sessionStorage.setItem(
-      clusterFeedCacheKey(userId),
+      key,
       JSON.stringify({ clusters, archiveLoaded, cachedAt }),
     );
   } catch {
@@ -86,31 +90,30 @@ function writeCachedClusterFeed(userId: string, clusters: ClusterSignal[], archi
 }
 
 function clearCachedClusterFeed(userId: string) {
-  if (clusterFeedMemoryCache?.userId === userId) {
-    clusterFeedMemoryCache = null;
-  }
-
-  try {
-    window.sessionStorage.removeItem(clusterFeedCacheKey(userId));
-  } catch {
-    // Ignore storage cleanup failures.
+  for (const source of ['politicians', 'insiders'] as const) {
+    const key = clusterFeedCacheKey(userId, source);
+    clusterFeedMemoryCache.delete(key);
+    try {
+      window.sessionStorage.removeItem(key);
+    } catch {
+      // Ignore storage cleanup failures.
+    }
   }
 }
 
 function initialClusterGateState() {
   const session = clusterAuthSessionCache;
-  const cachedFeed =
-    session &&
-    clusterFeedMemoryCache?.userId === session.user.id &&
-    isFreshClusterFeedCache(clusterFeedMemoryCache.cachedAt)
-      ? clusterFeedMemoryCache
-      : null;
+  const memoryValue = session
+    ? clusterFeedMemoryCache.get(clusterFeedCacheKey(session.user.id, DEFAULT_CLUSTER_SOURCE)) || null
+    : null;
+  const cachedFeed = memoryValue && isFreshClusterFeedCache(memoryValue.cachedAt) ? memoryValue : null;
   return {
     session,
+    source: DEFAULT_CLUSTER_SOURCE,
     accessToken: session?.access_token || '',
     signals: cachedFeed?.clusters || [],
     archiveLoaded: cachedFeed?.archiveLoaded || false,
-    loadState: (cachedFeed?.clusters.length ? 'ready' : session ? 'loading-account' : 'loading-session') as LoadState,
+    loadState: (cachedFeed ? 'ready' : session ? 'loading-account' : 'loading-session') as LoadState,
   };
 }
 
@@ -133,7 +136,7 @@ export function ProClusterGateCard({
       <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-zinc-500">
         {mode === 'error'
           ? error || 'Try refreshing in a moment.'
-          : 'Cluster detection groups coordinated activity across Congress, insiders, and hedge funds. Upgrade to Pro to unlock the live cluster feed and cluster alerts.'}
+          : 'Cluster detection groups coordinated activity from distinct people. Upgrade to Pro for politician clusters, the optional insider view, and cluster alerts.'}
       </p>
       <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
         {signedOut ? (
@@ -179,6 +182,7 @@ function ClusterLoadingState({ label }: { label: string }) {
 export default function ClusterAccessGate() {
   const [initialState] = useState(initialClusterGateState);
   const [session, setSession] = useState<Session | null>(initialState.session);
+  const [source, setSource] = useState<ClusterFeedSource>(initialState.source);
   const [accessToken, setAccessToken] = useState(initialState.accessToken);
   const [loadState, setLoadState] = useState<LoadState>(initialState.loadState);
   const [signals, setSignals] = useState<ClusterSignal[]>(initialState.signals);
@@ -187,6 +191,7 @@ export default function ClusterAccessGate() {
   const [loadMoreError, setLoadMoreError] = useState('');
   const [error, setError] = useState('');
   const userIdRef = useRef(initialState.session?.user.id || '');
+  const sourceRef = useRef<ClusterFeedSource>(initialState.source);
 
   useEffect(() => {
     let mounted = true;
@@ -203,7 +208,10 @@ export default function ClusterAccessGate() {
       }
 
       userIdRef.current = nextUserId;
-      const cachedFeed = nextSession ? readCachedClusterFeed(nextUserId) : null;
+      const nextSource = DEFAULT_CLUSTER_SOURCE;
+      const cachedFeed = nextSession ? readCachedClusterFeed(nextUserId, nextSource) : null;
+      sourceRef.current = nextSource;
+      setSource(nextSource);
       setSignals(cachedFeed?.clusters || []);
       setArchiveLoaded(cachedFeed?.archiveLoaded || false);
       setLoadMoreError('');
@@ -233,7 +241,7 @@ export default function ClusterAccessGate() {
     let cancelled = false;
 
     async function load() {
-      const cachedFeed = readCachedClusterFeed(activeSession.user.id);
+      const cachedFeed = readCachedClusterFeed(activeSession.user.id, source);
       if (cachedFeed) {
         setSignals(cachedFeed.clusters);
         setArchiveLoaded(cachedFeed.archiveLoaded);
@@ -246,7 +254,7 @@ export default function ClusterAccessGate() {
       setError('');
 
       try {
-        const clusterResponse = await fetch('/api/dashboard-clusters', {
+        const clusterResponse = await fetch(`/api/dashboard-clusters?source=${source}`, {
           cache: 'no-store',
           signal: controller.signal,
           headers: { Authorization: `Bearer ${activeSession.access_token}` },
@@ -271,7 +279,7 @@ export default function ClusterAccessGate() {
 
         if (!cancelled) {
           const nextClusters = clusterPayload.clusters || [];
-          writeCachedClusterFeed(activeSession.user.id, nextClusters, false);
+          writeCachedClusterFeed(activeSession.user.id, source, nextClusters, false);
           setSignals(nextClusters);
           setArchiveLoaded(false);
           setLoadState('ready');
@@ -295,15 +303,29 @@ export default function ClusterAccessGate() {
       cancelled = true;
       controller.abort();
     };
-  }, [session]);
+  }, [session, source]);
+
+  function changeSource(nextSource: ClusterFeedSource) {
+    if (nextSource === source) return;
+
+    sourceRef.current = nextSource;
+    setSource(nextSource);
+    setLoadMoreError('');
+    setError('');
+    const cachedFeed = session ? readCachedClusterFeed(session.user.id, nextSource) : null;
+    setSignals(cachedFeed?.clusters || []);
+    setArchiveLoaded(cachedFeed?.archiveLoaded || false);
+    setLoadState(cachedFeed ? 'ready' : session ? 'loading-clusters' : 'signed-out');
+  }
 
   async function loadMoreClusters() {
     if (!session || archiveLoaded || loadingMore) return;
 
+    const requestSource = source;
     setLoadingMore(true);
     setLoadMoreError('');
     try {
-      const response = await fetch('/api/dashboard-clusters?history=1', {
+      const response = await fetch(`/api/dashboard-clusters?source=${requestSource}&history=1`, {
         cache: 'no-store',
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
@@ -315,16 +337,19 @@ export default function ClusterAccessGate() {
         throw new Error(payload.error || 'Could not load older clusters.');
       }
 
-      const merged = new Map(signals.map((signal) => [signal.id, signal]));
-      for (const signal of payload.clusters || []) {
-        if (!merged.has(signal.id)) merged.set(signal.id, signal);
+      // The archive is a complete superset that has already selected the
+      // strongest window per stock and direction. Replacing the recent slice
+      // prevents a smaller recent window from masking a stronger archive one.
+      const nextSignals = payload.clusters || [];
+      writeCachedClusterFeed(session.user.id, requestSource, nextSignals, true);
+      if (sourceRef.current === requestSource) {
+        setSignals(nextSignals);
+        setArchiveLoaded(true);
       }
-      const nextSignals = [...merged.values()];
-      setSignals(nextSignals);
-      setArchiveLoaded(true);
-      writeCachedClusterFeed(session.user.id, nextSignals, true);
     } catch (value) {
-      setLoadMoreError(value instanceof Error ? value.message : 'Could not load older clusters.');
+      if (sourceRef.current === requestSource) {
+        setLoadMoreError(value instanceof Error ? value.message : 'Could not load older clusters.');
+      }
     } finally {
       setLoadingMore(false);
     }
@@ -353,6 +378,8 @@ export default function ClusterAccessGate() {
   return (
     <ClustersPage
       signals={signals}
+      source={source}
+      onSourceChange={changeSource}
       accessToken={accessToken}
       archiveLoaded={archiveLoaded}
       loadingMore={loadingMore}

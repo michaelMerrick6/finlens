@@ -14,7 +14,7 @@ const getCachedDashboardClusterDetail = unstable_cache(
     getDashboardClusterDetail(candidateKey, {
       statuses: PUBLIC_BROADCAST_STORY_STATUSES,
     }),
-  ['dashboard-cluster-detail-v1'],
+  ['dashboard-cluster-detail-v2'],
   { revalidate: 5 * 60 },
 );
 

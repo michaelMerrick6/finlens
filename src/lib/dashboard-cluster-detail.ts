@@ -1,6 +1,7 @@
 import 'server-only';
 
 import type { DashboardClusterDetail, DashboardClusterTransaction } from '@/lib/dashboard-cluster-types';
+import { parsePoliticianClusterKey } from '@/lib/politician-cluster-key';
 import { parsePoliticianOptionDetails } from '@/lib/politician-option-trades';
 import { getAdminSupabase } from '@/lib/supabase-admin';
 import { fetchTweetCandidateStoryByKey } from '@/lib/tweet-candidates';
@@ -19,6 +20,22 @@ type SignalEventRow = {
 type PoliticianTradeMetadata = {
   assetName: string | null;
   assetType: string | null;
+};
+
+type PoliticianClusterTradeRow = {
+  id: string;
+  member_id: string | null;
+  politician_name: string | null;
+  chamber: string | null;
+  party: string | null;
+  ticker: string | null;
+  asset_name: string | null;
+  asset_type: string | null;
+  transaction_type: string | null;
+  amount_range: string | null;
+  transaction_date: string | null;
+  published_date: string | null;
+  source_url: string | null;
 };
 
 const CLUSTER_DETAIL_RULES = new Set([
@@ -44,6 +61,83 @@ function titleCase(value: string) {
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
+}
+
+function politicianDirection(value: string | null) {
+  const normalized = trim(value).toLowerCase();
+  if (normalized.startsWith('purchase') || normalized.startsWith('buy')) return 'buy';
+  if (normalized.startsWith('sale') || normalized.startsWith('sell')) return 'sell';
+  return null;
+}
+
+function politicianEconomicTradeKey(row: PoliticianClusterTradeRow) {
+  return [
+    trim(row.member_id || row.politician_name).toLowerCase(),
+    trim(row.ticker).toUpperCase(),
+    politicianDirection(row.transaction_type),
+    trim(row.transaction_date).slice(0, 10),
+    trim(row.amount_range).replace(/\s+/g, '').toLowerCase(),
+    trim(row.asset_name).toLowerCase(),
+    trim(row.asset_type).toLowerCase(),
+  ].join('::');
+}
+
+async function loadPoliticianWindowDetail(candidateKey: string): Promise<DashboardClusterDetail | null> {
+  const key = parsePoliticianClusterKey(candidateKey);
+  if (!key) return null;
+
+  const supabase = getAdminSupabase();
+  const { data, error } = await supabase
+    .from('politician_trades')
+    .select(`
+      id,
+      member_id,
+      politician_name,
+      chamber,
+      party,
+      ticker,
+      asset_name,
+      asset_type,
+      transaction_type,
+      amount_range,
+      transaction_date,
+      published_date,
+      source_url
+    `)
+    .eq('ticker', key.ticker)
+    .gte('published_date', key.windowStart)
+    .lte('published_date', key.windowEnd)
+    .order('published_date', { ascending: false })
+    .order('id', { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  const uniqueTradeRows = new Map<string, PoliticianClusterTradeRow>();
+  for (const row of (data || []) as PoliticianClusterTradeRow[]) {
+    if (politicianDirection(row.transaction_type) !== key.direction) continue;
+    const economicKey = politicianEconomicTradeKey(row);
+    if (!uniqueTradeRows.has(economicKey)) uniqueTradeRows.set(economicKey, row);
+  }
+
+  const transactions = [...uniqueTradeRows.values()]
+    .map((row): DashboardClusterTransaction => ({
+      id: row.id,
+      sourceType: 'politician',
+      actorName: trim(row.politician_name) || 'Unknown member of Congress',
+      memberId: trim(row.member_id) || null,
+      party: trim(row.party) || null,
+      actorSubtitle: [trim(row.chamber) || 'Congress', trim(row.party)].filter(Boolean).join(' • '),
+      assetLabel: trim(row.ticker).toUpperCase() || key.ticker,
+      assetName: trim(row.asset_name) || null,
+      assetType: trim(row.asset_type) || null,
+      transactionTypeLabel: key.direction === 'sell' ? 'Sell' : 'Buy',
+      amountLabel: trim(row.amount_range) || null,
+      transactionDate: normalizedTransactionDate('politician', row.transaction_date, row.published_date),
+      publishedDate: trim(row.published_date) || null,
+      sourceUrl: trim(row.source_url) || null,
+    }));
+
+  return transactions.length ? { transactions } : null;
 }
 
 function isIsoDate(value: string | null | undefined) {
@@ -452,6 +546,10 @@ export async function getDashboardClusterDetail(
   candidateKey: string,
   options: { statuses?: string[] | null } = {},
 ): Promise<DashboardClusterDetail | null> {
+  if (parsePoliticianClusterKey(candidateKey)) {
+    return loadPoliticianWindowDetail(candidateKey);
+  }
+
   const story = await fetchTweetCandidateStoryByKey(candidateKey, {
     statuses: options.statuses,
   });

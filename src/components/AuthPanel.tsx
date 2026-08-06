@@ -64,9 +64,8 @@ const FUND_SPOTLIGHT: SpotlightFund[] = [
 ];
 
 const CLUSTER_SPOTLIGHT = [
-  { label: 'CON', detail: 'Congress' },
+  { label: 'POL', detail: 'Politicians' },
   { label: 'SEC', detail: 'Insiders' },
-  { label: '13F', detail: 'Funds' },
 ];
 
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
@@ -525,8 +524,8 @@ export function AuthPanel() {
 
               <AuthContextRow
                 label="Clusters"
-                title="Cross-Source Clusters"
-                description="Spot buy pressure when Congress, insiders, and funds align."
+                title="High-Conviction Clusters"
+                description="Start with coordinated congressional trades, then switch to insiders."
                 accent="#a78bfa"
               >
                 <TextChips items={CLUSTER_SPOTLIGHT} />

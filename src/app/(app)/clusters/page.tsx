@@ -10,7 +10,7 @@ export default async function ClusterSignalsPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              High-conviction clusters
+              Cluster feed
             </h1>
             <div className="group relative">
               <button
@@ -21,13 +21,13 @@ export default async function ClusterSignalsPage() {
                 <Info className="h-3 w-3" />
               </button>
               <div className="pointer-events-none absolute left-1/2 top-7 z-20 hidden w-72 -translate-x-1/2 rounded-xl border border-white/[0.1] bg-[#101010] p-3 text-xs leading-5 text-zinc-400 shadow-2xl group-hover:block group-focus-within:block sm:left-0 sm:translate-x-0">
-                Clusters group related moves around one stock inside a short window. Repeated activity from Congress,
-                insiders, or funds can be more meaningful than a single trade.
+                Clusters group distinct people moving around one stock inside a short window. The feed opens on
+                politicians; switch to Insiders when you want company-officer activity.
               </div>
             </div>
           </div>
           <p className="mt-1.5 max-w-3xl text-sm leading-6 text-zinc-500">
-            The strongest coordinated moves across Congress, company insiders, and institutional funds.
+            High-conviction activity from distinct people, grouped into one clear signal per stock and direction.
           </p>
         </div>
         <ClusterAlertButton />

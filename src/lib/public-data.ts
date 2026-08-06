@@ -26,6 +26,7 @@ import {
   filterProductPoliticianTrades,
   HOUSE_PRODUCT_START_DATE,
 } from '@/lib/politician-trade-scope';
+import { loadPoliticianClusterFeed } from '@/lib/politician-cluster-feed';
 import { getAdminSupabase } from '@/lib/supabase-admin';
 import { getPublicSupabase } from '@/lib/supabase-server';
 import type { BroadcastStory } from '@/lib/tweet-candidates';
@@ -35,6 +36,7 @@ import {
 } from '@/lib/tweet-candidates';
 
 const PUBLIC_FEED_REVALIDATE_SECONDS = 60;
+const CLUSTER_FEED_REVALIDATE_SECONDS = 5 * 60;
 const HEDGE_FUNDS_REVALIDATE_SECONDS = 60 * 60;
 const POLITICIAN_PROFILE_REVALIDATE_SECONDS = 5 * 60;
 const INITIAL_POLITICIAN_FEED_LIMIT = 20;
@@ -62,6 +64,10 @@ const CLUSTER_FEED_RULES = new Set([
   'insider_cluster',
 ]);
 const CLUSTER_FEED_RULE_ORDER = Array.from(CLUSTER_FEED_RULES);
+const CLUSTER_FEED_SOURCE_RULES = {
+  politicians: ['congress_cluster'],
+  insiders: ['insider_cluster'],
+} as const;
 const TRACKED_13F_FUNDS_CONFIG_PATH = path.join(process.cwd(), 'config', 'tracked_13f_funds.json');
 
 async function getFundDirectoryCacheVersion() {
@@ -160,6 +166,8 @@ export type PublicClusterSignal = DashboardFeaturedSignal & {
   score: number;
   windowDays: number | null;
 };
+
+export type PublicClusterFeedSource = keyof typeof CLUSTER_FEED_SOURCE_RULES;
 
 export type DashboardFeaturedPolitician = {
   memberId: string;
@@ -1163,6 +1171,7 @@ async function loadClusterSignals({
   includeActorPreviews = true,
   candidateRowLimit,
   validateEconomicActors = true,
+  ruleKeys,
 }: {
   limit: number;
   buyOnly: boolean;
@@ -1172,7 +1181,10 @@ async function loadClusterSignals({
   includeActorPreviews?: boolean;
   candidateRowLimit?: number;
   validateEconomicActors?: boolean;
+  ruleKeys?: string[];
 }): Promise<PublicClusterSignal[]> {
+  const activeRuleKeys = ruleKeys?.length ? ruleKeys : CLUSTER_FEED_RULE_ORDER;
+  const activeRuleKeySet = new Set(activeRuleKeys);
   const sharedStoryOptions = {
     status: statuses,
     sinceDate,
@@ -1183,20 +1195,20 @@ async function loadClusterSignals({
   const stories = candidateRowLimit
     ? (
         await Promise.all(
-          CLUSTER_FEED_RULE_ORDER.map((ruleKey) =>
+          activeRuleKeys.map((ruleKey) =>
             fetchTweetCandidateStories({
               ...sharedStoryOptions,
               storyLimit: Math.max(limit, 20),
-              rowLimit: Math.ceil(candidateRowLimit / CLUSTER_FEED_RULE_ORDER.length),
+              rowLimit: Math.ceil(candidateRowLimit / activeRuleKeys.length),
               ruleKeys: [ruleKey],
             }),
           ),
         )
       ).flat()
     : await fetchTweetCandidateStories({
-        ...sharedStoryOptions,
-        storyLimit: Math.max(limit * 2, 60),
-        ruleKeys: CLUSTER_FEED_RULE_ORDER,
+      ...sharedStoryOptions,
+      storyLimit: Math.max(limit * 2, 60),
+      ruleKeys: activeRuleKeys,
       });
 
   const candidateStories = dedupeClusterFeedStories(
@@ -1205,7 +1217,7 @@ async function loadClusterSignals({
       if (!ticker || ['N/A', 'UNKNOWN', 'MULTI'].includes(ticker)) {
         return false;
       }
-      if (!CLUSTER_FEED_RULES.has(story.ruleKey)) {
+      if (!activeRuleKeySet.has(story.ruleKey)) {
         return false;
       }
       if (!passesClusterFeedScoreGate(story)) {
@@ -1316,9 +1328,14 @@ function clusterConfidenceRank(signal: PublicClusterSignal) {
   return signal.score * 100 + sourceFamilyCount * 5 + ruleBoost + actorBoost + sizeBoost;
 }
 
-function curateClusterSignals(signals: PublicClusterSignal[], limit = CLUSTER_PAGE_SIGNAL_LIMIT) {
+function curateClusterSignals(
+  signals: PublicClusterSignal[],
+  source: PublicClusterFeedSource,
+  limit = CLUSTER_PAGE_SIGNAL_LIMIT,
+) {
+  const requiredRuleKey = CLUSTER_FEED_SOURCE_RULES[source][0];
   const ranked = signals
-    .filter((signal) => isHighConvictionCluster(signal))
+    .filter((signal) => signal.ruleKey === requiredRuleKey && isHighConvictionCluster(signal))
     .sort((left, right) => {
       const confidenceDelta = clusterConfidenceRank(right) - clusterConfidenceRank(left);
       if (confidenceDelta !== 0) return confidenceDelta;
@@ -1461,25 +1478,44 @@ async function loadInsiderFeedTrades() {
 }
 
 const loadClusterFeedSignals = unstable_cache(
-  async () =>
-    curateClusterSignals(await loadClusterSignals({
-      limit: CLUSTER_PAGE_CANDIDATE_SIGNAL_LIMIT,
-      buyOnly: false,
-      sinceDate: clusterPageSinceDate(),
-      statuses: PUBLIC_BROADCAST_STORY_STATUSES,
-      sort: 'score',
-      includeActorPreviews: false,
-      candidateRowLimit: CLUSTER_PAGE_CANDIDATE_ROW_LIMIT,
-      // The compiler stores normalized actor counts; resolve the full event graph only for cluster detail.
-      validateEconomicActors: false,
-    })),
-  ['public-cluster-feed-v15'],
-  { revalidate: PUBLIC_FEED_REVALIDATE_SECONDS },
+  async (source: PublicClusterFeedSource) => {
+    if (source === 'politicians') {
+      return curateClusterSignals(
+        await loadPoliticianClusterFeed(clusterPageSinceDate(), new Date().toISOString().slice(0, 10)),
+        source,
+      );
+    }
+
+    return curateClusterSignals(
+      await loadClusterSignals({
+        limit: CLUSTER_PAGE_CANDIDATE_SIGNAL_LIMIT,
+        buyOnly: false,
+        sinceDate: clusterPageSinceDate(),
+        statuses: PUBLIC_BROADCAST_STORY_STATUSES,
+        sort: 'score',
+        includeActorPreviews: false,
+        candidateRowLimit: CLUSTER_PAGE_CANDIDATE_ROW_LIMIT,
+        validateEconomicActors: false,
+        ruleKeys: [...CLUSTER_FEED_SOURCE_RULES[source]],
+      }),
+      source,
+    );
+  },
+  ['public-cluster-feed-by-source-v3'],
+  { revalidate: CLUSTER_FEED_REVALIDATE_SECONDS },
 );
 
 const loadClusterArchiveSignals = unstable_cache(
-  async () =>
-    curateClusterSignals(
+  async (source: PublicClusterFeedSource) => {
+    if (source === 'politicians') {
+      return curateClusterSignals(
+        await loadPoliticianClusterFeed(clusterArchiveSinceDate(), new Date().toISOString().slice(0, 10)),
+        source,
+        CLUSTER_ARCHIVE_SIGNAL_LIMIT,
+      );
+    }
+
+    return curateClusterSignals(
       await loadClusterSignals({
         limit: CLUSTER_ARCHIVE_CANDIDATE_SIGNAL_LIMIT,
         buyOnly: false,
@@ -1489,10 +1525,13 @@ const loadClusterArchiveSignals = unstable_cache(
         includeActorPreviews: false,
         candidateRowLimit: CLUSTER_ARCHIVE_CANDIDATE_ROW_LIMIT,
         validateEconomicActors: false,
+        ruleKeys: [...CLUSTER_FEED_SOURCE_RULES[source]],
       }),
+      source,
       CLUSTER_ARCHIVE_SIGNAL_LIMIT,
-    ),
-  ['public-cluster-archive-v1'],
+    );
+  },
+  ['public-cluster-archive-by-source-v3'],
   { revalidate: 5 * 60 },
 );
 
@@ -1537,12 +1576,12 @@ export async function getPublicInsiderFeedTrades() {
   return loadInsiderFeedTrades();
 }
 
-export async function getPublicClusterSignals() {
-  return loadClusterFeedSignals();
+export async function getPublicClusterSignals(source: PublicClusterFeedSource = 'politicians') {
+  return loadClusterFeedSignals(source);
 }
 
-export async function getPublicClusterArchiveSignals() {
-  return loadClusterArchiveSignals();
+export async function getPublicClusterArchiveSignals(source: PublicClusterFeedSource = 'politicians') {
+  return loadClusterArchiveSignals(source);
 }
 
 export async function getDashboardRecentClusterSignals() {

@@ -32,7 +32,7 @@ const NAV_ITEMS: NavItem[] = [
     href: '/clusters',
     label: 'Clusters',
     children: [
-      { href: '/clusters', label: 'High-Conviction Feed', desc: 'Coordinated moves across every source' },
+      { href: '/clusters', label: 'High-Conviction Feed', desc: 'Congress clusters, with an insider view' },
       { href: '/clusters/congress', label: 'Congress Accumulation', desc: 'Where lawmakers are concentrating their buys' },
     ],
   },

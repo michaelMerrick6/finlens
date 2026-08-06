@@ -405,8 +405,8 @@ function SelfDirectedSection() {
             </LandingContextRow>
 
             <LandingContextRow
-              title="Cross-Source Clusters"
-              description="Spot buy pressure when Congress, insiders, and funds align."
+              title="High-Conviction Clusters"
+              description="Start with coordinated congressional trades, then switch to insiders."
               label="Clusters"
               accent="#8b5cf6"
             >
@@ -561,7 +561,7 @@ function FundFaces() {
 function ClusterChips() {
   return (
     <div className="lp-chip-stack">
-      {['CON', 'SEC', '13F'].map((label) => (
+      {['POL', 'SEC'].map((label) => (
         <span key={label}>{label}</span>
       ))}
     </div>

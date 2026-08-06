@@ -4,18 +4,23 @@ import { routeErrorMessage } from '@/lib/api-errors';
 import { requireClusterAccess } from '@/lib/account-server';
 import { ApiRouteError, requireApiUser } from '@/lib/auth-server';
 import { getPublicClusterArchiveSignals, getPublicClusterSignals } from '@/lib/public-data';
+import type { PublicClusterFeedSource } from '@/lib/public-data';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
     const user = await requireApiUser(request);
-    const includeHistory = new URL(request.url).searchParams.get('history') === '1';
+    const searchParams = new URL(request.url).searchParams;
+    const includeHistory = searchParams.get('history') === '1';
+    const source: PublicClusterFeedSource = searchParams.get('source') === 'insiders'
+      ? 'insiders'
+      : 'politicians';
     const [clusters] = await Promise.all([
-      includeHistory ? getPublicClusterArchiveSignals() : getPublicClusterSignals(),
+      includeHistory ? getPublicClusterArchiveSignals(source) : getPublicClusterSignals(source),
       requireClusterAccess(user),
     ]);
-    return NextResponse.json({ clusters, archiveLoaded: includeHistory });
+    return NextResponse.json({ source, clusters, archiveLoaded: includeHistory });
   } catch (error) {
     if (error instanceof ApiRouteError) {
       return NextResponse.json({ clusters: [], code: error.code, error: error.message }, { status: error.status });
