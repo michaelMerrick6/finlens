@@ -1334,24 +1334,32 @@ function curateClusterSignals(
   limit = CLUSTER_PAGE_SIGNAL_LIMIT,
 ) {
   const requiredRuleKey = CLUSTER_FEED_SOURCE_RULES[source][0];
-  const ranked = signals
-    .filter((signal) => signal.ruleKey === requiredRuleKey && isHighConvictionCluster(signal))
-    .sort((left, right) => {
-      const confidenceDelta = clusterConfidenceRank(right) - clusterConfidenceRank(left);
-      if (confidenceDelta !== 0) return confidenceDelta;
-      return (right.publishedAt || '').localeCompare(left.publishedAt || '');
-    });
-
-  const seenTickerDirections = new Set<string>();
-  const curated: PublicClusterSignal[] = [];
-  for (const signal of ranked) {
+  const strongestByTickerDirection = new Map<string, PublicClusterSignal>();
+  for (const signal of signals) {
+    if (signal.ruleKey !== requiredRuleKey || !isHighConvictionCluster(signal)) continue;
     const key = `${signal.ticker}::${signal.direction || 'mixed'}`;
-    if (seenTickerDirections.has(key)) continue;
-    seenTickerDirections.add(key);
-    curated.push(signal);
-    if (curated.length >= limit) break;
+    const current = strongestByTickerDirection.get(key);
+    if (!current) {
+      strongestByTickerDirection.set(key, signal);
+      continue;
+    }
+
+    const confidenceDelta = clusterConfidenceRank(signal) - clusterConfidenceRank(current);
+    if (
+      confidenceDelta > 0 ||
+      (confidenceDelta === 0 && (signal.publishedAt || '') > (current.publishedAt || ''))
+    ) {
+      strongestByTickerDirection.set(key, signal);
+    }
   }
-  return curated;
+
+  return [...strongestByTickerDirection.values()]
+    .sort((left, right) => {
+      const freshnessDelta = (right.publishedAt || '').localeCompare(left.publishedAt || '');
+      if (freshnessDelta !== 0) return freshnessDelta;
+      return clusterConfidenceRank(right) - clusterConfidenceRank(left);
+    })
+    .slice(0, limit);
 }
 
 async function loadDashboardFeaturedSignals(): Promise<DashboardFeaturedSignal[]> {
@@ -1501,7 +1509,7 @@ const loadClusterFeedSignals = unstable_cache(
       source,
     );
   },
-  ['public-cluster-feed-by-source-v3'],
+  ['public-cluster-feed-by-source-v4'],
   { revalidate: CLUSTER_FEED_REVALIDATE_SECONDS },
 );
 
@@ -1531,7 +1539,7 @@ const loadClusterArchiveSignals = unstable_cache(
       CLUSTER_ARCHIVE_SIGNAL_LIMIT,
     );
   },
-  ['public-cluster-archive-by-source-v3'],
+  ['public-cluster-archive-by-source-v4'],
   { revalidate: 5 * 60 },
 );
 

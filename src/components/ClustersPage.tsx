@@ -224,12 +224,18 @@ export default function ClustersPage({
 
   const curatedSignals = useMemo(() => {
     const seen = new Set<string>();
-    return signals.filter((signal) => {
+    const deduplicated = signals.filter((signal) => {
       if (signal.ruleKey !== sourceConfig.ruleKey || !isHighConvictionCluster(signal)) return false;
       const key = `${signal.ticker}::${signal.direction || 'mixed'}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
+    });
+
+    return deduplicated.sort((left, right) => {
+      const freshnessDelta = (right.publishedAt || '').localeCompare(left.publishedAt || '');
+      if (freshnessDelta !== 0) return freshnessDelta;
+      return right.score - left.score;
     });
   }, [signals, sourceConfig.ruleKey]);
 

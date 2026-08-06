@@ -205,9 +205,10 @@ export async function loadPoliticianClusterFeed(rangeStart: string, rangeEnd: st
   const rows = await loadPoliticianClusterRows(rangeStart, rangeEnd);
   return buildStrongestWindows(rows, rangeStart, rangeEnd)
     .sort((left, right) => {
+      const freshnessDelta = right.windowEnd.localeCompare(left.windowEnd);
+      if (freshnessDelta !== 0) return freshnessDelta;
       if (right.actorCount !== left.actorCount) return right.actorCount - left.actorCount;
-      if (right.amountFloor !== left.amountFloor) return right.amountFloor - left.amountFloor;
-      return right.windowEnd.localeCompare(left.windowEnd);
+      return right.amountFloor - left.amountFloor;
     })
     .map((cluster) => {
       const score = Math.min(0.99, 0.84 + Math.min(0.12, 0.04 * Math.max(cluster.actorCount - 2, 0)));
