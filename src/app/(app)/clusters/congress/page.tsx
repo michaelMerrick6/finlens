@@ -4,7 +4,7 @@ import CongressClusterCalendarGate from '@/components/CongressClusterCalendarGat
 
 export const metadata: Metadata = {
   title: 'Congress Accumulation — Vail',
-  description: 'See where congressional buying is concentrating over the past week, month, or year.',
+  description: 'See where congressional buying is concentrating over the past week, month, or year to date.',
 };
 
 export default function CongressClusterCalendarPage() {

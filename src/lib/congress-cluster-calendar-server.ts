@@ -11,10 +11,9 @@ import { parsePoliticianAmountRange } from '@/lib/politician-amount-range';
 import { stripPoliticianOptionMetadata } from '@/lib/politician-option-trades';
 import { getPublicSupabase } from '@/lib/supabase-server';
 
-const RANGE_DAYS: Record<CongressClusterRange, number> = {
+const RANGE_DAYS: Partial<Record<CongressClusterRange, number>> = {
   week: 7,
   month: 30,
-  year: 365,
 };
 const PAGE_SIZE = 1_000;
 const PAGE_CONCURRENCY = 4;
@@ -28,7 +27,9 @@ type CongressBuyRow = {
   politician_name: string | null;
   ticker: string | null;
   asset_name: string | null;
+  asset_type: string | null;
   amount_range: string | null;
+  transaction_date: string | null;
   published_date: string | null;
 };
 
@@ -38,6 +39,7 @@ type MutablePlay = {
   actors: Set<string>;
   tradeCount: number;
   amountFloor: number;
+  latestTransactionDate: string | null;
   latestDisclosureDate: string;
 };
 
@@ -64,9 +66,12 @@ function addUtcDays(value: string, days: number) {
 
 function rangeDates(range: CongressClusterRange) {
   const rangeEnd = currentPacificDate();
+  const rangeStart = range === 'ytd'
+    ? `${rangeEnd.slice(0, 4)}-01-01`
+    : addUtcDays(rangeEnd, -((RANGE_DAYS[range] || 1) - 1));
   return {
     rangeEnd,
-    rangeStart: addUtcDays(rangeEnd, -(RANGE_DAYS[range] - 1)),
+    rangeStart,
   };
 }
 
@@ -82,6 +87,7 @@ function normalizedCompanyName(row: CongressBuyRow) {
     .replace(/\s+(?:Class\s+[A-Z]\s+)?Common\s+Stock.*$/i, '')
     .replace(/\s+-\s+Class\s+[A-Z]\s+Capital\s+Stock.*$/i, '')
     .replace(/\s+(?:Class\s+[A-Z]\s+)?Ordinary\s+Shares?.*$/i, '')
+    .replace(/\s+\[[A-Z]{2,4}\]\s*$/i, '')
     .replace(/\s+/g, ' ')
     .trim();
   const ticker = String(row.ticker || '').trim().toUpperCase();
@@ -100,6 +106,23 @@ function preferredCompanyName(names: Map<string, number>) {
     .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0]?.[0] || null;
 }
 
+function normalizedTransactionDate(row: CongressBuyRow, publishedDate: string) {
+  const transactionDate = String(row.transaction_date || '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(transactionDate)) return null;
+  return transactionDate > publishedDate ? publishedDate : transactionDate;
+}
+
+function economicTradeKey(row: CongressBuyRow, ticker: string, politicianKey: string) {
+  return [
+    politicianKey,
+    ticker,
+    String(row.transaction_date || '').slice(0, 10),
+    String(row.amount_range || '').replace(/\s+/g, '').toLowerCase(),
+    String(row.asset_name || '').trim().toLowerCase(),
+    String(row.asset_type || '').trim().toLowerCase(),
+  ].join('::');
+}
+
 async function loadCongressBuys(rangeStart: string, rangeEnd: string): Promise<CongressBuyRow[]> {
   const supabase = getPublicSupabase();
 
@@ -112,7 +135,9 @@ async function loadCongressBuys(rangeStart: string, rangeEnd: string): Promise<C
         politician_name,
         ticker,
         asset_name,
+        asset_type,
         amount_range,
+        transaction_date,
         published_date
       `)
       .gte('published_date', rangeStart)
@@ -155,8 +180,10 @@ function buildAccumulationData(
   const plays = new Map<string, MutablePlay>();
   const allActors = new Set<string>();
   const allTickers = new Set<string>();
+  const economicTrades = new Set<string>();
   let processedTradeCount = 0;
   let totalAmountFloor = 0;
+  let latestDisclosureDate = '';
 
   for (const row of rows) {
     const ticker = String(row.ticker || '').trim().toUpperCase();
@@ -166,19 +193,28 @@ function buildAccumulationData(
       continue;
     }
 
+    const tradeKey = economicTradeKey(row, ticker, politicianKey);
+    if (economicTrades.has(tradeKey)) continue;
+    economicTrades.add(tradeKey);
+
     const amountFloor = parsePoliticianAmountRange(row.amount_range)?.min || 0;
     const companyName = normalizedCompanyName(row);
+    const transactionDate = normalizedTransactionDate(row, publishedDate);
     const play = plays.get(ticker) || {
       ticker,
       companyNames: new Map<string, number>(),
       actors: new Set<string>(),
       tradeCount: 0,
       amountFloor: 0,
+      latestTransactionDate: null,
       latestDisclosureDate: publishedDate,
     };
     play.actors.add(politicianKey);
     play.tradeCount += 1;
     play.amountFloor += amountFloor;
+    if (transactionDate && (!play.latestTransactionDate || transactionDate > play.latestTransactionDate)) {
+      play.latestTransactionDate = transactionDate;
+    }
     play.latestDisclosureDate =
       publishedDate > play.latestDisclosureDate ? publishedDate : play.latestDisclosureDate;
     if (companyName) {
@@ -190,6 +226,7 @@ function buildAccumulationData(
     allTickers.add(ticker);
     processedTradeCount += 1;
     totalAmountFloor += amountFloor;
+    if (publishedDate > latestDisclosureDate) latestDisclosureDate = publishedDate;
   }
 
   const qualifyingPlays = [...plays.values()].filter(
@@ -201,9 +238,9 @@ function buildAccumulationData(
       if (right.actors.size !== left.actors.size) return right.actors.size - left.actors.size;
       if (right.amountFloor !== left.amountFloor) return right.amountFloor - left.amountFloor;
       if (right.tradeCount !== left.tradeCount) return right.tradeCount - left.tradeCount;
-      return right.latestDisclosureDate.localeCompare(left.latestDisclosureDate);
+      const freshnessDelta = right.latestDisclosureDate.localeCompare(left.latestDisclosureDate);
+      return freshnessDelta || left.ticker.localeCompare(right.ticker);
     })
-    .slice(0, 5)
     .map((play) => ({
       ticker: play.ticker,
       companyName: preferredCompanyName(play.companyNames),
@@ -213,13 +250,14 @@ function buildAccumulationData(
         : 0,
       tradeCount: play.tradeCount,
       amountFloor: play.amountFloor,
+      latestTransactionDate: play.latestTransactionDate,
       latestDisclosureDate: play.latestDisclosureDate,
       conviction: play.actors.size >= HIGH_CONVICTION_ACTORS ? 'high' : 'building',
     }));
 
   return {
     range,
-    latestDisclosureDate: rows[0]?.published_date?.slice(0, 10) || null,
+    latestDisclosureDate: latestDisclosureDate || null,
     topClusters,
     totals: {
       actorCount: allActors.size,
@@ -237,7 +275,7 @@ const loadCachedCongressClusterCalendar = unstable_cache(
     const rows = await loadCongressBuys(rangeStart, rangeEnd);
     return buildAccumulationData(range, rows);
   },
-  ['congress-cluster-accumulation-v2'],
+  ['congress-cluster-accumulation-v4'],
   { revalidate: 2 * 60 },
 );
 

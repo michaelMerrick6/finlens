@@ -8,7 +8,7 @@ import type { CongressClusterRange } from '@/lib/congress-cluster-calendar-types
 
 export const dynamic = 'force-dynamic';
 
-const VALID_RANGES = new Set<CongressClusterRange>(['week', 'month', 'year']);
+const VALID_RANGES = new Set<CongressClusterRange>(['week', 'month', 'ytd']);
 
 export async function GET(request: Request) {
   try {

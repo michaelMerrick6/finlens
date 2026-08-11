@@ -1,4 +1,4 @@
-export type CongressClusterRange = 'week' | 'month' | 'year';
+export type CongressClusterRange = 'week' | 'month' | 'ytd';
 
 export type CongressClusterPlay = {
   ticker: string;
@@ -7,6 +7,7 @@ export type CongressClusterPlay = {
   lawmakersSharePct: number;
   tradeCount: number;
   amountFloor: number;
+  latestTransactionDate: string | null;
   latestDisclosureDate: string;
   conviction: 'high' | 'building';
 };
