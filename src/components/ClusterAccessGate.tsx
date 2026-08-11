@@ -13,7 +13,7 @@ import { supabase } from '@/lib/supabase';
 
 type LoadState = 'loading-session' | 'signed-out' | 'loading-account' | 'free' | 'loading-clusters' | 'ready' | 'error';
 
-const CLUSTER_FEED_CACHE_VERSION = 'v12';
+const CLUSTER_FEED_CACHE_VERSION = 'v13';
 const CLUSTER_FEED_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const DEFAULT_CLUSTER_SOURCE: ClusterFeedSource = 'politicians';
 

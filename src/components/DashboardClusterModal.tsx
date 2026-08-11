@@ -60,7 +60,7 @@ function TickerLogo({ ticker }: { ticker: string }) {
 
   if (activeLogoUrl) {
     return (
-      <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-white/10 bg-black/30">
+      <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-white/[0.12] bg-zinc-100 shadow-sm shadow-black/30">
         <Image
           loader={passthroughImageLoader}
           unoptimized
@@ -69,7 +69,7 @@ function TickerLogo({ ticker }: { ticker: string }) {
           width={44}
           height={44}
           sizes="44px"
-          className="h-full w-full object-contain p-0.5"
+          className="h-full w-full object-contain p-1.5"
           onError={() => setFailedUrl(activeLogoUrl)}
         />
       </div>

@@ -156,6 +156,7 @@ export type DashboardFeaturedSignal = {
 export type PublicClusterSignal = DashboardFeaturedSignal & {
   amountFloor: number;
   includesCongress: boolean;
+  transactionDate?: string | null;
   ruleKey: string;
   sourceGroup: 'congress' | 'insiders' | 'cross-source';
   sourceCounts: {
@@ -1509,7 +1510,7 @@ const loadClusterFeedSignals = unstable_cache(
       source,
     );
   },
-  ['public-cluster-feed-by-source-v4'],
+  ['public-cluster-feed-by-source-v5'],
   { revalidate: CLUSTER_FEED_REVALIDATE_SECONDS },
 );
 
@@ -1539,7 +1540,7 @@ const loadClusterArchiveSignals = unstable_cache(
       CLUSTER_ARCHIVE_SIGNAL_LIMIT,
     );
   },
-  ['public-cluster-archive-by-source-v4'],
+  ['public-cluster-archive-by-source-v5'],
   { revalidate: 5 * 60 },
 );
 

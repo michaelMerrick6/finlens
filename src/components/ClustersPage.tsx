@@ -30,6 +30,7 @@ export type ClusterSignal = {
   includesCongress: boolean;
   sourceLabel: string;
   publishedAt: string | null;
+  transactionDate?: string | null;
   direction: 'buy' | 'sell' | null;
   ruleKey: string;
   sourceGroup: 'congress' | 'insiders' | 'cross-source';
@@ -109,7 +110,7 @@ function TickerLogo({ ticker }: { ticker: string }) {
 
   if (activeLogoUrl) {
     return (
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] bg-black/30">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.12] bg-zinc-100 shadow-sm shadow-black/30">
         <Image
           loader={passthroughImageLoader}
           unoptimized
@@ -118,7 +119,7 @@ function TickerLogo({ ticker }: { ticker: string }) {
           width={44}
           height={44}
           sizes="44px"
-          className="h-full w-full object-contain p-1"
+          className="h-full w-full object-contain p-1.5"
           onError={() => setFailedUrl(activeLogoUrl)}
         />
       </span>
@@ -377,6 +378,9 @@ export default function ClustersPage({
           <div className="space-y-2" aria-live="polite">
             {visibleSignals.map((signal) => {
               const isSell = signal.direction === 'sell';
+              const activityDate = source === 'politicians'
+                ? signal.transactionDate || signal.publishedAt
+                : signal.publishedAt;
               return (
                 <button
                   key={signal.id}
@@ -389,7 +393,7 @@ export default function ClustersPage({
                   aria-label={`Open ${signal.ticker} cluster: ${clusterHeadline(signal)}`}
                   className="group w-full rounded-2xl border border-white/[0.065] bg-white/[0.012] px-4 py-4 text-left transition hover:border-white/[0.12] hover:bg-white/[0.027] focus:outline-none focus:ring-1 focus:ring-emerald-400/25 sm:px-5"
                 >
-                  <div className="flex items-start gap-3.5">
+                  <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3.5 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto] sm:gap-x-5">
                     <TickerLogo ticker={signal.ticker} />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
@@ -406,13 +410,31 @@ export default function ClustersPage({
                         {clusterHeadline(signal)}
                       </h3>
                       <p className="mt-0.5 text-xs leading-5 text-zinc-500">{clusterReason(signal)}</p>
-                      <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-zinc-600">
-                        {signal.windowDays ? <span>{signal.windowDays}-day window</span> : null}
-                        {signal.amountLabel ? <span>{signal.amountLabel} tracked minimum</span> : null}
-                        <span>Updated {formatDateShort(signal.publishedAt)}</span>
+                      {signal.windowDays ? (
+                        <div className="mt-1.5 text-[10px] font-medium text-zinc-600">
+                          {signal.windowDays}-day cluster
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="col-start-2 col-end-4 mt-3 grid grid-cols-2 gap-x-5 border-t border-white/[0.05] pt-3 sm:col-start-3 sm:col-end-4 sm:row-start-1 sm:mt-0.5 sm:min-w-[250px] sm:border-0 sm:pt-0">
+                      <div>
+                        <div className="text-[9px] font-semibold uppercase tracking-[0.14em] text-zinc-600">
+                          Disclosed minimum
+                        </div>
+                        <div className="mt-1 text-[13px] font-semibold tabular-nums text-zinc-200">
+                          {signal.amountLabel || 'Not reported'}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[9px] font-semibold uppercase tracking-[0.14em] text-zinc-600">
+                          {source === 'politicians' ? 'Latest trade' : 'Latest filing'}
+                        </div>
+                        <div className="mt-1 text-[13px] font-medium tabular-nums text-zinc-300">
+                          {formatDateShort(activityDate)}
+                        </div>
                       </div>
                     </div>
-                    <ChevronRight className="mt-3 h-4 w-4 shrink-0 text-zinc-700 transition group-hover:translate-x-0.5 group-hover:text-zinc-400" />
+                    <ChevronRight className="col-start-3 row-start-1 mt-3 h-4 w-4 shrink-0 text-zinc-700 transition group-hover:translate-x-0.5 group-hover:text-zinc-400 sm:col-start-4" />
                   </div>
                 </button>
               );

@@ -37,6 +37,7 @@ type PoliticianWindow = {
   actorNames: string[];
   amountFloor: number;
   direction: 'buy' | 'sell';
+  latestTransactionDate: string | null;
   ticker: string;
   windowEnd: string;
   windowStart: string;
@@ -62,6 +63,15 @@ function parseAmountFloor(value: string | null) {
 
 function moneyFloorLabel(value: number) {
   return value > 0 ? `$${Math.round(value).toLocaleString()}+` : null;
+}
+
+function normalizedTransactionDate(row: NormalizedPoliticianClusterRow) {
+  const transactionDate = String(row.transaction_date || '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(transactionDate)) return null;
+
+  // A few source filings contain future or malformed transaction dates. A trade
+  // cannot occur after its disclosure, so cap those records at the filing date.
+  return transactionDate > row.publishedDate ? row.publishedDate : transactionDate;
 }
 
 function normalizeRow(row: PoliticianClusterRow): NormalizedPoliticianClusterRow | null {
@@ -167,6 +177,7 @@ function buildStrongestWindows(
       const actors = new Map<string, string>();
       const economicTrades = new Set<string>();
       let amountFloor = 0;
+      let latestTransactionDate: string | null = null;
       for (const row of windowRows) {
         if (!actors.has(row.actorKey)) actors.set(row.actorKey, row.actorName);
         const economicKey = [
@@ -181,6 +192,10 @@ function buildStrongestWindows(
         if (economicTrades.has(economicKey)) continue;
         economicTrades.add(economicKey);
         amountFloor += parseAmountFloor(row.amount_range);
+        const transactionDate = normalizedTransactionDate(row);
+        if (transactionDate && (!latestTransactionDate || transactionDate > latestTransactionDate)) {
+          latestTransactionDate = transactionDate;
+        }
       }
 
       if (actors.size < MIN_CONGRESS_CLUSTER_ACTORS) continue;
@@ -189,6 +204,7 @@ function buildStrongestWindows(
         actorNames: [...actors.values()],
         amountFloor,
         direction: bucket[0].direction,
+        latestTransactionDate,
         ticker: bucket[0].tickerSymbol,
         windowEnd,
         windowStart,
@@ -232,6 +248,7 @@ export async function loadPoliticianClusterFeed(rangeStart: string, rangeEnd: st
         includesCongress: true,
         sourceLabel: 'Congress',
         publishedAt: cluster.windowEnd,
+        transactionDate: cluster.latestTransactionDate,
         ruleKey: 'congress_cluster',
         sourceGroup: 'congress' as const,
         sourceCounts: {
