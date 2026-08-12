@@ -113,7 +113,7 @@ function RankedCompany({ cluster, rank }: { cluster: CongressClusterPlay; rank: 
       </div>
 
       <div className="col-start-2 col-end-5 mt-3 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-white/[0.05] pt-3 sm:contents">
-        <Fact label="Lawmakers" value={cluster.actorCount.toLocaleString()} emphasis={cluster.conviction === 'high'} />
+        <Fact label="Lawmakers" value={cluster.actorCount.toLocaleString()} emphasis={rank === 1} />
         <Fact label="Disclosed buys" value={cluster.tradeCount.toLocaleString()} />
         <Fact label="Minimum disclosed" value={minimumLabel(cluster.amountFloor)} />
         <Fact

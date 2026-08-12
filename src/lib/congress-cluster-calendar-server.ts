@@ -19,7 +19,6 @@ const PAGE_SIZE = 1_000;
 const PAGE_CONCURRENCY = 4;
 const MAX_ROWS = 20_000;
 const MIN_CLUSTER_ACTORS = 2;
-const HIGH_CONVICTION_ACTORS = 4;
 
 type CongressBuyRow = {
   id: string;
@@ -245,14 +244,10 @@ function buildAccumulationData(
       ticker: play.ticker,
       companyName: preferredCompanyName(play.companyNames),
       actorCount: play.actors.size,
-      lawmakersSharePct: allActors.size
-        ? Math.round((play.actors.size / allActors.size) * 100)
-        : 0,
       tradeCount: play.tradeCount,
       amountFloor: play.amountFloor,
       latestTransactionDate: play.latestTransactionDate,
       latestDisclosureDate: play.latestDisclosureDate,
-      conviction: play.actors.size >= HIGH_CONVICTION_ACTORS ? 'high' : 'building',
     }));
 
   return {
@@ -275,7 +270,7 @@ const loadCachedCongressClusterCalendar = unstable_cache(
     const rows = await loadCongressBuys(rangeStart, rangeEnd);
     return buildAccumulationData(range, rows);
   },
-  ['congress-cluster-accumulation-v4'],
+  ['congress-cluster-accumulation-v5'],
   { revalidate: 2 * 60 },
 );
 

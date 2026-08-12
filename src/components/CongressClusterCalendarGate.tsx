@@ -15,7 +15,7 @@ type GateState = 'loading-session' | 'signed-out' | 'loading-data' | 'ready' | '
 
 const CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const CACHE_REVALIDATE_AFTER_MS = 2 * 60 * 1000;
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const calendarCache = new Map<string, { data: CongressClusterCalendarData; cachedAt: number }>();
 
 function cacheKey(userId: string, range: CongressClusterRange) {

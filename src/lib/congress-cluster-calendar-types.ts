@@ -4,12 +4,10 @@ export type CongressClusterPlay = {
   ticker: string;
   companyName: string | null;
   actorCount: number;
-  lawmakersSharePct: number;
   tradeCount: number;
   amountFloor: number;
   latestTransactionDate: string | null;
   latestDisclosureDate: string;
-  conviction: 'high' | 'building';
 };
 
 export type CongressClusterCalendarData = {
