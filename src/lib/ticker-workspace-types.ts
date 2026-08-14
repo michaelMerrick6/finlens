@@ -41,3 +41,35 @@ export type DashboardTickerWorkspaceData = {
   recentActivity: DashboardTickerActivity[];
   nextOffset: number | null;
 };
+
+export type DashboardCongressOverviewRange = '7d' | '30d' | 'ytd';
+
+export type DashboardCongressTransaction = {
+  id: string;
+  memberId: string | null;
+  politicianName: string;
+  party: string | null;
+  chamber: string | null;
+  direction: 'buy' | 'sell';
+  transactionDate: string | null;
+  publishedDate: string;
+  amountRange: string | null;
+  amountFloor: number;
+  sourceUrl: string | null;
+};
+
+export type DashboardCongressOverviewData = {
+  symbol: string;
+  range: DashboardCongressOverviewRange;
+  periodStart: string;
+  periodEnd: string;
+  latestDisclosureDate: string | null;
+  totals: {
+    lawmakerCount: number;
+    buyCount: number;
+    sellCount: number;
+    buyAmountFloor: number;
+    sellAmountFloor: number;
+  };
+  transactions: DashboardCongressTransaction[];
+};

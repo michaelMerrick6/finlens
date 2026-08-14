@@ -2,6 +2,7 @@ import 'server-only';
 
 import { formatFundChangeLabel, getFundChangeKind } from '@/lib/fund-holdings';
 import { normalizeInsiderDirection } from '@/lib/insider-trades';
+import { parsePoliticianAmountRange } from '@/lib/politician-amount-range';
 import { normalizeProfileDate, normalizeProfileDirection } from '@/lib/politician-profile';
 import { filterProductPoliticianTrades } from '@/lib/politician-trade-scope';
 import { getPublicSupabase } from '@/lib/supabase-server';
@@ -9,6 +10,9 @@ import type {
   DashboardTickerActivity,
   DashboardTickerActivityDirection,
   DashboardTickerActivityFilter,
+  DashboardCongressOverviewData,
+  DashboardCongressOverviewRange,
+  DashboardCongressTransaction,
   DashboardTickerWorkspaceData,
 } from '@/lib/ticker-workspace-types';
 
@@ -63,6 +67,7 @@ const VALID_TICKER_PATTERN = /^[A-Z][A-Z0-9.-]{0,9}$/;
 const DEFAULT_ACTIVITY_LIMIT = 10;
 const MAX_ACTIVITY_LIMIT = 16;
 const MAX_ACTIVITY_OFFSET = 5000;
+const CONGRESS_OVERVIEW_LIMIT = 1000;
 
 function normalizeText(value: string | null | undefined) {
   return String(value || '').trim();
@@ -87,6 +92,32 @@ function normalizeSource(value: string | null | undefined): DashboardTickerActiv
     return source;
   }
   return 'all';
+}
+
+export function normalizeCongressOverviewRange(value: string | null | undefined): DashboardCongressOverviewRange {
+  if (value === '7d' || value === 'ytd') {
+    return value;
+  }
+  return '30d';
+}
+
+function isoDate(value: Date) {
+  return value.toISOString().slice(0, 10);
+}
+
+function congressOverviewPeriod(range: DashboardCongressOverviewRange, now = new Date()) {
+  const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const start = new Date(end);
+
+  if (range === '7d') {
+    start.setUTCDate(start.getUTCDate() - 6);
+  } else if (range === '30d') {
+    start.setUTCDate(start.getUTCDate() - 29);
+  } else {
+    start.setUTCMonth(0, 1);
+  }
+
+  return { start: isoDate(start), end: isoDate(end) };
 }
 
 function clampPageValue(value: number | string | null | undefined, fallback: number, min: number, max: number) {
@@ -208,6 +239,59 @@ function politicianDirection(value: string | null | undefined): {
     return { direction: 'sell', label: 'Sell' };
   }
   return { direction: 'activity', label: normalizeText(value) || 'Activity' };
+}
+
+function normalizedCongressDirection(value: string | null | undefined): 'buy' | 'sell' | null {
+  const direction = normalizeProfileDirection(value);
+  return direction === 'buy' || direction === 'sell' ? direction : null;
+}
+
+function congressTradeIdentity(row: PoliticianTradeRow, direction: 'buy' | 'sell') {
+  return [
+    normalizeText(row.member_id || row.politician_name).toLowerCase(),
+    normalizeText(row.ticker).toUpperCase(),
+    normalizeProfileDate(row.transaction_date) || '',
+    direction,
+    normalizeText(row.amount_range).replace(/\s+/g, '').toLowerCase(),
+  ].join('|');
+}
+
+function dedupeCongressTrades(rows: PoliticianTradeRow[]) {
+  const seen = new Set<string>();
+  const deduped: Array<{ row: PoliticianTradeRow; direction: 'buy' | 'sell' }> = [];
+
+  for (const row of rows) {
+    const direction = normalizedCongressDirection(row.transaction_type);
+    if (!direction) continue;
+    const identity = congressTradeIdentity(row, direction);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    deduped.push({ row, direction });
+  }
+
+  return deduped;
+}
+
+function congressTransaction(
+  row: PoliticianTradeRow,
+  direction: 'buy' | 'sell',
+): DashboardCongressTransaction | null {
+  const publishedDate = normalizeProfileDate(row.published_date);
+  if (!publishedDate) return null;
+
+  return {
+    id: `politician:${row.id}`,
+    memberId: normalizeText(row.member_id) || null,
+    politicianName: normalizeText(row.politician_name) || 'Unknown member',
+    party: normalizeKnownText(row.party),
+    chamber: normalizeKnownText(row.chamber),
+    direction,
+    transactionDate: normalizeProfileDate(row.transaction_date),
+    publishedDate,
+    amountRange: normalizeText(row.amount_range) || null,
+    amountFloor: parsePoliticianAmountRange(row.amount_range)?.min || 0,
+    sourceUrl: normalizeText(row.source_url) || null,
+  };
 }
 
 function insiderDirection(value: string | null | undefined): {
@@ -517,5 +601,70 @@ export async function getTickerWorkspaceData(
     source: selectedSource,
     recentActivity: page,
     nextOffset: activity.length > safeOffset + safeLimit ? safeOffset + safeLimit : null,
+  };
+}
+
+export async function getTickerCongressOverview(
+  inputSymbol: string,
+  inputRange: string | null | undefined,
+): Promise<DashboardCongressOverviewData | null> {
+  const symbol = normalizeTickerSymbol(inputSymbol);
+  if (!symbol) return null;
+
+  const range = normalizeCongressOverviewRange(inputRange);
+  const period = congressOverviewPeriod(range);
+  const supabase = getPublicSupabase();
+  const { data, error } = await supabase
+    .from('politician_trades')
+    .select('id,member_id,politician_name,chamber,party,ticker,transaction_date,published_date,transaction_type,amount_range,source_url,doc_id,asset_name')
+    .eq('ticker', symbol)
+    .gte('published_date', period.start)
+    .lte('published_date', period.end)
+    .order('published_date', { ascending: false })
+    .order('transaction_date', { ascending: false })
+    .order('id', { ascending: false })
+    .limit(CONGRESS_OVERVIEW_LIMIT);
+
+  if (error) throw new Error(error.message);
+
+  const scoped = filterProductPoliticianTrades((data || []) as PoliticianTradeRow[]);
+  const transactions = dedupeCongressTrades(scoped)
+    .map(({ row, direction }) => congressTransaction(row, direction))
+    .filter((transaction): transaction is DashboardCongressTransaction => Boolean(transaction));
+
+  const lawmakerIds = new Set(
+    transactions.map((transaction) =>
+      normalizeText(transaction.memberId || transaction.politicianName).toLowerCase(),
+    ),
+  );
+
+  const totals = transactions.reduce(
+    (summary, transaction) => {
+      if (transaction.direction === 'buy') {
+        summary.buyCount += 1;
+        summary.buyAmountFloor += transaction.amountFloor;
+      } else {
+        summary.sellCount += 1;
+        summary.sellAmountFloor += transaction.amountFloor;
+      }
+      return summary;
+    },
+    {
+      lawmakerCount: lawmakerIds.size,
+      buyCount: 0,
+      sellCount: 0,
+      buyAmountFloor: 0,
+      sellAmountFloor: 0,
+    },
+  );
+
+  return {
+    symbol,
+    range,
+    periodStart: period.start,
+    periodEnd: period.end,
+    latestDisclosureDate: transactions[0]?.publishedDate || null,
+    totals,
+    transactions,
   };
 }

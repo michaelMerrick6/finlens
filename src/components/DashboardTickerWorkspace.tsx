@@ -18,6 +18,9 @@ import PoliticianHeadshot from '@/components/PoliticianHeadshot';
 import SignalActionButton from '@/components/SignalActionButton';
 import { getTickerLogoUrl } from '@/lib/company-logos';
 import type {
+  DashboardCongressOverviewData,
+  DashboardCongressOverviewRange,
+  DashboardCongressTransaction,
   DashboardTickerActivity,
   DashboardTickerActivityDirection,
   DashboardTickerActivityFilter,
@@ -37,6 +40,11 @@ type DashboardTickerWorkspaceProps = {
 
 const ACTIVITY_PAGE_SIZE = 10;
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
+const CONGRESS_RANGES: Array<{ key: DashboardCongressOverviewRange; label: string }> = [
+  { key: '7d', label: '7 days' },
+  { key: '30d', label: '30 days' },
+  { key: 'ytd', label: 'YTD' },
+];
 const ACTIVITY_TABS: Array<{ key: DashboardTickerActivityFilter; label: string }> = [
   { key: 'all', label: 'All' },
   { key: 'politician', label: 'Politicians' },
@@ -53,6 +61,15 @@ type ActivityTabState = Record<
   }
 >;
 
+type CongressOverviewState = Record<
+  DashboardCongressOverviewRange,
+  {
+    data: DashboardCongressOverviewData | null;
+    error: string;
+    loaded: boolean;
+  }
+>;
+
 function createEmptyTabState(): ActivityTabState {
   return {
     all: { activity: [], nextOffset: null, loaded: false },
@@ -60,6 +77,29 @@ function createEmptyTabState(): ActivityTabState {
     insider: { activity: [], nextOffset: null, loaded: false },
     fund: { activity: [], nextOffset: null, loaded: false },
   };
+}
+
+function createEmptyCongressOverviewState(): CongressOverviewState {
+  return {
+    '7d': { data: null, error: '', loaded: false },
+    '30d': { data: null, error: '', loaded: false },
+    ytd: { data: null, error: '', loaded: false },
+  };
+}
+
+function formatMinimumCurrency(value: number) {
+  if (!Number.isFinite(value) || value <= 0) return '$0';
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    notation: value >= 1_000 ? 'compact' : 'standard',
+    maximumFractionDigits: value >= 1_000_000 ? 1 : 0,
+  });
+  return `${formatter.format(value)}+`;
+}
+
+function countLabel(count: number, singular: string, plural = `${singular}s`) {
+  return `${count.toLocaleString()} ${count === 1 ? singular : plural}`;
 }
 
 function tabLabel(tab: DashboardTickerActivityFilter) {
@@ -251,6 +291,212 @@ function ActivityRow({ item, showSource }: { item: DashboardTickerActivity; show
   );
 }
 
+function CongressTransactionRow({ transaction }: { transaction: DashboardCongressTransaction }) {
+  const isBuy = transaction.direction === 'buy';
+  const amount = transaction.amountRange || (transaction.amountFloor ? formatMinimumCurrency(transaction.amountFloor) : '—');
+  const metric = (
+    <div className="min-w-[116px] text-right">
+      <div className="flex items-center justify-end gap-1 whitespace-nowrap text-xs font-semibold tabular-nums text-white sm:text-sm">
+        <span>{amount}</span>
+        {transaction.sourceUrl ? <ArrowUpRight className="h-3 w-3 text-zinc-600" /> : null}
+      </div>
+      <div className="mt-0.5 whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.08em] text-zinc-600 sm:text-[10px]">
+        reported range
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex min-h-[72px] items-center gap-3 border-b border-white/[0.055] px-4 py-3 last:border-b-0 sm:px-5">
+      {transaction.memberId ? (
+        <PoliticianHeadshot
+          memberId={transaction.memberId}
+          name={transaction.politicianName}
+          party={transaction.party}
+          size={38}
+        />
+      ) : (
+        <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full border border-blue-400/20 bg-blue-400/10 text-blue-300">
+          <Landmark className="h-4 w-4" />
+        </div>
+      )}
+
+      <div className="min-w-0 flex-1">
+        <div className="truncate text-sm font-semibold text-zinc-100 sm:text-[15px]">
+          {transaction.politicianName}
+        </div>
+        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] sm:text-xs">
+          <span className={`font-semibold ${isBuy ? 'text-emerald-300' : 'text-red-300'}`}>
+            {isBuy ? 'Buy' : 'Sell'}
+          </span>
+          {transaction.transactionDate ? (
+            <span className="tabular-nums text-zinc-300">
+              Traded {formatCalendarDate(transaction.transactionDate)}
+            </span>
+          ) : null}
+          <span className="tabular-nums text-zinc-600">
+            Disclosed {formatCalendarDate(transaction.publishedDate)}
+          </span>
+        </div>
+      </div>
+
+      {transaction.sourceUrl ? (
+        <Link
+          href={transaction.sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Open source filing for ${transaction.politicianName}`}
+          className="shrink-0 transition hover:text-cyan-200"
+        >
+          {metric}
+        </Link>
+      ) : metric}
+    </div>
+  );
+}
+
+function CongressOverview({
+  symbol,
+  range,
+  onRangeChange,
+  data,
+  loading,
+  error,
+  onRetry,
+}: {
+  symbol: string;
+  range: DashboardCongressOverviewRange;
+  onRangeChange: (range: DashboardCongressOverviewRange) => void;
+  data: DashboardCongressOverviewData | null;
+  loading: boolean;
+  error: string;
+  onRetry: () => void;
+}) {
+  const [showAllTransactions, setShowAllTransactions] = useState(false);
+
+  const displayedTransactions = showAllTransactions ? data?.transactions || [] : data?.transactions.slice(0, 8) || [];
+
+  return (
+    <div>
+      <div className="border-b border-white/[0.06] px-4 py-4 sm:px-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-white">Congress activity</h3>
+            <p className="mt-1 text-xs leading-5 text-zinc-600">
+              Newly disclosed filings. Trade dates may be earlier.
+            </p>
+          </div>
+          <div className="flex w-full gap-1 rounded-xl border border-white/[0.07] bg-black/20 p-1 sm:w-fit">
+            {CONGRESS_RANGES.map((option) => {
+              const selected = range === option.key;
+              return (
+                <button
+                  key={option.key}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => onRangeChange(option.key)}
+                  className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition sm:flex-none ${
+                    selected ? 'bg-white/[0.09] text-white' : 'text-zinc-600 hover:text-zinc-300'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {loading && !data ? (
+        <div className="flex min-h-[240px] items-center justify-center px-6 text-sm text-zinc-500">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin text-emerald-300" />
+          Loading Congress overview...
+        </div>
+      ) : error && !data ? (
+        <div className="m-4 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-4 text-sm text-red-200 sm:m-5">
+          <p>{error}</p>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/[0.08]"
+          >
+            <RefreshCcw className="h-3.5 w-3.5" />
+            Retry
+          </button>
+        </div>
+      ) : data ? (
+        <>
+          <div className="grid grid-cols-3 border-b border-white/[0.06]">
+            <div className="px-4 py-4 sm:px-5">
+              <div className="text-xl font-semibold tabular-nums text-white sm:text-2xl">
+                {data.totals.lawmakerCount.toLocaleString()}
+              </div>
+              <div className="mt-1 text-[9px] font-medium uppercase tracking-[0.12em] text-zinc-600 sm:text-[10px]">
+                Lawmakers
+              </div>
+            </div>
+            <div className="border-l border-white/[0.06] px-4 py-4 sm:px-5">
+              <div className="text-xl font-semibold tabular-nums text-emerald-300 sm:text-2xl">
+                {formatMinimumCurrency(data.totals.buyAmountFloor)}
+              </div>
+              <div className="mt-1 text-[9px] font-medium uppercase tracking-[0.12em] text-zinc-600 sm:text-[10px]">
+                Bought · {countLabel(data.totals.buyCount, 'buy')}
+              </div>
+            </div>
+            <div className="border-l border-white/[0.06] px-4 py-4 sm:px-5">
+              <div className="text-xl font-semibold tabular-nums text-red-300 sm:text-2xl">
+                {formatMinimumCurrency(data.totals.sellAmountFloor)}
+              </div>
+              <div className="mt-1 text-[9px] font-medium uppercase tracking-[0.12em] text-zinc-600 sm:text-[10px]">
+                Sold · {countLabel(data.totals.sellCount, 'sale', 'sales')}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3 sm:px-5">
+            <div>
+              <h4 className="text-xs font-semibold text-zinc-200">Disclosed transactions</h4>
+              <p className="mt-0.5 text-[10px] text-zinc-600">Dollar totals use the minimum of each reported range.</p>
+            </div>
+            {data.latestDisclosureDate ? (
+              <div className="shrink-0 text-[10px] tabular-nums text-zinc-600">
+                Latest <span className="text-zinc-400">{formatCalendarDate(data.latestDisclosureDate)}</span>
+              </div>
+            ) : null}
+          </div>
+
+          {data.transactions.length ? (
+            <div>
+              {displayedTransactions.map((transaction) => (
+                <CongressTransactionRow key={transaction.id} transaction={transaction} />
+              ))}
+              {data.transactions.length > 8 ? (
+                <div className="border-t border-white/[0.06] p-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllTransactions((current) => !current)}
+                    className="inline-flex w-full items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.018] px-4 py-2.5 text-xs font-medium text-zinc-400 transition hover:border-white/[0.12] hover:bg-white/[0.035] hover:text-white"
+                  >
+                    {showAllTransactions
+                      ? 'Show fewer transactions'
+                      : `Show all ${data.transactions.length.toLocaleString()} transactions`}
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="flex min-h-[180px] flex-col items-center justify-center px-6 text-center text-sm text-zinc-500">
+              <Landmark className="mb-3 h-7 w-7 text-zinc-700" />
+              <p>No congressional trades were newly disclosed for {symbol} in this period.</p>
+              <p className="mt-1 text-xs text-zinc-700">Try 30 days or YTD.</p>
+            </div>
+          )}
+        </>
+      ) : null}
+    </div>
+  );
+}
+
 function LoadingState({ requestedTicker, onDismiss }: Pick<DashboardTickerWorkspaceProps, 'requestedTicker' | 'onDismiss'>) {
   return (
     <section className="dash-fade-in overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.018]">
@@ -329,6 +575,12 @@ export default function DashboardTickerWorkspace({
   onDismiss,
   onOpenPriceAlert,
 }: DashboardTickerWorkspaceProps) {
+  const [workspaceView, setWorkspaceView] = useState<'congress' | 'activity'>('congress');
+  const [congressRange, setCongressRange] = useState<DashboardCongressOverviewRange>('30d');
+  const [congressOverviewState, setCongressOverviewState] = useState<CongressOverviewState>(() =>
+    createEmptyCongressOverviewState(),
+  );
+  const [loadingCongressRange, setLoadingCongressRange] = useState<DashboardCongressOverviewRange | null>(null);
   const [activeTab, setActiveTab] = useState<DashboardTickerActivityFilter>('all');
   const [tabState, setTabState] = useState<ActivityTabState>(() => createEmptyTabState());
   const [loadingTab, setLoadingTab] = useState<DashboardTickerActivityFilter | null>(null);
@@ -349,7 +601,60 @@ export default function DashboardTickerWorkspace({
     setLoadingTab(null);
     setLoadMoreError('');
     setLoadingMore(false);
+    setWorkspaceView('congress');
+    setCongressRange('30d');
+    setCongressOverviewState(createEmptyCongressOverviewState());
+    setLoadingCongressRange(null);
   }, [data]);
+
+  useEffect(() => {
+    const rangeState = congressOverviewState[congressRange];
+    if (!data || workspaceView !== 'congress' || rangeState.loaded) {
+      return;
+    }
+
+    let cancelled = false;
+    const controller = new AbortController();
+    const loadOverview = async () => {
+      setLoadingCongressRange(congressRange);
+      try {
+        const response = await fetch(
+          `/api/ticker-workspace/${encodeURIComponent(data.symbol)}/congress-overview?range=${congressRange}`,
+          { signal: controller.signal, cache: 'no-store' },
+        );
+        if (!response.ok) {
+          const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(payload?.error || 'Could not load Congress overview.');
+        }
+        const payload = (await response.json()) as DashboardCongressOverviewData;
+        if (cancelled) return;
+        setCongressOverviewState((current) => ({
+          ...current,
+          [congressRange]: { data: payload, error: '', loaded: true },
+        }));
+      } catch (overviewError) {
+        if (cancelled || (overviewError instanceof Error && overviewError.name === 'AbortError')) return;
+        setCongressOverviewState((current) => ({
+          ...current,
+          [congressRange]: {
+            data: null,
+            error: overviewError instanceof Error ? overviewError.message : 'Could not load Congress overview.',
+            loaded: true,
+          },
+        }));
+      } finally {
+        if (!cancelled) {
+          setLoadingCongressRange((current) => (current === congressRange ? null : current));
+        }
+      }
+    };
+
+    void loadOverview();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [congressOverviewState, congressRange, data, workspaceView]);
 
   useEffect(() => {
     if (!data || activeTab === 'all' || tabState[activeTab].loaded) {
@@ -419,6 +724,7 @@ export default function DashboardTickerWorkspace({
   const tabIsLoading = loadingTab === activeTab;
   const currentTabLabel = tabLabel(activeTab);
   const latestActivityDate = activity[0]?.date || (activeTab === 'all' ? data.latestActivityDate : null);
+  const currentCongressOverview = congressOverviewState[congressRange];
 
   const handleLoadMore = async () => {
     if (nextOffset == null || loadingMore) {
@@ -483,6 +789,47 @@ export default function DashboardTickerWorkspace({
         </div>
       </header>
 
+      <div className="flex gap-1 border-b border-white/[0.06] px-4 py-2.5 sm:px-5">
+        <button
+          type="button"
+          aria-pressed={workspaceView === 'congress'}
+          onClick={() => setWorkspaceView('congress')}
+          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+            workspaceView === 'congress' ? 'bg-white/[0.09] text-white' : 'text-zinc-600 hover:text-zinc-300'
+          }`}
+        >
+          Congress overview
+        </button>
+        <button
+          type="button"
+          aria-pressed={workspaceView === 'activity'}
+          onClick={() => setWorkspaceView('activity')}
+          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+            workspaceView === 'activity' ? 'bg-white/[0.09] text-white' : 'text-zinc-600 hover:text-zinc-300'
+          }`}
+        >
+          All activity
+        </button>
+      </div>
+
+      {workspaceView === 'congress' ? (
+        <CongressOverview
+          key={`${data.symbol}:${congressRange}`}
+          symbol={data.symbol}
+          range={congressRange}
+          onRangeChange={setCongressRange}
+          data={currentCongressOverview.data}
+          loading={loadingCongressRange === congressRange}
+          error={currentCongressOverview.error}
+          onRetry={() => {
+            setCongressOverviewState((current) => ({
+              ...current,
+              [congressRange]: { data: null, error: '', loaded: false },
+            }));
+          }}
+        />
+      ) : (
+        <>
       <div className="border-b border-white/[0.06] px-4 py-3.5 sm:px-5">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-sm font-semibold text-white">Activity</h3>
@@ -553,6 +900,8 @@ export default function DashboardTickerWorkspace({
           </button>
         </div>
       ) : null}
+        </>
+      )}
     </section>
   );
 }
