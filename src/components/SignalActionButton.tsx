@@ -6,12 +6,14 @@ type SignalActionButtonProps = {
   onClick: () => void;
   label?: string;
   className?: string;
+  showLiveStatus?: boolean;
 };
 
 export default function SignalActionButton({
   onClick,
   label = 'Turn On Signals',
   className = '',
+  showLiveStatus = true,
 }: SignalActionButtonProps) {
   return (
     <button
@@ -24,10 +26,14 @@ export default function SignalActionButton({
         <BellPlus className="h-3.5 w-3.5 text-emerald-100" />
       </span>
       <span className="relative whitespace-nowrap">{label}</span>
-      <span className="relative hidden h-4 w-px bg-white/15 sm:block" />
-      <span className="relative hidden text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-100/70 sm:block">
-        Live
-      </span>
+      {showLiveStatus ? (
+        <>
+          <span className="relative hidden h-4 w-px bg-white/15 sm:block" />
+          <span className="relative hidden text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-100/70 sm:block">
+            Live
+          </span>
+        </>
+      ) : null}
     </button>
   );
 }
