@@ -4,6 +4,8 @@ import { unstable_cache } from 'next/cache';
 
 import type {
   CongressBuyingCompany,
+  CongressBuyingTransaction,
+  CongressBuyingTransactionsData,
   CongressClusterCalendarData,
   CongressClusterRange,
 } from '@/lib/congress-cluster-calendar-types';
@@ -41,6 +43,12 @@ type CongressBuyRow = {
   amount_range: string | null;
   transaction_date: string | null;
   published_date: string | null;
+};
+
+type CongressBuyDetailRow = CongressBuyRow & {
+  chamber: string | null;
+  party: string | null;
+  source_url: string | null;
 };
 
 type MutablePlay = {
@@ -194,6 +202,48 @@ async function loadCongressBuys(rangeStart: string, rangeEnd: string): Promise<C
   return rows;
 }
 
+async function loadCongressBuysForTicker(
+  rangeStart: string,
+  rangeEnd: string,
+  ticker: string,
+): Promise<CongressBuyDetailRow[]> {
+  const supabase = getPublicSupabase();
+  const rows: CongressBuyDetailRow[] = [];
+
+  for (let offset = 0; offset < MAX_ROWS; offset += PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from('politician_trades')
+      .select(`
+        id,
+        member_id,
+        politician_name,
+        chamber,
+        party,
+        ticker,
+        asset_name,
+        asset_type,
+        amount_range,
+        transaction_date,
+        published_date,
+        source_url
+      `)
+      .eq('ticker', ticker)
+      .gte('published_date', rangeStart)
+      .lte('published_date', rangeEnd)
+      .or('transaction_type.ilike.buy%,transaction_type.ilike.purchase%')
+      .order('published_date', { ascending: false })
+      .order('id', { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1);
+
+    if (error) throw new Error(error.message);
+    const page = (data || []) as CongressBuyDetailRow[];
+    rows.push(...page);
+    if (page.length < PAGE_SIZE) break;
+  }
+
+  return rows;
+}
+
 function buildAccumulationData(
   range: CongressClusterRange,
   rows: CongressBuyRow[],
@@ -279,6 +329,64 @@ function buildAccumulationData(
   };
 }
 
+function buildTransactionsData(
+  range: CongressClusterRange,
+  ticker: string,
+  rows: CongressBuyDetailRow[],
+): CongressBuyingTransactionsData {
+  const economicTrades = new Set<string>();
+  const actors = new Set<string>();
+  const transactions: CongressBuyingTransaction[] = [];
+  let amountFloor = 0;
+
+  for (const row of rows) {
+    const publishedDate = String(row.published_date || '').slice(0, 10);
+    const politicianKey = actorKey(row);
+    if (!publishedDate || !politicianKey || !isEquityPurchase(row)) continue;
+
+    const tradeKey = economicTradeKey(row, ticker, politicianKey);
+    if (economicTrades.has(tradeKey)) continue;
+    economicTrades.add(tradeKey);
+
+    const transactionAmountFloor = parsePoliticianAmountRange(row.amount_range)?.min || 0;
+    amountFloor += transactionAmountFloor;
+    actors.add(politicianKey);
+    transactions.push({
+      id: row.id,
+      memberId: String(row.member_id || '').trim() || null,
+      politicianName: String(row.politician_name || '').replace(/[,\s]+$/g, '').trim() || 'Member of Congress',
+      chamber: String(row.chamber || '').trim() || null,
+      party: String(row.party || '').trim() || null,
+      assetName: stripPoliticianOptionMetadata(row.asset_name).replace(/\s+/g, ' ').trim() || null,
+      transactionDate: normalizedTransactionDate(row, publishedDate),
+      publishedDate,
+      amountRange: String(row.amount_range || '').trim() || null,
+      amountFloor: transactionAmountFloor,
+      sourceUrl: /^https?:\/\//i.test(String(row.source_url || '').trim())
+        ? String(row.source_url).trim()
+        : null,
+    });
+  }
+
+  transactions.sort((left, right) => {
+    const transactionDelta = String(right.transactionDate || '').localeCompare(String(left.transactionDate || ''));
+    if (transactionDelta) return transactionDelta;
+    const disclosureDelta = right.publishedDate.localeCompare(left.publishedDate);
+    return disclosureDelta || left.politicianName.localeCompare(right.politicianName);
+  });
+
+  return {
+    ticker,
+    range,
+    transactions,
+    totals: {
+      actorCount: actors.size,
+      tradeCount: transactions.length,
+      amountFloor,
+    },
+  };
+}
+
 const loadCachedCongressClusterCalendar = unstable_cache(
   async (range: CongressClusterRange) => {
     const { rangeStart, rangeEnd } = rangeDates(range);
@@ -291,4 +399,18 @@ const loadCachedCongressClusterCalendar = unstable_cache(
 
 export function getCongressClusterCalendar(range: CongressClusterRange) {
   return loadCachedCongressClusterCalendar(range);
+}
+
+const loadCachedCongressBuyingTransactions = unstable_cache(
+  async (range: CongressClusterRange, ticker: string) => {
+    const { rangeStart, rangeEnd } = rangeDates(range);
+    const rows = await loadCongressBuysForTicker(rangeStart, rangeEnd, ticker);
+    return buildTransactionsData(range, ticker, rows);
+  },
+  ['congress-buying-transactions-v1'],
+  { revalidate: 2 * 60 },
+);
+
+export function getCongressBuyingTransactions(range: CongressClusterRange, ticker: string) {
+  return loadCachedCongressBuyingTransactions(range, ticker);
 }

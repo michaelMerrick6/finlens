@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 
+import CongressBuyingTransactionsModal from '@/components/CongressBuyingTransactionsModal';
 import CongressClusterCalendar from '@/components/CongressClusterCalendar';
 import { ProClusterGateCard } from '@/components/ClusterAccessGate';
 import type {
+  CongressBuyingCompany,
+  CongressBuyingTransactionsData,
   CongressClusterCalendarData,
   CongressClusterRange,
 } from '@/lib/congress-cluster-calendar-types';
@@ -17,9 +20,14 @@ const CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const CACHE_REVALIDATE_AFTER_MS = 2 * 60 * 1000;
 const CACHE_VERSION = 'v7';
 const calendarCache = new Map<string, { data: CongressClusterCalendarData; cachedAt: number }>();
+const transactionCache = new Map<string, { data: CongressBuyingTransactionsData; cachedAt: number }>();
 
 function cacheKey(userId: string, range: CongressClusterRange) {
   return `vail:congress-accumulation:${CACHE_VERSION}:${userId}:${range}`;
+}
+
+function transactionCacheKey(userId: string, range: CongressClusterRange, ticker: string) {
+  return `vail:congress-buying-transactions:v1:${userId}:${range}:${ticker}`;
 }
 
 function readCache(userId: string, range: CongressClusterRange) {
@@ -77,11 +85,18 @@ export default function CongressClusterCalendarGate() {
   const [state, setState] = useState<GateState>('loading-session');
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState<CongressBuyingCompany | null>(null);
+  const [transactionData, setTransactionData] = useState<CongressBuyingTransactionsData | null>(null);
+  const [transactionsLoading, setTransactionsLoading] = useState(false);
+  const [transactionsError, setTransactionsError] = useState('');
   const dataRef = useRef<CongressClusterCalendarData | null>(null);
+  const transactionRequestRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  useEffect(() => () => transactionRequestRef.current?.abort(), []);
 
   useEffect(() => {
     let mounted = true;
@@ -168,18 +183,86 @@ export default function CongressClusterCalendarGate() {
     };
   }, [range, session]);
 
+  const closeTransactions = useCallback(() => {
+    transactionRequestRef.current?.abort();
+    transactionRequestRef.current = null;
+    setSelectedCompany(null);
+    setTransactionData(null);
+    setTransactionsLoading(false);
+    setTransactionsError('');
+  }, []);
+
+  const openTransactions = useCallback(async (company: CongressBuyingCompany) => {
+    if (!session) return;
+
+    transactionRequestRef.current?.abort();
+    const controller = new AbortController();
+    transactionRequestRef.current = controller;
+    const key = transactionCacheKey(session.user.id, range, company.ticker);
+    const cached = transactionCache.get(key);
+
+    setSelectedCompany(company);
+    setTransactionsError('');
+    if (cached && Date.now() - cached.cachedAt < CACHE_MAX_AGE_MS) {
+      setTransactionData(cached.data);
+      setTransactionsLoading(false);
+      transactionRequestRef.current = null;
+      return;
+    }
+
+    setTransactionData(null);
+    setTransactionsLoading(true);
+    try {
+      const response = await fetch(
+        `/api/congress-cluster-calendar/transactions?range=${range}&ticker=${encodeURIComponent(company.ticker)}`,
+        {
+          cache: 'no-store',
+          signal: controller.signal,
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        },
+      );
+      const payload = (await response.json()) as CongressBuyingTransactionsData & { error?: string };
+      if (!response.ok) {
+        throw new Error(payload.error || 'Could not load congressional transactions.');
+      }
+      transactionCache.set(key, { data: payload, cachedAt: Date.now() });
+      setTransactionData(payload);
+    } catch (value) {
+      if (value instanceof Error && value.name === 'AbortError') return;
+      setTransactionsError(
+        value instanceof Error ? value.message : 'Could not load congressional transactions.',
+      );
+    } finally {
+      if (transactionRequestRef.current === controller) {
+        transactionRequestRef.current = null;
+        setTransactionsLoading(false);
+      }
+    }
+  }, [range, session]);
+
   if (state === 'signed-out') return <ProClusterGateCard mode="signed-out" />;
   if (state === 'free') return <ProClusterGateCard mode="free" />;
   if (state === 'error') return <ProClusterGateCard mode="error" error={error} />;
   if (!data || state !== 'ready') return <CalendarLoadingState />;
 
   return (
-    <CongressClusterCalendar
-      data={data}
-      range={range}
-      loading={refreshing}
-      error={error}
-      onRangeChange={setRange}
-    />
+    <>
+      <CongressClusterCalendar
+        data={data}
+        range={range}
+        loading={refreshing}
+        error={error}
+        onRangeChange={setRange}
+        onCompanySelect={openTransactions}
+      />
+      <CongressBuyingTransactionsModal
+        company={selectedCompany}
+        range={range}
+        data={transactionData}
+        loading={transactionsLoading}
+        error={transactionsError}
+        onClose={closeTransactions}
+      />
+    </>
   );
 }

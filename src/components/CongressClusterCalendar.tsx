@@ -1,9 +1,8 @@
 'use client';
 
 import Image, { type ImageLoaderProps } from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
-import { ArrowUpRight, Landmark } from 'lucide-react';
+import { ChevronRight, Landmark } from 'lucide-react';
 
 import { getTickerLogoUrl } from '@/lib/company-logos';
 import type {
@@ -93,11 +92,22 @@ function Fact({ label, value, emphasis = false }: { label: string; value: string
   );
 }
 
-function RankedCompany({ company, rank }: { company: CongressBuyingCompany; rank: number }) {
+function RankedCompany({
+  company,
+  rank,
+  onSelect,
+}: {
+  company: CongressBuyingCompany;
+  rank: number;
+  onSelect: (company: CongressBuyingCompany) => void;
+}) {
   return (
-    <Link
-      href={`/ticker/${encodeURIComponent(company.ticker)}`}
-      className={`group grid grid-cols-[24px_42px_minmax(0,1fr)_auto] items-center gap-x-3 px-4 py-4 transition hover:bg-white/[0.025] sm:grid-cols-[28px_42px_minmax(170px,1fr)_120px_92px_80px_112px_16px] sm:gap-x-4 sm:px-5 ${
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      aria-label={`Show ${company.ticker} congressional transactions`}
+      onClick={() => onSelect(company)}
+      className={`group grid w-full grid-cols-[24px_42px_minmax(0,1fr)_auto] items-center gap-x-3 px-4 py-4 text-left transition hover:bg-white/[0.025] sm:grid-cols-[28px_42px_minmax(170px,1fr)_120px_92px_80px_112px_16px] sm:gap-x-4 sm:px-5 ${
         rank === 1 ? 'bg-emerald-400/[0.025]' : ''
       }`}
     >
@@ -122,8 +132,8 @@ function RankedCompany({ company, rank }: { company: CongressBuyingCompany; rank
         />
       </div>
 
-      <ArrowUpRight className="col-start-4 row-start-1 h-3.5 w-3.5 text-zinc-700 transition group-hover:text-zinc-400 sm:col-start-8" />
-    </Link>
+      <ChevronRight className="col-start-4 row-start-1 h-3.5 w-3.5 text-zinc-700 transition group-hover:translate-x-0.5 group-hover:text-zinc-400 sm:col-start-8" />
+    </button>
   );
 }
 
@@ -133,12 +143,14 @@ export default function CongressClusterCalendar({
   loading,
   error,
   onRangeChange,
+  onCompanySelect,
 }: {
   data: CongressClusterCalendarData;
   range: CongressClusterRange;
   loading: boolean;
   error: string;
   onRangeChange: (range: CongressClusterRange) => void;
+  onCompanySelect: (company: CongressBuyingCompany) => void;
 }) {
   const [visibleCount, setVisibleCount] = useState(ROWS_PER_PAGE);
   const visibleCompanies = data.rankedCompanies.slice(0, visibleCount);
@@ -226,7 +238,12 @@ export default function CongressClusterCalendar({
 
             <div className="divide-y divide-white/[0.045]">
               {visibleCompanies.map((company, index) => (
-                <RankedCompany key={company.ticker} company={company} rank={index + 1} />
+                <RankedCompany
+                  key={company.ticker}
+                  company={company}
+                  rank={index + 1}
+                  onSelect={onCompanySelect}
+                />
               ))}
             </div>
 
