@@ -7,8 +7,8 @@ import { ArrowUpRight, Landmark } from 'lucide-react';
 
 import { getTickerLogoUrl } from '@/lib/company-logos';
 import type {
+  CongressBuyingCompany,
   CongressClusterCalendarData,
-  CongressClusterPlay,
   CongressClusterRange,
 } from '@/lib/congress-cluster-calendar-types';
 import { formatCalendarDate } from '@/lib/date-format';
@@ -93,32 +93,32 @@ function Fact({ label, value, emphasis = false }: { label: string; value: string
   );
 }
 
-function RankedCompany({ cluster, rank }: { cluster: CongressClusterPlay; rank: number }) {
+function RankedCompany({ company, rank }: { company: CongressBuyingCompany; rank: number }) {
   return (
     <Link
-      href={`/ticker/${encodeURIComponent(cluster.ticker)}`}
-      className={`group grid grid-cols-[24px_42px_minmax(0,1fr)_auto] items-center gap-x-3 px-4 py-4 transition hover:bg-white/[0.025] sm:grid-cols-[28px_42px_minmax(170px,1fr)_92px_80px_112px_112px_16px] sm:gap-x-4 sm:px-5 ${
+      href={`/ticker/${encodeURIComponent(company.ticker)}`}
+      className={`group grid grid-cols-[24px_42px_minmax(0,1fr)_auto] items-center gap-x-3 px-4 py-4 transition hover:bg-white/[0.025] sm:grid-cols-[28px_42px_minmax(170px,1fr)_120px_92px_80px_112px_16px] sm:gap-x-4 sm:px-5 ${
         rank === 1 ? 'bg-emerald-400/[0.025]' : ''
       }`}
     >
       <span className={`text-center text-xs font-semibold tabular-nums ${rank === 1 ? 'text-emerald-300' : 'text-zinc-700'}`}>
         {rank}
       </span>
-      <TickerLogo ticker={cluster.ticker} />
+      <TickerLogo ticker={company.ticker} />
       <div className="min-w-0">
-        <div className="text-sm font-bold tracking-[0.07em] text-cyan-100">{cluster.ticker}</div>
+        <div className="text-sm font-bold tracking-[0.07em] text-cyan-100">{company.ticker}</div>
         <div className="mt-0.5 truncate text-xs text-zinc-600">
-          {cluster.companyName || `${cluster.ticker} purchases`}
+          {company.companyName || `${company.ticker} purchases`}
         </div>
       </div>
 
       <div className="col-start-2 col-end-5 mt-3 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-white/[0.05] pt-3 sm:contents">
-        <Fact label="Lawmakers" value={cluster.actorCount.toLocaleString()} emphasis={rank === 1} />
-        <Fact label="Disclosed buys" value={cluster.tradeCount.toLocaleString()} />
-        <Fact label="Minimum disclosed" value={minimumLabel(cluster.amountFloor)} />
+        <Fact label="Minimum disclosed" value={minimumLabel(company.amountFloor)} emphasis={rank === 1} />
+        <Fact label="Lawmakers" value={company.actorCount.toLocaleString()} />
+        <Fact label="Disclosed buys" value={company.tradeCount.toLocaleString()} />
         <Fact
           label="Latest trade"
-          value={cluster.latestTransactionDate ? formatCalendarDate(cluster.latestTransactionDate, 'UTC') : 'Not reported'}
+          value={company.latestTransactionDate ? formatCalendarDate(company.latestTransactionDate, 'UTC') : 'Not reported'}
         />
       </div>
 
@@ -141,8 +141,8 @@ export default function CongressClusterCalendar({
   onRangeChange: (range: CongressClusterRange) => void;
 }) {
   const [visibleCount, setVisibleCount] = useState(ROWS_PER_PAGE);
-  const visibleClusters = data.topClusters.slice(0, visibleCount);
-  const remainingCount = Math.max(data.topClusters.length - visibleClusters.length, 0);
+  const visibleCompanies = data.rankedCompanies.slice(0, visibleCount);
+  const remainingCount = Math.max(data.rankedCompanies.length - visibleCompanies.length, 0);
 
   return (
     <div className="mx-auto max-w-[1040px] space-y-4">
@@ -154,7 +154,7 @@ export default function CongressClusterCalendar({
           </div>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Congress buying</h1>
           <p className="mt-1.5 max-w-xl text-sm leading-6 text-zinc-500">
-            Stocks bought by 2+ lawmakers, based on buys newly disclosed {RANGE_PHRASES[range]}.
+            Stocks ranked by minimum disclosed congressional buying {RANGE_PHRASES[range]}.
           </p>
         </div>
 
@@ -201,32 +201,32 @@ export default function CongressClusterCalendar({
           <Metric label="Minimum disclosed" value={minimumLabel(data.totals.amountFloor)} />
         </section>
 
-        {data.topClusters.length ? (
+        {data.rankedCompanies.length ? (
           <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.012]">
             <div className="flex items-center justify-between gap-4 border-b border-white/[0.055] px-4 py-3.5 sm:px-5">
               <div>
-                <h2 className="text-sm font-semibold text-white">Ranked accumulation</h2>
-                <p className="mt-0.5 text-[11px] text-zinc-600">Most distinct lawmakers first</p>
+                <h2 className="text-sm font-semibold text-white">Congressional buying by stock</h2>
+                <p className="mt-0.5 text-[11px] text-zinc-600">Largest disclosed minimum first</p>
               </div>
               <div className="text-xs font-medium tabular-nums text-zinc-500">
-                {data.totals.clusterCount.toLocaleString()} companies
+                {data.totals.companyCount.toLocaleString()} companies
               </div>
             </div>
 
-            <div className="hidden grid-cols-[28px_42px_minmax(170px,1fr)_92px_80px_112px_112px_16px] gap-x-4 border-b border-white/[0.045] px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[0.11em] text-zinc-700 sm:grid">
+            <div className="hidden grid-cols-[28px_42px_minmax(170px,1fr)_120px_92px_80px_112px_16px] gap-x-4 border-b border-white/[0.045] px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[0.11em] text-zinc-700 sm:grid">
               <span className="text-center">#</span>
               <span />
               <span>Company</span>
+              <span>Minimum</span>
               <span>Lawmakers</span>
               <span>Buys</span>
-              <span>Minimum</span>
               <span>Latest trade</span>
               <span />
             </div>
 
             <div className="divide-y divide-white/[0.045]">
-              {visibleClusters.map((cluster, index) => (
-                <RankedCompany key={cluster.ticker} cluster={cluster} rank={index + 1} />
+              {visibleCompanies.map((company, index) => (
+                <RankedCompany key={company.ticker} company={company} rank={index + 1} />
               ))}
             </div>
 
@@ -234,10 +234,10 @@ export default function CongressClusterCalendar({
               <div className="border-t border-white/[0.055] p-3">
                 <button
                   type="button"
-                  onClick={() => setVisibleCount(data.topClusters.length)}
+                  onClick={() => setVisibleCount(data.rankedCompanies.length)}
                   className="w-full rounded-xl border border-white/[0.07] bg-white/[0.018] px-4 py-2.5 text-xs font-medium text-zinc-400 transition hover:border-white/[0.12] hover:bg-white/[0.035] hover:text-white"
                 >
-                  Show all {data.topClusters.length.toLocaleString()} companies
+                  Show all {data.rankedCompanies.length.toLocaleString()} companies
                   <span className="ml-2 text-zinc-700">{remainingCount} more</span>
                 </button>
               </div>
@@ -245,7 +245,7 @@ export default function CongressClusterCalendar({
           </section>
         ) : (
           <section className="rounded-2xl border border-white/[0.07] bg-white/[0.015] px-5 py-14 text-center">
-            <div className="text-sm font-medium text-zinc-300">No stocks were bought by 2+ lawmakers in this period.</div>
+            <div className="text-sm font-medium text-zinc-300">No congressional buys were disclosed in this period.</div>
             <div className="mt-1 text-xs text-zinc-600">Try a longer time range.</div>
           </section>
         )}

@@ -3,8 +3,8 @@ import 'server-only';
 import { unstable_cache } from 'next/cache';
 
 import type {
+  CongressBuyingCompany,
   CongressClusterCalendarData,
-  CongressClusterPlay,
   CongressClusterRange,
 } from '@/lib/congress-cluster-calendar-types';
 import { parsePoliticianAmountRange } from '@/lib/politician-amount-range';
@@ -18,7 +18,18 @@ const RANGE_DAYS: Partial<Record<CongressClusterRange, number>> = {
 const PAGE_SIZE = 1_000;
 const PAGE_CONCURRENCY = 4;
 const MAX_ROWS = 20_000;
-const MIN_CLUSTER_ACTORS = 2;
+const EQUITY_ASSET_TYPES = new Set([
+  'cs',
+  'common stock',
+  'common stocks',
+  'equity',
+  'etf',
+  'rs',
+  'st',
+  'stock',
+  'stock/etf',
+  'stocks',
+]);
 
 type CongressBuyRow = {
   id: string;
@@ -111,6 +122,17 @@ function normalizedTransactionDate(row: CongressBuyRow, publishedDate: string) {
   return transactionDate > publishedDate ? publishedDate : transactionDate;
 }
 
+function isEquityPurchase(row: CongressBuyRow) {
+  const assetType = String(row.asset_type || '').trim().toLowerCase();
+  const assetName = String(row.asset_name || '').trim().toLowerCase();
+
+  if (/\b(?:annuit(?:y|ies)|bond|municipal|treasur(?:y|ies))\b/.test(assetName)) {
+    return false;
+  }
+  if (!assetType) return true;
+  return EQUITY_ASSET_TYPES.has(assetType) || assetType.includes('stock') || assetType.includes('etf');
+}
+
 function economicTradeKey(row: CongressBuyRow, ticker: string, politicianKey: string) {
   return [
     politicianKey,
@@ -178,7 +200,6 @@ function buildAccumulationData(
 ): CongressClusterCalendarData {
   const plays = new Map<string, MutablePlay>();
   const allActors = new Set<string>();
-  const allTickers = new Set<string>();
   const economicTrades = new Set<string>();
   let processedTradeCount = 0;
   let totalAmountFloor = 0;
@@ -188,7 +209,7 @@ function buildAccumulationData(
     const ticker = String(row.ticker || '').trim().toUpperCase();
     const publishedDate = String(row.published_date || '').slice(0, 10);
     const politicianKey = actorKey(row);
-    if (!ticker || !publishedDate || !politicianKey) {
+    if (!ticker || !publishedDate || !politicianKey || !isEquityPurchase(row)) {
       continue;
     }
 
@@ -222,20 +243,15 @@ function buildAccumulationData(
     plays.set(ticker, play);
 
     allActors.add(politicianKey);
-    allTickers.add(ticker);
     processedTradeCount += 1;
     totalAmountFloor += amountFloor;
     if (publishedDate > latestDisclosureDate) latestDisclosureDate = publishedDate;
   }
 
-  const qualifyingPlays = [...plays.values()].filter(
-    (play) => play.actors.size >= MIN_CLUSTER_ACTORS,
-  );
-
-  const topClusters: CongressClusterPlay[] = qualifyingPlays
+  const rankedCompanies: CongressBuyingCompany[] = [...plays.values()]
     .sort((left, right) => {
-      if (right.actors.size !== left.actors.size) return right.actors.size - left.actors.size;
       if (right.amountFloor !== left.amountFloor) return right.amountFloor - left.amountFloor;
+      if (right.actors.size !== left.actors.size) return right.actors.size - left.actors.size;
       if (right.tradeCount !== left.tradeCount) return right.tradeCount - left.tradeCount;
       const freshnessDelta = right.latestDisclosureDate.localeCompare(left.latestDisclosureDate);
       return freshnessDelta || left.ticker.localeCompare(right.ticker);
@@ -253,12 +269,11 @@ function buildAccumulationData(
   return {
     range,
     latestDisclosureDate: latestDisclosureDate || null,
-    topClusters,
+    rankedCompanies,
     totals: {
       actorCount: allActors.size,
-      clusterCount: qualifyingPlays.length,
+      companyCount: rankedCompanies.length,
       tradeCount: processedTradeCount,
-      tickerCount: allTickers.size,
       amountFloor: totalAmountFloor,
     },
   };
@@ -270,7 +285,7 @@ const loadCachedCongressClusterCalendar = unstable_cache(
     const rows = await loadCongressBuys(rangeStart, rangeEnd);
     return buildAccumulationData(range, rows);
   },
-  ['congress-cluster-accumulation-v5'],
+  ['congress-cluster-accumulation-v7'],
   { revalidate: 2 * 60 },
 );
 

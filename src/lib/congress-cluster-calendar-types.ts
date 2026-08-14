@@ -1,6 +1,6 @@
 export type CongressClusterRange = 'week' | 'month' | 'ytd';
 
-export type CongressClusterPlay = {
+export type CongressBuyingCompany = {
   ticker: string;
   companyName: string | null;
   actorCount: number;
@@ -13,12 +13,11 @@ export type CongressClusterPlay = {
 export type CongressClusterCalendarData = {
   range: CongressClusterRange;
   latestDisclosureDate: string | null;
-  topClusters: CongressClusterPlay[];
+  rankedCompanies: CongressBuyingCompany[];
   totals: {
     actorCount: number;
-    clusterCount: number;
+    companyCount: number;
     tradeCount: number;
-    tickerCount: number;
     amountFloor: number;
   };
 };
