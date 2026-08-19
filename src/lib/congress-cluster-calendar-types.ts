@@ -46,3 +46,45 @@ export type CongressClusterCalendarData = {
     amountFloor: number;
   };
 };
+
+export type CongressCalendarCompany = {
+  ticker: string;
+  companyName: string | null;
+  actorCount: number;
+  tradeCount: number;
+  amountFloor: number;
+};
+
+export type CongressCalendarDay = {
+  date: string;
+  actorCount: number;
+  tradeCount: number;
+  amountFloor: number;
+  companies: CongressCalendarCompany[];
+};
+
+export type CongressBuyingCalendarData = {
+  month: string;
+  calendarStart: string;
+  calendarEnd: string;
+  latestTransactionDate: string | null;
+  latestDisclosureDate: string | null;
+  days: CongressCalendarDay[];
+  totals: {
+    actorCount: number;
+    companyCount: number;
+    tradeCount: number;
+    amountFloor: number;
+  };
+};
+
+export type CongressCalendarTransactionsData = {
+  date: string;
+  ticker: string;
+  transactions: CongressBuyingTransaction[];
+  totals: {
+    actorCount: number;
+    tradeCount: number;
+    amountFloor: number;
+  };
+};

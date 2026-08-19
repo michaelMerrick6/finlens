@@ -33,7 +33,7 @@ const EQUITY_ASSET_TYPES = new Set([
   'stocks',
 ]);
 
-type CongressBuyRow = {
+export type CongressBuyRow = {
   id: string;
   member_id: string | null;
   politician_name: string | null;
@@ -45,7 +45,7 @@ type CongressBuyRow = {
   published_date: string | null;
 };
 
-type CongressBuyDetailRow = CongressBuyRow & {
+export type CongressBuyDetailRow = CongressBuyRow & {
   chamber: string | null;
   party: string | null;
   source_url: string | null;
@@ -93,13 +93,13 @@ function rangeDates(range: CongressClusterRange) {
   };
 }
 
-function actorKey(row: CongressBuyRow) {
+export function actorKey(row: CongressBuyRow) {
   const memberId = String(row.member_id || '').trim().toLowerCase();
   const politicianName = String(row.politician_name || '').replace(/[,\s]+$/g, '').trim();
   return memberId || politicianName.toLowerCase();
 }
 
-function normalizedCompanyName(row: CongressBuyRow) {
+export function normalizedCompanyName(row: CongressBuyRow) {
   const name = stripPoliticianOptionMetadata(row.asset_name)
     .replace(/\s+-\s+(?:Class\s+[A-Z]\s+)?Common\s+Stock.*$/i, '')
     .replace(/\s+(?:Class\s+[A-Z]\s+)?Common\s+Stock.*$/i, '')
@@ -119,18 +119,18 @@ function normalizedCompanyName(row: CongressBuyRow) {
   return name;
 }
 
-function preferredCompanyName(names: Map<string, number>) {
+export function preferredCompanyName(names: Map<string, number>) {
   return [...names.entries()]
     .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))[0]?.[0] || null;
 }
 
-function normalizedTransactionDate(row: CongressBuyRow, publishedDate: string) {
+export function normalizedTransactionDate(row: CongressBuyRow, publishedDate: string) {
   const transactionDate = String(row.transaction_date || '').slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(transactionDate)) return null;
-  return transactionDate > publishedDate ? publishedDate : transactionDate;
+  return transactionDate > publishedDate ? null : transactionDate;
 }
 
-function isEquityPurchase(row: CongressBuyRow) {
+export function isEquityPurchase(row: CongressBuyRow) {
   const assetType = String(row.asset_type || '').trim().toLowerCase();
   const assetName = String(row.asset_name || '').trim().toLowerCase();
 
@@ -141,14 +141,12 @@ function isEquityPurchase(row: CongressBuyRow) {
   return EQUITY_ASSET_TYPES.has(assetType) || assetType.includes('stock') || assetType.includes('etf');
 }
 
-function economicTradeKey(row: CongressBuyRow, ticker: string, politicianKey: string) {
+export function economicTradeKey(row: CongressBuyRow, ticker: string, politicianKey: string) {
   return [
     politicianKey,
     ticker,
     String(row.transaction_date || '').slice(0, 10),
     String(row.amount_range || '').replace(/\s+/g, '').toLowerCase(),
-    String(row.asset_name || '').trim().toLowerCase(),
-    String(row.asset_type || '').trim().toLowerCase(),
   ].join('::');
 }
 
@@ -393,7 +391,7 @@ const loadCachedCongressClusterCalendar = unstable_cache(
     const rows = await loadCongressBuys(rangeStart, rangeEnd);
     return buildAccumulationData(range, rows);
   },
-  ['congress-cluster-accumulation-v7'],
+  ['congress-cluster-accumulation-v8'],
   { revalidate: 2 * 60 },
 );
 
@@ -407,7 +405,7 @@ const loadCachedCongressBuyingTransactions = unstable_cache(
     const rows = await loadCongressBuysForTicker(rangeStart, rangeEnd, ticker);
     return buildTransactionsData(range, ticker, rows);
   },
-  ['congress-buying-transactions-v1'],
+  ['congress-buying-transactions-v2'],
   { revalidate: 2 * 60 },
 );
 

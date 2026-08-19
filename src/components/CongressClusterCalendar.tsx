@@ -4,6 +4,7 @@ import Image, { type ImageLoaderProps } from 'next/image';
 import { useState } from 'react';
 import { ChevronRight, Landmark } from 'lucide-react';
 
+import CongressBuyingViewNav from '@/components/CongressBuyingViewNav';
 import { getTickerLogoUrl } from '@/lib/company-logos';
 import type {
   CongressBuyingCompany,
@@ -158,6 +159,10 @@ export default function CongressClusterCalendar({
 
   return (
     <div className="mx-auto max-w-[1040px] space-y-4">
+      <div className="flex justify-end">
+        <CongressBuyingViewNav active="overview" />
+      </div>
+
       <header className="flex flex-col gap-4 border-b border-white/[0.06] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300/80">
