@@ -63,6 +63,15 @@ export type CongressCalendarDay = {
   companies: CongressCalendarCompany[];
 };
 
+export type CongressCalendarWeek = {
+  startDate: string;
+  endDate: string;
+  actorCount: number;
+  companyCount: number;
+  tradeCount: number;
+  amountFloor: number;
+};
+
 export type CongressBuyingCalendarData = {
   month: string;
   calendarStart: string;
@@ -70,6 +79,7 @@ export type CongressBuyingCalendarData = {
   latestTransactionDate: string | null;
   latestDisclosureDate: string | null;
   days: CongressCalendarDay[];
+  weeks: CongressCalendarWeek[];
   totals: {
     actorCount: number;
     companyCount: number;

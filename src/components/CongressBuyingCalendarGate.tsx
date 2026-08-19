@@ -31,7 +31,13 @@ function currentPacificMonth() {
 }
 
 function cacheKey(userId: string, month: string) {
-  return `vail:congress-buying-calendar:v1:${userId}:${month}`;
+  return `vail:congress-buying-calendar:v2:${userId}:${month}`;
+}
+
+function addDays(value: string, days: number) {
+  const date = new Date(`${value}T12:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
 }
 
 function transactionCacheKey(userId: string, date: string, ticker: string) {
@@ -71,11 +77,16 @@ function writeCache(userId: string, month: string, data: CongressBuyingCalendarD
 
 function CalendarLoadingState() {
   return (
-    <div className="mx-auto max-w-[1120px] space-y-4">
+    <div className="mx-auto max-w-[1180px] space-y-4">
       <div className="ml-auto h-10 w-56 animate-pulse rounded-xl bg-white/[0.025]" />
-      <div className="h-28 animate-pulse border-b border-white/[0.06] bg-white/[0.01]" />
-      <div className="h-16 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.018]" />
-      <div className="h-[520px] animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.012]" />
+      <div className="h-24 animate-pulse border-b border-white/[0.06] bg-white/[0.01]" />
+      <div className="h-20 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.018]" />
+      <div className="grid grid-cols-7 gap-2">
+        {Array.from({ length: 7 }, (_, index) => (
+          <div key={index} className="h-16 animate-pulse rounded-xl border border-white/[0.06] bg-white/[0.012] md:h-40" />
+        ))}
+      </div>
+      <div className="h-44 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.012]" />
     </div>
   );
 }
@@ -83,6 +94,7 @@ function CalendarLoadingState() {
 export default function CongressBuyingCalendarGate() {
   const [session, setSession] = useState<Session | null>(null);
   const [month, setMonth] = useState(currentPacificMonth);
+  const [requestedWeekStart, setRequestedWeekStart] = useState<string | null>(null);
   const [data, setData] = useState<CongressBuyingCalendarData | null>(null);
   const [state, setState] = useState<GateState>('loading-session');
   const [refreshing, setRefreshing] = useState(false);
@@ -248,6 +260,11 @@ export default function CongressBuyingCalendarGate() {
     }
   }, [session]);
 
+  const changeWeek = useCallback((weekStart: string) => {
+    setRequestedWeekStart(weekStart);
+    setMonth(addDays(weekStart, 3).slice(0, 7));
+  }, []);
+
   if (state === 'signed-out') return <ProClusterGateCard mode="signed-out" />;
   if (state === 'free') return <ProClusterGateCard mode="free" />;
   if (state === 'error') return <ProClusterGateCard mode="error" error={error} />;
@@ -256,11 +273,12 @@ export default function CongressBuyingCalendarGate() {
   return (
     <>
       <CongressBuyingCalendar
-        key={data.month}
+        key={`${data.month}:${requestedWeekStart || 'latest'}`}
         data={data}
         loading={refreshing}
         error={error}
-        onMonthChange={setMonth}
+        initialWeekStart={requestedWeekStart}
+        onWeekChange={changeWeek}
         onCompanySelect={openTransactions}
       />
       <CongressCalendarTransactionsModal

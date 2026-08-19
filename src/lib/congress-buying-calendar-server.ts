@@ -16,6 +16,7 @@ import type {
   CongressBuyingTransaction,
   CongressCalendarCompany,
   CongressCalendarDay,
+  CongressCalendarWeek,
   CongressCalendarTransactionsData,
 } from '@/lib/congress-cluster-calendar-types';
 import { parsePoliticianAmountRange } from '@/lib/politician-amount-range';
@@ -45,6 +46,15 @@ type MutableDay = {
   tradeCount: number;
   amountFloor: number;
   companies: Map<string, MutableCompany>;
+};
+
+type MutableWeek = {
+  startDate: string;
+  endDate: string;
+  actors: Set<string>;
+  companies: Set<string>;
+  tradeCount: number;
+  amountFloor: number;
 };
 
 function toIsoDate(date: Date) {
@@ -90,6 +100,12 @@ function calendarBounds(month: string) {
     start: addUtcDays(toIsoDate(first), -mondayOffset),
     end: addUtcDays(toIsoDate(last), sundayOffset),
   };
+}
+
+function weekStart(value: string) {
+  const date = new Date(`${value}T12:00:00Z`);
+  const mondayOffset = (date.getUTCDay() + 6) % 7;
+  return addUtcDays(value, -mondayOffset);
 }
 
 function normalizedTicker(value: string | null | undefined) {
@@ -153,6 +169,7 @@ function companySummary(company: MutableCompany): CongressCalendarCompany {
 function buildCalendarData(month: string, rows: CalendarBuyRow[]): CongressBuyingCalendarData {
   const bounds = calendarBounds(month);
   const days = new Map<string, MutableDay>();
+  const weeks = new Map<string, MutableWeek>();
   const economicTrades = new Set<string>();
   const monthActors = new Set<string>();
   const monthCompanies = new Set<string>();
@@ -209,6 +226,21 @@ function buildCalendarData(month: string, rows: CalendarBuyRow[]): CongressBuyin
     day.companies.set(ticker, company);
     days.set(transactionDate, day);
 
+    const startDate = weekStart(transactionDate);
+    const week = weeks.get(startDate) || {
+      startDate,
+      endDate: addUtcDays(startDate, 6),
+      actors: new Set<string>(),
+      companies: new Set<string>(),
+      tradeCount: 0,
+      amountFloor: 0,
+    };
+    week.actors.add(politicianKey);
+    week.companies.add(ticker);
+    week.tradeCount += 1;
+    week.amountFloor += amountFloor;
+    weeks.set(startDate, week);
+
     if (transactionDate.startsWith(month)) {
       monthActors.add(politicianKey);
       monthCompanies.add(ticker);
@@ -235,6 +267,17 @@ function buildCalendarData(month: string, rows: CalendarBuyRow[]): CongressBuyin
         .map(companySummary),
     }));
 
+  const calendarWeeks: CongressCalendarWeek[] = [...weeks.values()]
+    .sort((left, right) => left.startDate.localeCompare(right.startDate))
+    .map((week) => ({
+      startDate: week.startDate,
+      endDate: week.endDate,
+      actorCount: week.actors.size,
+      companyCount: week.companies.size,
+      tradeCount: week.tradeCount,
+      amountFloor: week.amountFloor,
+    }));
+
   return {
     month,
     calendarStart: bounds.start,
@@ -242,6 +285,7 @@ function buildCalendarData(month: string, rows: CalendarBuyRow[]): CongressBuyin
     latestTransactionDate: latestTransactionDate || null,
     latestDisclosureDate: latestDisclosureDate || null,
     days: calendarDays,
+    weeks: calendarWeeks,
     totals: {
       actorCount: monthActors.size,
       companyCount: monthCompanies.size,
@@ -257,7 +301,7 @@ const loadCachedCongressBuyingCalendar = unstable_cache(
     const rows = await loadCalendarRows(bounds.start, bounds.end);
     return buildCalendarData(month, rows);
   },
-  ['congress-buying-calendar-v1'],
+  ['congress-buying-calendar-v2'],
   { revalidate: 2 * 60 },
 );
 
