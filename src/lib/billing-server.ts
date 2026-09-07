@@ -201,7 +201,7 @@ async function ensureStripeCustomer(profile: BillingProfileRow, user: User) {
     metadata: {
       supabase_user_id: user.id,
     },
-  });
+  }, { idempotencyKey: `vail-customer-${user.id}` });
 
   const supabase = getAdminSupabase();
   const response = await supabase
@@ -224,6 +224,32 @@ export async function createCheckoutSession(user: User) {
   const stripe = getStripeClient();
   const profile = await ensureBillingProfile(user);
   const customerId = await ensureStripeCustomer(profile, user);
+
+  // Check Stripe itself: the checkout webhook may not have reached us yet.
+  for await (const subscription of stripe.subscriptions.list({ customer: customerId, status: 'all', limit: 100 })) {
+    if (!['canceled', 'incomplete_expired'].includes(subscription.status)) {
+      throw new ApiRouteError(409, 'BILLING_SUBSCRIPTION_EXISTS', 'You already have a subscription. Manage it in the billing portal.');
+    }
+  }
+
+  const recentSessions = await stripe.checkout.sessions.list({ customer: customerId, limit: 1 });
+  const previousSession = recentSessions.data[0];
+  if (previousSession?.status === 'open' && previousSession.mode === 'subscription' && previousSession.url) {
+    return previousSession.url;
+  }
+  // A completed checkout can precede subscription visibility. Do not open another
+  // checkout until Stripe exposes its subscription (or reports a terminal state).
+  if (previousSession?.status === 'complete' && previousSession.mode === 'subscription') {
+    const subscriptionId = typeof previousSession.subscription === 'string'
+      ? previousSession.subscription : previousSession.subscription?.id;
+    if (!subscriptionId) {
+      throw new ApiRouteError(409, 'BILLING_CHECKOUT_PENDING', 'Your checkout is still processing. Please try again shortly.');
+    }
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    if (!['canceled', 'incomplete_expired'].includes(subscription.status)) {
+      throw new ApiRouteError(409, 'BILLING_SUBSCRIPTION_EXISTS', 'You already have a subscription. Manage it in the billing portal.');
+    }
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
@@ -249,7 +275,7 @@ export async function createCheckoutSession(user: User) {
         plan_key: 'pro',
       },
     },
-  });
+  }, { idempotencyKey: `vail-checkout-${customerId}-${previousSession?.id || "first"}` });
 
   if (!session.url) {
     throw new Error('Stripe did not return a checkout URL.');
@@ -386,7 +412,11 @@ export async function syncBillingFromStripeEvent(event: Stripe.Event) {
     event.type === 'customer.subscription.updated' ||
     event.type === 'customer.subscription.deleted'
   ) {
-    await syncBillingFromStripeSubscription(event.data.object as Stripe.Subscription);
+    // Webhooks may arrive out of order. Read current Stripe state rather than
+    // applying the historical snapshot carried by the event.
+    const stripe = getStripeClient();
+    const subscription = await stripe.subscriptions.retrieve((event.data.object as Stripe.Subscription).id);
+    await syncBillingFromStripeSubscription(subscription);
   }
 
   // Record only after the billing update succeeds. Stripe can then safely retry

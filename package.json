@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:billing": "node --test tests/billing-server.test.mjs",
     "test:python": "python3 scripts/run_tests.py"
   },
   "engines": {

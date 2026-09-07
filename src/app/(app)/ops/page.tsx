@@ -8,6 +8,7 @@ import {
   Activity,
   AlertTriangle,
   ArrowRight,
+  BarChart3,
   Bell,
   GitBranch,
   Megaphone,
@@ -524,6 +525,7 @@ export default async function OpsPage() {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            <ActionLink href="/ops/analytics">Site Analytics</ActionLink>
             <ActionLink href="/ops/social">Broadcast Control</ActionLink>
             <ActionLink href="/ops/clusters">Cluster Ops</ActionLink>
             <ActionLink href="/ops/policy">Policy</ActionLink>
@@ -866,7 +868,12 @@ export default async function OpsPage() {
             <h2 className="mt-1 text-lg font-semibold text-white">Operational panels</h2>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-4">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+            <Link href="/ops/analytics" className="rounded-xl border border-white/[0.06] bg-black/20 p-4 transition hover:bg-white/[0.04]">
+              <BarChart3 className="h-5 w-5 text-emerald-300" />
+              <div className="mt-3 text-sm font-semibold text-white">Site Analytics</div>
+              <div className="mt-1 text-xs leading-5 text-zinc-500">See visitors, sources, locations, and popular pages.</div>
+            </Link>
             <Link href="/ops/social" className="rounded-xl border border-white/[0.06] bg-black/20 p-4 transition hover:bg-white/[0.04]">
               <Megaphone className="h-5 w-5 text-cyan-300" />
               <div className="mt-3 text-sm font-semibold text-white">Broadcast Review</div>

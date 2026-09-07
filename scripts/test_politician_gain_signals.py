@@ -1,7 +1,12 @@
+from datetime import datetime, timezone
+from unittest.mock import patch
+
 import politician_gain_signals as module
 
 
-def test_build_politician_gain_milestone_events() -> None:
+@patch("signal_baseline_support.utc_now", return_value=datetime(2026, 4, 14, tzinfo=timezone.utc))
+@patch("politician_gain_signals.utc_now", return_value=datetime(2026, 4, 14, tzinfo=timezone.utc))
+def test_build_politician_gain_milestone_events(_gain_clock, _baseline_clock) -> None:
     original_fetch = module.fetch_market_price_series
     try:
         module.fetch_market_price_series = lambda ticker, earliest_date=None: {
@@ -148,7 +153,9 @@ def test_build_politician_gain_milestone_events() -> None:
         module.fetch_market_price_series = original_fetch
 
 
-def test_build_cluster_gain_milestone_events() -> None:
+@patch("signal_baseline_support.utc_now", return_value=datetime(2026, 4, 14, tzinfo=timezone.utc))
+@patch("politician_gain_signals.utc_now", return_value=datetime(2026, 4, 14, tzinfo=timezone.utc))
+def test_build_cluster_gain_milestone_events(_gain_clock, _baseline_clock) -> None:
     original_fetch = module.fetch_market_price_series
     try:
         module.fetch_market_price_series = lambda ticker, earliest_date=None: {

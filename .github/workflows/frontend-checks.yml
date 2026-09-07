@@ -28,6 +28,9 @@ jobs:
     - name: Lint
       run: npm run lint
 
+    - name: Billing regression tests
+      run: npm run test:billing
+
     - name: Typecheck
       run: npm run typecheck
 
