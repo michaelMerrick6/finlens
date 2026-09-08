@@ -2,8 +2,11 @@
 
 import { type CSSProperties, type FormEvent, type ReactNode, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import Image, { type ImageLoaderProps } from 'next/image';
 import { AlertTriangle, KeyRound, UserPlus } from 'lucide-react';
+
+import { authReturnPath } from '@/lib/auth-return-path';
 
 import { supabase } from '@/lib/supabase';
 import { getTickerLogoUrl } from '@/lib/company-logos';
@@ -70,10 +73,10 @@ const CLUSTER_SPOTLIGHT = [
 
 const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
 
-function authCallbackUrl() {
+function authCallbackUrl(next: string) {
   const configuredOrigin = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/+$/, '');
   const origin = configuredOrigin || window.location.origin;
-  return `${origin}/auth/callback`;
+  return `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
 }
 
 function formatCompactNumber(value: number) {
@@ -332,7 +335,8 @@ function TextChips({ items }: { items: Array<{ label: string; symbol?: string }>
 export function AuthPanel() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [mode, setMode] = useState<AuthMode>('signup');
+  const [mode, setMode] = useState<AuthMode>(searchParams.get('mode') === 'signup' ? 'signup' : 'signin');
+  const nextPath = authReturnPath(searchParams.get('next'));
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -365,14 +369,14 @@ export function AuthPanel() {
     supabase.auth.getSession().then(({ data }) => {
       if (mounted) {
         if (data.session) {
-          router.replace('/dashboard');
+          router.replace(nextPath);
         }
       }
     });
 
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (nextSession) {
-        router.replace('/dashboard');
+        router.replace(nextPath);
       }
     });
 
@@ -380,7 +384,7 @@ export function AuthPanel() {
       mounted = false;
       data.subscription.unsubscribe();
     };
-  }, [router]);
+  }, [router, nextPath]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -410,7 +414,7 @@ export function AuthPanel() {
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: authCallbackUrl(),
+          redirectTo: authCallbackUrl(nextPath),
         },
       });
       if (oauthError) throw oauthError;
@@ -436,6 +440,7 @@ export function AuthPanel() {
           email: email.trim(),
           password,
           options: {
+            emailRedirectTo: authCallbackUrl(nextPath),
             data: {
               display_name: displayName.trim() || undefined,
             },
@@ -447,7 +452,7 @@ export function AuthPanel() {
         }
 
         if (response.data.session) {
-          router.replace('/dashboard');
+          router.replace(nextPath);
           return;
         }
 
@@ -462,7 +467,7 @@ export function AuthPanel() {
           throw response.error;
         }
 
-        router.replace('/dashboard');
+        router.replace(nextPath);
       }
     } catch (value) {
       setError(value instanceof Error ? value.message : 'Authentication failed.');
@@ -476,7 +481,7 @@ export function AuthPanel() {
       <div className="min-w-0 w-full max-w-6xl">
         <div className="grid min-w-0 gap-6 lg:grid-cols-[1.08fr_0.92fr]">
           {/* Left — value proposition */}
-          <div className="glass-panel auth-card auth-overview-card min-w-0 overflow-hidden rounded-3xl p-8">
+          <div className="glass-panel auth-card auth-overview-card order-2 lg:order-1 min-w-0 overflow-hidden rounded-3xl p-8">
             <div className="auth-live-kicker inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
               <span className="auth-live-dot h-1.5 w-1.5 rounded-full bg-emerald-300" />
               Live market data
@@ -538,7 +543,7 @@ export function AuthPanel() {
           </div>
 
           {/* Right — auth form */}
-          <div className="glass-panel auth-card flex h-full min-w-0 flex-col rounded-3xl p-6 md:p-8 lg:min-h-[760px]">
+          <div className="glass-panel auth-card order-1 lg:order-2 flex h-full min-w-0 flex-col rounded-3xl p-6 md:p-8 lg:min-h-[760px]">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <div className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">Account</div>
@@ -591,10 +596,11 @@ export function AuthPanel() {
             <form className="space-y-5" onSubmit={handleSubmit}>
               {mode === 'signup' ? (
                 <div>
-                  <label className="mb-2 block text-sm text-zinc-300">Display name</label>
+                  <label htmlFor="auth-displayName" className="mb-2 block text-sm text-zinc-300">Display name</label>
                   <input
                     type="text"
-                    value={displayName}
+                    id="auth-displayName"
+                  value={displayName}
                     onChange={(event) => setDisplayName(event.target.value)}
                     className="w-full rounded-2xl border border-white/10 bg-[#0b0b0c] px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-white/20"
                     placeholder="Mike"
@@ -603,9 +609,10 @@ export function AuthPanel() {
               ) : null}
 
               <div>
-                <label className="mb-2 block text-sm text-zinc-300">Email</label>
+                <label htmlFor="auth-email" className="mb-2 block text-sm text-zinc-300">Email</label>
                 <input
                   type="email"
+                  id="auth-email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   className="w-full rounded-2xl border border-white/10 bg-[#0b0b0c] px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-white/20"
@@ -615,9 +622,10 @@ export function AuthPanel() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm text-zinc-300">Password</label>
+                <label htmlFor="auth-password" className="mb-2 block text-sm text-zinc-300">Password</label>
                 <input
                   type="password"
+                  id="auth-password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   className="w-full rounded-2xl border border-white/10 bg-[#0b0b0c] px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-white/20"
@@ -630,10 +638,11 @@ export function AuthPanel() {
 
               {mode === 'signup' ? (
                 <div>
-                  <label className="mb-2 block text-sm text-zinc-300">Confirm password</label>
+                  <label htmlFor="auth-confirmPassword" className="mb-2 block text-sm text-zinc-300">Confirm password</label>
                   <input
                     type="password"
-                    value={confirmPassword}
+                    id="auth-confirmPassword"
+                  value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     className="w-full rounded-2xl border border-white/10 bg-[#0b0b0c] px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-white/20"
                     placeholder="••••••••"
@@ -668,6 +677,7 @@ export function AuthPanel() {
                 {mode === 'signin' ? <KeyRound className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
                 {busy ? 'Working...' : mode === 'signin' ? 'Sign in' : 'Create account'}
               </button>
+              {mode === 'signin' ? <Link href="/auth/reset" className="inline-flex min-h-11 items-center text-sm text-emerald-300 underline">Forgot your password?</Link> : null}
             </form>
 
             <div className="mt-auto pt-8 text-center text-xs text-zinc-600">

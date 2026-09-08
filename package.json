@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:auth": "node --test tests/auth-return-path.test.mjs",
     "test:billing": "node --test tests/billing-server.test.mjs",
     "test:python": "python3 scripts/run_tests.py"
   },

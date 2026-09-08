@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Image, { type ImageLoaderProps } from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -328,8 +329,29 @@ export default function InsidersFeed({ initialTrades }: { initialTrades: Insider
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+        <div className="divide-y divide-white/10 md:hidden">
+          {displayedTrades.map(trade => (
+            <article key={trade.id} className="space-y-3 p-4">
+              <div>
+                <h2 className="text-sm font-semibold text-white">{displayFilerName(trade.filer_name)}</h2>
+                <p className="mt-1 text-xs text-zinc-400">{displayRelation(trade.filer_relation)}</p>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                {trade.ticker && !['N/A', 'UNKNOWN', 'NA'].includes(displayTicker(trade.ticker)) ? <Link href={`/ticker/${encodeURIComponent(displayTicker(trade.ticker))}`} className="font-semibold text-blue-300 underline-offset-4 hover:underline">{displayTicker(trade.ticker)}</Link> : <span className="text-zinc-400">Ticker unavailable</span>}
+                <span className="text-sm text-zinc-200">{displayTradeLabel(normalizeDirection(trade.transaction_code))}</span>
+              </div>
+              <div className="text-sm text-zinc-200">{formatCompactCurrency(trade.value)} · {formatShares(trade.amount)} shares</div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-400">
+                <span>Price {formatPrice(trade.price)}</span>
+                <span>Traded {formatCalendarDate(trade.transaction_date)}</span>
+                {trade.published_date ? <span>Filed {formatCalendarDate(trade.published_date)}</span> : null}
+              </div>
+              {trade.source_url ? <a href={trade.source_url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center text-xs text-blue-300 underline">Original SEC filing</a> : null}
+            </article>
+          ))}
+        </div>
         <div className="overflow-x-auto">
-          <table className="min-w-[1080px] w-full border-collapse text-left">
+          <table className="hidden md:table min-w-[1080px] w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-white/[0.08] bg-white/[0.03]">
                 <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-600">
@@ -394,10 +416,11 @@ export default function InsidersFeed({ initialTrades }: { initialTrades: Insider
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-[13px] font-semibold text-white">
-                        <TickerLogo ticker={trade.ticker} />
-                        {displayTicker(trade.ticker)}
-                      </span>
+                      {trade.ticker && !['N/A', 'UNKNOWN', 'NA'].includes(displayTicker(trade.ticker)) ? (
+                        <Link href={`/ticker/${encodeURIComponent(displayTicker(trade.ticker))}`} className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-2 py-1 text-sm font-semibold text-blue-300 hover:bg-white/5">
+                          <TickerLogo ticker={trade.ticker} />{displayTicker(trade.ticker)}
+                        </Link>
+                      ) : <span className="text-sm text-zinc-400">Ticker unavailable</span>}
                     </td>
                     <td className="px-4 py-4">
                       <span className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[12px] font-medium ${typeToneClass}`}>

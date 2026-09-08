@@ -186,16 +186,31 @@ function profileFallbackFromTrade(trade: Trade | null | undefined): PoliticianPr
   };
 }
 
+function MobileOptionBadge({ trade }: { trade: Trade }) {
+  const option = parsePoliticianOptionDetails(trade);
+  return option ? <OptionTradeBadge label={option.badgeLabel} tooltip={option.tooltip} className="rounded-md border border-orange-500/30 px-2 py-1 text-xs text-orange-300" /> : null;
+}
+
 export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trade[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [baseTrades, setBaseTrades] = useState<Trade[]>(initialTrades);
   const [trades, setTrades] = useState<Trade[]>(initialTrades);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, updateSearchQuery] = useState(searchParams.get('q') || '');
   const [searchSuggestions, setSearchSuggestions] = useState<SearchSuggestion[]>([]);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
-  const [chamberFilter, setChamberFilter] = useState<(typeof CHAMBER_OPTIONS)[number]>('All');
-  const [directionFilter, setDirectionFilter] = useState<(typeof DIRECTION_OPTIONS)[number]['value']>('All');
+  const [chamberFilter, updateChamberFilter] = useState<(typeof CHAMBER_OPTIONS)[number]>(searchParams.get('chamber') === 'House' ? 'House' : searchParams.get('chamber') === 'Senate' ? 'Senate' : 'All');
+  const [directionFilter, updateDirectionFilter] = useState<(typeof DIRECTION_OPTIONS)[number]['value']>(searchParams.get('direction') === 'buy' ? 'buy' : searchParams.get('direction') === 'sell' ? 'sell' : 'All');
+  function persistFilter(key: string, value: string) {
+    const url = new URL(window.location.href);
+    if (!value || value === 'All') url.searchParams.delete(key);
+    else url.searchParams.set(key, value);
+    window.history.replaceState(null, '', url.pathname + url.search);
+  }
+  function setSearchQuery(value: string) { updateSearchQuery(value); persistFilter('q', value); }
+  function setChamberFilter(value: (typeof CHAMBER_OPTIONS)[number]) { updateChamberFilter(value); persistFilter('chamber', value); }
+  function setDirectionFilter(value: (typeof DIRECTION_OPTIONS)[number]['value']) { updateDirectionFilter(value); persistFilter('direction', value); }
+
   const [isSearching, setIsSearching] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loadMoreError, setLoadMoreError] = useState('');
@@ -650,8 +665,33 @@ export default function PoliticiansFeed({ initialTrades }: { initialTrades: Trad
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+          <div className="divide-y divide-white/10 md:hidden">
+            {displayedTrades.map((trade) => (
+              <article key={trade.id} className="space-y-3 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <button type="button" onClick={() => openProfile(trade)} className="text-left text-sm font-semibold text-white underline-offset-4 hover:underline">
+                    {[trade.congress_members?.first_name, trade.congress_members?.last_name].filter(Boolean).join(' ') || trade.politician_name}
+                  </button>
+                  <span className="text-xs text-zinc-400">{trade.congress_members?.chamber || trade.chamber}</span>
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  {hasTickerPage(trade) ? (
+                    <Link href={`/ticker/${trade.ticker}`} className="font-semibold text-blue-300 underline-offset-4 hover:underline">{displayAssetLabel(trade)}</Link>
+                  ) : <span className="text-sm text-white">{displayAssetLabel(trade)}</span>}
+                  <span className={`text-sm font-medium ${isBuyTrade(trade) ? "text-emerald-300" : "text-red-300"}`}>{isBuyTrade(trade) ? "Buy" : "Sell"}</span>
+                  <MobileOptionBadge trade={trade} />
+                </div>
+                <div className="text-sm text-zinc-200">{trade.amount_range || 'Amount unavailable'}</div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-400">
+                  <span>Traded {formatCalendarDate(trade.transaction_date)}</span>
+                  <span>Filed {formatCalendarDate(trade.published_date)}</span>
+                </div>
+                {trade.source_url ? <a href={trade.source_url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-8 items-center text-xs text-blue-300 underline">Original disclosure</a> : null}
+              </article>
+            ))}
+          </div>
           <div className="overflow-x-auto">
-            <table className="min-w-[1120px] w-full border-collapse text-left">
+            <table className="hidden md:table min-w-[1120px] w-full border-collapse text-left">
               <thead>
                 <tr className="border-b border-white/[0.08] bg-white/[0.03]">
                   <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-600">Politician</th>

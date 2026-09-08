@@ -203,7 +203,7 @@ export default function ClusterAccessGate() {
       clusterAuthSessionCache = nextSession;
       setSession(nextSession);
       setAccessToken(nextSession?.access_token || '');
-      if (previousUserId === nextUserId) {
+      if (previousUserId === nextUserId && nextSession) {
         return;
       }
 

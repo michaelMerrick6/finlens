@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { authCallbackPath } from '@/lib/auth-return-path';
+
 import { supabase } from '@/lib/supabase';
 
 export default function AuthCallbackPage() {
@@ -14,7 +16,8 @@ export default function AuthCallbackPage() {
 
     const finish = () => {
       if (mounted) {
-        router.replace('/dashboard');
+        const params = new URL(window.location.href).searchParams;
+        router.replace(authCallbackPath(params.get('next'), params.get('recovery')));
       }
     };
 
@@ -24,7 +27,7 @@ export default function AuthCallbackPage() {
     };
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
+      if ((event === 'SIGNED_IN' || event === 'PASSWORD_RECOVERY') && session) {
         finish();
       }
     });
@@ -59,7 +62,7 @@ export default function AuthCallbackPage() {
       }
 
       timeout = setTimeout(() => {
-        fail('callback_timeout');
+        fail('This sign-in link has expired or could not be verified. Please try signing in again.');
       }, 5000);
     };
 

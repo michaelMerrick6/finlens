@@ -71,7 +71,7 @@ export default function LandingPage() {
             </h1>
             <p className="lp-sub">
               Track Congress trades, SEC insider filings, and hedge fund 13Fs — all from official government sources.
-              See what the smart money is buying before the rest of the market catches on.
+              Explore reported activity and follow the people and companies you care about.
             </p>
             <div className="lp-hero-ctas">
               <Link className="lp-btn-primary" href="/auth?mode=signup">Start alerts</Link>
@@ -121,7 +121,7 @@ export default function LandingPage() {
           <div className="lp-cta-in">
             <h2 className="lp-cta-h2">
               They file. You know.<br />
-              <span className="lp-green">Instantly.</span>
+              <span className="lp-green">From public filings.</span>
             </h2>
             <p className="lp-cta-sub">
               Set up alerts in 30 seconds. No credit card required.
@@ -168,7 +168,7 @@ function ConvergeCards() {
           <span className="lp-src-badge">PTR</span>
         </div>
         <h3>Congressional trades</h3>
-        <p>STOCK Act disclosures from the House and Senate, parsed and surfaced within minutes of filing.</p>
+        <p>STOCK Act disclosures from the House and Senate, organized with links to the original filings.</p>
         <div className="lp-src-example">
           <div className="lp-src-avatar circle" style={{ backgroundImage: pelosiUrl ? `url("${pelosiUrl}")` : undefined }} />
           <div className="lp-src-ex-text">
@@ -230,7 +230,7 @@ function ClusterCard() {
         <div className="lp-cluster-glow" />
         <div className="lp-cluster-head">
           <div className="lp-cluster-pulse" />
-          <span className="lp-cluster-badge-main">Cluster Detected</span>
+          <span className="lp-cluster-badge-main">Illustrative cluster</span>
           <span className="lp-cluster-ticker">NVDA</span>
         </div>
         <div className="lp-cluster-body">
@@ -265,7 +265,7 @@ function ClusterCard() {
           </div>
         </div>
         <div className="lp-cluster-foot">
-          3 independent sources converged on NVDA within 10 days — high conviction cluster.
+          Example: three sources of activity around NVDA — high conviction cluster.
         </div>
       </div>
     </div>
@@ -275,10 +275,10 @@ function ClusterCard() {
 /* ─── Self-Directed Investor Section ──────────────────────────────────────── */
 
 const LANDING_STATS = [
-  { value: '1K', label: 'Congress 7d' },
-  { value: '1K', label: 'Insiders 7d' },
-  { value: '1K', label: '13Fs 7d' },
-  { value: '619', label: 'Politicians' },
+  { value: 'Congress', label: 'Trade disclosures' },
+  { value: 'Insiders', label: 'SEC Form 4' },
+  { value: 'Funds', label: 'Quarterly 13Fs' },
+  { value: 'Sources', label: 'Original filings' },
 ];
 
 const CONGRESS_SPOTLIGHT = [
@@ -621,10 +621,10 @@ function RecentPoliticianBuys() {
     <section className="lp-recent-buys">
       <div className="lp-recent-head">
         <div>
-          <div className="lp-recent-title">Recent politician buys</div>
-          <div className="lp-recent-sub">Public filings, simplified.</div>
+          <div className="lp-recent-title">Example politician trades</div>
+          <div className="lp-recent-sub">Sample content — not a live feed.</div>
         </div>
-        <div className="lp-recent-pill">Live feed preview</div>
+        <div className="lp-recent-pill">Illustrative preview</div>
       </div>
       <div className="lp-buy-strip">
         <div className="lp-buy-track">

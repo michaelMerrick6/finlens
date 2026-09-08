@@ -41,9 +41,9 @@ const WORKSPACE_DISMISS_MS = 240;
 /* ------------------------------------------------------------------ */
 
 type PopularEntry =
-  | { kind: 'politician'; memberId: string; label: string; party: string; chamber: string; subtitle: string; returnPct: number }
-  | { kind: 'company'; ticker: string; label: string; subtitle: string; returnPct: number }
-  | { kind: 'fund'; label: string; subtitle: string; imageUrl: string; href: string; returnPct: number };
+  | { kind: 'politician'; memberId: string; label: string; party: string; chamber: string; subtitle: string }
+  | { kind: 'company'; ticker: string; label: string; subtitle: string }
+  | { kind: 'fund'; label: string; subtitle: string; imageUrl: string; href: string };
 
 const PARTY_DOT: Record<string, string> = {
   Democrat: '#3b82f6',
@@ -55,16 +55,16 @@ const passthroughImageLoader = ({ src }: ImageLoaderProps) => src;
 
 const POPULAR_SEARCHES: PopularEntry[] = [
   // Row 1: politicians
-  { kind: 'politician', memberId: 'P000197', label: 'Nancy Pelosi', party: 'Democrat', chamber: 'House', subtitle: 'Dem · House', returnPct: 41.5 },
-  { kind: 'politician', memberId: 'T000278', label: 'Tommy Tuberville', party: 'Republican', chamber: 'Senate', subtitle: 'Rep · Senate', returnPct: 15.6 },
-  { kind: 'politician', memberId: 'K000389', label: 'Ro Khanna', party: 'Democrat', chamber: 'House', subtitle: 'Dem · House', returnPct: 112.1 },
+  { kind: 'politician', memberId: 'P000197', label: 'Nancy Pelosi', party: 'Democrat', chamber: 'House', subtitle: 'Dem · House' },
+  { kind: 'politician', memberId: 'T000278', label: 'Tommy Tuberville', party: 'Republican', chamber: 'Senate', subtitle: 'Rep · Senate' },
+  { kind: 'politician', memberId: 'K000389', label: 'Ro Khanna', party: 'Democrat', chamber: 'House', subtitle: 'Dem · House' },
   // Row 2: more politicians
-  { kind: 'politician', memberId: 'G000583', label: 'Josh Gottheimer', party: 'Democrat', chamber: 'House', subtitle: 'Dem · House', returnPct: 3.8 },
-  { kind: 'politician', memberId: 'M001157', label: 'Michael McCaul', party: 'Republican', chamber: 'House', subtitle: 'Rep · House', returnPct: 22.4 },
+  { kind: 'politician', memberId: 'G000583', label: 'Josh Gottheimer', party: 'Democrat', chamber: 'House', subtitle: 'Dem · House' },
+  { kind: 'politician', memberId: 'M001157', label: 'Michael McCaul', party: 'Republican', chamber: 'House', subtitle: 'Rep · House' },
   // Row 3: companies + fund
-  { kind: 'company', ticker: 'NVDA', label: 'Nvidia', subtitle: 'NVDA', returnPct: 38.9 },
-  { kind: 'company', ticker: 'IONQ', label: 'IonQ', subtitle: 'IONQ', returnPct: 42.7 },
-  { kind: 'fund', label: 'Situational Awareness LP', subtitle: 'Leopold Aschenbrenner', imageUrl: '/leopold-aschenbrenner.png', href: '/hedge-funds/Situational%20Awareness%20LP', returnPct: 47.0 },
+  { kind: 'company', ticker: 'NVDA', label: 'Nvidia', subtitle: 'NVDA' },
+  { kind: 'company', ticker: 'IONQ', label: 'IonQ', subtitle: 'IONQ' },
+  { kind: 'fund', label: 'Situational Awareness LP', subtitle: 'Leopold Aschenbrenner', imageUrl: '/leopold-aschenbrenner.png', href: '/hedge-funds/Situational%20Awareness%20LP' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -148,7 +148,7 @@ function DashboardHome({
                 <span className="text-zinc-500">or hedge&nbsp;fund</span>
               </h1>
               <p className="mt-2 text-[13px] text-zinc-500">
-                Get alerted the moment any politician, insider, or institution makes a move.
+                Get alerts when new public filings report activity from the people and companies you follow.
               </p>
             </div>
 
@@ -177,18 +177,6 @@ function DashboardHome({
             </div>
             <div className="mt-2.5 grid grid-cols-2 gap-2">
               {POPULAR_SEARCHES.map((entry, i) => {
-                const returnBadge = (
-                  <span
-                    className={`ml-auto shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-semibold tabular-nums ${
-                      entry.returnPct >= 0
-                        ? 'bg-emerald-500/10 text-emerald-400'
-                        : 'bg-red-500/10 text-red-400'
-                    }`}
-                  >
-                    {entry.returnPct >= 0 ? '+' : ''}{entry.returnPct.toFixed(1)}%
-                  </span>
-                );
-
                 if (entry.kind === 'politician') {
                   return (
                     <button
@@ -214,7 +202,7 @@ function DashboardHome({
                         <span className="mr-0.5 inline-block h-1.5 w-1.5 rounded-full align-middle" style={{ backgroundColor: PARTY_DOT[entry.party] || '#6b7280' }} />
                         {entry.subtitle}
                       </span>
-                      {returnBadge}
+
                     </button>
                   );
                 }
@@ -240,7 +228,7 @@ function DashboardHome({
                       <TickerPill ticker={entry.ticker} />
                       <span className="text-[12px] font-medium text-zinc-200 group-hover:text-white">{entry.label}</span>
                       <span className="text-[10px] font-semibold tracking-wider text-zinc-600">{entry.subtitle}</span>
-                      {returnBadge}
+
                     </button>
                   );
                 }
@@ -259,13 +247,13 @@ function DashboardHome({
                     </div>
                     <span className="text-[12px] font-medium text-zinc-200 group-hover:text-white">{entry.label}</span>
                     <span className="text-[10px] text-zinc-600">{entry.subtitle}</span>
-                    {returnBadge}
+
                   </button>
                 );
               })}
             </div>
             <div className="mt-2 text-center text-[9px] text-zinc-700">
-              1Y returns · Estimates based on public data
+              Explore public filings for a person, stock, or fund
             </div>
           </div>
         </div>
@@ -590,9 +578,20 @@ export default function DashboardClient() {
     [openPoliticianWorkspace, openTickerWorkspace],
   );
 
+  useEffect(() => {
+    if (!session || !workspaceSelection || !hasHydratedWorkspace) return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('follow') !== '1') return;
+    url.searchParams.delete('follow');
+    window.history.replaceState(null, '', url.pathname + url.search);
+    setShowCreateSignal(true);
+  }, [session, workspaceSelection, hasHydratedWorkspace]);
+
   const handleOpenSignalAction = useCallback(() => {
     if (!session) {
-      router.push('/auth');
+      const next = new URL(window.location.href);
+      next.searchParams.set('follow', '1');
+      router.push(`/auth?mode=signup&next=${encodeURIComponent(next.pathname + next.search)}`);
       return;
     }
     setShowCreateSignal(true);

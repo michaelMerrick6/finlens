@@ -19,8 +19,7 @@ export default async function PoliticiansPage() {
           Congressional Trading Feed
         </h1>
         <p className="mt-1 max-w-4xl text-sm text-zinc-500">
-          Live Periodic Transaction Reports from active United States Congress members, with faster scanning across politician,
-          asset, filing date, and trade direction.
+          Explore reported congressional trades. Trade dates show when activity occurred; filing dates show when it was disclosed.
         </p>
       </div>
 

@@ -274,11 +274,11 @@ export default function PricingPage() {
       <section className="mx-auto mt-7 max-w-4xl overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.018]">
         <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
           <div>
-            <div className="text-sm font-medium text-white">Recent politician buys</div>
-            <div className="text-xs text-zinc-600">Public filings, simplified.</div>
+            <div className="text-sm font-medium text-white">Example politician trades</div>
+            <div className="text-xs text-zinc-600">Sample content — not a live feed.</div>
           </div>
           <div className="hidden rounded-full border border-white/[0.08] px-3 py-1 text-xs text-zinc-500 sm:block">
-            Live feed preview
+            Illustrative preview
           </div>
         </div>
 

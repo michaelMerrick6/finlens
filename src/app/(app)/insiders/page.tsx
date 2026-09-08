@@ -19,8 +19,7 @@ export default async function InsidersPage() {
           Insider Trading Feed
         </h1>
         <p className="mt-1 max-w-4xl text-sm text-zinc-500">
-          Real-time Form 4 filings from executives, directors, and 10% owners, with faster scanning across insider,
-          ticker, transaction direction, and filing date.
+          Explore reported trades from executives, directors, and major shareholders. Open a stock or original filing to investigate further.
         </p>
       </div>
 

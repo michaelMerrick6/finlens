@@ -408,7 +408,7 @@ export default function DashboardPoliticianWorkspace({
         <div className="mb-3 flex flex-wrap items-end justify-between gap-3 px-1">
           <div>
             <div className="text-sm font-semibold text-white">Recent trades</div>
-            <div className="mt-1 text-xs text-zinc-500">Newest displayable ticker trades first. More loads only when requested.</div>
+            <div className="mt-1 text-xs text-zinc-500">Latest reported trades, with links to the original disclosures.</div>
           </div>
           <div className="text-[10px] uppercase tracking-[0.16em] text-zinc-600">{trades.length} loaded</div>
         </div>
@@ -421,7 +421,7 @@ export default function DashboardPoliticianWorkspace({
           </div>
         ) : (
           <div className="rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.02] px-4 py-10 text-center text-sm text-zinc-500">
-            No recent displayable ticker trades were found for this member.
+            No recent stock trades were found for this member.
           </div>
         )}
 

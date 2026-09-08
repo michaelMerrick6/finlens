@@ -218,7 +218,7 @@ function NavPills() {
   }
 
   return (
-    <div className="relative" ref={pillsRef}>
+    <div className="relative col-span-2 row-start-2 lg:row-auto" ref={pillsRef}>
       {/* Sliding holographic indicator */}
       <div
         ref={indicatorRef}
@@ -254,7 +254,7 @@ function NavPills() {
                   type="button"
                   aria-haspopup="menu"
                   aria-expanded={menuOpen}
-                  onClick={() => setOpenMenu((current) => current === item.href ? null : item.href)}
+                  onClick={() => openNavMenu(item.href)}
                   onKeyDown={(event) => {
                     if (event.key === 'Escape') setOpenMenu(null);
                   }}
@@ -319,16 +319,16 @@ export default function AppTopNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#050505]/88 backdrop-blur-xl">
       <div className="mx-auto w-full max-w-[1800px] px-4 py-3 sm:px-6">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+        <div className="grid grid-cols-[1fr_auto] items-center gap-3 lg:flex lg:flex-row lg:items-center">
           <VailMark />
 
-          <div className="flex min-w-0 flex-col gap-3 lg:ml-auto lg:flex-row lg:items-center lg:justify-end lg:gap-5">
+          <div className="contents min-w-0 gap-3 lg:ml-auto lg:flex lg:flex-row lg:items-center lg:justify-end lg:gap-5">
             <NavPills />
 
-            <div className="flex items-center gap-3 self-start lg:self-auto">
+            <div className="col-start-2 row-start-1 flex items-center justify-end gap-3 lg:self-auto">
               {!session ? (
                 <Link
-                  href="/auth"
+                  href="/auth?mode=signin"
                   className="nav-signin-btn"
                 >
                   <span className="nav-signin-btn-glow" />

@@ -92,6 +92,7 @@ export async function getMarketPriceSeries(
     for (let attempt = 0; attempt < 3; attempt += 1) {
       const response = await fetch(url.toString(), {
         headers: YAHOO_CHART_HEADERS,
+        signal: AbortSignal.timeout(8_000),
       });
 
       if (response.status === 429 && attempt < 2) {
