@@ -1,0 +1,1697 @@
+{
+  "generated_at": "2026-09-09T05:42:08.303790+00:00",
+  "mode": "read-only proposal",
+  "sources": {
+    "House": {
+      "url": "https://clerk.house.gov/xml/lists/MemberData.xml",
+      "sha256": "07aec65948e99fd80b5e7c31722f1208d9f5e0717ba00f4b02122f4724cb0c18",
+      "source_entries": 441,
+      "identified_members": 439,
+      "entries_without_id": 2
+    },
+    "Senate": {
+      "url": "https://www.senate.gov/legislative/LIS_MEMBER/cvc_member_data.xml",
+      "sha256": "9727326ea3559ce8f0743cdb0e3a277608a261eff3813f95a27c7fd2cffda22a",
+      "source_entries": 100,
+      "identified_members": 100,
+      "entries_without_id": 0
+    }
+  },
+  "official_count": 539,
+  "stored_count": 1120,
+  "proposed_additions": [
+    {
+      "record": {
+        "id": "A000383",
+        "first_name": "Alan",
+        "last_name": "Armstrong",
+        "chamber": "Senate",
+        "state": "OK",
+        "party": "Republican",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/A000383"
+      },
+      "same_surname_ids_for_review": [
+        "A000377",
+        "unknown-alan-armstrong"
+      ]
+    },
+    {
+      "record": {
+        "id": "B001328",
+        "first_name": "Everton",
+        "last_name": "Blair",
+        "chamber": "House",
+        "state": "GA",
+        "party": "Democrat",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/B001328"
+      },
+      "same_surname_ids_for_review": []
+    },
+    {
+      "record": {
+        "id": "F000485",
+        "first_name": "Clay",
+        "last_name": "Fuller",
+        "chamber": "House",
+        "state": "GA",
+        "party": "Republican",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/F000485"
+      },
+      "same_surname_ids_for_review": []
+    },
+    {
+      "record": {
+        "id": "G000607",
+        "first_name": "James",
+        "last_name": "Gallagher",
+        "chamber": "House",
+        "state": "CA",
+        "party": "Republican",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/G000607"
+      },
+      "same_surname_ids_for_review": [
+        "G000579"
+      ]
+    },
+    {
+      "record": {
+        "id": "G000608",
+        "first_name": "Darline",
+        "last_name": "Graham",
+        "chamber": "Senate",
+        "state": "SC",
+        "party": "Republican",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/G000608"
+      },
+      "same_surname_ids_for_review": [
+        "G000359",
+        "G000575"
+      ]
+    },
+    {
+      "record": {
+        "id": "M001246",
+        "first_name": "Analilia",
+        "last_name": "Mejia",
+        "chamber": "House",
+        "state": "NJ",
+        "party": "Democrat",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/M001246"
+      },
+      "same_surname_ids_for_review": []
+    },
+    {
+      "record": {
+        "id": "W000832",
+        "first_name": "Aisha",
+        "last_name": "Wahab",
+        "chamber": "House",
+        "state": "CA",
+        "party": "Democrat",
+        "active": true,
+        "source_url": "https://bioguide.congress.gov/search/bio/W000832"
+      },
+      "same_surname_ids_for_review": []
+    }
+  ],
+  "proposed_corrections": [
+    {
+      "id": "A000382",
+      "changes": {
+        "first_name": {
+          "before": "Angela",
+          "after": "Angela D."
+        }
+      }
+    },
+    {
+      "id": "B001267",
+      "changes": {
+        "first_name": {
+          "before": "Michael",
+          "after": "Michael F."
+        }
+      }
+    },
+    {
+      "id": "B001282",
+      "changes": {
+        "first_name": {
+          "before": "Garland",
+          "after": "Andy"
+        }
+      }
+    },
+    {
+      "id": "B001288",
+      "changes": {
+        "first_name": {
+          "before": "Cory",
+          "after": "Cory A."
+        }
+      }
+    },
+    {
+      "id": "B001315",
+      "changes": {
+        "first_name": {
+          "before": "Nicole (Nikki)",
+          "after": "Nikki"
+        }
+      }
+    },
+    {
+      "id": "B001319",
+      "changes": {
+        "first_name": {
+          "before": "Katie",
+          "after": "Katie Boyd"
+        }
+      }
+    },
+    {
+      "id": "C000880",
+      "changes": {
+        "first_name": {
+          "before": "Michael",
+          "after": "Mike"
+        }
+      }
+    },
+    {
+      "id": "C001035",
+      "changes": {
+        "first_name": {
+          "before": "Susan",
+          "after": "Susan M."
+        }
+      }
+    },
+    {
+      "id": "C001039",
+      "changes": {
+        "first_name": {
+          "before": "Katherine",
+          "after": "Kat"
+        }
+      }
+    },
+    {
+      "id": "C001047",
+      "changes": {
+        "first_name": {
+          "before": "Shelley",
+          "after": "Shelley Moore"
+        }
+      }
+    },
+    {
+      "id": "C001088",
+      "changes": {
+        "first_name": {
+          "before": "Christopher",
+          "after": "Christopher A."
+        }
+      }
+    },
+    {
+      "id": "C001114",
+      "changes": {
+        "first_name": {
+          "before": "John",
+          "after": "John  R."
+        }
+      }
+    },
+    {
+      "id": "C001131",
+      "changes": {
+        "first_name": {
+          "before": "Gregorio",
+          "after": "Greg"
+        }
+      }
+    },
+    {
+      "id": "C001132",
+      "changes": {
+        "first_name": {
+          "before": "Eli",
+          "after": "Elijah"
+        }
+      }
+    },
+    {
+      "id": "D000530",
+      "changes": {
+        "first_name": {
+          "before": "Chris",
+          "after": "Christopher"
+        }
+      }
+    },
+    {
+      "id": "D000563",
+      "changes": {
+        "first_name": {
+          "before": "Richard",
+          "after": "Richard J."
+        }
+      }
+    },
+    {
+      "id": "D000594",
+      "changes": {
+        "first_name": {
+          "before": "M\u00f3nica",
+          "after": "Monica"
+        }
+      }
+    },
+    {
+      "id": "E000246",
+      "changes": {
+        "first_name": {
+          "before": "Charles (Chuck)",
+          "after": "Chuck"
+        }
+      }
+    },
+    {
+      "id": "F000246",
+      "changes": {
+        "first_name": {
+          "before": "Patrick",
+          "after": "Pat"
+        }
+      }
+    },
+    {
+      "id": "F000472",
+      "changes": {
+        "first_name": {
+          "before": "C.",
+          "after": "Scott"
+        }
+      }
+    },
+    {
+      "id": "F000484",
+      "changes": {
+        "first_name": {
+          "before": "Randall",
+          "after": "Randy"
+        }
+      }
+    },
+    {
+      "id": "G000386",
+      "changes": {
+        "first_name": {
+          "before": "Charles",
+          "after": "Chuck"
+        }
+      }
+    },
+    {
+      "id": "G000555",
+      "changes": {
+        "first_name": {
+          "before": "Kirsten",
+          "after": "Kirsten E."
+        }
+      }
+    },
+    {
+      "id": "G000599",
+      "changes": {
+        "first_name": {
+          "before": "Dan",
+          "after": "Daniel"
+        }
+      }
+    },
+    {
+      "id": "G000600",
+      "changes": {
+        "last_name": {
+          "before": "Gluesenkamp Perez",
+          "after": "Perez"
+        }
+      }
+    },
+    {
+      "id": "H000273",
+      "changes": {
+        "first_name": {
+          "before": "John",
+          "after": "John W."
+        }
+      }
+    },
+    {
+      "id": "H001042",
+      "changes": {
+        "first_name": {
+          "before": "Mazie",
+          "after": "Mazie K."
+        }
+      }
+    },
+    {
+      "id": "H001076",
+      "changes": {
+        "first_name": {
+          "before": "Margaret",
+          "after": "Margaret Wood"
+        }
+      }
+    },
+    {
+      "id": "H001089",
+      "changes": {
+        "first_name": {
+          "before": "Joshua",
+          "after": "Josh"
+        }
+      }
+    },
+    {
+      "id": "H001094",
+      "changes": {
+        "first_name": {
+          "before": "Valerie",
+          "after": "Val"
+        }
+      }
+    },
+    {
+      "id": "H001103",
+      "changes": {
+        "first_name": {
+          "before": "Pablo Jos\u00e9",
+          "after": "Pablo"
+        },
+        "last_name": {
+          "before": "Hern\u00e1ndez Rivera",
+          "after": "Hern\u00e1ndez"
+        }
+      }
+    },
+    {
+      "id": "J000312",
+      "changes": {
+        "first_name": {
+          "before": "Jim",
+          "after": "James C."
+        }
+      }
+    },
+    {
+      "id": "K000383",
+      "changes": {
+        "first_name": {
+          "before": "Angus",
+          "after": "Angus S."
+        }
+      }
+    },
+    {
+      "id": "K000384",
+      "changes": {
+        "first_name": {
+          "before": "Timothy",
+          "after": "Tim"
+        }
+      }
+    },
+    {
+      "id": "K000401",
+      "changes": {
+        "party": {
+          "before": "Republican",
+          "after": "Independent"
+        }
+      }
+    },
+    {
+      "id": "L000570",
+      "changes": {
+        "first_name": {
+          "before": "Ben",
+          "after": "Ben Ray"
+        },
+        "last_name": {
+          "before": "Luj\u00e1n",
+          "after": "Lujan"
+        }
+      }
+    },
+    {
+      "id": "L000571",
+      "changes": {
+        "first_name": {
+          "before": "Cynthia",
+          "after": "Cynthia M."
+        }
+      }
+    },
+    {
+      "id": "L000596",
+      "changes": {
+        "first_name": {
+          "before": "Anna",
+          "after": "Anna Paulina"
+        }
+      }
+    },
+    {
+      "id": "L000598",
+      "changes": {
+        "first_name": {
+          "before": "Nicolas",
+          "after": "Nick"
+        }
+      }
+    },
+    {
+      "id": "M000133",
+      "changes": {
+        "first_name": {
+          "before": "Edward",
+          "after": "Edward J."
+        }
+      }
+    },
+    {
+      "id": "M001218",
+      "changes": {
+        "first_name": {
+          "before": "Rich",
+          "after": "Richard"
+        }
+      }
+    },
+    {
+      "id": "M001219",
+      "changes": {
+        "first_name": {
+          "before": "James (Jim)",
+          "after": "James"
+        }
+      }
+    },
+    {
+      "id": "M001243",
+      "changes": {
+        "first_name": {
+          "before": "Dave",
+          "after": "David"
+        }
+      }
+    },
+    {
+      "id": "N000193",
+      "changes": {
+        "first_name": {
+          "before": "Zachary (Zach)",
+          "after": "Zachary"
+        }
+      }
+    },
+    {
+      "id": "O000086",
+      "changes": {
+        "first_name": {
+          "before": "Clarence",
+          "after": "Burgess"
+        }
+      }
+    },
+    {
+      "id": "P000145",
+      "changes": {
+        "first_name": {
+          "before": "Alejandro",
+          "after": "Alex"
+        }
+      }
+    },
+    {
+      "id": "P000595",
+      "changes": {
+        "first_name": {
+          "before": "Gary",
+          "after": "Gary C."
+        }
+      }
+    },
+    {
+      "id": "R000122",
+      "changes": {
+        "first_name": {
+          "before": "John",
+          "after": "Jack"
+        }
+      }
+    },
+    {
+      "id": "R000584",
+      "changes": {
+        "first_name": {
+          "before": "James",
+          "after": "James  E."
+        }
+      }
+    },
+    {
+      "id": "S000148",
+      "changes": {
+        "first_name": {
+          "before": "Charles",
+          "after": "Charles E."
+        }
+      }
+    },
+    {
+      "id": "S001150",
+      "changes": {
+        "first_name": {
+          "before": "Adam",
+          "after": "Adam B."
+        }
+      }
+    },
+    {
+      "id": "S001205",
+      "changes": {
+        "first_name": {
+          "before": "Mary",
+          "after": "Mary Gay"
+        }
+      }
+    },
+    {
+      "id": "V000136",
+      "changes": {
+        "first_name": {
+          "before": "Gabriel (Gabe)",
+          "after": "Gabe"
+        }
+      }
+    },
+    {
+      "id": "W000437",
+      "changes": {
+        "first_name": {
+          "before": "Roger",
+          "after": "Roger F."
+        }
+      }
+    },
+    {
+      "id": "W000790",
+      "changes": {
+        "first_name": {
+          "before": "Raphael",
+          "after": "Raphael G."
+        }
+      }
+    },
+    {
+      "id": "W000805",
+      "changes": {
+        "first_name": {
+          "before": "Mark",
+          "after": "Mark R."
+        }
+      }
+    }
+  ],
+  "active_status_reviews": [
+    {
+      "record": {
+        "id": "C001127",
+        "first_name": "Sheila",
+        "last_name": "Cherfilus-McCormick",
+        "chamber": "House",
+        "active": true,
+        "state": "FL",
+        "party": "Democrat"
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "G000359",
+        "first_name": "Lindsey",
+        "last_name": "Graham",
+        "chamber": "Senate",
+        "active": true,
+        "state": "SC",
+        "party": "Republican"
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "G000594",
+        "first_name": "Ernest",
+        "last_name": "Gonzales",
+        "chamber": "House",
+        "active": true,
+        "state": "TX",
+        "party": "Republican"
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "M001190",
+        "first_name": "Markwayne",
+        "last_name": "Mullin",
+        "chamber": "Senate",
+        "active": true,
+        "state": "OK",
+        "party": "Republican"
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "S001157",
+        "first_name": "David",
+        "last_name": "Scott",
+        "chamber": "House",
+        "active": true,
+        "state": "GA",
+        "party": "Democrat"
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "S001193",
+        "first_name": "Eric",
+        "last_name": "Swalwell",
+        "chamber": "House",
+        "active": true,
+        "state": "CA",
+        "party": "Democrat"
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-abigail-spanberger",
+        "first_name": "Abigail",
+        "last_name": "Spanberger",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-adamb-schiff",
+        "first_name": "Adam B.",
+        "last_name": "Schiff",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-adanorah-henriquez",
+        "first_name": "Ada Norah",
+        "last_name": "Henriquez",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-alan-armstrong",
+        "first_name": "alan",
+        "last_name": "armstrong",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-anna-paulinaluna",
+        "first_name": "Anna",
+        "last_name": "Paulina Luna",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-aprilmcclain-delaney",
+        "first_name": "April McClain",
+        "last_name": "Delaney",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-ashley-hinsonarenholz",
+        "first_name": "Ashley",
+        "last_name": "Hinson Arenholz",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-augustlee-pfluger",
+        "first_name": "August Lee",
+        "last_name": "Pfluger",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-brandonmcdonald-williams",
+        "first_name": "Brandon McDonald",
+        "last_name": "Williams",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-cathymcmorris-rodgers",
+        "first_name": "Cathy McMorris",
+        "last_name": "Rodgers",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-charlesj.\"chuck\"-fleischmann",
+        "first_name": "Charles J. \"Chuck\"",
+        "last_name": "Fleischmann",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-chris-vanhollen",
+        "first_name": "Chris",
+        "last_name": "Van Hollen",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-chuck-fleischmann",
+        "first_name": "Chuck",
+        "last_name": "Fleischmann",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-daniel-goldman",
+        "first_name": "Daniel",
+        "last_name": "Goldman",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-david-trone",
+        "first_name": "David",
+        "last_name": "Trone",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-davidh-mccormick",
+        "first_name": "David H",
+        "last_name": "McCormick",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-davidj.-taylor",
+        "first_name": "David J.",
+        "last_name": "Taylor",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-dean-phillips",
+        "first_name": "Dean",
+        "last_name": "Phillips",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-diana-harshbarger",
+        "first_name": "Diana",
+        "last_name": "Harshbarger",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-donaldsternoff-beyer",
+        "first_name": "Donald Sternoff",
+        "last_name": "Beyer",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-doriso-matsui",
+        "first_name": "Doris O.",
+        "last_name": "Matsui",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-doriso.-matsui",
+        "first_name": "Doris O.",
+        "last_name": "Matsui",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-geralde-connolly",
+        "first_name": "Gerald E.",
+        "last_name": "Connolly",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-greg-steube",
+        "first_name": "Greg",
+        "last_name": "Steube",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-harolddallas-rogers",
+        "first_name": "Harold Dallas",
+        "last_name": "Rogers",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-harshbarger-hon",
+        "first_name": "Harshbarger",
+        "last_name": "Hon.",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jacky-rosen",
+        "first_name": "Jacky",
+        "last_name": "Rosen",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-james-banks",
+        "first_name": "James",
+        "last_name": "Banks",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jamesconley-justice,ii",
+        "first_name": "James Conley",
+        "last_name": "Justice, II",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jamesd-jordan",
+        "first_name": "James D",
+        "last_name": "Jordan",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jamese-banks",
+        "first_name": "James E.",
+        "last_name": "Banks",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jamesehon-banks",
+        "first_name": "James E Hon",
+        "last_name": "Banks",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jamesfrench-hill",
+        "first_name": "James French",
+        "last_name": "Hill",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jd-vance",
+        "first_name": "jd",
+        "last_name": "vance",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jeff-jackson",
+        "first_name": "Jeff",
+        "last_name": "Jackson",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-john-curtis",
+        "first_name": "John",
+        "last_name": "Curtis",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-jonathan-jackson",
+        "first_name": "Jonathan",
+        "last_name": "Jackson",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-kathy-manning",
+        "first_name": "Kathy",
+        "last_name": "Manning",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-kellylouise-morrison",
+        "first_name": "Kelly Louise",
+        "last_name": "Morrison",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-lindat.-sanchez",
+        "first_name": "Linda T.",
+        "last_name": "Sanchez",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-lisa-bluntrochester",
+        "first_name": "Lisa",
+        "last_name": "Blunt Rochester",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-marco-rubio",
+        "first_name": "marco",
+        "last_name": "rubio",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-marjorietaylor-greene",
+        "first_name": "Marjorie Taylor",
+        "last_name": "Greene",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-marjorietaylormrs-greene",
+        "first_name": "Marjorie Taylor Mrs",
+        "last_name": "Greene",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-matthewrobert-vanepps",
+        "first_name": "Matthew Robert",
+        "last_name": "Van Epps",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-melvinl-watt",
+        "first_name": "Melvin L.",
+        "last_name": "Watt",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-michael-garcia",
+        "first_name": "Michael",
+        "last_name": "Garcia",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-michael-waltz",
+        "first_name": "Michael",
+        "last_name": "Waltz",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-michaela.-collins",
+        "first_name": "Michael A.",
+        "last_name": "Collins",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-michaelpatrick-guest",
+        "first_name": "Michael Patrick",
+        "last_name": "Guest",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-michaelt.-mccaul",
+        "first_name": "Michael T.",
+        "last_name": "McCaul",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-mikie-sherrill",
+        "first_name": "Mikie",
+        "last_name": "Sherrill",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-nealpatrick-dunnmdfacs",
+        "first_name": "Neal Patrick",
+        "last_name": "Dunn, MD, FACS",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-peter-welch",
+        "first_name": "Peter",
+        "last_name": "Welch",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-rafaele-cruz",
+        "first_name": "Rafael E",
+        "last_name": "Cruz",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-richardb-reisdorf",
+        "first_name": "Richard B.",
+        "last_name": "Reisdorf",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-richardw-allen",
+        "first_name": "Richard W.",
+        "last_name": "Allen",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-richardw.-allen",
+        "first_name": "Richard W.",
+        "last_name": "Allen",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-ro-khanna",
+        "first_name": "Ro",
+        "last_name": "Khanna",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-rob-bresnahan",
+        "first_name": "Rob",
+        "last_name": "Bresnahan",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-roberte.-latta",
+        "first_name": "Robert E.",
+        "last_name": "Latta",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-rogers-hon",
+        "first_name": "Rogers",
+        "last_name": "Hon.",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-rogerw-marshall",
+        "first_name": "Roger W.",
+        "last_name": "Marshall",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-rohit-khanna",
+        "first_name": "Rohit",
+        "last_name": "Khanna",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-scotth.-peters",
+        "first_name": "Scott H.",
+        "last_name": "Peters",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-scottscott-franklin",
+        "first_name": "Scott Scott",
+        "last_name": "Franklin",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-shelleymoore-capito",
+        "first_name": "Shelley Moore",
+        "last_name": "Capito",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-steve-cohen",
+        "first_name": "Steve",
+        "last_name": "Cohen",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-suzank.-delbene",
+        "first_name": "Suzan K.",
+        "last_name": "DelBene",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-tammy-duckworth",
+        "first_name": "Tammy",
+        "last_name": "Duckworth",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-test-member",
+        "first_name": "Test",
+        "last_name": "Member",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-thomas-suozzi",
+        "first_name": "Thomas",
+        "last_name": "Suozzi",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-thomas-udall",
+        "first_name": "Thomas",
+        "last_name": "Udall",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-thomash-kean",
+        "first_name": "Thomas H.",
+        "last_name": "Kean",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-thomash-tuberville",
+        "first_name": "Thomas H",
+        "last_name": "Tuberville",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-thomash.-kean",
+        "first_name": "Thomas H.",
+        "last_name": "Kean",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-tony-wied",
+        "first_name": "Tony",
+        "last_name": "Wied",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-william-cassidy",
+        "first_name": "William",
+        "last_name": "Cassidy",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-williamf-hagerty,iv",
+        "first_name": "William F",
+        "last_name": "Hagerty, IV",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-williamf-hagertyiv",
+        "first_name": "William F",
+        "last_name": "Hagerty, IV",
+        "chamber": "Senate",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-williamm-cassidy",
+        "first_name": "William M.",
+        "last_name": "Cassidy",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    },
+    {
+      "record": {
+        "id": "unknown-williamr.-keating",
+        "first_name": "William R.",
+        "last_name": "Keating",
+        "chamber": "House",
+        "active": true,
+        "state": null,
+        "party": null
+      },
+      "reason": "Absent from current rosters; verify term end and aliases before changing status."
+    }
+  ],
+  "automatic_merges": [],
+  "automatic_deletions": []
+}

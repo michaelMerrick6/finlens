@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-09-09T05:58:21.964413+00:00",
+  "scope": "Latest five House PTR references returned within 30 days; not a completeness audit",
+  "rows": [
+    {
+      "filing": "house-2026-20035392",
+      "filed_date": "9/5/2026",
+      "stored_rows_under_filing_prefix": 9,
+      "parse_verified": false
+    },
+    {
+      "filing": "house-2026-20035190",
+      "filed_date": "9/4/2026",
+      "stored_rows_under_filing_prefix": 66,
+      "parse_verified": false
+    },
+    {
+      "filing": "house-2026-9116328",
+      "filed_date": "9/4/2026",
+      "stored_rows_under_filing_prefix": 40,
+      "parse_verified": false
+    },
+    {
+      "filing": "house-2026-20035370",
+      "filed_date": "9/3/2026",
+      "stored_rows_under_filing_prefix": 1,
+      "parse_verified": false
+    },
+    {
+      "filing": "house-2026-20035367",
+      "filed_date": "9/2/2026",
+      "stored_rows_under_filing_prefix": 2,
+      "parse_verified": false
+    }
+  ],
+  "limitations": [
+    "Senate not assessed by this lightweight check",
+    "Zero stored rows can mean no reportable transactions or missing capture",
+    "Full parser audit interrupted during OCR; no successful parse comparison report"
+  ]
+}

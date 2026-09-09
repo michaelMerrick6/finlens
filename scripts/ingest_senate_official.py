@@ -1,5 +1,6 @@
 import io
 import json
+from parser_write_policy import parser_writes_allowed
 import os
 import re
 import time
@@ -141,7 +142,7 @@ def normalize_ocr_date(raw_value: str) -> str | None:
 def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], target_chamber: str = "Senate") -> str:
     first_tokens = normalize_name_tokens(first_name)
     last_key = "".join(normalize_name_tokens(last_name))
-    exact_last_name_candidates: list[dict] = []
+    matching_ids: set[str] = set()
 
     for member in members_db:
         if is_placeholder_member(member):
@@ -151,20 +152,21 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
         member_last_key = "".join(normalize_name_tokens(member["last_name"]))
         if not member_last_key or member_last_key != last_key:
             continue
-        exact_last_name_candidates.append(member)
         if first_name_tokens_match(first_tokens, member["first_name"]):
-            return member["id"]
+            matching_ids.add(member["id"])
 
-    active_candidates = [member for member in exact_last_name_candidates if member.get("active") is not False]
-    if len(active_candidates) == 1:
-        return active_candidates[0]["id"]
-    if len(exact_last_name_candidates) == 1:
-        return exact_last_name_candidates[0]["id"]
+    # A surname or active flag alone cannot establish the filing's identity.
+    # Multiple compatible names need source evidence, not database row order.
+    if len(matching_ids) == 1:
+        return next(iter(matching_ids))
 
     first_norm = normalize_name_part(first_name)
     last_norm = normalize_name_part(last_name)
     member_id = f"unknown-{first_norm}-{last_norm}"[:50]
     if any(member["id"] == member_id for member in members_db):
+        return member_id
+
+    if not parser_writes_allowed():
         return member_id
 
     try:
@@ -224,6 +226,7 @@ def load_valid_tickers() -> set[str]:
 
 
 def resolve_company_ticker(asset_text: str, valid_tickers: set[str]) -> str | None:
+    asset_text = clean_paper_asset_text(asset_text)
     ticker_match = TICKER_RE.search(asset_text)
     if ticker_match:
         return ticker_match.group(1)[:10]
@@ -267,6 +270,8 @@ def resolve_company_ticker(asset_text: str, valid_tickers: set[str]) -> str | No
 
 
 def upsert_company(ticker: str, company_name: str):
+    if not parser_writes_allowed():
+        return
     try:
         supabase.table("companies").upsert(
             {
@@ -545,7 +550,7 @@ def group_tokens_by_line(tokens: list[dict]) -> list[list[dict]]:
 
 
 def clean_paper_asset_text(asset_text: str) -> str:
-    asset_text = re.sub(r"^\((?:S|J|D|DC|SP|JT|PE)\)\s*", "", asset_text, flags=re.IGNORECASE)
+    asset_text = re.sub(r"^(?:[=»]\s*)*(?:[A-Za-z]\s+)?\((?:S|J|D|DC|SP|JT|PE)\)\s*", "", asset_text, flags=re.IGNORECASE)
     asset_text = re.sub(r"\s+x+\s*$", "", asset_text, flags=re.IGNORECASE)
     return clean_text(asset_text.rstrip(":"))
 

@@ -1,0 +1,180 @@
+{
+  "checked_at": "2026-09-09T05:42:29.985689+00:00",
+  "scope": "Stored transaction counts by published_date; includes all stored asset types and sources.",
+  "limitations": [
+    "No official filing inventory comparison.",
+    "Row counts may include duplicates.",
+    "Zero rows do not establish that nobody traded.",
+    "Years before start-year are not assessed."
+  ],
+  "rows": [
+    {
+      "chamber": "House",
+      "filing_year": 2015,
+      "stored_transaction_rows": 8033,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2016,
+      "stored_transaction_rows": 7695,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2017,
+      "stored_transaction_rows": 7017,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2018,
+      "stored_transaction_rows": 8002,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2019,
+      "stored_transaction_rows": 8148,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2020,
+      "stored_transaction_rows": 7739,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2021,
+      "stored_transaction_rows": 5796,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2022,
+      "stored_transaction_rows": 4802,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2023,
+      "stored_transaction_rows": 4697,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2024,
+      "stored_transaction_rows": 3847,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2025,
+      "stored_transaction_rows": 8863,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "House",
+      "filing_year": 2026,
+      "stored_transaction_rows": 5759,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2015,
+      "stored_transaction_rows": 1499,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2016,
+      "stored_transaction_rows": 1603,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2017,
+      "stored_transaction_rows": 1585,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2018,
+      "stored_transaction_rows": 1507,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2019,
+      "stored_transaction_rows": 1533,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2020,
+      "stored_transaction_rows": 1884,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2021,
+      "stored_transaction_rows": 1264,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2022,
+      "stored_transaction_rows": 1036,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2023,
+      "stored_transaction_rows": 1226,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2024,
+      "stored_transaction_rows": 964,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2025,
+      "stored_transaction_rows": 1235,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    },
+    {
+      "chamber": "Senate",
+      "filing_year": 2026,
+      "stored_transaction_rows": 1834,
+      "official_filing_count": null,
+      "filing_completeness": "not measured"
+    }
+  ]
+}

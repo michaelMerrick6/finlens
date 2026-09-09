@@ -66,3 +66,15 @@ export function parsePoliticianAmountRange(value: string | null | undefined): Po
 
   return { min: single, max: single, estimated: single };
 }
+
+/** Preserve the reported amount while making likely truncated disclosure ranges explicit. */
+export function formatPoliticianAmountRange(value: string | null | undefined): string {
+  const raw = normalizeAmountText(value);
+  if (!raw || /^(unknown|undisclosed|n\/a)$/i.test(raw)) return 'Amount unavailable';
+  const bounds = extractNumericBounds(raw);
+  const isBareAmount = /^\$?[\d,]+(?:\.\d+)?$/.test(raw);
+  if (isBareAmount && bounds.length === 1 && CONGRESS_AMOUNT_BUCKETS.some((bucket) => bucket.min === bounds[0])) {
+    return `${raw} (range incomplete)`;
+  }
+  return raw;
+}

@@ -2,6 +2,7 @@ import csv
 import difflib
 import io
 import json
+from parser_write_policy import parser_writes_allowed
 import os
 import re
 import subprocess
@@ -522,7 +523,7 @@ def is_placeholder_member(member: dict) -> bool:
 def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], target_chamber: str = "House") -> str:
     first_tokens = normalize_name_tokens(first_name)
     last_key = "".join(normalize_name_tokens(last_name))
-    exact_last_name_candidates: list[dict] = []
+    matching_ids: set[str] = set()
 
     for member in members_db:
         if is_placeholder_member(member):
@@ -532,20 +533,21 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
         member_last_key = "".join(normalize_name_tokens(member["last_name"]))
         if not member_last_key or member_last_key != last_key:
             continue
-        exact_last_name_candidates.append(member)
         if first_name_tokens_match(first_tokens, member["first_name"]):
-            return member["id"]
+            matching_ids.add(member["id"])
 
-    active_candidates = [member for member in exact_last_name_candidates if member.get("active") is not False]
-    if len(active_candidates) == 1:
-        return active_candidates[0]["id"]
-    if len(exact_last_name_candidates) == 1:
-        return exact_last_name_candidates[0]["id"]
+    # A surname or active flag alone cannot establish the filing's identity.
+    # Multiple compatible names need source evidence, not database row order.
+    if len(matching_ids) == 1:
+        return next(iter(matching_ids))
 
     first_norm = normalize_name_part(first_name)
     last_norm = normalize_name_part(last_name)
     member_id = f"unknown-{first_norm}-{last_norm}"[:50]
     if any(member["id"] == member_id for member in members_db):
+        return member_id
+
+    if not parser_writes_allowed():
         return member_id
 
     try:
@@ -714,6 +716,8 @@ def house_trade_fingerprint(*parts: str) -> str:
 
 
 def upsert_company(ticker: str, company_name: str):
+    if not parser_writes_allowed():
+        return
     cleaned_name = (company_name or ticker).strip()[:255]
     if not looks_like_clean_equity_company_name(cleaned_name):
         return

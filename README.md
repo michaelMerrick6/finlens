@@ -1,5 +1,13 @@
 # Vail
 
+## UI reset in progress
+
+The previous interface has been removed locally in preparation for a backend review and a new UI. Only a minimal rebuild notice and a not-found page remain. Former product, marketing, account, authentication (including callback/reset), and ops screens are unavailable. Do not deploy this reset expecting a usable customer application.
+
+All 39 API endpoints retain their URLs; backend fixes are being applied during the review. Routes previously nested under `src/app/(app)/api` now live in `src/app/api`. Server libraries, database schemas, ingestion scripts, scheduled jobs, billing webhooks, and access controls are retained. Ten modules with no remaining application callers have been removed after a dependency review.
+
+Next: review API contracts, data quality, query performance, authentication, billing, and pipeline reliability; then build Activity, Explore, and Following. Restore indexing when the new public experience is ready. The last complete UI is in git commit `b0dc4c4`.
+
 Vail is a Next.js + Supabase product for tracking three public-market signal streams in one place:
 
 - Congressional trades
@@ -25,8 +33,8 @@ That architecture is the project story to lead with on GitHub and in a resume.
 
 ## Core Files
 
-- App shell: `src/app/(app)/page.tsx`
-- Ticker intelligence: `src/app/(app)/ticker/[symbol]/page.tsx`
+- Temporary app shell: `src/app/page.tsx`
+- API routes: `src/app/api/`
 - Public data reads: `src/lib/public-data.ts`
 - Ticker aggregation: `src/lib/ticker-intelligence.ts`
 - Base schema: `supabase_schema.sql`

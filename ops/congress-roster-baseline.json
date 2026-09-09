@@ -1,0 +1,861 @@
+{
+  "checked_at": "2026-09-09T05:26:54.580077+00:00",
+  "scope": "current official federal congressional rosters; not filing completeness",
+  "sources": {
+    "House": {
+      "url": "https://clerk.house.gov/xml/lists/MemberData.xml",
+      "sha256": "07aec65948e99fd80b5e7c31722f1208d9f5e0717ba00f4b02122f4724cb0c18",
+      "source_entries": 441,
+      "identified_members": 439,
+      "entries_without_id": 2
+    },
+    "Senate": {
+      "url": "https://www.senate.gov/legislative/LIS_MEMBER/cvc_member_data.xml",
+      "sha256": "9727326ea3559ce8f0743cdb0e3a277608a261eff3813f95a27c7fd2cffda22a",
+      "source_entries": 100,
+      "identified_members": 100,
+      "entries_without_id": 0
+    }
+  },
+  "stored_members": 1120,
+  "official_members": 539,
+  "matched_members": 532,
+  "stored_by_chamber": {
+    "House": 938,
+    "Senate": 182
+  },
+  "missing_members": [
+    {
+      "id": "G000607",
+      "name": "James Gallagher",
+      "chamber": "House"
+    },
+    {
+      "id": "W000832",
+      "name": "Aisha Wahab",
+      "chamber": "House"
+    },
+    {
+      "id": "B001328",
+      "name": "Everton Blair Jr.",
+      "chamber": "House"
+    },
+    {
+      "id": "F000485",
+      "name": "Clay Fuller",
+      "chamber": "House"
+    },
+    {
+      "id": "M001246",
+      "name": "Analilia Mejia",
+      "chamber": "House"
+    },
+    {
+      "id": "A000383",
+      "name": "Alan Armstrong",
+      "chamber": "Senate"
+    },
+    {
+      "id": "G000608",
+      "name": "Darline Graham",
+      "chamber": "Senate"
+    }
+  ],
+  "current_members_not_active": [],
+  "chamber_mismatches": [],
+  "stored_active_not_on_current_rosters": [
+    {
+      "id": "C001127",
+      "first_name": "Sheila",
+      "last_name": "Cherfilus-McCormick",
+      "chamber": "House",
+      "active": true,
+      "state": "FL",
+      "party": "Democrat"
+    },
+    {
+      "id": "G000359",
+      "first_name": "Lindsey",
+      "last_name": "Graham",
+      "chamber": "Senate",
+      "active": true,
+      "state": "SC",
+      "party": "Republican"
+    },
+    {
+      "id": "G000594",
+      "first_name": "Ernest",
+      "last_name": "Gonzales",
+      "chamber": "House",
+      "active": true,
+      "state": "TX",
+      "party": "Republican"
+    },
+    {
+      "id": "M001190",
+      "first_name": "Markwayne",
+      "last_name": "Mullin",
+      "chamber": "Senate",
+      "active": true,
+      "state": "OK",
+      "party": "Republican"
+    },
+    {
+      "id": "S001157",
+      "first_name": "David",
+      "last_name": "Scott",
+      "chamber": "House",
+      "active": true,
+      "state": "GA",
+      "party": "Democrat"
+    },
+    {
+      "id": "S001193",
+      "first_name": "Eric",
+      "last_name": "Swalwell",
+      "chamber": "House",
+      "active": true,
+      "state": "CA",
+      "party": "Democrat"
+    },
+    {
+      "id": "unknown-abigail-spanberger",
+      "first_name": "Abigail",
+      "last_name": "Spanberger",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-adamb-schiff",
+      "first_name": "Adam B.",
+      "last_name": "Schiff",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-adanorah-henriquez",
+      "first_name": "Ada Norah",
+      "last_name": "Henriquez",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-alan-armstrong",
+      "first_name": "alan",
+      "last_name": "armstrong",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-anna-paulinaluna",
+      "first_name": "Anna",
+      "last_name": "Paulina Luna",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-aprilmcclain-delaney",
+      "first_name": "April McClain",
+      "last_name": "Delaney",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-ashley-hinsonarenholz",
+      "first_name": "Ashley",
+      "last_name": "Hinson Arenholz",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-augustlee-pfluger",
+      "first_name": "August Lee",
+      "last_name": "Pfluger",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-brandonmcdonald-williams",
+      "first_name": "Brandon McDonald",
+      "last_name": "Williams",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-cathymcmorris-rodgers",
+      "first_name": "Cathy McMorris",
+      "last_name": "Rodgers",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-charlesj.\"chuck\"-fleischmann",
+      "first_name": "Charles J. \"Chuck\"",
+      "last_name": "Fleischmann",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-chris-vanhollen",
+      "first_name": "Chris",
+      "last_name": "Van Hollen",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-chuck-fleischmann",
+      "first_name": "Chuck",
+      "last_name": "Fleischmann",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-daniel-goldman",
+      "first_name": "Daniel",
+      "last_name": "Goldman",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-david-trone",
+      "first_name": "David",
+      "last_name": "Trone",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-davidh-mccormick",
+      "first_name": "David H",
+      "last_name": "McCormick",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-davidj.-taylor",
+      "first_name": "David J.",
+      "last_name": "Taylor",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-dean-phillips",
+      "first_name": "Dean",
+      "last_name": "Phillips",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-diana-harshbarger",
+      "first_name": "Diana",
+      "last_name": "Harshbarger",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-donaldsternoff-beyer",
+      "first_name": "Donald Sternoff",
+      "last_name": "Beyer",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-doriso-matsui",
+      "first_name": "Doris O.",
+      "last_name": "Matsui",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-doriso.-matsui",
+      "first_name": "Doris O.",
+      "last_name": "Matsui",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-geralde-connolly",
+      "first_name": "Gerald E.",
+      "last_name": "Connolly",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-greg-steube",
+      "first_name": "Greg",
+      "last_name": "Steube",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-harolddallas-rogers",
+      "first_name": "Harold Dallas",
+      "last_name": "Rogers",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-harshbarger-hon",
+      "first_name": "Harshbarger",
+      "last_name": "Hon.",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jacky-rosen",
+      "first_name": "Jacky",
+      "last_name": "Rosen",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-james-banks",
+      "first_name": "James",
+      "last_name": "Banks",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jamesconley-justice,ii",
+      "first_name": "James Conley",
+      "last_name": "Justice, II",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jamesd-jordan",
+      "first_name": "James D",
+      "last_name": "Jordan",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jamese-banks",
+      "first_name": "James E.",
+      "last_name": "Banks",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jamesehon-banks",
+      "first_name": "James E Hon",
+      "last_name": "Banks",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jamesfrench-hill",
+      "first_name": "James French",
+      "last_name": "Hill",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jd-vance",
+      "first_name": "jd",
+      "last_name": "vance",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jeff-jackson",
+      "first_name": "Jeff",
+      "last_name": "Jackson",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-john-curtis",
+      "first_name": "John",
+      "last_name": "Curtis",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-jonathan-jackson",
+      "first_name": "Jonathan",
+      "last_name": "Jackson",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-kathy-manning",
+      "first_name": "Kathy",
+      "last_name": "Manning",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-kellylouise-morrison",
+      "first_name": "Kelly Louise",
+      "last_name": "Morrison",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-lindat.-sanchez",
+      "first_name": "Linda T.",
+      "last_name": "Sanchez",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-lisa-bluntrochester",
+      "first_name": "Lisa",
+      "last_name": "Blunt Rochester",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-marco-rubio",
+      "first_name": "marco",
+      "last_name": "rubio",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-marjorietaylor-greene",
+      "first_name": "Marjorie Taylor",
+      "last_name": "Greene",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-marjorietaylormrs-greene",
+      "first_name": "Marjorie Taylor Mrs",
+      "last_name": "Greene",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-matthewrobert-vanepps",
+      "first_name": "Matthew Robert",
+      "last_name": "Van Epps",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-melvinl-watt",
+      "first_name": "Melvin L.",
+      "last_name": "Watt",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-michael-garcia",
+      "first_name": "Michael",
+      "last_name": "Garcia",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-michael-waltz",
+      "first_name": "Michael",
+      "last_name": "Waltz",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-michaela.-collins",
+      "first_name": "Michael A.",
+      "last_name": "Collins",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-michaelpatrick-guest",
+      "first_name": "Michael Patrick",
+      "last_name": "Guest",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-michaelt.-mccaul",
+      "first_name": "Michael T.",
+      "last_name": "McCaul",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-mikie-sherrill",
+      "first_name": "Mikie",
+      "last_name": "Sherrill",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-nealpatrick-dunnmdfacs",
+      "first_name": "Neal Patrick",
+      "last_name": "Dunn, MD, FACS",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-peter-welch",
+      "first_name": "Peter",
+      "last_name": "Welch",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-rafaele-cruz",
+      "first_name": "Rafael E",
+      "last_name": "Cruz",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-richardb-reisdorf",
+      "first_name": "Richard B.",
+      "last_name": "Reisdorf",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-richardw-allen",
+      "first_name": "Richard W.",
+      "last_name": "Allen",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-richardw.-allen",
+      "first_name": "Richard W.",
+      "last_name": "Allen",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-ro-khanna",
+      "first_name": "Ro",
+      "last_name": "Khanna",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-rob-bresnahan",
+      "first_name": "Rob",
+      "last_name": "Bresnahan",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-roberte.-latta",
+      "first_name": "Robert E.",
+      "last_name": "Latta",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-rogers-hon",
+      "first_name": "Rogers",
+      "last_name": "Hon.",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-rogerw-marshall",
+      "first_name": "Roger W.",
+      "last_name": "Marshall",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-rohit-khanna",
+      "first_name": "Rohit",
+      "last_name": "Khanna",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-scotth.-peters",
+      "first_name": "Scott H.",
+      "last_name": "Peters",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-scottscott-franklin",
+      "first_name": "Scott Scott",
+      "last_name": "Franklin",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-shelleymoore-capito",
+      "first_name": "Shelley Moore",
+      "last_name": "Capito",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-steve-cohen",
+      "first_name": "Steve",
+      "last_name": "Cohen",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-suzank.-delbene",
+      "first_name": "Suzan K.",
+      "last_name": "DelBene",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-tammy-duckworth",
+      "first_name": "Tammy",
+      "last_name": "Duckworth",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-test-member",
+      "first_name": "Test",
+      "last_name": "Member",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-thomas-suozzi",
+      "first_name": "Thomas",
+      "last_name": "Suozzi",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-thomas-udall",
+      "first_name": "Thomas",
+      "last_name": "Udall",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-thomash-kean",
+      "first_name": "Thomas H.",
+      "last_name": "Kean",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-thomash-tuberville",
+      "first_name": "Thomas H",
+      "last_name": "Tuberville",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-thomash.-kean",
+      "first_name": "Thomas H.",
+      "last_name": "Kean",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-tony-wied",
+      "first_name": "Tony",
+      "last_name": "Wied",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-william-cassidy",
+      "first_name": "William",
+      "last_name": "Cassidy",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-williamf-hagerty,iv",
+      "first_name": "William F",
+      "last_name": "Hagerty, IV",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-williamf-hagertyiv",
+      "first_name": "William F",
+      "last_name": "Hagerty, IV",
+      "chamber": "Senate",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-williamm-cassidy",
+      "first_name": "William M.",
+      "last_name": "Cassidy",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    },
+    {
+      "id": "unknown-williamr.-keating",
+      "first_name": "William R.",
+      "last_name": "Keating",
+      "chamber": "House",
+      "active": true,
+      "state": null,
+      "party": null
+    }
+  ],
+  "current_roster_gate_passed": false
+}
