@@ -25,6 +25,11 @@ ON public.institutional_holdings(fund_name, report_period DESC);
 CREATE INDEX IF NOT EXISTS idx_signal_events_created_at
 ON public.signal_events(created_at DESC);
 
+-- The raw_filings FK uses ON DELETE SET NULL; without this index each
+-- replaced filing row scans all signal events during a repair.
+CREATE INDEX IF NOT EXISTS idx_signal_events_raw_filing_id
+ON public.signal_events(raw_filing_id);
+
 CREATE INDEX IF NOT EXISTS idx_signal_events_type_published_at
 ON public.signal_events(signal_type, published_at DESC);
 

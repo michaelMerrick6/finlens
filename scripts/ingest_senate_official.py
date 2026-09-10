@@ -1,6 +1,7 @@
 import io
 import json
 from parser_write_policy import parser_writes_allowed
+from reviewed_congress_filings import reviewed_senate_trades
 import os
 import re
 import time
@@ -346,8 +347,9 @@ def build_trade_record(
     amount_range: str,
     source_url: str,
     asset_name: str = "",
+    asset_type: str = "Stock",
 ) -> dict:
-    normalized_asset_type = normalize_politician_asset_type("Stock", asset_name)
+    normalized_asset_type = normalize_politician_asset_type(asset_type, asset_name)
     return {
         "member_id": member_id,
         "politician_name": f"{first_name} {last_name}"[:100],
@@ -440,6 +442,7 @@ def parse_senate_html_table(
                 amount_range=amount_raw,
                 source_url=source_url,
                 asset_name=issuer_text or ticker_text or ticker,
+                asset_type=clean_text(cells[5].get_text(" ", strip=True)) or "Stock",
             )
         )
     return trades
@@ -689,6 +692,10 @@ def parse_senate_paper_report(
     except Exception as exc:
         print(f"Failed to OCR Senate paper filing {doc_key}: {exc}")
         return [], 0
+
+    reviewed = reviewed_senate_trades(f"senate-{doc_key}", images, member_id, filed_date)
+    if reviewed is not None:
+        return reviewed, len(reviewed)
 
     paper_row_count = count_senate_paper_transaction_rows(images)
 

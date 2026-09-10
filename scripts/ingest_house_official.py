@@ -3,6 +3,7 @@ import difflib
 import io
 import json
 from parser_write_policy import parser_writes_allowed
+from reviewed_congress_filings import reviewed_house_trades
 import os
 import re
 import subprocess
@@ -1461,6 +1462,9 @@ def extract_best_text_transactions(
     members_db: list[dict],
     company_lookup: list[dict] | None = None,
 ) -> tuple[list[dict], list[str]]:
+    reviewed = reviewed_house_trades(f"house-{tx_year}-{doc_id}", pdf_bytes)
+    if reviewed is not None:
+        return reviewed, []
     pdf_lines = [normalize_line(line) for line in extract_pdf_lines(pdf_bytes)]
     pdf_lines = [line for line in pdf_lines if line]
 

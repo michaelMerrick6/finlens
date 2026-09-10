@@ -54,3 +54,12 @@ Added four regression tests covering conflicting first names, ambiguous initials
 A new latest-filings sample completed all five comparisons with a 30-second document limit. One Senate filing dated September 9, 2026 (`e5144197-e49c-4f74-bec4-19f1f3124668`) parsed seven transactions but had no stored rows at audit time. This is a current capture discrepancy; check pipeline timing before classifying it as a persistent ingestion failure. Evidence: `congress-followup-audit.json`. New filings changed the sample, so this run alone does not resolve the two previously timed-out documents.
 
 The exact previously timed-out filings were also retried independently of the rolling sample. House filing `house-2026-9116328` still exceeded 30 seconds. Senate filing `929216d5-5dbd-429c-858c-1e9332924627` completed and returned 23 parsed rows versus 19 stored rows, with no detected filing-date or unknown-ID discrepancy. This row-count mismatch requires row-level comparison and the same deduplication/normalization rules used by ingestion before concluding that four transactions are missing. Evidence: `congress-targeted-followup.json`. No repair was applied.
+
+## September 10 source-verified repairs
+
+The two paper filing discrepancies are repaired in production: Khanna has 244
+verified rows and Blumenthal has 111. The latest Booker filing has seven verified
+rows, including a corrected non-public stock classification. See
+[the repair report](filing-discrepancy-repair.md) for source evidence, transaction
+backups, downstream corrections, tests, and remaining limits. The accepted
+seven-member roster gap is unchanged.

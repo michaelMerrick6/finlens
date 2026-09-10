@@ -24,6 +24,7 @@ class SchemaPerformanceIndexesTests(unittest.TestCase):
             "idx_institutional_holdings_report_period",
             "idx_institutional_holdings_fund_period",
             "idx_signal_events_created_at",
+            "idx_signal_events_raw_filing_id",
             "idx_signal_events_type_published_at",
             "idx_signal_events_type_occurred_at",
             "idx_tweet_candidates_cluster_feed",

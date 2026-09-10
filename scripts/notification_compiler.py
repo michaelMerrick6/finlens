@@ -143,6 +143,10 @@ def filing_group_key(event: dict) -> str:
     payload = event.get("payload") or {}
 
     if source == "congress" and source_document_id:
+        # Grouped trades still belong to the original filing. Treating their
+        # derived ID as a filing splits one report into a summary per ticker.
+        if event.get("signal_type") == "politician_trade_grouped":
+            return str(payload.get("group_source_document_id") or source_document_id.split("::group::", 1)[0])
         return re.sub(r"-\d+$", "", source_document_id)
 
     if source == "insider":

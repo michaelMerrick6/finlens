@@ -2,6 +2,7 @@ import unittest
 from pathlib import Path
 import sys
 from unittest.mock import patch
+from bs4 import BeautifulSoup
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -10,10 +11,17 @@ from scripts.ingest_senate_official import (
     parse_senate_paper_lines,
     prepare_senate_trades_for_insert,
     resolve_company_ticker,
+    parse_senate_html_table,
 )
 
 
 class SenateParserRegressionTests(unittest.TestCase):
+    def test_html_retains_non_public_asset_type(self) -> None:
+        soup = BeautifulSoup('<table class="table"><tbody><tr><td>1</td><td>08/18/2026</td><td>Spouse</td><td>--</td><td>Private Company</td><td>Non-Public Stock</td><td>Sale (Full)</td><td>$50,001 - $100,000</td></tr></tbody></table>', 'html.parser')
+        trades = parse_senate_html_table(soup, doc_key='test', member_id='B001288', first_name='Cory', last_name='Booker', filed_date='2026-09-09', source_url='https://example.com/report')
+        self.assertEqual(trades[0]['asset_type'], 'NON-PUBLIC STOCK')
+        self.assertEqual(trades[0]['ticker'], 'N/A')
+
     def test_private_entity_names_do_not_become_false_tickers(self) -> None:
         valid_tickers = {"MH", "AWAY", "IBM", "N/A"}
 

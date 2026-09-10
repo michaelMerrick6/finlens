@@ -88,3 +88,12 @@ python ops/audit_congress_roster.py --output ops/congress-roster-baseline.json
 ```
 
 This audit checks current identities/status/chamber only. It does not prove historical completeness, transaction correctness, or filing capture, and its JSON `current_roster_gate_passed` flag must be inspected separately from successful command execution.
+
+## September 10 progress
+
+Completed the targeted paper-filing repair and latest Senate filing check:
+362 source-verified rows across three filings. Corrected downstream summaries,
+added source-locked parser exceptions, preserved non-public asset types, and
+indexed the signal-to-filing foreign key. See
+[filing-discrepancy-repair.md](filing-discrepancy-repair.md). These fixes do not
+replace the broader historical inventory and OCR-template work above.
