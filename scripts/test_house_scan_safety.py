@@ -52,6 +52,14 @@ class HouseScanSafetyTests(unittest.TestCase):
                           'Private LLC','08/06/2026','08/07/2026'],
                          scores=[[.02,0,0,0],[.02]+[0]*10,[0,0,0,0],[.02]+[0]*10])
 
+    def test_unknown_page_layout_stops_document(self):
+        with patch('ingest_house_official.convert_from_bytes',return_value=[Image.new('RGB',(2200,1700),'white')]), \
+             patch('ingest_house_official.resolve_member_id',return_value='test-member'), \
+             patch('ingest_house_official.is_house_attachment_continuation_page',return_value=False), \
+             patch('ingest_house_official.extract_house_scanned_rows',return_value=[]):
+            with self.assertRaisesRegex(HouseScanReviewRequired,'unrecognized scan layout'):
+                extract_transactions_from_scanned_house_pdf(b'pdf','test','Test','Member',2026,[])
+
     def test_future_transaction_year_requires_review(self):
         with self.assertRaisesRegex(HouseScanReviewRequired,'year'):
             self.extract(['Private LLC','08/06/2027'])

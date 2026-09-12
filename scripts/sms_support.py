@@ -4,6 +4,8 @@ import re
 
 import requests
 
+from alert_delivery_support import DeliveryRateLimited
+
 
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "").strip()
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
@@ -44,5 +46,7 @@ def send_sms(destination: str, body: str) -> None:
         data={"From": from_phone, "To": to_phone, "Body": body},
         timeout=20,
     )
+    if response.status_code == 429:
+        raise DeliveryRateLimited("SMS provider rate limit")
     if response.status_code >= 400:
         raise RuntimeError(f"Twilio SMS error {response.status_code}: {response.text}")

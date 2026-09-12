@@ -48,6 +48,13 @@ JavaScript tests; TypeScript, ESLint and production build passed. Read-only API
 smokes covered stats, autocomplete, workspace and unauthorized account access.
 Production dependency audit reported zero vulnerabilities; pip check passed.
 
+## Follow-up validation
+
+See billing-delivery-validation.md for confirmed live email delivery, local billing
+lifecycle validation and the outstanding sandbox payment check. See
+historical-coverage-baseline.md for the complete 2015–2026 official congressional
+filing inventory comparison and measured historical review indicators.
+
 ## Remaining boundaries
 
 - The accepted seven-member coverage gap remains. Previously measured active-status
@@ -55,8 +62,9 @@ Production dependency audit reported zero vulnerabilities; pip check passed.
 - Senate OCR evidence is 111 rows in one development filing, not a held-out corpus.
   Unknown layouts and degraded handwriting can still require source review. House
   scan coverage is not exhaustive; historical completeness is not established.
-- Live authenticated multi-user billing and outbound delivery were not exercised.
-  Validate these in a controlled environment before restoring those user flows.
+- A real sandbox payment and live authenticated multi-user sessions remain
+  untested. Email has now been provider-tested and received in the owner inbox;
+  live SMS/broadcast delivery remains outside this validation.
 - UI remains the intentional rebuild notice. Begin the frontend with search,
   politician profiles and transaction browsing, using the failure and pagination
   contracts above.

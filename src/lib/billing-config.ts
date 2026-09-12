@@ -40,15 +40,15 @@ export function getBillingPlanName(planKey: BillingPlanKey) {
 }
 
 export function resolveBillingPlanKey(
-  priceId: string | null | undefined,
-  status: string | null | undefined
+  priceId: string | null | undefined
 ): BillingPlanKey {
   const configuredProPriceId = String(process.env.STRIPE_VAIL_PRO_PRICE_ID || '').trim();
   if (priceId && configuredProPriceId && priceId === configuredProPriceId) {
     return 'pro';
   }
 
-  return isPaidBillingStatus(status) ? 'pro' : 'free';
+  // An active subscription to another product must not grant Vail Pro.
+  return 'free';
 }
 
 export function resolveBillingFollowLimit(planKey: BillingPlanKey, status: string | null | undefined) {

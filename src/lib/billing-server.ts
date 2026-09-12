@@ -122,7 +122,7 @@ async function ensureBillingProfile(user: User): Promise<BillingProfileRow> {
 
 async function updateProfileBillingState(profileId: string, payload: BillingSyncPayload) {
   const supabase = getAdminSupabase();
-  const planKey = resolveBillingPlanKey(payload.priceId, payload.status);
+  const planKey = resolveBillingPlanKey(payload.priceId);
   const normalizedStatus = normalizeBillingStatus(payload.status);
   const followLimit = resolveBillingFollowLimit(planKey, normalizedStatus);
 
@@ -151,11 +151,14 @@ async function findProfileIdForBillingPayload(payload: BillingSyncPayload) {
   const supabase = getAdminSupabase();
 
   if (payload.userId) {
-    const byId = await supabase.from('profiles').select('id').eq('id', payload.userId).maybeSingle();
+    const byId = await supabase.from('profiles').select('id,stripe_customer_id').eq('id', payload.userId).maybeSingle();
     if (byId.error) {
       throw byId.error;
     }
     if (byId.data?.id) {
+      if (byId.data.stripe_customer_id && byId.data.stripe_customer_id !== payload.customerId) {
+        throw new Error('Stripe customer does not match the account billing identity.');
+      }
       return String(byId.data.id);
     }
   }
@@ -340,10 +343,27 @@ export async function constructStripeEvent(signature: string | null, payload: st
   }
 
   const stripe = getStripeClient();
-  return stripe.webhooks.constructEvent(payload, signature, getStripeWebhookSecret());
+  const secret = getStripeWebhookSecret();
+  try {
+    return stripe.webhooks.constructEvent(payload, signature, secret);
+  } catch {
+    throw new ApiRouteError(400, 'BILLING_BAD_SIGNATURE', 'Invalid Stripe signature or payload.');
+  }
 }
 
 export async function syncBillingFromStripeSubscription(subscription: Stripe.Subscription, userId?: string | null) {
+  // A late event for a canceled subscription must not downgrade its replacement.
+  if (['canceled', 'incomplete_expired'].includes(subscription.status)) {
+    const customerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id;
+    const candidates: Stripe.Subscription[] = [];
+    for await (const candidate of getStripeClient().subscriptions.list({ customer: customerId, status: 'all', limit: 100 })) {
+      if (['active', 'trialing', 'past_due'].includes(candidate.status) && subscriptionPriceId(candidate) === getStripePriceId()) {
+        candidates.push(candidate);
+      }
+    }
+    candidates.sort((a, b) => b.created - a.created);
+    subscription = candidates[0] || subscription;
+  }
   const payload: BillingSyncPayload = {
     userId: userId || subscription.metadata?.supabase_user_id || null,
     customerId: typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id,

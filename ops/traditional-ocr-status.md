@@ -46,3 +46,7 @@ first-date-anywhere fallback was removed because it could select an option expir
 Equal transactions on separate physical rows are retained. These House changes
 are regression-tested safeguards, not a demonstrated recovery of all House layouts. No OpenAI requests were made. Production capture and identity repairs are
 documented in backend-release.md.
+
+Follow-up: House scans now stop on conversion failure or any page without a
+recognized row layout. This can defer cover-page documents too; broad layout
+support remains deferred rather than publishing partial documents.

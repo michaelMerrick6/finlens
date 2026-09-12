@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { ApiRouteError } from '@/lib/auth-server';
 import { routeErrorMessage } from '@/lib/api-errors';
 import { constructStripeEvent, syncBillingFromStripeEvent } from '@/lib/billing-server';
 
@@ -15,6 +16,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {
     const message = routeErrorMessage(error, 'Stripe webhook failed.', 'stripe-webhook');
-    return NextResponse.json({ ok: false, error: message }, { status: 400 });
+    return NextResponse.json({ ok: false, error: message }, { status: error instanceof ApiRouteError ? error.status : 500 });
   }
 }

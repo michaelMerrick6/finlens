@@ -1,5 +1,6 @@
 import html
 import os
+import time
 from datetime import datetime, timezone
 
 from alert_rules import describe_behavior_reasons
@@ -305,3 +306,85 @@ def event_email_html(event: dict) -> str:
         "</table>"
         "</div>"
     )
+
+
+class DeliveryRateLimited(RuntimeError):
+    """Provider explicitly rejected the request without accepting a delivery."""
+
+
+def claim_delivery(supabase, delivery: dict) -> bool:
+    """Compare-and-set: only one worker may move a pending delivery to sending."""
+    response = (supabase.table('alert_deliveries')
+                .update({'status': 'sending', 'attempts': int(delivery.get('attempts') or 0) + 1, 'last_error': None})
+                .eq('id', delivery['id']).eq('status', 'pending').execute())
+    return bool(response.data)
+
+
+def delivery_subscription_is_current(supabase, delivery: dict) -> bool:
+    subscription_id = delivery.get('subscription_id')
+    if not subscription_id:
+        # System broadcasts have no account subscription.
+        return True
+    response = (supabase.table('alert_subscriptions').select('id,active,channel,destination')
+                .eq('id', subscription_id).maybe_single().execute())
+    subscription = response.data
+    return bool(subscription and subscription.get('active')
+                and subscription.get('channel') == delivery.get('channel')
+                and subscription.get('destination') == delivery.get('destination'))
+
+
+def dispatch_channel(supabase, *, channel: str, batch_size: int, send, configured: bool = True, min_send_interval: float = 0) -> dict:
+    """Dispatch claimed rows only. Ambiguous sends require review, never automatic replay."""
+    deliveries = fetch_pending_deliveries(supabase, channel=channel, batch_size=batch_size)
+    if deliveries and not configured:
+        raise RuntimeError(f'{channel} dispatch blocked: missing provider configuration; queue unchanged.')
+    summary = dict(deliveries_seen=len(deliveries), deliveries_sent=0, deliveries_failed=0,
+                   deliveries_skipped=0, deliveries_uncertain=0, deliveries_deferred=0, batch_size=batch_size)
+    last_send_started = None
+    for delivery in deliveries:
+        if not claim_delivery(supabase, delivery):
+            summary['deliveries_skipped'] += 1
+            continue
+        attempts = int(delivery.get('attempts') or 0) + 1
+        try:
+            current = delivery_subscription_is_current(supabase, delivery)
+        except Exception:
+            # Nothing has been sent: the next run can safely retry the lookup.
+            mark_delivery(supabase, delivery['id'], status='pending', attempts=attempts,
+                          last_error='Subscription check unavailable; nothing sent.')
+            raise
+        if not current:
+            mark_delivery(supabase, delivery['id'], status='cancelled', attempts=attempts,
+                          last_error='Subscription disabled, removed, or destination changed.')
+            summary['deliveries_skipped'] += 1
+            continue
+        destination = str(delivery.get('destination') or '').strip()
+        event = delivery.get('signal_events')
+        if not destination or not event:
+            mark_delivery(supabase, delivery['id'], status='failed', attempts=attempts,
+                          last_error='Missing destination or event payload')
+            summary['deliveries_failed'] += 1
+            continue
+        rendered_event = dict(event, _delivery_payload=delivery.get('payload') or {})
+        try:
+            if last_send_started is not None and min_send_interval > 0:
+                time.sleep(max(0, min_send_interval - (time.monotonic() - last_send_started)))
+            last_send_started = time.monotonic()
+            send(destination, rendered_event, delivery['id'])
+        except DeliveryRateLimited:
+            mark_delivery(supabase, delivery['id'], status='pending', attempts=attempts,
+                          last_error='Provider rate limit; deferred until a later dispatch run.')
+            summary['deliveries_deferred'] += 1
+            break
+        except Exception:
+            # Providers can accept a request before our connection fails. Do not
+            # automatically resend or leak provider responses/destinations to logs.
+            mark_delivery(supabase, delivery['id'], status='uncertain', attempts=attempts,
+                          last_error='Provider send did not complete locally; verify provider status before retrying.')
+            summary['deliveries_uncertain'] += 1
+            continue
+        # Keep a DB failure here outside the sender exception handler. The row
+        # remains "sending", blocking duplicate sends until an operator verifies it.
+        mark_delivery(supabase, delivery['id'], status='sent', attempts=attempts)
+        summary['deliveries_sent'] += 1
+    return summary

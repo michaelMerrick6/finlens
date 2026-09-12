@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: process-signals
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   process-signals:

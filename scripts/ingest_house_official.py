@@ -1092,13 +1092,15 @@ def extract_transactions_from_scanned_house_pdf(
     try:
         images = convert_from_bytes(pdf_bytes, dpi=250)
     except Exception as exc:
-        print(f"Error converting scanned House PDF {doc_id}: {exc}")
-        return []
+        raise HouseScanReviewRequired(f"Cannot render scanned House PDF {doc_id}") from exc
 
     member_id = resolve_member_id(first_name, last_name, members_db)
     transactions: list[dict] = []
 
+    if not images:
+        raise HouseScanReviewRequired("Scan contains no readable pages")
     for page_number, image in enumerate(images, 1):
+        page_start_count = len(transactions)
         if image.width < image.height:
             image = image.rotate(90, expand=True)
 
@@ -1210,6 +1212,8 @@ def extract_transactions_from_scanned_house_pdf(
 
             if len(transactions) > page_transactions_before:
                 break
+        if len(transactions) == page_start_count:
+            raise HouseScanReviewRequired(f"Page {page_number}: unrecognized scan layout; document requires review")
 
     return transactions
 
