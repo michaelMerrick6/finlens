@@ -1,3 +1,4 @@
+from congress_member_lookup import load_congress_members
 import io
 import json
 from parser_write_policy import parser_writes_allowed
@@ -10,7 +11,6 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from urllib.parse import urljoin
 
-import pytesseract
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
@@ -35,9 +35,6 @@ CSRF_INPUT_RE = re.compile(r'name="csrfmiddlewaretoken"\s+value="([^"]+)"')
 DOCUMENT_HREF_RE = re.compile(r'href="(.*?)"')
 DATE_RE = re.compile(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b")
 TICKER_RE = re.compile(r"\(([A-Z]{1,6})\)")
-# OCR on scanned Senate forms often emits checked boxes as "~", "*", "v", etc.
-# Accept a narrow set of short symbol-only tokens so checkbox marks are captured.
-PAPER_MARK_RE = re.compile(r"^(?:[xX×~*vV✓✔√/\\]){1,4}$")
 COMMON_NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 PRIVATE_ENTITY_MARKERS = (" LLC", " L.L.C", " L.P.", " LP", " PARTNERS", " FAMILY", " TRUST")
 PUBLIC_COMPANY_HINTS = (" STOCK", " SHARES", " COMMON", " ETF", " ETN", " ADR", " ADS", " INC", " CORP", " PLC")
@@ -286,43 +283,20 @@ def upsert_company(ticker: str, company_name: str):
         print(f"Warning: company upsert failed for {ticker}: {exc}")
 
 
-def infer_paper_transaction_type(type_marks: list[dict], line_text: str) -> str:
-    line_lower = line_text.lower()
-    if "sale" in line_lower or "sold" in line_lower:
-        return "sell"
-    if "purchase" in line_lower or "buy" in line_lower:
-        return "buy"
-    if not type_marks:
-        return "exchange"
-
-    left = min(mark["left"] for mark in type_marks)
-    if left < 1475:
-        return "buy"
-    if left < 1600:
-        return "sell"
-    return "exchange"
+class PaperFilingReviewRequired(ValueError):
+    """The scan cannot safely be published without source review."""
 
 
-def infer_paper_amount(amount_marks: list[dict]) -> str:
-    if not amount_marks:
-        return "Unknown"
-
-    left = min(mark["left"] for mark in amount_marks)
-    if left < 2050:
-        return "$1,001 - $15,000"
-    if left < 2200:
-        return "$15,001 - $50,000"
-    if left < 2360:
-        return "$50,001 - $100,000"
-    if left < 2500:
-        return "$100,001 - $250,000"
-    if left < 2620:
-        return "$250,001 - $500,000"
-    if left < 2725:
-        return "$500,001 - $1,000,000"
-    if left < 2835:
-        return "$1,000,001 - $5,000,000"
-    return "Over $5,000,000"
+def validate_paper_extraction(trades: list[dict], expected_rows: int, filed_date: str) -> None:
+    if not expected_rows or len(trades) != expected_rows:
+        raise PaperFilingReviewRequired(
+            f"Scan requires review: detected {expected_rows} table rows, parsed {len(trades)}")
+    for index, trade in enumerate(trades, 1):
+        if (trade.get("transaction_type") not in {"buy", "sell", "exchange"}
+                or trade.get("amount_range") in {None, "", "Unknown"}
+                or not trade.get("transaction_date")
+                or trade["transaction_date"] > filed_date):
+            raise PaperFilingReviewRequired(f"Scan requires review: ambiguous financial fields in row {index}")
 
 
 def parse_filed_date(value: str) -> str:
@@ -458,32 +432,6 @@ def extract_paper_image_urls(soup: BeautifulSoup) -> list[str]:
     return image_urls
 
 
-def detect_dark_line_groups(image: Image.Image, *, axis: str, threshold: int, min_fraction: float) -> list[tuple[int, int]]:
-    grayscale = image.convert("L")
-    pixels = grayscale.load()
-    length = grayscale.height if axis == "horizontal" else grayscale.width
-    breadth = grayscale.width if axis == "horizontal" else grayscale.height
-    min_dark = int(breadth * min_fraction)
-    positions: list[int] = []
-
-    for primary in range(length):
-        dark = 0
-        for secondary in range(breadth):
-            x, y = (secondary, primary) if axis == "horizontal" else (primary, secondary)
-            if pixels[x, y] < threshold:
-                dark += 1
-        if dark >= min_dark:
-            positions.append(primary)
-
-    groups: list[tuple[int, int]] = []
-    for position in positions:
-        if not groups or position - groups[-1][1] > 4:
-            groups.append((position, position))
-        else:
-            groups[-1] = (groups[-1][0], position)
-    return groups
-
-
 def load_paper_images(session: requests.Session, image_urls: list[str]) -> list[Image.Image]:
     images: list[Image.Image] = []
     for image_url in image_urls:
@@ -493,182 +441,10 @@ def load_paper_images(session: requests.Session, image_urls: list[str]) -> list[
     return images
 
 
-def count_senate_paper_transaction_rows(images: list[Image.Image]) -> int:
-    row_count = 0
-    for image in images:
-        horizontal_lines = detect_dark_line_groups(image, axis="horizontal", threshold=180, min_fraction=0.25)
-        for current, nxt in zip(horizontal_lines, horizontal_lines[1:]):
-            row_start = current[1]
-            row_end = nxt[0]
-            height = row_end - row_start
-            if not (100 <= height <= 170):
-                continue
-            if row_start < int(image.height * 0.4) or row_end > int(image.height * 0.92):
-                continue
-            row_count += 1
-    return row_count
-
-
-def collect_paper_tokens(images: list[Image.Image]) -> list[dict]:
-    tokens: list[dict] = []
-    for page_index, image in enumerate(images):
-        data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
-
-        for index, raw_text in enumerate(data["text"]):
-            text = clean_text(raw_text)
-            if not text:
-                continue
-            try:
-                confidence = float(data["conf"][index])
-            except Exception:
-                confidence = 0.0
-            if confidence < 20:
-                continue
-            tokens.append(
-                {
-                    "page": page_index,
-                    "text": text,
-                    "left": int(data["left"][index]),
-                    "top": int(data["top"][index]),
-                }
-            )
-    return tokens
-
-
-def group_tokens_by_line(tokens: list[dict]) -> list[list[dict]]:
-    grouped: list[list[dict]] = []
-    for token in sorted(tokens, key=lambda item: (item["page"], item["top"], item["left"])):
-        if not grouped:
-            grouped.append([token])
-            continue
-        last_line = grouped[-1]
-        last_token = last_line[0]
-        if token["page"] == last_token["page"] and abs(token["top"] - last_token["top"]) <= 18:
-            last_line.append(token)
-        else:
-            grouped.append([token])
-    for line in grouped:
-        line.sort(key=lambda item: item["left"])
-    return grouped
-
-
 def clean_paper_asset_text(asset_text: str) -> str:
     asset_text = re.sub(r"^(?:[=»]\s*)*(?:[A-Za-z]\s+)?\((?:S|J|D|DC|SP|JT|PE)\)\s*", "", asset_text, flags=re.IGNORECASE)
     asset_text = re.sub(r"\s+x+\s*$", "", asset_text, flags=re.IGNORECASE)
     return clean_text(asset_text.rstrip(":"))
-
-
-def parse_senate_paper_lines(
-    line_tokens: list[list[dict]],
-    *,
-    doc_key: str,
-    member_id: str,
-    first_name: str,
-    last_name: str,
-    filed_date: str,
-    source_url: str,
-    valid_tickers: set[str],
-) -> list[dict]:
-    trades: list[dict] = []
-    seen: set[str] = set()
-
-    for tokens in line_tokens:
-        date_tokens = [token for token in tokens if DATE_RE.fullmatch(token["text"])]
-        if not date_tokens:
-            continue
-
-        asset_tokens = [token for token in tokens if token["left"] < 1400]
-        if not asset_tokens:
-            continue
-
-        asset_text = clean_paper_asset_text(" ".join(token["text"] for token in asset_tokens))
-        if not asset_text or asset_text.endswith(":"):
-            continue
-
-        tx_date = normalize_ocr_date(date_tokens[0]["text"])
-        if not tx_date:
-            continue
-
-        ticker = resolve_company_ticker(asset_text, valid_tickers) or "N/A"
-
-        type_marks = [
-            token
-            for token in tokens
-            if 1350 <= token["left"] < 1650 and PAPER_MARK_RE.match(token["text"])
-        ]
-        amount_marks = [
-            token
-            for token in tokens
-            if 1880 <= token["left"] < 2900 and PAPER_MARK_RE.match(token["text"])
-        ]
-
-        line_text = " ".join(token["text"] for token in tokens)
-        transaction_type = infer_paper_transaction_type(type_marks, line_text)
-        amount_range = infer_paper_amount(amount_marks)
-        if ticker != "N/A":
-            upsert_company(ticker, asset_text)
-
-        unique_key = "|".join(
-            (
-                re.sub(r"\s+", " ", asset_text).upper(),
-                tx_date,
-                transaction_type,
-                amount_range,
-            )
-        )
-        if unique_key in seen:
-            continue
-        seen.add(unique_key)
-
-        trades.append(
-            build_trade_record(
-                doc_key=doc_key,
-                trade_index=len(trades),
-                member_id=member_id,
-                first_name=first_name,
-                last_name=last_name,
-                chamber="Senate",
-                ticker=ticker,
-                transaction_date=tx_date,
-                published_date=filed_date,
-                transaction_type=transaction_type,
-                amount_range=amount_range,
-                source_url=source_url,
-                asset_name=asset_text,
-            )
-        )
-
-    if not trades:
-        return trades
-
-    base_key_with_known_amount: set[tuple[str, str, str]] = set()
-    for trade in trades:
-        amount_value = str(trade.get("amount_range") or "").strip().lower()
-        if amount_value and amount_value != "unknown":
-            base_key_with_known_amount.add(
-                (
-                    re.sub(r"\s+", " ", str(trade.get("asset_name") or "").strip()).upper(),
-                    str(trade.get("transaction_date") or ""),
-                    str(trade.get("transaction_type") or ""),
-                )
-            )
-
-    if not base_key_with_known_amount:
-        return trades
-
-    filtered: list[dict] = []
-    for trade in trades:
-        trade_key = (
-            re.sub(r"\s+", " ", str(trade.get("asset_name") or "").strip()).upper(),
-            str(trade.get("transaction_date") or ""),
-            str(trade.get("transaction_type") or ""),
-        )
-        amount_value = str(trade.get("amount_range") or "").strip().lower()
-        if amount_value == "unknown" and trade_key in base_key_with_known_amount:
-            continue
-        filtered.append(trade)
-
-    return filtered
 
 
 def parse_senate_paper_report(
@@ -697,28 +473,29 @@ def parse_senate_paper_report(
     if reviewed is not None:
         return reviewed, len(reviewed)
 
-    paper_row_count = count_senate_paper_transaction_rows(images)
-
+    from senate_table_ocr import extract_document, TableReviewRequired
     try:
-        tokens = collect_paper_tokens(images)
-    except Exception as exc:
-        print(f"Failed to OCR Senate paper filing {doc_key}: {exc}")
-        return [], paper_row_count
-
-    lines = group_tokens_by_line(tokens)
-    return (
-        parse_senate_paper_lines(
-            lines,
-            doc_key=doc_key,
-            member_id=member_id,
-            first_name=first_name,
-            last_name=last_name,
-            filed_date=filed_date,
-            source_url=source_url,
-            valid_tickers=valid_tickers,
-        ),
-        paper_row_count,
-    )
+        extracted = extract_document(images, filed_date=filed_date)
+    except (TableReviewRequired, RuntimeError) as exc:
+        raise PaperFilingReviewRequired(f"{doc_key}: {exc}") from exc
+    trades = []
+    for row in extracted:
+        asset = clean_paper_asset_text(row['asset_name'])
+        ticker = resolve_company_ticker(asset, valid_tickers) or "N/A"
+        trade = build_trade_record(
+            doc_key=doc_key, trade_index=len(trades), member_id=member_id,
+            first_name=first_name, last_name=last_name, chamber="Senate",
+            ticker=ticker, transaction_date=row['transaction_date'],
+            published_date=filed_date, transaction_type=row['transaction_type'],
+            amount_range=row['amount_range'], source_url=source_url, asset_name=asset,
+            asset_type="Stock" if re.search(r"\bstock\b", asset, re.I) else "Other",
+        )
+        trades.append(trade)
+    validate_paper_extraction(trades, len(extracted), filed_date)
+    for trade in trades:
+        if trade["ticker"] != "N/A":
+            upsert_company(trade["ticker"], trade.get("asset_name") or trade.get("_asset_name") or trade["ticker"])
+    return trades, len(extracted)
 
 
 def establish_senate_session(session: requests.Session) -> str:
@@ -808,12 +585,7 @@ def fetch_senate_trades():
 
     print(f"Found {len(all_rows)} Senate PTR filings across pagination.")
 
-    try:
-        members_req = supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute()
-        members_db = members_req.data if members_req else []
-    except Exception as exc:
-        print(f"Warn: Could not fetch congress_members for mapping ({exc})")
-        members_db = []
+    members_db = load_congress_members(supabase)
 
     valid_tickers = load_valid_tickers()
     formatted_trades: list[dict] = []
@@ -889,17 +661,23 @@ def fetch_senate_trades():
         paper_row_count = 0
         if "/search/view/paper/" in detail_path:
             paper_filings_seen += 1
-            trades, paper_row_count = parse_senate_paper_report(
-                session,
-                soup,
-                doc_key=doc_key,
-                member_id=member_id,
-                first_name=first_name,
-                last_name=last_name,
-                filed_date=filed_date,
-                source_url=detail_url,
-                valid_tickers=valid_tickers,
-            )
+            try:
+                trades, paper_row_count = parse_senate_paper_report(
+                    session,
+                    soup,
+                    doc_key=doc_key,
+                    member_id=member_id,
+                    first_name=first_name,
+                    last_name=last_name,
+                    filed_date=filed_date,
+                    source_url=detail_url,
+                    valid_tickers=valid_tickers,
+                )
+            except PaperFilingReviewRequired as exc:
+                parse_failures += 1
+                failed_doc_ids.append(doc_key)
+                print(f" -> {doc_key}: {exc}")
+                continue
             paper_transaction_rows_seen += paper_row_count
             paper_trades_parsed += len(trades)
         else:

@@ -34,6 +34,9 @@ jobs:
     - name: Billing regression tests
       run: npm run test:billing
 
+    - name: Backend API contract tests
+      run: npm run test:backend
+
     - name: Typecheck
       run: npm run typecheck
 

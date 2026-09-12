@@ -17,6 +17,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ memberId: 
     return NextResponse.json({
       memberId: profile.memberId,
       summary: profile.summary,
+      history: profile.history,
+      tradesTruncated: profile.trades.length > 120 || profile.history.hasMore,
       livePortfolio: profile.livePortfolio,
       trades: profile.trades.slice(0, 120),
     });

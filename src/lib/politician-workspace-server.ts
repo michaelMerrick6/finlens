@@ -1,4 +1,5 @@
 import 'server-only';
+import { readFilteredPage } from '@/lib/filtered-page';
 
 import { enrichPoliticianTradesWithAssetNames } from '@/lib/politician-asset-names';
 import { normalizeProfileDate, type PoliticianProfileTrade } from '@/lib/politician-profile';
@@ -81,28 +82,33 @@ export async function getPoliticianWorkspaceData(
     .eq('id', normalizedMemberId)
     .maybeSingle();
 
-  const tradesPromise = supabase
-    .from('politician_trades')
-    .select(WORKSPACE_TRADE_SELECT)
-    .eq('member_id', normalizedMemberId)
-    .not('ticker', 'is', null)
-    .not('ticker', 'in', '("N/A","NA","UNKNOWN","MULTI")')
-    .order('transaction_date', { ascending: false })
-    .order('published_date', { ascending: false })
-    .order('id', { ascending: false })
-    .range(safeOffset, safeOffset + safeLimit);
+  const tradesPromise = readFilteredPage<PoliticianProfileTrade>({
+    offset: safeOffset, limit: safeLimit,
+    include: (row) => filterDisplayPoliticianTrades([row]).length > 0,
+    fetchRows: async (offset, count) => {
+      const response = await supabase
+      .from('politician_trades')
+      .select(WORKSPACE_TRADE_SELECT)
+      .eq('member_id', normalizedMemberId)
+      .not('ticker', 'is', null)
+      .not('ticker', 'in', '("N/A","NA","UNKNOWN","MULTI")')
+      .order('transaction_date', { ascending: false })
+      .order('published_date', { ascending: false })
+      .order('id', { ascending: false })
+      .range(offset, offset + count - 1);
+      if (response.error) throw new Error(response.error.message);
+      return (response.data || []) as PoliticianProfileTrade[];
+    },
+  });
 
   const [memberResult, tradesResult] = await Promise.all([memberPromise, tradesPromise]);
 
   if (memberResult.error) {
     throw new Error(memberResult.error.message);
   }
-  if (tradesResult.error) {
-    throw new Error(tradesResult.error.message);
-  }
 
   const member = (memberResult.data as CongressMemberRow | null) || null;
-  const displayTrades = filterDisplayPoliticianTrades((tradesResult.data || []) as PoliticianProfileTrade[]);
+  const displayTrades = tradesResult.rows;
   const pageTrades = displayTrades.slice(0, safeLimit);
   const enrichedTrades = await enrichPoliticianTradesWithAssetNames(pageTrades);
   const firstTrade = enrichedTrades[0] || displayTrades[0] || null;
@@ -124,6 +130,6 @@ export async function getPoliticianWorkspaceData(
         null,
     },
     trades: enrichedTrades,
-    nextOffset: displayTrades.length > safeLimit ? safeOffset + safeLimit : null,
+    nextOffset: tradesResult.hasMore ? tradesResult.nextOffset : null,
   };
 }

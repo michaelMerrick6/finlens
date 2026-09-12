@@ -1,0 +1,74 @@
+{
+  "status": "completed",
+  "scope": "bounded recent filing sample, not historical completeness",
+  "document_timeout_seconds": 60.0,
+  "house": {
+    "filings_seen": 5,
+    "filings_with_trades": 5,
+    "no_trade_filings": 0,
+    "source_parse_failures": [],
+    "fallback_doc_rows": [],
+    "row_count_mismatches": [],
+    "transaction_mismatches": [],
+    "published_date_mismatches": [],
+    "unexpected_rows_for_no_trade_filings": [],
+    "unknown_member_docs": [],
+    "document_outcomes": [
+      {
+        "doc_id": "house-2026-20035390",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035411",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035410",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035408",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035403",
+        "status": "completed"
+      }
+    ]
+  },
+  "senate": {
+    "filings_seen": 5,
+    "filings_with_trades": 5,
+    "paper_unmapped_filings": [],
+    "source_parse_failures": [],
+    "fallback_doc_rows": [],
+    "row_count_mismatches": [],
+    "transaction_mismatches": [],
+    "published_date_mismatches": [],
+    "unknown_member_docs": [],
+    "document_outcomes": [
+      {
+        "doc_id": "senate-6298991b-e48f-4b11-9bbb-dfc94a7e1b32",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-0632f542-7ac2-46e4-bd9c-603e3673f0cd",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-a0431e36-2161-4e97-b99a-74a966d7193a",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-e5144197-e49c-4f74-bec4-19f1f3124668",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-f8d003c0-ca1e-4c39-9d66-632d220180e1",
+        "status": "completed"
+      }
+    ]
+  },
+  "recent_unknown_rows": [],
+  "parse_failures": 0
+}

@@ -13,6 +13,7 @@ import requests
 import os
 from datetime import datetime, timedelta
 
+from congress_member_lookup import load_congress_members
 from ingest_house_official import load_company_lookup
 from ingest_senate_official import load_valid_tickers
 from pipeline_support import emit_summary, get_supabase_client
@@ -64,9 +65,7 @@ def summarize_fallback_rows(prefix: str, rows: list[dict]) -> dict | None:
 
 @read_only_parsing
 def audit_house(supabase, *, days: int, limit: int, document_timeout: float = 120, checkpoint=None) -> dict:
-    members_db = (
-        supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute().data or []
-    )
+    members_db = load_congress_members(supabase)
     company_lookup = load_company_lookup()
     filings = load_recent_house_filings(days=days, limit=limit)
 

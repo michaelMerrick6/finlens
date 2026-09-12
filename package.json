@@ -10,7 +10,8 @@
     "lint": "eslint",
     "test:billing": "node --test tests/billing-server.test.mjs",
     "test:python": "python3 scripts/run_tests.py",
-    "test:pagination": "node --test tests/filtered-page.test.mjs"
+    "test:pagination": "node --test tests/filtered-page.test.mjs",
+    "test:backend": "node --test tests/backend-contracts.test.mjs"
   },
   "engines": {
     "node": ">=22.13.0"

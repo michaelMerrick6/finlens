@@ -17,6 +17,7 @@ from datetime import datetime
 import requests
 
 from legacy_congress_guard import require_repair_write_opt_in
+from congress_member_lookup import load_congress_members
 from ingest_house_official import (
     HOUSE_INDEX_URL,
     HOUSE_PTR_PDF_URL,
@@ -181,8 +182,7 @@ def main() -> None:
     years = sorted({year for year, _ in args.targets})
     index_by_year = {year: load_house_index(year) for year in years}
 
-    members_req = supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute()
-    members_db = members_req.data if members_req else []
+    members_db = load_congress_members(supabase)
     company_lookup = load_company_lookup()
 
     total_existing = 0

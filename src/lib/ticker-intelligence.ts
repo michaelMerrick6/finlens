@@ -179,6 +179,7 @@ async function fetchAllTickerRows<T>({
       .select(columns)
       .eq('ticker', ticker)
       .order(orderColumn, { ascending: false })
+      .order('id', { ascending: false })
       .range(offset, offset + batchSize - 1);
 
     if (error) {
@@ -518,6 +519,7 @@ async function loadTickerIntelligence(symbol: string): Promise<TickerIntelligenc
     }),
   ]);
 
+  if (companyResult.error) throw companyResult.error;
   const company = (companyResult.data || null) as CompanyRow | null;
   const politicianTrades = filterProductPoliticianTrades(politicianRows);
   const insiderTrades = insiderRows;
@@ -575,6 +577,14 @@ async function loadTickerIntelligence(symbol: string): Promise<TickerIntelligenc
   };
 
   return {
+    history: {
+      rowLimitPerSource: MAX_ROWS_PER_SOURCE,
+      potentiallyTruncatedSources: [
+        ...(politicianRows.length === MAX_ROWS_PER_SOURCE ? ['congress'] : []),
+        ...(insiderRows.length === MAX_ROWS_PER_SOURCE ? ['insider'] : []),
+        ...(fundRows.length === MAX_ROWS_PER_SOURCE ? ['funds'] : []),
+      ],
+    },
     overview,
     politicianHolders,
     politicianTransactions,
@@ -621,6 +631,7 @@ async function loadTickerPoliticianTransactions(
   return {
     transactions,
     totalCount: trades.length,
+    totalCountIsExact: rows.length < MAX_ROWS_PER_SOURCE,
     offset: normalizedOffset,
     limit: normalizedLimit,
     nextOffset: consumedCount < trades.length ? consumedCount : null,

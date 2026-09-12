@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 import requests
 
+from congress_member_lookup import load_congress_members
 from ingest_house_official import (
     HOUSE_INDEX_URL,
     HOUSE_PTR_PDF_URL,
@@ -318,8 +319,7 @@ def main() -> None:
     )
     filings = dedupe_house_filings(recent_filings, carryover_filings)
 
-    members_req = supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute()
-    members_db = members_req.data if members_req else []
+    members_db = load_congress_members(supabase)
     company_lookup = load_company_lookup()
 
     summary = {

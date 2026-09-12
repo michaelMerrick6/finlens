@@ -10,11 +10,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ results: [] });
   }
 
-  // Run company + politician search in parallel
-  const [companies, politicians] = await Promise.all([
-    searchCompaniesDetailed(q, 6).catch(() => []),
-    searchPoliticiansDetailed(q, 4).catch(() => []),
+  if (q.length > 200) {
+    return NextResponse.json({ error: 'Search query must be 200 characters or fewer.' }, { status: 400 });
+  }
+  const [companyResult, politicianResult] = await Promise.allSettled([
+    searchCompaniesDetailed(q, 6),
+    searchPoliticiansDetailed(q, 4),
   ]);
+  const companies = companyResult.status === 'fulfilled' ? companyResult.value : [];
+  const politicians = politicianResult.status === 'fulfilled' ? politicianResult.value : [];
+  const failedSources = [
+    ...(companyResult.status === 'rejected' ? ['companies'] : []),
+    ...(politicianResult.status === 'rejected' ? ['politicians'] : []),
+  ];
 
   const companiesWithLogos = companies.map((company) => ({
     type: 'company' as const,
@@ -52,5 +60,6 @@ export async function GET(request: NextRequest) {
     ...weakPoliticians,
   ].slice(0, 8);
 
-  return NextResponse.json({ results });
+  return NextResponse.json({ results, partial: failedSources.length > 0, failedSources },
+    { status: failedSources.length === 2 ? 503 : 200 });
 }

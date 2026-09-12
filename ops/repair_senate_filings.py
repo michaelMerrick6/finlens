@@ -13,6 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from legacy_congress_guard import require_repair_write_opt_in
+from congress_member_lookup import load_congress_members
 from ingest_senate_official import (
     SENATE_BASE_URL,
     SENATE_HOME_URL,
@@ -64,8 +65,7 @@ def create_senate_session() -> requests.Session:
 
 
 def load_members_lookup() -> list[dict]:
-    members_req = supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute()
-    return members_req.data if members_req else []
+    return load_congress_members(supabase)
 
 
 def load_existing_senate_filing(doc_key: str) -> dict:

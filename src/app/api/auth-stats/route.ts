@@ -8,7 +8,7 @@ export const revalidate = 300;
 type AuthStats = {
   congressTradesLastWeek: number;
   insiderTradesLastWeek: number;
-  fundFilingsLastWeek: number;
+  fundHoldingRowsLastWeek: number;
   politiciansTracked: number;
   clusterCount: number;
   latestCluster: {
@@ -21,15 +21,6 @@ type LatestClusterRow = {
   ticker: string | null;
   title: string | null;
   created_at: string | null;
-};
-
-const EMPTY_STATS: AuthStats = {
-  congressTradesLastWeek: 0,
-  insiderTradesLastWeek: 0,
-  fundFilingsLastWeek: 0,
-  politiciansTracked: 0,
-  clusterCount: 0,
-  latestCluster: null,
 };
 
 const CLUSTER_SIGNAL_TYPES = [
@@ -59,21 +50,27 @@ export async function GET() {
       politicianResponse,
       ...clusterResponses
     ] = await Promise.all([
-      supabase.from('politician_trades').select('id').gte('created_at', since).limit(1000),
-      supabase.from('insider_trades').select('id').gte('created_at', since).limit(1000),
-      supabase.from('institutional_holdings').select('id').gte('created_at', since).limit(1000),
+      supabase.from('politician_trades').select('id', { count: 'exact', head: true }).gte('created_at', since),
+      supabase.from('insider_trades').select('id', { count: 'exact', head: true }).gte('created_at', since),
+      supabase.from('institutional_holdings').select('id', { count: 'exact', head: true }).gte('created_at', since),
       supabase.from('congress_members').select('id', { count: 'exact', head: true }).eq('active', true),
       ...CLUSTER_SOURCES.map((source) =>
         supabase
           .from('signal_events')
-          .select('ticker,title,created_at')
+          .select('ticker,title,created_at', { count: 'exact' })
           .eq('source', source)
           .in('signal_type', CLUSTER_SIGNAL_TYPES)
           .gte('created_at', since)
           .order('created_at', { ascending: false, nullsFirst: false })
-          .limit(100),
+          .order('id', { ascending: false })
+          .limit(1),
       ),
     ]);
+
+    const responses = [congressResponse, insiderResponse, fundResponse, politicianResponse, ...clusterResponses];
+    if (responses.some((response) => response.error || response.count === null)) {
+      return NextResponse.json({ stats: null, error: 'Statistics are temporarily unavailable.' }, { status: 503 });
+    }
 
     const clusterRows = clusterResponses.flatMap((response) => (response.data || []) as LatestClusterRow[]);
     const latestCluster =
@@ -82,11 +79,11 @@ export async function GET() {
 
     return NextResponse.json({
       stats: {
-        congressTradesLastWeek: congressResponse.data?.length || 0,
-        insiderTradesLastWeek: insiderResponse.data?.length || 0,
-        fundFilingsLastWeek: fundResponse.data?.length || 0,
+        congressTradesLastWeek: congressResponse.count ?? 0,
+        insiderTradesLastWeek: insiderResponse.count ?? 0,
+        fundHoldingRowsLastWeek: fundResponse.count ?? 0,
         politiciansTracked: politicianResponse.count || 0,
-        clusterCount: clusterRows.length,
+        clusterCount: clusterResponses.reduce((total, response) => total + (response.count ?? 0), 0),
         latestCluster: latestCluster
           ? {
               ticker: latestCluster.ticker || null,
@@ -94,23 +91,15 @@ export async function GET() {
             }
           : null,
       } satisfies AuthStats,
-      errors: process.env.NODE_ENV === 'production'
-        ? []
-        : [
-            congressResponse.error?.message,
-            insiderResponse.error?.message,
-            fundResponse.error?.message,
-            politicianResponse.error?.message,
-            ...clusterResponses.map((response) => response.error?.message),
-          ].filter(Boolean),
+
     });
   } catch (error) {
     return NextResponse.json(
       {
-        stats: EMPTY_STATS,
+        stats: null,
         error: routeErrorMessage(error, 'Failed to load auth stats.', 'auth-stats'),
       },
-      { status: 200 },
+      { status: 503 },
     );
   }
 }

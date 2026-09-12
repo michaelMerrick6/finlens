@@ -1,4 +1,5 @@
 import 'server-only';
+import { readBoundedRows } from '@/lib/bounded-rows';
 
 import { buildPoliticianLivePortfolio } from '@/lib/politician-live-portfolio';
 import { getLatestPoliticianDisclosureHoldings } from '@/lib/politician-disclosure-holdings';
@@ -17,6 +18,7 @@ export type PoliticianProfileData = {
   summary: PoliticianProfileSummary;
   livePortfolio: PoliticianLivePortfolioSummary;
   trades: PoliticianProfileTrade[];
+  history: { rowLimit: number; hasMore: boolean };
 };
 
 const EMPTY_LIVE_PORTFOLIO: PoliticianLivePortfolioSummary = {
@@ -38,28 +40,32 @@ export async function getPoliticianProfileData(
   { limit = 1200, includeLivePortfolio = true }: { limit?: number; includeLivePortfolio?: boolean } = {},
 ): Promise<PoliticianProfileData | null> {
   const supabase = getAdminSupabase();
-  const { data, error } = await supabase
-    .from('politician_trades')
-    .select(`
-      *,
-      congress_members (
-        first_name,
-        last_name,
-        party,
-        chamber,
-        state
-      )
-    `)
-    .eq('member_id', memberId)
-    .order('transaction_date', { ascending: false })
-    .order('published_date', { ascending: false })
-    .limit(limit);
+  const history = await readBoundedRows<PoliticianProfileTrade>(limit, async (offset, count) => {
+    const { data, error } = await supabase
+      .from('politician_trades')
+      .select(`
+        *,
+        congress_members (
+          first_name,
+          last_name,
+          party,
+          chamber,
+          state
+        )
+      `)
+      .eq('member_id', memberId)
+      .order('transaction_date', { ascending: false })
+      .order('published_date', { ascending: false })
+      .order('id', { ascending: false })
+      .range(offset, offset + count - 1);
 
-  if (error) {
-    throw new Error(error.message);
-  }
+    if (error) {
+      throw new Error(error.message);
+    }
 
-  const scopedTrades = filterProductPoliticianTrades((data || []) as PoliticianProfileTrade[]);
+    return (data || []) as PoliticianProfileTrade[];
+  });
+  const scopedTrades = filterProductPoliticianTrades(history.rows);
   if (!scopedTrades.length) {
     return null;
   }
@@ -74,6 +80,7 @@ export async function getPoliticianProfileData(
 
   return {
     memberId,
+    history: { rowLimit: history.rowLimit, hasMore: history.hasMore },
     summary,
     livePortfolio,
     trades,

@@ -1,3 +1,4 @@
+from congress_member_lookup import load_congress_members
 import csv
 import difflib
 import io
@@ -531,6 +532,13 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
             continue
         if not member_matches_chamber(member, target_chamber):
             continue
+        # Official sources can split a compound surname at different boundaries.
+        # Require the same complete token sequence and retain ambiguity handling.
+        full_tokens = first_tokens + normalize_name_tokens(last_name)
+        member_tokens = normalize_name_tokens(member['first_name']) + normalize_name_tokens(member['last_name'])
+        if first_tokens and last_key and full_tokens == member_tokens:
+            matching_ids.add(member['id'])
+            continue
         member_last_key = "".join(normalize_name_tokens(member["last_name"]))
         if not member_last_key or member_last_key != last_key:
             continue
@@ -1059,6 +1067,17 @@ def detect_house_non_public_only_lines(lines: list[str]) -> bool:
     return True
 
 
+class HouseScanReviewRequired(ValueError):
+    """An identified scan row cannot safely be imported."""
+
+
+def select_house_checkbox(scores: list[float], *, field: str) -> int:
+    marked = [i for i, value in enumerate(scores) if value >= .003]
+    if len(marked) != 1:
+        raise HouseScanReviewRequired(f"Scan requires review: {field} has {len(marked)} marked columns")
+    return marked[0]
+
+
 def extract_transactions_from_scanned_house_pdf(
     pdf_bytes: bytes,
     doc_id: str,
@@ -1078,9 +1097,8 @@ def extract_transactions_from_scanned_house_pdf(
 
     member_id = resolve_member_id(first_name, last_name, members_db)
     transactions: list[dict] = []
-    seen_keys: set[str] = set()
 
-    for image in images:
+    for page_number, image in enumerate(images, 1):
         if image.width < image.height:
             image = image.rotate(90, expand=True)
 
@@ -1104,7 +1122,7 @@ def extract_transactions_from_scanned_house_pdf(
                 asset_text = ocr_house_scanned_cell(crop_ratio_box(image, layout["asset_bounds"], row_start, row_end))
                 asset_text = clean_house_asset_name(asset_text)
                 if len(re.sub(r"[^A-Za-z0-9]", "", asset_text)) < 3:
-                    continue
+                    raise HouseScanReviewRequired(f"Page {page_number}: unreadable asset")
 
                 row_text = ""
                 if layout_name == "attachment":
@@ -1121,21 +1139,10 @@ def extract_transactions_from_scanned_house_pdf(
                 )
                 tx_date = parse_house_scanned_date(tx_date_text, tx_year)
                 if not tx_date:
-                    if not row_text:
-                        row_text = ocr_house_scanned_cell(
-                            image.crop((0, row_start, image.width, row_end)),
-                            scale=3,
-                            config="--psm 6",
-                        )
-                    inline_dates = [parse_house_scanned_date(match, tx_year) for match in HOUSE_INLINE_DATE_RE.findall(row_text)]
-                    inline_dates = [value for value in inline_dates if value]
-                    if inline_dates:
-                        tx_date = inline_dates[0]
-                if not tx_date:
-                    continue
+                    raise HouseScanReviewRequired(f"Page {page_number}: unreadable transaction-date cell")
                 tx_year_value = int(tx_date[:4])
-                if tx_year_value < tx_year - 1 or tx_year_value > tx_year + 1:
-                    continue
+                if tx_year_value < tx_year - 1 or tx_year_value > tx_year:
+                    raise HouseScanReviewRequired(f"Page {page_number}: transaction year outside filing window")
 
                 notified_text = ocr_house_scanned_cell(
                     crop_ratio_box(image, layout["notified_bounds"], row_start, row_end),
@@ -1151,8 +1158,8 @@ def extract_transactions_from_scanned_house_pdf(
 
                 type_scores = score_house_checkbox_row(image, row_start, row_end, type_columns)
                 amount_scores = score_house_checkbox_row(image, row_start, row_end, amount_columns)
-                tx_type = ("buy", "sell", "sell", "exchange")[type_scores.index(max(type_scores))]
-                amount_range = HOUSE_AMOUNT_RANGES[amount_scores.index(max(amount_scores))]
+                tx_type = ("buy", "sell", "sell", "exchange")[select_house_checkbox(type_scores, field="transaction type")]
+                amount_range = HOUSE_AMOUNT_RANGES[select_house_checkbox(amount_scores, field="amount")]
 
                 layout_company_lookup = None if layout_name == "attachment" else company_lookup
                 ticker = resolve_house_ticker(
@@ -1169,20 +1176,8 @@ def extract_transactions_from_scanned_house_pdf(
                         config="--psm 6",
                     )
 
-                key = "|".join(
-                    (
-                        ticker,
-                        tx_date,
-                        published_date,
-                        amount_range,
-                        tx_type,
-                        house_trade_fingerprint(asset_text, row_text),
-                    )
-                )
-                if key in seen_keys:
-                    continue
-                seen_keys.add(key)
-
+                # Each physical source row is a transaction, even when its
+                # financial fields match another account's transaction.
                 option_metadata = extract_politician_option_metadata(asset_text, row_text, asset_type="Stock")
                 option_asset_type = normalize_politician_asset_type(
                     "Stock",
@@ -1512,12 +1507,7 @@ def fetch_house_trades():
     session = requests.Session()
     session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"})
 
-    try:
-        members_req = supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute()
-        members_db = members_req.data if members_req else []
-    except Exception as exc:
-        print(f"Warn: Could not fetch congress_members for mapping ({exc})")
-        members_db = []
+    members_db = load_congress_members(supabase)
     try:
         company_lookup = load_company_lookup()
     except Exception as exc:

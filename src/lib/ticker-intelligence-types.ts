@@ -42,6 +42,7 @@ export type TickerPoliticianTransaction = {
 };
 
 export type TickerPoliticianTransactionsPage = {
+  totalCountIsExact: boolean;
   transactions: TickerPoliticianTransaction[];
   totalCount: number;
   offset: number;
@@ -114,6 +115,7 @@ export type TickerFundSummary = {
 };
 
 export type TickerIntelligencePayload = {
+  history: { rowLimitPerSource: number; potentiallyTruncatedSources: string[] };
   overview: TickerOverview;
   politicianHolders: TickerPoliticianHolder[];
   politicianTransactions: TickerPoliticianTransaction[];

@@ -1,4 +1,5 @@
 import 'server-only';
+import { readBoundedRows } from '@/lib/bounded-rows';
 
 import { parsePoliticianAmountRange } from '@/lib/politician-amount-range';
 import { getAdminSupabase } from '@/lib/supabase-admin';
@@ -64,19 +65,23 @@ function lowerBound(valueRange: string | null | undefined) {
 
 export async function getLatestPoliticianDisclosureHoldings(memberId: string): Promise<PoliticianDisclosureHolding[]> {
   const supabase = getAdminSupabase();
-  const { data, error } = await supabase
-    .from('raw_filings')
-    .select('source_document_id,filed_at,source_url,payload')
-    .eq('source', 'house_disclosures')
-    .eq('payload->>member_id', memberId)
-    .order('filed_at', { ascending: false })
-    .limit(4000);
-
-  if (error) {
-    throw new Error(error.message);
+  const history = await readBoundedRows<RawDisclosureHoldingRow>(4000, async (offset, count) => {
+    const { data, error } = await supabase
+      .from('raw_filings')
+      .select('source_document_id,filed_at,source_url,payload')
+      .eq('source', 'house_disclosures')
+      .eq('payload->>member_id', memberId)
+      .order('filed_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(offset, offset + count - 1);
+    if (error) throw new Error(error.message);
+    return (data || []) as RawDisclosureHoldingRow[];
+  });
+  if (history.hasMore) {
+    throw new Error('Disclosure history exceeds the supported snapshot window; refusing a partial portfolio.');
   }
 
-  const rows = ((data as RawDisclosureHoldingRow[] | null) || []).filter((row) => {
+  const rows = history.rows.filter((row) => {
     const valueRange = trim(row.payload?.value_range).toLowerCase();
     return row.payload?.product_eligible !== false && valueRange !== 'none';
   });
