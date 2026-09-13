@@ -1,3 +1,4 @@
+import { CapitolIllustration } from "@/components/capitol-illustration";
 import { TrackingPromo } from "@/components/tracking-promo";
 import { ActivityLine } from "@/components/activity-line";
 import Link from "next/link";
@@ -7,7 +8,8 @@ export default function Home() {
   return (
     <main id="main" className="container">
       <ActivityLine />
-      <section className="home-hero">
+      <section className="home-hero home-hero-capitol">
+        <CapitolIllustration />
         <div className="hero-copy">
           <div className="eyebrow">
             <span className="accent-line" />

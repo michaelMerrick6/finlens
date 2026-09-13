@@ -8,7 +8,7 @@ import {
   type ReactNode,
   type CSSProperties,
 } from "react";
-import { createClient, type Session } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient, type Session } from "@supabase/supabase-js";
 import type { AccountState } from "@/lib/account-types";
 import { prepareTrackingChime } from "@/lib/tracking-chime";
 import { Modal } from "./modal";
@@ -24,7 +24,19 @@ type Context = {
   signOut: () => Promise<void>;
   refresh: () => void;
 };
-let clientCache: ReturnType<typeof createClient> | null = null;
+// Keep one browser auth client across development hot reloads as well as renders.
+const browserAuth = globalThis as typeof globalThis & {
+  __vailAuthClient?: { url: string; key: string; client: SupabaseClient };
+};
+function getBrowserClient(url: string, key: string) {
+  if (!url || !key) return null;
+  if (typeof window === "undefined") return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  const cached = browserAuth.__vailAuthClient;
+  if (cached?.url === url && cached.key === key) return cached.client;
+  const client = createClient(url, key);
+  browserAuth.__vailAuthClient = { url, key, client };
+  return client;
+}
 const AccountContext = createContext<Context | null>(null);
 export function useAccount() {
   const value = useContext(AccountContext);
@@ -41,7 +53,7 @@ export function AccountProvider({
   publicKey: string;
 }) {
   const [client] = useState(() =>
-    url && publicKey ? (clientCache ??= createClient(url, publicKey)) : null,
+    getBrowserClient(url, publicKey),
   );
   const activeUser = useRef<string | undefined>(undefined);
   const [session, setSession] = useState<Session | null>(null);
@@ -77,6 +89,8 @@ export function AccountProvider({
         }
       });
     const { data } = client.auth.onAuthStateChange((_event, next) => {
+      if (!active) return;
+      if (!next) setLoading(false);
       if (activeUser.current !== next?.user.id) {
         setAccount(null);
         setError("");

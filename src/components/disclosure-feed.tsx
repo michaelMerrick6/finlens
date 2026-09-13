@@ -147,7 +147,19 @@ function DisclosureFeedContent({
     if (memberId) params.set("memberId", memberId);
     if (ticker) params.set("ticker", ticker);
     if (ids) params.set("memberIds", ids);
-    fetch(`/api/search-trades?${params}`, { signal: controller.signal })
+    async function loadDisclosures() {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const response = await fetch(`/api/search-trades?${params}`, { signal: controller.signal });
+          if (response.status >= 500 && attempt === 0) continue;
+          return response;
+        } catch (error) {
+          if (controller.signal.aborted || attempt === 1) throw error;
+        }
+      }
+      throw new Error("We couldn’t load these disclosures. Please try again.");
+    }
+    loadDisclosures()
       .then(async (r) => {
         if (!r.ok)
           throw new Error(
