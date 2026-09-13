@@ -1,4 +1,5 @@
 "use client";
+import { readPublicPage, storePublicPage } from "@/lib/public-page-cache";
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -39,9 +40,11 @@ function DirectoryContent() {
   const setSearch = (value: string) => updateFilter("q", value);
   const setChamber = (value: string) => updateFilter("chamber", value);
   const [offset, setOffset] = useState(0);
-  const [members, setMembers] = useState<Member[]>([]);
-  const [next, setNext] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = `directory:${search}:${chamber}:${sort}`;
+  const cached = readPublicPage<{members: Member[]; nextOffset: number | null}>(cacheKey);
+  const [members, setMembers] = useState<Member[]>(()=>cached?.members || []);
+  const [next, setNext] = useState<number | null>(()=>cached?.nextOffset ?? null);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   useEffect(() => {
@@ -56,6 +59,7 @@ function DirectoryContent() {
       })
       .then((data) => {
         if (!controller.signal.aborted) {
+          if (offset === 0) storePublicPage(cacheKey, data);
           setMembers((old) =>
             offset === 0 ? data.members : [...old, ...data.members],
           );
@@ -69,7 +73,7 @@ function DirectoryContent() {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [search, chamber, sort, offset, retry]);
+  }, [search, chamber, sort, offset, retry, cacheKey]);
   function reset() {
     setLoading(true);
     setError("");

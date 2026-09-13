@@ -48,7 +48,7 @@ export default function RootLayout({
         >
           <SiteHeader />
           <SiteAnalytics />
-            {children}
+          {children}
           <SiteFooter />
         </AccountProvider>
       </body>

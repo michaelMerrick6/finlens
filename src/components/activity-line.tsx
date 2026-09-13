@@ -33,7 +33,7 @@ export function ActivityLine(){
     for(const stock of [...data.stocks].filter((s:{buyers:number})=>s.buyers>=3).sort((a:{buyers:number;ticker:string},b:{buyers:number;ticker:string})=>b.buyers-a.buyers||a.ticker.localeCompare(b.ticker)).slice(0,4))next.push({key:stock.ticker,ticker:stock.ticker,text:`${stock.buyers} politicians disclosed ${stock.ticker} purchases · last 30 days`,href:`/ticker/${encodeURIComponent(stock.ticker)}`});
     const latest=[...recent].sort((a,b)=>(b.published_date||'').localeCompare(a.published_date||''))[0];
     if(latest)next.push({key:'freshness',text:`Latest available filing · ${dateLabel(latest.published_date)}`,href:'/'});
-    if(!controller.signal.aborted)setItems(recent.length?next:[]);
+    if(!controller.signal.aborted)setItems(previous => { const updated = recent.length ? next : []; return JSON.stringify(previous) === JSON.stringify(updated) ? previous : updated; });
    }catch{if(!controller.signal.aborted)setItems([]);}finally{pending=false;}
   }
   void refresh();const timer=setInterval(()=>void refresh(),300000);

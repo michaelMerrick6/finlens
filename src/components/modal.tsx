@@ -1,15 +1,26 @@
 "use client";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Icon } from "./icon";
 export function Modal({
   title,
   onClose,
   children,
+  animated = false,
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  animated?: boolean;
 }) {
+  const [closing, setClosing] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const requestClose = () => {
+    if (closeTimer.current) return;
+    if (!animated || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { onClose(); return; }
+    setClosing(true);
+    closeTimer.current = setTimeout(onClose, 140);
+  };
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const dialog = ref.current;
@@ -26,9 +37,10 @@ export function Modal({
   return (
     <dialog
       ref={ref}
-      className="modal"
-      onCancel={onClose}
+      className={`modal${animated ? " modal-animated" : ""}${closing ? " modal-closing" : ""}`}
+      onCancel={(e) => { e.preventDefault(); requestClose(); }}
       onClick={(e) => {
+        if ((e.target as HTMLElement).closest('[data-modal-close]')) { requestClose(); return; }
         if (e.target === e.currentTarget) {
           const r = e.currentTarget.getBoundingClientRect();
           if (
@@ -37,7 +49,7 @@ export function Modal({
             e.clientY < r.top ||
             e.clientY > r.bottom
           )
-            onClose();
+            requestClose();
         }
       }}
       aria-label={title}
@@ -46,7 +58,7 @@ export function Modal({
         <span className="eyebrow">{title}</span>
         <button
           className="icon-button"
-          onClick={onClose}
+          onClick={requestClose}
           aria-label="Close dialog"
         >
           <Icon name="close" />

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useAccount } from "./account-provider";
 import { CompanyLogo } from "./identity-images";
 import { Avatar, DisclosureFeed } from "./disclosure-feed";
+import { playTrackingOpenSound } from "@/lib/tracking-chime";
+import { AddTracking } from "./add-tracking";
 import { Icon } from "./icon";
 import type { AccountState } from "@/lib/account-types";
 function EmailPreference({ account }: { account: AccountState }) {
@@ -65,6 +67,7 @@ function EmailPreference({ account }: { account: AccountState }) {
 export function TrackingPage() {
   const { account, session, loading, error, openSignIn, refresh, mutate } =
     useAccount();
+  const [adding, setAdding] = useState(false);
   const [removing, setRemoving] = useState("");
   const [saveError, setSaveError] = useState("");
   if (!session && !loading)
@@ -167,13 +170,14 @@ export function TrackingPage() {
         <div className="page-heading">
           <span className="eyebrow">YOUR VIEW OF THE PUBLIC RECORD</span>
           <h1>Tracking.</h1>
-          <p>The people you’re keeping an eye on, all in one place.</p>
+          <p>The people and stocks you’re keeping an eye on, all in one place.</p>
         </div>
-        <Link className="button secondary" href="/politicians">
+        <button className="button secondary" onClick={() => { playTrackingOpenSound(); setAdding(true); }}>
           <Icon name="plus" size={17} />
-          Find a politician
-        </Link>
+          Add to tracking
+        </button>
       </div>
+      {adding && <AddTracking onClose={() => setAdding(false)} />}
       <EmailPreference account={account} />
       <div className="tracking-list-heading">
         <h2>Your list</h2>
@@ -186,13 +190,9 @@ export function TrackingPage() {
           <Icon name="bookmark" size={30} />
           <h2>A fresh perspective starts with someone.</h2>
           <p>
-            Find a politician and select “Track politician” to start your
-            personal feed.
+            Add politicians or stocks to start building your list.
           </p>
-          <Link className="button primary" href="/politicians">
-            Explore politicians
-            <Icon name="arrow" size={16} />
-          </Link>
+          <button className="button primary" onClick={() => { playTrackingOpenSound(); setAdding(true); }}>Add to tracking<Icon name="plus" size={16} /></button>
         </div>
       ) : (
         <div className="tracked-people">

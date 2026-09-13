@@ -35,3 +35,29 @@ export function prepareTrackingChime() {
     },
   };
 }
+
+// A soft, warm tap, generated locally with no audio download.
+export function playTrackingOpenSound() {
+  try {
+    const context = new AudioContext();
+    const close = () => { void context.close().catch(() => {}); };
+    void context.resume().then(() => {
+      try {
+        const tone = context.createOscillator();
+        const gain = context.createGain();
+        const at = context.currentTime;
+        tone.type = 'sine';
+        tone.frequency.setValueAtTime(390, at);
+        tone.frequency.exponentialRampToValueAtTime(310, at + 0.07);
+        gain.gain.setValueAtTime(0, at);
+        gain.gain.linearRampToValueAtTime(0.018, at + 0.006);
+        gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.095);
+        tone.connect(gain);
+        gain.connect(context.destination);
+        tone.onended = close;
+        tone.start(at);
+        tone.stop(at + 0.11);
+      } catch { close(); }
+    }).catch(close);
+  } catch { /* Optional sound must never block the popup. */ }
+}

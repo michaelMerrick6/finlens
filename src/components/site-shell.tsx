@@ -27,10 +27,12 @@ export function SiteHeader() {
               ["/politicians", "Politicians"],
               ["/analysis", "Analysis"],
               ["/tracking", "Tracking"],
+              ["/sunday-brief", "Sunday Brief"],
             ].map(([href, label]) => (
               <Link
                 key={href}
                 href={href}
+                prefetch={true}
                 className={
                   (href === "/" ? path === "/" : path.startsWith(href))
                     ? "active"

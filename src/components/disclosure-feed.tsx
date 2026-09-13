@@ -1,4 +1,5 @@
 "use client";
+import { readPublicPage, storePublicPage } from "@/lib/public-page-cache";
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -127,10 +128,12 @@ function DisclosureFeedContent({
   const setCommittedQuery = (value: string) => updateFilter("q", value);
   const setDirection = (value: string) => updateFilter("direction", value);
   const setChamber = (value: string) => updateFilter("chamber", value);
-  const [rows, setRows] = useState<Disclosure[]>([]);
-  const [next, setNext] = useState<number | null>(null);
+  const cacheKey = `feed:${committedQuery}:${direction}:${chamber}:${memberId || ''}:${ticker || ''}:${trackedIds?.join(',') || ''}`;
+  const cached = readPublicPage<{trades: Disclosure[]; hasMore: boolean; nextOffset: number}>(cacheKey);
+  const [rows, setRows] = useState<Disclosure[]>(()=>cached?.trades || []);
+  const [next, setNext] = useState<number | null>(()=>cached?.hasMore ? cached.nextOffset : null);
   const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   const [selected, setSelected] = useState<Disclosure | null>(null);
@@ -169,6 +172,7 @@ function DisclosureFeedContent({
       })
       .then((data) => {
         if (controller.signal.aborted) return;
+        if (offset === 0) storePublicPage(cacheKey, data);
         setRows((old) =>
           offset === 0
             ? data.trades
@@ -191,6 +195,7 @@ function DisclosureFeedContent({
       });
     return () => controller.abort();
   }, [
+    cacheKey,
     committedQuery,
     direction,
     chamber,
@@ -379,15 +384,7 @@ function DisclosureFeedContent({
       </div>
       {loading && (
         <div className="feed-loading" role="status" aria-live="polite">
-          <span className="spinner" />
           Loading disclosures…
-          {!rows.length && (
-            <div className="skeleton-rows">
-              {[0, 1, 2, 3].map((n) => (
-                <div key={n} />
-              ))}
-            </div>
-          )}
         </div>
       )}
       {error && (
