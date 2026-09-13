@@ -6,6 +6,7 @@ import { getPoliticianWorkspaceData } from '@/lib/politician-workspace-server';
 export const dynamic = 'force-dynamic';
 
 function parsePositiveInt(value: string | null, fallback: number, maximum = 50) {
+  if (value === null) return fallback;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.min(maximum, Math.max(0, Math.floor(parsed))) : fallback;
 }
@@ -13,7 +14,7 @@ function parsePositiveInt(value: string | null, fallback: number, maximum = 50) 
 export async function GET(request: Request, { params }: { params: Promise<{ memberId: string }> }) {
   const { memberId } = await params;
   const url = new URL(request.url);
-  const offset = parsePositiveInt(url.searchParams.get('offset'), 0);
+  const offset = parsePositiveInt(url.searchParams.get('offset'), 0, 10_000);
   const limit = parsePositiveInt(url.searchParams.get('limit'), 8);
 
   try {

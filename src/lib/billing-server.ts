@@ -104,6 +104,7 @@ async function ensureBillingProfile(user: User): Promise<BillingProfileRow> {
       email: user.email || null,
       display_name: user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || null,
       alert_email: user.email || null,
+      email_enabled: false,
       follow_limit: getFreeFollowLimit(),
       billing_plan_key: 'free',
       billing_status: 'free',

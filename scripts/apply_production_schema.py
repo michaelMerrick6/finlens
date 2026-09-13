@@ -18,6 +18,8 @@ PRODUCTION_SQL_FILES = [
     ROOT_DIR / "supabase_vail_phase8_cluster_alert_channels.sql",
     ROOT_DIR / "supabase_vail_phase9_cluster_alert_limits.sql",
     ROOT_DIR / "supabase_vail_phase11_site_analytics.sql",
+    ROOT_DIR / "supabase_vail_phase12_tracking_opt_in.sql",
+    ROOT_DIR / "supabase_vail_phase13_engagement.sql",
     ROOT_DIR / "ops" / "sql" / "supabase_pipeline_performance.sql",
 ]
 

@@ -1,3 +1,4 @@
+import { reviewPoliticianTrade } from "@/lib/reviewed-politician-trades";
 import { NextRequest, NextResponse } from 'next/server';
 import {
   searchCompaniesDetailed,
@@ -123,7 +124,12 @@ export async function GET(request: NextRequest) {
   const offset = readBoundedInteger(searchParams.get('offset'), 0);
   const trimmedQuery = query.trim();
 
-  if (!trimmedQuery) {
+  const memberIds = (searchParams.get('memberIds') || searchParams.get('memberId') || '').split(',').filter(Boolean);
+  const exactTicker = (searchParams.get('ticker') || '').toUpperCase();
+  if (memberIds.length > 25 || memberIds.some(id => !/^[A-Za-z0-9-]{1,70}$/.test(id)) || (exactTicker && !/^[A-Z0-9.-]{1,12}$/.test(exactTicker))) {
+    return NextResponse.json({error:'Invalid disclosure filter.'},{status:400});
+  }
+  if (!trimmedQuery || memberIds.length || exactTicker) {
     try {
       const page = await readFilteredPage<TradeRow>({
         offset,
@@ -140,9 +146,12 @@ export async function GET(request: NextRequest) {
               .order('id', { ascending: true })
               .range(cursor, cursor + count - 1),
           );
-          const { data, error } = await applyTradeFilters(baseQuery, chamber, direction);
+          let scopedQuery = applyTradeFilters(baseQuery, chamber, direction);
+          if (memberIds.length) scopedQuery = scopedQuery.in('member_id', memberIds);
+          if (exactTicker) scopedQuery = scopedQuery.eq('ticker', exactTicker);
+          const { data, error } = await scopedQuery;
           if (error) throw error;
-          return (data || []) as TradeRow[];
+          return ((data || []) as TradeRow[]).map(reviewPoliticianTrade);
         },
       });
       return NextResponse.json({ trades: page.rows, hasMore: page.hasMore, nextOffset: page.nextOffset });
@@ -241,7 +250,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const trades = filterDisplayPoliticianTrades(sortTrades([...merged.values()], tickerScores, memberScores));
+    const trades = filterDisplayPoliticianTrades(sortTrades([...merged.values()].map(reviewPoliticianTrade), tickerScores, memberScores));
     return pageResponse(trades, offset, limit);
   } catch (error) {
     const message = routeErrorMessage(error, 'Search failed.', 'search-trades');

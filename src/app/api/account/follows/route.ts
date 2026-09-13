@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: 'Invalid follow kind.' }, { status: 400 });
     }
 
-    const state = await getAccountState(user);
+    const state = await getAccountState(user, { includeHistory: false, includeAlertPreview: false });
     return NextResponse.json({ ok: true, state });
   } catch (error) {
     return accountRouteErrorResponse(error);
@@ -71,7 +71,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ ok: false, error: 'Invalid follow kind.' }, { status: 400 });
     }
 
-    const state = await getAccountState(user);
+    const state = await getAccountState(user, { includeHistory: false, includeAlertPreview: false });
     return NextResponse.json({ ok: true, state });
   } catch (error) {
     return accountRouteErrorResponse(error);
@@ -95,7 +95,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ ok: false, error: 'Invalid follow kind.' }, { status: 400 });
     }
 
-    const state = await getAccountState(user);
+    const state = await getAccountState(user, { includeHistory: false, includeAlertPreview: false });
     return NextResponse.json({ ok: true, state });
   } catch (error) {
     return accountRouteErrorResponse(error);

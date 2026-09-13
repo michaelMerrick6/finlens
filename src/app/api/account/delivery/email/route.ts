@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as { alertEmail?: string; enabled?: boolean };
 
     await updateEmailDelivery(user, body.alertEmail || null, Boolean(body.enabled));
-    const state = await getAccountState(user);
+    const state = await getAccountState(user, { includeHistory: false, includeAlertPreview: false });
     return NextResponse.json({ ok: true, state });
   } catch (error) {
     return accountRouteErrorResponse(error);

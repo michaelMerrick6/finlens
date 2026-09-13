@@ -1,3 +1,4 @@
+import { reviewPoliticianTrade } from "./reviewed-politician-trades";
 import 'server-only';
 import { readFilteredPage } from '@/lib/filtered-page';
 
@@ -97,7 +98,7 @@ export async function getPoliticianWorkspaceData(
       .order('id', { ascending: false })
       .range(offset, offset + count - 1);
       if (response.error) throw new Error(response.error.message);
-      return (response.data || []) as PoliticianProfileTrade[];
+      return ((response.data || []) as PoliticianProfileTrade[]).map(reviewPoliticianTrade);
     },
   });
 

@@ -1,4 +1,5 @@
 import 'server-only';
+import { readBoundedRows } from '@/lib/bounded-rows';
 
 import type { User } from '@supabase/supabase-js';
 
@@ -408,6 +409,7 @@ async function ensureUserProfile(user: User): Promise<ProfileRow> {
         email: user.email || null,
         display_name: defaultDisplayName(user),
         alert_email: user.email || null,
+        email_enabled: false,
         follow_limit: DEFAULT_FOLLOW_LIMIT,
         billing_plan_key: 'free',
         billing_status: 'free',
@@ -1578,17 +1580,15 @@ export async function getAccountState(user: User, options: AccountStateOptions =
 
 async function fetchCongressMembers(): Promise<CongressMemberRecord[]> {
   const supabase = getAdminSupabase();
-  const response = await supabase
-    .from('congress_members')
-    .select('id,first_name,last_name,chamber,active,state,party')
-    .order('active', { ascending: false })
-    .order('last_name', { ascending: true });
-
-  if (response.error) {
-    throw new Error(response.error.message || 'Failed to load Congress member list.');
-  }
-
-  return (response.data || []) as CongressMemberRecord[];
+  const result = await readBoundedRows<CongressMemberRecord>(2000, async (offset, count) => {
+    const { data, error } = await supabase.from('congress_members')
+      .select('id,first_name,last_name,chamber,active,state,party')
+      .order('id', { ascending: true }).range(offset, offset + count - 1);
+    if (error) throw error;
+    return (data || []) as CongressMemberRecord[];
+  });
+  if (result.hasMore) throw new Error('Member lookup exceeds its supported window.');
+  return result.rows;
 }
 
 async function politicianSuggestionScore(member: CongressMemberRecord, query: string) {

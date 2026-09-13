@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid page view.' }, { status: 400 });
   }
 
-  if (path.startsWith('/ops') || path.startsWith('/api')) {
+  if (path.startsWith('/hq') || path.startsWith('/ops') || path.startsWith('/api')) {
     return new NextResponse(null, { status: 204 });
   }
 
