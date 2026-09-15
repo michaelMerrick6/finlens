@@ -95,7 +95,7 @@ Congress capture uses a durable filing queue and atomic publication. Apply
 [Congress capture operations](ops/congress-capture.md) for deployment order,
 retry behavior, validation, and remaining coverage limits.
 
-GitHub Actions `schedule` is no longer the primary trigger for production capture. Public-repo schedules can be auto-disabled by GitHub after inactivity, so production should trigger the workflows through the authenticated cron dispatch route instead:
+Congress capture runs hourly through GitHub Actions. The current Vercel plan allows only daily crons, so its authenticated dispatch route provides a daily fallback and can re-enable workflows disabled after repository inactivity:
 
 - `/api/cron/github-dispatch/capture-congress`
 - `/api/cron/github-dispatch/capture-insider`

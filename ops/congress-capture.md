@@ -3,7 +3,7 @@
 ## Deployment order
 
 1. Apply `supabase_vail_phase14_congress_capture.sql` with the database owner before deploying these workers. The production schema installer includes it. It creates private queue/history tables, service-only RPCs, correction guards, and a unique transaction-key index. If duplicate document IDs exist, migration fails without deleting them.
-2. Deploy the code and the updated Vercel cron configuration. Congress capture is dispatched hourly at minute 10. The Congress workflow has no second GitHub schedule; nightly fallback retains its own trigger. Congress capture, nightly fallback, and signal processing share a non-canceling workflow concurrency group.
+2. Deploy the code and the updated Vercel cron configuration. Congress capture runs hourly through GitHub Actions at minute 20. Vercel dispatch remains a daily fallback because the current plan rejected hourly crons; nightly fallback retains its own trigger. Congress capture, nightly fallback, and signal processing share a non-canceling workflow concurrency group.
 3. Inspect `congress_filings` and the capture summary. A successful bounded run is not a completeness claim: `coverage_complete` and `filings_unresolved` report the inventory backlog separately.
 
 Production rollout verification is recorded in the deployment task and the local `artifacts/congress-rollout/` reports.
