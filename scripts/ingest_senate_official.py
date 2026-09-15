@@ -302,8 +302,8 @@ def validate_paper_extraction(trades: list[dict], expected_rows: int, filed_date
 def parse_filed_date(value: str) -> str:
     try:
         return datetime.strptime(str(value).strip(), "%m/%d/%Y").strftime("%Y-%m-%d")
-    except Exception:
-        return congress_now().strftime("%Y-%m-%d")
+    except (ValueError, TypeError) as exc:
+        raise ValueError(f"Invalid official Senate filing date: {value!r}") from exc
 
 
 def build_trade_record(
@@ -378,28 +378,32 @@ def parse_senate_html_table(
     trades: list[dict] = []
     for row in tbody.find_all("tr"):
         cells = row.find_all("td")
-        if len(cells) < 8:
+        if not cells or not row.get_text(strip=True):
             continue
+        if len(cells) < 8:
+            raise PaperFilingReviewRequired("HTML transaction row has missing columns")
 
         tx_date = normalize_ocr_date(cells[1].get_text(" ", strip=True))
-        if not tx_date:
-            continue
+        if not tx_date or tx_date > filed_date:
+            raise PaperFilingReviewRequired("HTML transaction row has an invalid date")
 
         ticker_text = clean_text(cells[3].get_text(" ", strip=True))
         issuer_text = clean_text(cells[4].get_text(" ", strip=True))
         tx_type_raw = clean_text(cells[6].get_text(" ", strip=True)).lower()
-        amount_raw = clean_text(cells[7].get_text(" ", strip=True)) or "Unknown"
+        amount_raw = clean_text(cells[7].get_text(" ", strip=True))
+        if not issuer_text or not re.fullmatch(r"(?:\$[\d,]+\s*-\s*\$[\d,]+|(?:Over|Under)\s+\$[\d,]+)", amount_raw, re.I):
+            raise PaperFilingReviewRequired("HTML transaction has an unreadable asset or amount")
 
         ticker = ticker_text if ticker_text and ticker_text != "--" else "N/A"
-        if ticker != "N/A":
-            upsert_company(ticker, issuer_text or ticker)
 
         if "sale" in tx_type_raw:
             tx_type = "sell"
         elif "purchase" in tx_type_raw:
             tx_type = "buy"
-        else:
+        elif "exchange" in tx_type_raw:
             tx_type = "exchange"
+        else:
+            raise PaperFilingReviewRequired("HTML transaction has an unknown direction")
 
         trades.append(
             build_trade_record(
@@ -419,6 +423,9 @@ def parse_senate_html_table(
                 asset_type=clean_text(cells[5].get_text(" ", strip=True)) or "Stock",
             )
         )
+    for trade in trades:
+        if trade["ticker"] != "N/A":
+            upsert_company(trade["ticker"], trade["asset_name"])
     return trades
 
 
@@ -523,240 +530,8 @@ def establish_senate_session(session: requests.Session) -> str:
 
 
 def fetch_senate_trades():
-    print("Starting Official Senate eFD Scraper...")
-    session = requests.Session()
-    session.headers.update(
-        {
-            "User-Agent": (
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            )
-        }
-    )
-
-    print("1. Bypassing Senate eFD Terms of Service Gateway...")
-    cookie_csrf = establish_senate_session(session)
-
-    print("2. Fetching historical PTR reports via pagination...")
-    daily_mode = os.environ.get("FINLENS_DAILY_MODE", "0") == "1"
-    max_pagination = 500 if daily_mode else 10000
-
-    submitted_start_date = "01/01/2012 00:00:00"
-    if daily_mode:
-        submitted_start_date = (congress_now() - timedelta(days=SENATE_DAILY_LOOKBACK_DAYS)).strftime("%m/%d/%Y 00:00:00")
-
-    all_rows = []
-    for start_offset in range(0, max_pagination, 100):
-        print(f" -> Fetching offset {start_offset}...")
-        payload = {
-            "start": str(start_offset),
-            "length": "100",
-            "report_types": "[11]",
-            "filer_types": "[]",
-            "submitted_start_date": submitted_start_date,
-            "submitted_end_date": "",
-            "candidate_state": "",
-            "senator_state": "",
-            "office_id": "",
-            "first_name": "",
-            "last_name": "",
-            "csrfmiddlewaretoken": cookie_csrf,
-        }
-        try:
-            search_response = session.post(
-                SENATE_REPORT_DATA_URL,
-                data=payload,
-                headers={"Referer": SENATE_SEARCH_URL},
-                timeout=30,
-            )
-            search_response.raise_for_status()
-            data = search_response.json()
-        except Exception as exc:
-            if start_offset == 0:
-                raise RuntimeError(f"Failed to fetch Senate PTR feed: {exc}") from exc
-            print(f"Pagination error at offset {start_offset}: {exc}")
-            break
-
-        chunk_rows = data.get("data", [])
-        if not chunk_rows:
-            break
-        all_rows.extend(chunk_rows)
-        time.sleep(1)
-
-    print(f"Found {len(all_rows)} Senate PTR filings across pagination.")
-
-    members_db = load_congress_members(supabase)
-
-    valid_tickers = load_valid_tickers()
-    formatted_trades: list[dict] = []
-    inserted_count = 0
-    paper_filings_seen = 0
-    paper_transaction_rows_seen = 0
-    paper_trades_parsed = 0
-    paper_unmapped_filings = 0
-    parse_failures = 0
-    failed_doc_ids: list[str] = []
-    existing_filings_seen = 0
-    write_failures = 0
-    prepared_trades: list[dict] = []
-
-    consecutive_existing = 0
-    for row in all_rows:
-        first_name = clean_text(str(row[0]))
-        last_name = clean_text(str(row[1]))
-        link_str = str(row[3])
-        href_match = DOCUMENT_HREF_RE.search(link_str)
-        if not href_match:
-            continue
-        detail_path = href_match.group(1)
-        doc_key = detail_path.rstrip("/").split("/")[-1]
-
-        member_id = resolve_member_id(first_name, last_name, members_db)
-        filed_date = parse_filed_date(row[4])
-        anchor_doc_id = f"senate-{doc_key}-0"
-
-        check = supabase.table("politician_trades").select("id").eq("doc_id", anchor_doc_id).limit(1).execute()
-        if check.data:
-            existing_filings_seen += 1
-            if SENATE_DAILY_EXISTING_STOP > 0:
-                consecutive_existing += 1
-            if daily_mode and SENATE_DAILY_EXISTING_STOP > 0 and consecutive_existing >= SENATE_DAILY_EXISTING_STOP:
-                print(f" -> Hit {SENATE_DAILY_EXISTING_STOP} consecutive existing Senate filings. Stopping.")
-                break
-            continue
-
-        consecutive_existing = 0
-        detail_url = f"{SENATE_BASE_URL}{detail_path}"
-        print(f"Scraping eFD for {first_name} {last_name} ({detail_path})...")
-
-        try:
-            detail_response = session.get(detail_url, headers={"Referer": SENATE_SEARCH_URL}, timeout=30)
-            detail_response.raise_for_status()
-        except Exception as exc:
-            parse_failures += 1
-            failed_doc_ids.append(doc_key)
-            print(f"Failed to fetch {detail_url}: {exc}")
-            continue
-
-        if "<title>eFD: Find Reports</title>" in detail_response.text:
-            # Session expired — refresh and retry once
-            print(f"Session redirect detected for {detail_url}. Refreshing session...")
-            try:
-                cookie_csrf = establish_senate_session(session)
-                detail_response = session.get(detail_url, headers={"Referer": SENATE_SEARCH_URL}, timeout=30)
-                detail_response.raise_for_status()
-            except Exception as refresh_exc:
-                parse_failures += 1
-                failed_doc_ids.append(doc_key)
-                print(f"Session refresh failed for {detail_url}: {refresh_exc}")
-                continue
-
-            if "<title>eFD: Find Reports</title>" in detail_response.text:
-                parse_failures += 1
-                failed_doc_ids.append(doc_key)
-                print(f"Session redirect persists after refresh for {detail_url}")
-                continue
-
-        soup = BeautifulSoup(detail_response.text, "html.parser")
-        paper_row_count = 0
-        if "/search/view/paper/" in detail_path:
-            paper_filings_seen += 1
-            try:
-                trades, paper_row_count = parse_senate_paper_report(
-                    session,
-                    soup,
-                    doc_key=doc_key,
-                    member_id=member_id,
-                    first_name=first_name,
-                    last_name=last_name,
-                    filed_date=filed_date,
-                    source_url=detail_url,
-                    valid_tickers=valid_tickers,
-                )
-            except PaperFilingReviewRequired as exc:
-                parse_failures += 1
-                failed_doc_ids.append(doc_key)
-                print(f" -> {doc_key}: {exc}")
-                continue
-            paper_transaction_rows_seen += paper_row_count
-            paper_trades_parsed += len(trades)
-        else:
-            trades = parse_senate_html_table(
-                soup,
-                doc_key=doc_key,
-                member_id=member_id,
-                first_name=first_name,
-                last_name=last_name,
-                filed_date=filed_date,
-                source_url=detail_url,
-            )
-
-        if not trades:
-            if "/search/view/paper/" in detail_path and paper_row_count > 0:
-                paper_unmapped_filings += 1
-                print(f" -> Paper filing contained {paper_row_count} transaction rows but no public ticker matches")
-            else:
-                parse_failures += 1
-                failed_doc_ids.append(doc_key)
-                print(" -> No Senate trades parsed from filing")
-        else:
-            formatted_trades.extend(trades)
-            print(f" -> Extracted {len(trades)} Senate trades")
-
-        time.sleep(0.5)
-
-    print(f"Parsed {len(formatted_trades)} detailed Senate trades.")
-
-    if formatted_trades:
-        prepared_trades = prepare_senate_trades_for_insert(formatted_trades)
-        print(f"Uploading {len(prepared_trades)} real Senate trades to Supabase...")
-        for index in range(0, len(prepared_trades), 50):
-            chunk = prepared_trades[index : index + 50]
-            to_insert: list[dict] = []
-            try:
-                doc_ids = [trade["doc_id"] for trade in chunk]
-                existing = supabase.table("politician_trades").select("doc_id").in_("doc_id", doc_ids).execute()
-                existing_ids = {row["doc_id"] for row in existing.data}
-
-                to_insert = [trade for trade in chunk if trade["doc_id"] not in existing_ids]
-                if to_insert:
-                    supabase.table("politician_trades").insert(to_insert).execute()
-                    inserted_count += len(to_insert)
-                    print(f" -> Inserted {len(to_insert)} new Senate trades.")
-            except Exception as exc:
-                print(f"Error manual-upserting chunk: {exc}")
-                for trade in to_insert:
-                    try:
-                        supabase.table("politician_trades").insert(trade).execute()
-                        inserted_count += 1
-                    except Exception as inner_exc:
-                        write_failures += 1
-                        failed_doc_id = str(trade.get("doc_id") or "").rsplit("-", 1)[0].removeprefix("senate-")
-                        if failed_doc_id:
-                            failed_doc_ids.append(failed_doc_id)
-                        print(f" -> Failed to insert Senate trade {trade.get('doc_id')}: {inner_exc}")
-
-        print("Successfully seeded SENATE trades!")
-
-    print(
-        "SUMMARY_JSON:"
-        + json.dumps(
-            {
-                "failed_doc_ids": failed_doc_ids[:20],
-                "paper_filings_seen": paper_filings_seen,
-                "paper_transaction_rows_seen": paper_transaction_rows_seen,
-                "paper_trades_parsed": paper_trades_parsed,
-                "paper_unmapped_filings": paper_unmapped_filings,
-                "existing_filings_seen": existing_filings_seen,
-                "write_failures": write_failures,
-                "parse_failures": parse_failures + write_failures,
-                "records_inserted": inserted_count,
-                "records_seen": len(prepared_trades),
-                "records_skipped": max(len(prepared_trades) - inserted_count, 0),
-            },
-            sort_keys=True,
-        )
-    )
+    from capture_congress import main
+    main(chamber="Senate")
 
 
 if __name__ == "__main__":

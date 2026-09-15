@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/cron/github-dispatch/capture-congress",
-      "schedule": "10 5 * * *"
+      "schedule": "10 * * * *"
     },
     {
       "path": "/api/cron/github-dispatch/capture-insider",

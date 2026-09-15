@@ -40,12 +40,17 @@ def load_house_index(year: int) -> list[dict]:
     payload = response.content.decode("utf-8-sig", errors="replace")
     reader = csv.DictReader(io.StringIO(payload), delimiter="\t")
     filings: list[dict] = []
+    required = {"FilingType", "DocID", "First", "Last", "FilingDate"}
+    if not required.issubset(set(reader.fieldnames or [])):
+        raise ValueError(f"House {year} index has unexpected columns")
+    seen = set()
     for row in reader:
         if (row.get("FilingType") or "").strip().upper() != "P":
             continue
         doc_id = (row.get("DocID") or "").strip()
-        if not doc_id:
-            continue
+        if not doc_id or doc_id in seen:
+            raise ValueError(f"House {year} index has missing or duplicate document IDs")
+        seen.add(doc_id)
         filings.append(
             {
                 "doc_id": doc_id,
@@ -224,7 +229,7 @@ def parse_house_doc(filing: dict, members_db: list[dict], company_lookup: list[d
                 if transactions:
                     status = "trades"
                 elif detect_house_non_public_only_lines(ocr_lines):
-                    status = "no_trade"
+                    status = "non_public_unparsed"
 
     published_date = datetime.strptime(filing["filing_date_raw"], "%m/%d/%Y").strftime("%Y-%m-%d")
     for transaction in transactions:
@@ -278,86 +283,16 @@ def ensure_referenced_companies(prepared_trades: list[dict]) -> None:
     print(f"Registered {len(rows)} missing company ticker(s): {', '.join(missing[:10])}")
 
 
-def replace_doc_rows(filing: dict, trades: list[dict]) -> tuple[int, int]:
+def replace_doc_rows(filing: dict, trades: list[dict], *, verified_no_trades: bool = False) -> tuple[int, int]:
+    from congress_filing_store import publish_filing
     prepared_trades = prepare_house_trades_for_insert(trades)
     ensure_referenced_companies(prepared_trades)
-    prefix = f"house-{filing['year']}-{filing['doc_id']}"
-    existing = (
-        supabase.table("politician_trades")
-        .select("id", count="exact")
-        .ilike("doc_id", f"{prefix}%")
-        .limit(2000)
-        .execute()
-    )
-    existing_count = existing.count or 0
-    supabase.table("politician_trades").delete().ilike("doc_id", f"{prefix}%").execute()
-
-    inserted_count = 0
-    if prepared_trades:
-        for index in range(0, len(prepared_trades), 50):
-            chunk = prepared_trades[index : index + 50]
-            supabase.table("politician_trades").insert(chunk).execute()
-            inserted_count += len(chunk)
-    return existing_count, inserted_count
+    return publish_filing(supabase, f"house-{filing['year']}-{filing['doc_id']}", prepared_trades, filing=filing, verified_no_trades=verified_no_trades)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Replace the most recent House filings from the official index.")
-    parser.add_argument("--days", type=int, default=RECENT_DAYS)
-    parser.add_argument("--limit", type=int, default=MAX_FILINGS)
-    parser.add_argument("--max-parse-failures", type=int, default=MAX_PARSE_FAILURES)
-    parser.add_argument("--carryover-days", type=int, default=CARRYOVER_DAYS)
-    parser.add_argument("--carryover-run-limit", type=int, default=CARRYOVER_RUN_LIMIT)
-    parser.add_argument("--carryover-doc-limit", type=int, default=CARRYOVER_DOC_LIMIT)
-    args = parser.parse_args()
-
-    recent_filings = load_recent_house_filings(days=args.days, limit=args.limit)
-    carryover_filings = load_recent_house_carryover_filings(
-        days=args.carryover_days,
-        run_limit=args.carryover_run_limit,
-        doc_limit=args.carryover_doc_limit,
-    )
-    filings = dedupe_house_filings(recent_filings, carryover_filings)
-
-    members_db = load_congress_members(supabase)
-    company_lookup = load_company_lookup()
-
-    summary = {
-        "filings_seen": len(filings),
-        "recent_filings_seen": len(recent_filings),
-        "carryover_filings_seen": len(carryover_filings),
-        "filings_with_trades": 0,
-        "no_trade_filings": 0,
-        "rows_replaced": 0,
-        "rows_inserted": 0,
-        "failed_doc_ids": [],
-    }
-
-    for filing in filings:
-        status, trades = parse_house_doc(filing, members_db, company_lookup)
-        if status == "trades":
-            summary["filings_with_trades"] += 1
-        elif status == "no_trade":
-            summary["no_trade_filings"] += 1
-        else:
-            summary["failed_doc_ids"].append(f"{filing['year']}-{filing['doc_id']}")
-            continue
-
-        replaced_count, inserted_count = replace_doc_rows(filing, trades)
-        summary["rows_replaced"] += replaced_count
-        summary["rows_inserted"] += inserted_count
-        print(
-            f"Synced {filing['year']}:{filing['doc_id']} {filing['filing_date_raw']} "
-            f"status={status} replaced={replaced_count} inserted={inserted_count}"
-        )
-
-    summary["parse_failures"] = len(summary["failed_doc_ids"])
-    print("SUMMARY_JSON:" + json.dumps(summary, sort_keys=True))
-
-    if summary["failed_doc_ids"] and (
-        summary["parse_failures"] > args.max_parse_failures or summary["rows_inserted"] == 0
-    ):
-        raise SystemExit(1)
+    from capture_congress import main as capture
+    capture(chamber="House")
 
 
 if __name__ == "__main__":

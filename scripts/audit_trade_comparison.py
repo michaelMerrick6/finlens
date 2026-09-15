@@ -1,7 +1,7 @@
 """Compare transaction multisets so equal counts cannot hide changed values."""
 from collections import Counter
 
-FIELDS = ('ticker', 'transaction_date', 'published_date', 'transaction_type', 'amount_range')
+FIELDS = ('ticker', 'transaction_date', 'published_date', 'transaction_type', 'amount_range', 'member_id', 'asset_name', 'asset_type')
 
 
 def compare_transactions(parsed, stored):

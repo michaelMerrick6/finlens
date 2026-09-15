@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: process-signals
+  group: congress-data-and-signals
   cancel-in-progress: false
 
 jobs:
@@ -35,6 +35,9 @@ jobs:
         pip install -r scripts/requirements.txt
 
     - name: Run Signal & Alert Tests
+      env:
+        SUPABASE_URL: https://example.supabase.co
+        SUPABASE_SERVICE_KEY: test-key
       if: github.event_name == 'workflow_dispatch'
       working-directory: scripts
       run: |

@@ -216,31 +216,9 @@ def replace_senate_doc(
     trades = prepare_senate_trades_for_insert(parse_senate_filing(session, doc_key, filing, members_db, valid_tickers))
     if not trades:
         raise RuntimeError(f"No Senate trades parsed for {doc_key}; refusing to replace existing data")
-    prefix = f"senate-{doc_key}"
-    existing_count, existing_rows = load_existing_senate_trade_rows(prefix)
+    from congress_filing_store import publish_filing
+    return publish_filing(supabase, f"senate-{doc_key}", trades, filing=filing)
 
-    if existing_count:
-        supabase.table("politician_trades").delete().ilike("doc_id", f"{prefix}%").execute()
-
-    try:
-        inserted = insert_politician_trade_rows(trades)
-    except Exception as exc:
-        try:
-            supabase.table("politician_trades").delete().ilike("doc_id", f"{prefix}%").execute()
-        except Exception:
-            pass
-
-        if existing_rows:
-            try:
-                insert_politician_trade_rows(existing_rows)
-            except Exception as restore_exc:
-                raise RuntimeError(
-                    f"Failed to replace Senate filing {doc_key}: {exc}; restore also failed: {restore_exc}"
-                ) from exc
-
-        raise RuntimeError(f"Failed to replace Senate filing {doc_key}: {exc}") from exc
-
-    return existing_count, inserted
 
 
 def main() -> None:

@@ -44,7 +44,7 @@ def fetch_doc_rows(supabase, prefix: str) -> tuple[int, list[dict]]:
     rows = []
     while True:
         batch = (supabase.table("politician_trades")
-                 .select("doc_id,member_id,published_date,ticker,transaction_date,transaction_type,amount_range")
+                 .select("doc_id,member_id,published_date,ticker,transaction_date,transaction_type,amount_range,asset_name,asset_type")
                  .like("doc_id", f"{prefix}-%")
                  .order("id").range(len(rows), len(rows) + 499).execute().data or [])
         rows.extend(batch)
@@ -246,7 +246,7 @@ def main() -> None:
     parser.add_argument("--house-limit", type=int, default=HOUSE_AUDIT_LIMIT)
     parser.add_argument("--senate-days", type=int, default=SENATE_AUDIT_DAYS)
     parser.add_argument("--senate-limit", type=int, default=SENATE_AUDIT_LIMIT)
-    parser.add_argument('--document-timeout', type=float, default=120, help='Maximum wall-clock seconds per document, including OCR and database comparison.')
+    parser.add_argument('--document-timeout', type=float, default=float(os.environ.get('CONGRESS_AUDIT_DOCUMENT_TIMEOUT', '120')), help='Maximum wall-clock seconds per document, including OCR and database comparison.')
     parser.add_argument('--progress-file', type=Path, default=None)
     args = parser.parse_args()
     if args.document_timeout <= 0 or min(args.house_days, args.senate_days, args.house_limit, args.senate_limit) <= 0:

@@ -16,6 +16,7 @@ for path in (SCRIPTS_DIR, OPS_DIR):
 from ingest_house_official import load_company_lookup
 from ingest_senate_official import load_valid_tickers
 from pipeline_support import emit_summary, get_supabase_client
+from parser_write_policy import read_only_parsing
 from repair_senate_filings import create_senate_session, load_members_lookup, parse_senate_filing
 from sec_form4_support import create_session, load_recent_form4_filings, parse_form4_filing
 from sync_recent_house_filings import load_recent_house_filings, parse_house_doc
@@ -153,6 +154,7 @@ def collect_coverage_gaps(value: Any) -> list[dict]:
     return gaps
 
 
+@read_only_parsing
 def latest_house_trade_date(supabase, *, days: int, limit: int, parse_limit: int) -> tuple[date | None, dict]:
     members_db = supabase.table("congress_members").select("id, first_name, last_name, chamber, active").execute().data or []
     company_lookup = load_company_lookup()
@@ -207,6 +209,7 @@ def latest_house_trade_date(supabase, *, days: int, limit: int, parse_limit: int
     )
 
 
+@read_only_parsing
 def latest_senate_trade_date(supabase, *, days: int, limit: int, parse_limit: int) -> tuple[date | None, dict]:
     session = create_senate_session()
     members_db = load_members_lookup()
@@ -223,9 +226,6 @@ def latest_senate_trade_date(supabase, *, days: int, limit: int, parse_limit: in
         try:
             trades = parse_senate_filing(session, filing["doc_key"], filing, members_db, valid_tickers)
         except Exception as exc:
-            if "/search/view/paper/" in str(filing.get("source_url") or "") and "No Senate trades parsed" in str(exc):
-                paper_unmapped_count += 1
-                continue
             failures.append({"doc_key": filing.get("doc_key"), "error": str(exc)[:240]})
             continue
         if trades and filing_date:
@@ -312,6 +312,14 @@ def latest_insider_source_trade_date(*, days: int, limit: int, pages: int, parse
 
 def evaluate_lag(name: str, source_latest: date | None, db_latest: date | None, *, grace_days: int, details: dict) -> dict:
     coverage_gaps = collect_coverage_gaps(details)
+    def has_parse_failures(value):
+        return isinstance(value, dict) and (bool(value.get("parse_failures")) or any(
+            has_parse_failures(child) for child in value.values() if isinstance(child, dict)))
+    if has_parse_failures(details):
+        return {"name": name, "status": "failed", "reason": "Source filings could not be parsed; freshness is unverified.",
+                "source_latest": source_latest.isoformat() if source_latest else None,
+                "db_latest": db_latest.isoformat() if db_latest else None,
+                "lag_days": None, "coverage_gap_count": len(coverage_gaps), "details": details}
     if source_latest is None:
         return {
             "name": name,
@@ -352,7 +360,7 @@ def evaluate_lag(name: str, source_latest: date | None, db_latest: date | None, 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Fail if stored trade rows lag official recent source feeds.")
-    parser.add_argument("--checks", choices=["all", "congress", "insider"], default="all")
+    parser.add_argument("--checks", choices=["all", "congress", "insider"], default=os.environ.get("CAPTURE_FRESHNESS_CHECKS", "all"))
     parser.add_argument("--lookback-days", type=int, default=DEFAULT_LOOKBACK_DAYS)
     parser.add_argument("--grace-days", type=int, default=DEFAULT_GRACE_DAYS)
     parser.add_argument("--source-limit", type=int, default=DEFAULT_SOURCE_LIMIT)

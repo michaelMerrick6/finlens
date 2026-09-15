@@ -1017,7 +1017,8 @@ def detect_house_attachment_only_filing(pdf_bytes: bytes) -> bool:
 def detect_house_no_trade_filing(pdf_bytes: bytes) -> bool:
     try:
         reader = PdfReader(io.BytesIO(pdf_bytes))
-        if not reader.pages:
+        # A first-page declaration cannot account for additional pages.
+        if len(reader.pages) != 1:
             return False
         writer = PdfWriter()
         writer.add_page(reader.pages[0])
@@ -1033,12 +1034,15 @@ def detect_house_no_trade_filing(pdf_bytes: bytes) -> bool:
     if image.width < image.height:
         image = image.rotate(90, expand=True)
 
+    saw_no_trade = False
     for row_start, row_end in extract_house_scanned_rows(image):
         asset_text = ocr_house_scanned_cell(crop_ratio_box(image, HOUSE_SCANNED_ASSET_BOUNDS, row_start, row_end))
         asset_upper = asset_text.upper()
         if any(marker in asset_upper for marker in HOUSE_NO_TRADE_MARKERS):
-            return True
-    return False
+            saw_no_trade = True
+        elif asset_upper.strip():
+            return False
+    return saw_no_trade
 
 
 def detect_house_non_public_only_lines(lines: list[str]) -> bool:
@@ -1231,7 +1235,6 @@ def extract_transactions_from_lines(
     member_id = resolve_member_id(first_name, last_name, members_db)
 
     transactions: list[dict] = []
-    seen_keys: set[str] = set()
 
     for index, line in enumerate(filtered_lines):
         asset_match = HOUSE_ASSET_TYPE_RE.search(line)
@@ -1243,7 +1246,7 @@ def extract_transactions_from_lines(
         previous_line = filtered_lines[index - 1] if index > 0 else ""
         asset_name = merge_house_asset_name(previous_line, inline_asset_name) if inline_asset_name else previous_line
         if not asset_name:
-            continue
+            raise HouseScanReviewRequired("Text row: missing asset name")
 
         detail_parts = [normalize_line(line[asset_match.end() :])]
         lookahead = index + 1
@@ -1259,15 +1262,15 @@ def extract_transactions_from_lines(
         detail_blob = normalize_line(" ".join(part for part in detail_parts if part))
         tx_match = HOUSE_TX_RE.search(detail_blob)
         if not tx_match:
-            continue
+            raise HouseScanReviewRequired("Text row: missing transaction fields")
 
         amount_match = HOUSE_AMOUNT_RE.search(detail_blob)
         if not amount_match:
-            continue
+            raise HouseScanReviewRequired("Text row: missing amount")
 
         tx_date = parse_house_date(tx_match.group("tx_date"))
         if not tx_date:
-            continue
+            raise HouseScanReviewRequired("Text row: invalid transaction date")
         published_date = parse_house_date(tx_match.group("notif_date")) or tx_date
 
         tx_code = tx_match.group("tx_code")
@@ -1287,20 +1290,6 @@ def extract_transactions_from_lines(
             asset_type=asset_type,
             option_metadata=option_metadata,
         )
-
-        key = "|".join(
-            (
-                ticker,
-                tx_date,
-                published_date,
-                amount_range,
-                tx_type,
-                house_trade_fingerprint(asset_name, detail_blob),
-            )
-        )
-        if key in seen_keys:
-            continue
-        seen_keys.add(key)
 
         transactions.append(
             {
@@ -1337,7 +1326,6 @@ def extract_transactions_from_layout_lines(
     member_id = resolve_member_id(first_name, last_name, members_db)
 
     transactions: list[dict] = []
-    seen_keys: set[str] = set()
 
     for index, line in enumerate(filtered_lines):
         if should_skip_house_line(line):
@@ -1381,7 +1369,7 @@ def extract_transactions_from_layout_lines(
 
         asset_name = clean_house_asset_name(normalize_line(" ".join(part for part in asset_name_parts if part)))
         if len(re.sub(r"[^A-Za-z0-9]", "", asset_name)) < 3:
-            continue
+            raise HouseScanReviewRequired("Layout row: missing asset name")
 
         ticker_match = HOUSE_LAYOUT_TICKER_RE.search(asset_name)
 
@@ -1396,7 +1384,7 @@ def extract_transactions_from_layout_lines(
 
         tx_date = parse_house_date(tx_match.group("tx_date"))
         if not tx_date:
-            continue
+            raise HouseScanReviewRequired("Text row: invalid transaction date")
 
         published_date = parse_house_date(tx_match.group("notif_date")) or tx_date
         tx_code = tx_match.group("tx_code").upper()
@@ -1415,20 +1403,6 @@ def extract_transactions_from_layout_lines(
             asset_type=asset_type,
             option_metadata=option_metadata,
         )
-
-        key = "|".join(
-            (
-                ticker,
-                tx_date,
-                published_date,
-                amount_range,
-                tx_type,
-                house_trade_fingerprint(asset_name, detail_blob),
-            )
-        )
-        if key in seen_keys:
-            continue
-        seen_keys.add(key)
 
         transactions.append(
             {
@@ -1467,31 +1441,34 @@ def extract_best_text_transactions(
     pdf_lines = [normalize_line(line) for line in extract_pdf_lines(pdf_bytes)]
     pdf_lines = [line for line in pdf_lines if line]
 
-    standard_transactions: list[dict] = []
-    if sum(len(line) for line in pdf_lines) >= 80:
-        standard_transactions = extract_transactions_from_lines(
-            pdf_lines,
-            doc_id,
-            first_name,
-            last_name,
-            tx_year,
-            members_db,
-            company_lookup,
-        )
-
     layout_lines = [normalize_line(line) for line in extract_pdftotext_layout_lines(pdf_bytes)]
     layout_lines = [line for line in layout_lines if line]
-    layout_transactions = extract_transactions_from_layout_lines(
-        layout_lines,
-        doc_id,
-        first_name,
-        last_name,
-        tx_year,
-        members_db,
-        company_lookup,
-    )
+    candidates = []
+    errors = []
+    for parser, lines in ((extract_transactions_from_lines, pdf_lines),
+                          (extract_transactions_from_layout_lines, layout_lines)):
+        try:
+            candidates.append(parser(lines, doc_id, first_name, last_name, tx_year, members_db, company_lookup))
+        except HouseScanReviewRequired as exc:
+            errors.append(str(exc))
+    selected = select_best_house_transactions(*candidates)
+    # Account for visible source row markers independently of successful parsing.
+    expected = max((sum(len(HOUSE_ASSET_TYPE_RE.findall(line)) for line in lines)
+                    for lines in (pdf_lines, layout_lines)), default=0)
+    dated_rows = max((sum(bool(re.search(r"\b[PSE]\s+(?:\([^)]*\)\s*)?\d{1,2}/", line, re.I))
+                       for line in lines) for lines in (pdf_lines, layout_lines)), default=0)
+    if selected and len(selected) < max(expected, dated_rows):
+        raise HouseScanReviewRequired(f"Partial text filing: source has at least {max(expected, dated_rows)} rows, parsed {len(selected)}")
+    if selected:
+        # A text result cannot establish completeness of additional image-only pages.
+        reader = PdfReader(io.BytesIO(pdf_bytes))
+        for page in reader.pages:
+            if len((page.extract_text() or "").strip()) < 80 and len(page.images):
+                raise HouseScanReviewRequired("Mixed text/scan filing requires whole-document review")
+    if not selected and errors:
+        raise HouseScanReviewRequired("; ".join(errors))
+    return selected, pdf_lines
 
-    return select_best_house_transactions(standard_transactions, layout_transactions), pdf_lines
 
 
 def filing_sort_key(filing: dict) -> tuple[datetime, int]:
@@ -1507,236 +1484,8 @@ def filing_sort_key(filing: dict) -> tuple[datetime, int]:
 
 
 def fetch_house_trades():
-    print("Starting Official House Clerk PTR Scraper...")
-    session = requests.Session()
-    session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"})
-
-    members_db = load_congress_members(supabase)
-    try:
-        company_lookup = load_company_lookup()
-    except Exception as exc:
-        print(f"Warn: Could not fetch companies for ticker resolution ({exc})")
-        company_lookup = []
-
-    all_transactions: list[dict] = []
-    inserted_count = 0
-    ocr_fallbacks = 0
-    attachment_parsed_filings = 0
-    attachment_parsed_doc_ids: list[str] = []
-    attachment_only_filings = 0
-    attachment_doc_ids: list[str] = []
-    no_trade_filings = 0
-    no_trade_doc_ids: list[str] = []
-    carryover_parse_failures = 0
-    carryover_failed_doc_ids: list[str] = []
-    parse_failures = 0
-    failed_doc_ids: list[str] = []
-
-    daily_mode = os.environ.get("FINLENS_DAILY_MODE", "0") == "1"
-    start_year = congress_now().year
-    stop_year = start_year - 1 if daily_mode else 2012
-
-    for year in range(start_year, stop_year - 1, -1):
-        print(f"\n1. Fetching Bulk Index for {year}...")
-
-        try:
-            response = session.get(HOUSE_INDEX_URL.format(year=year), timeout=30)
-        except Exception as exc:
-            print(f"Skipping {year}, index request failed: {exc}")
-            continue
-
-        if response.status_code != 200:
-            print(f"Skipping {year}, index not available.")
-            continue
-
-        payload = response.content.decode("utf-8-sig", errors="replace")
-        reader = csv.DictReader(io.StringIO(payload), delimiter="\t")
-
-        bulk_filings = []
-        for row in reader:
-            if (row.get("FilingType") or "").strip().upper() != "P":
-                continue
-            doc_id = (row.get("DocID") or "").strip()
-            if not doc_id:
-                continue
-            bulk_filings.append(
-                {
-                    "doc_id": doc_id,
-                    "first_name": (row.get("First") or "").strip(),
-                    "last_name": (row.get("Last") or "").strip(),
-                    "filing_date": (row.get("FilingDate") or "").strip(),
-                    "year": year,
-                }
-            )
-
-        bulk_filings.sort(key=filing_sort_key, reverse=True)
-        if daily_mode and year < start_year:
-            bulk_filings = bulk_filings[:HOUSE_PREVIOUS_YEAR_DAILY_LIMIT]
-        print(f"Found {len(bulk_filings)} House PTR filings in the {year} index.")
-
-        consecutive_existing = 0
-        for filing in bulk_filings:
-            doc_id = filing["doc_id"]
-            first_name = filing["first_name"]
-            last_name = filing["last_name"]
-            idx_filing_date_raw = filing["filing_date"]
-
-            check = (
-                supabase.table("politician_trades")
-                .select("id")
-                .eq("doc_id", f"house-{year}-{doc_id}-0")
-                .limit(1)
-                .execute()
-            )
-            if check.data:
-                consecutive_existing += 1
-                if daily_mode and year < start_year and consecutive_existing >= 25:
-                    print("Reached 25 consecutive existing prior-year House filings. Stopping carryover scan.")
-                    break
-                continue
-
-            consecutive_existing = 0
-
-            try:
-                idx_filing_date = datetime.strptime(idx_filing_date_raw, "%m/%d/%Y").strftime("%Y-%m-%d")
-            except Exception:
-                idx_filing_date = congress_now().strftime("%Y-%m-%d")
-
-            pdf_url = HOUSE_PTR_PDF_URL.format(year=year, doc_id=doc_id)
-            print(f"Fetching NEW PDF {doc_id} for {first_name} {last_name}...")
-
-            try:
-                pdf_resp = session.get(pdf_url, timeout=(10, 60))
-                pdf_resp.raise_for_status()
-
-                used_ocr = False
-                attachment_only = False
-                no_trade_filing = False
-                transactions, pdf_lines = extract_best_text_transactions(
-                    pdf_resp.content,
-                    doc_id,
-                    first_name,
-                    last_name,
-                    year,
-                    members_db,
-                    company_lookup,
-                )
-
-                if not transactions:
-                    no_trade_filing = detect_house_no_trade_filing(pdf_resp.content)
-                    attachment_only = detect_house_attachment_only_filing(pdf_resp.content) if not no_trade_filing else False
-                    if no_trade_filing or attachment_only:
-                        used_ocr = True
-                    if not no_trade_filing:
-                        scanned_transactions = extract_transactions_from_scanned_house_pdf(
-                            pdf_resp.content,
-                            doc_id,
-                            first_name,
-                            last_name,
-                            year,
-                            members_db,
-                            company_lookup,
-                            attachment_hint=attachment_only,
-                        )
-                        if scanned_transactions:
-                            used_ocr = True
-                            transactions = scanned_transactions
-                    if not transactions and not attachment_only:
-                        ocr_lines = [normalize_line(line) for line in extract_ocr_lines(pdf_resp.content)]
-                        ocr_lines = [line for line in ocr_lines if line]
-                        if ocr_lines:
-                            used_ocr = True
-                            transactions = extract_transactions_from_lines(
-                                ocr_lines, doc_id, first_name, last_name, year, members_db, company_lookup
-                            )
-                            if not transactions and detect_house_non_public_only_lines(ocr_lines):
-                                no_trade_filing = True
-
-                if used_ocr:
-                    ocr_fallbacks += 1
-
-                if transactions:
-                    if attachment_only:
-                        attachment_parsed_filings += 1
-                        attachment_parsed_doc_ids.append(f"{year}-{doc_id}")
-                    for transaction in transactions:
-                        # Keep the official House index filing date as the stored
-                        # published date. Parsed PDFs can contain trade/notification
-                        # dates that belong in transaction_date, not published_date.
-                        transaction["published_date"] = idx_filing_date
-                    all_transactions.extend(transactions)
-                    print(f" -> Extracted {len(transactions)} trades")
-                elif no_trade_filing:
-                    no_trade_filings += 1
-                    no_trade_doc_ids.append(f"{year}-{doc_id}")
-                    print(" -> Filing explicitly reports no transactions")
-                elif attachment_only:
-                    attachment_only_filings += 1
-                    attachment_doc_ids.append(f"{year}-{doc_id}")
-                    print(" -> Filing defers to attached statements; flagged for separate attachment parsing")
-                else:
-                    if daily_mode and year < start_year:
-                        carryover_parse_failures += 1
-                        carryover_failed_doc_ids.append(f"{year}-{doc_id}")
-                        print(" -> No House trades parsed from prior-year carryover filing")
-                    else:
-                        parse_failures += 1
-                        failed_doc_ids.append(f"{year}-{doc_id}")
-                        print(" -> No House trades parsed from filing")
-            except Exception as exc:
-                if daily_mode and year < start_year:
-                    carryover_parse_failures += 1
-                    carryover_failed_doc_ids.append(f"{year}-{doc_id}")
-                    print(f" -> Prior-year carryover PDF exception: {exc}")
-                else:
-                    parse_failures += 1
-                    failed_doc_ids.append(f"{year}-{doc_id}")
-                    print(f" -> PDF Exception: {exc}")
-
-    print(f"\nFinished extracting {len(all_transactions)} standard House trades.")
-
-    if all_transactions:
-        print(f"Uploading {len(all_transactions)} real House trades to Supabase...")
-        for index in range(0, len(all_transactions), 50):
-            chunk = all_transactions[index : index + 50]
-            try:
-                doc_ids = [trade["doc_id"] for trade in chunk]
-                existing = supabase.table("politician_trades").select("doc_id").in_("doc_id", doc_ids).execute()
-                existing_ids = {row["doc_id"] for row in existing.data}
-
-                to_insert = [trade for trade in chunk if trade["doc_id"] not in existing_ids]
-                if to_insert:
-                    prepared_trades = prepare_house_trades_for_insert(to_insert)
-                    supabase.table("politician_trades").insert(prepared_trades).execute()
-                    inserted_count += len(prepared_trades)
-                    print(f" -> Inserted {len(to_insert)} new House trades.")
-            except Exception as exc:
-                print(f"Error manual-upserting chunk: {exc}")
-
-        print("Successfully seeded HOUSE trades!")
-
-    print(
-        "SUMMARY_JSON:"
-        + json.dumps(
-            {
-                "attachment_parsed_doc_ids": attachment_parsed_doc_ids[:20],
-                "attachment_parsed_filings": attachment_parsed_filings,
-                "attachment_doc_ids": attachment_doc_ids[:20],
-                "attachment_only_filings": attachment_only_filings,
-                "carryover_failed_doc_ids": carryover_failed_doc_ids[:20],
-                "carryover_parse_failures": carryover_parse_failures,
-                "no_trade_doc_ids": no_trade_doc_ids[:20],
-                "no_trade_filings": no_trade_filings,
-                "ocr_fallbacks": ocr_fallbacks,
-                "parse_failures": parse_failures,
-                "failed_doc_ids": failed_doc_ids[:20],
-                "records_inserted": inserted_count,
-                "records_seen": len(all_transactions),
-                "records_skipped": max(len(all_transactions) - inserted_count, 0),
-            },
-            sort_keys=True,
-        )
-    )
+    from capture_congress import main
+    main(chamber="House")
 
 
 if __name__ == "__main__":

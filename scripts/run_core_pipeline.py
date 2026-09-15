@@ -7,10 +7,7 @@ from pipeline_support import finish_scraper_run, get_supabase_client, start_scra
 
 
 CORE_PIPELINE_STEPS = [
-    ("House PDFs", "ingest_house_official.py"),
-    ("House Recent Sync", "sync_recent_house_filings.py"),
-    ("Senate", "ingest_senate_official.py"),
-    ("Senate Recent Sync", "sync_recent_senate_filings.py"),
+    ("Congress Capture", "capture_congress.py"),
     ("SEC Edgar", "ingest_sec_daily.py"),
     ("SEC Recent Sync", "sync_recent_sec_filings.py"),
     ("Signal Events", "emit_signal_events.py"),
@@ -25,10 +22,7 @@ OPTIONAL_13F_STEPS = [
 ]
 
 REQUIRED_CORE_STEPS = {
-    "House PDFs",
-    "House Recent Sync",
-    "Senate",
-    "Senate Recent Sync",
+    "Congress Capture",
     "SEC Edgar",
     "SEC Recent Sync",
     "Signal Events",
@@ -41,7 +35,8 @@ REQUIRED_CORE_STEPS = {
 def core_steps() -> list[tuple[str, str]]:
     steps = list(CORE_PIPELINE_STEPS)
     if os.environ.get("FINLENS_RUN_13F_DAILY", "0") == "1":
-        steps[7:7] = OPTIONAL_13F_STEPS
+        insert_at = next(i for i, step in enumerate(steps) if step[0] == "13F Deadline Reminders")
+        steps[insert_at:insert_at] = OPTIONAL_13F_STEPS
     return steps
 
 

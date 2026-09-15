@@ -1,18 +1,15 @@
 name: Capture Congress
 
 on:
-  schedule:
-    # Poll official House/Senate disclosure sources hourly so new filings are
-    # picked up the same day without depending on the full fallback pipeline.
-    - cron: '20 * * * *'
+  # Primary hourly trigger: authenticated Vercel cron dispatch.
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: capture-congress
-  cancel-in-progress: true
+  group: congress-data-and-signals
+  cancel-in-progress: false
 
 jobs:
   capture-congress:
@@ -40,12 +37,16 @@ jobs:
         pip install -r scripts/requirements.txt
 
     - name: Run Congress Parser Tests
+      env:
+        SUPABASE_URL: https://example.supabase.co
+        SUPABASE_SERVICE_KEY: test-key
       if: github.event_name == 'workflow_dispatch'
       working-directory: scripts
       run: |
-        python -m pytest test_house_parser_regressions.py -v || python test_house_parser_regressions.py
-        python -m pytest test_senate_parser_regressions.py -v || python test_senate_parser_regressions.py
-        python -m pytest test_capitol_trades_support.py -v || python test_capitol_trades_support.py
+        python test_house_parser_regressions.py
+        python test_senate_parser_regressions.py
+        python test_capitol_trades_support.py
+        python test_congress_capture.py
         python test_recent_congress_audit_smoke.py
         python test_schema_performance_indexes.py
 
@@ -53,37 +54,27 @@ jobs:
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        HOUSE_AUDIT_LIMIT: '5'
+        SENATE_AUDIT_LIMIT: '5'
+        CONGRESS_AUDIT_DOCUMENT_TIMEOUT: '30'
         FINLENS_DAILY_MODE: '1'
         PYTHONPATH: ${{ github.workspace }}/scripts:${{ github.workspace }}/ops
-        HOUSE_RECENT_SYNC_MAX_PARSE_FAILURES: '3'
-        HOUSE_RECENT_SYNC_CARRYOVER_DAYS: '90'
-        HOUSE_RECENT_SYNC_CARRYOVER_DOC_LIMIT: '60'
         CAPITOL_TRADES_LOOKBACK_DAYS: '21'
         CAPITOL_TRADES_MAX_PAGES: '20'
         CAPITOL_TRADES_AUDIT_DAYS: '21'
-        CAPTURE_FRESHNESS_SOURCE_LIMIT: '100'
-        CAPTURE_FRESHNESS_PARSE_LIMIT: '50'
-        SCRAPER_TIMEOUT_SECONDS: '600'
       run: |
         cd scripts
-        echo "=== House Official Ingest ==="
-        python ingest_house_official.py
-        echo "=== House Recent Sync ==="
-        python sync_recent_house_filings.py
-        echo "=== Senate Official Ingest ==="
-        python ingest_senate_official.py
-        echo "=== Senate Recent Sync ==="
-        python sync_recent_senate_filings.py
+        status=0
+        python capture_congress.py || status=1
         echo "=== Member Backfill ==="
-        python ../ops/backfill_recent_politician_member_ids.py
+        python ../ops/backfill_recent_politician_member_ids.py || status=1
         echo "=== Congress Audit ==="
-        python ../ops/audit_recent_congress_coverage.py
+        python ../ops/audit_recent_congress_coverage.py || status=1
         echo "=== Capitol Lead Capture ==="
-        python capture_capitol_trades_leads.py
+        python capture_capitol_trades_leads.py || status=1
         echo "=== Capitol Gap Audit ==="
-        python ../ops/audit_capitol_trades_gaps.py
-        echo "=== Congress Freshness Guard ==="
-        python validate_recent_trade_capture.py --checks congress --lookback-days 10 --grace-days 2 --source-limit 100 --parse-limit 50
+        python ../ops/audit_capitol_trades_gaps.py || status=1
+        exit "$status"
 
     - name: Notify on Failure
       if: failure()

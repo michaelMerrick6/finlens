@@ -90,6 +90,11 @@ Ops-only entrypoints now live in `ops/`, and one-off SQL repair files live in `o
 
 ## Scheduling
 
+Congress capture uses a durable filing queue and atomic publication. Apply
+`supabase_vail_phase14_congress_capture.sql` before deploying its workers. See
+[Congress capture operations](ops/congress-capture.md) for deployment order,
+retry behavior, validation, and remaining coverage limits.
+
 GitHub Actions `schedule` is no longer the primary trigger for production capture. Public-repo schedules can be auto-disabled by GitHub after inactivity, so production should trigger the workflows through the authenticated cron dispatch route instead:
 
 - `/api/cron/github-dispatch/capture-congress`

@@ -1,5 +1,6 @@
 import argparse
 import json
+import re
 import os
 import sys
 from datetime import datetime, timedelta
@@ -24,12 +25,14 @@ RECENT_DAYS = int(os.environ.get("SENATE_RECENT_SYNC_DAYS", "30"))
 MAX_FILINGS = int(os.environ.get("SENATE_RECENT_SYNC_LIMIT", "100"))
 
 
-def load_recent_senate_filings(session, *, days: int, limit: int) -> list[dict]:
+def load_recent_senate_filings(session, *, days: int, limit: int | None) -> list[dict]:
     cutoff = congress_today() - timedelta(days=days)
     filings: list[dict] = []
     seen: set[str] = set()
 
-    for start_offset in range(0, 500, 100):
+    start_offset = 0
+    expected_total = None
+    while True:
         payload = {
             "start": str(start_offset),
             "length": "100",
@@ -52,8 +55,16 @@ def load_recent_senate_filings(session, *, days: int, limit: int) -> list[dict]:
         )
         response.raise_for_status()
         data = response.json()
+        total = data.get("recordsFiltered")
+        if not isinstance(total, int) or total < 0:
+            raise RuntimeError("Senate feed omitted its filing total")
+        if expected_total is not None and total != expected_total:
+            raise RuntimeError("Senate inventory changed during pagination; retry discovery")
+        expected_total = total
         rows = data.get("data", [])
         if not rows:
+            if len(seen) != total:
+                raise RuntimeError("Senate feed ended before its reported total")
             break
 
         for row in rows:
@@ -61,20 +72,20 @@ def load_recent_senate_filings(session, *, days: int, limit: int) -> list[dict]:
             last_name = str(row[1]).strip()
             filed_date = parse_filed_date(row[4])
             if not filed_date:
-                continue
+                raise ValueError("Invalid Senate filing date")
             filed_dt = datetime.strptime(filed_date, "%Y-%m-%d").date()
             if filed_dt < cutoff:
-                continue
+                raise ValueError("Senate filing outside requested window")
             link_html = str(row[3])
-            href_start = link_html.find('href="')
-            if href_start == -1:
-                continue
-            href_start += len('href="')
-            href_end = link_html.find('"', href_start)
-            detail_path = link_html[href_start:href_end]
-            doc_key = detail_path.rstrip("/").split("/")[-1]
+            match = re.search(r'href=[\'"]([^\'"]+)[\'"]', link_html)
+            if not match:
+                raise ValueError("Senate filing has no document link")
+            detail_path = match.group(1)
+            if not re.fullmatch(r"/search/view/(ptr|paper)/[a-fA-F0-9-]+/", detail_path):
+                raise ValueError("Unrecognized Senate document URL")
+            doc_key = detail_path.rstrip("/").split("/")[-1].lower()
             if doc_key in seen:
-                continue
+                raise ValueError("Duplicate Senate filing during pagination")
             seen.add(doc_key)
             filings.append(
                 {
@@ -84,63 +95,20 @@ def load_recent_senate_filings(session, *, days: int, limit: int) -> list[dict]:
                     "published_date": filed_date,
                 }
             )
-            if len(filings) >= limit:
+            if limit is not None and len(filings) >= limit:
                 return filings
+        start_offset += len(rows)
+        if len(seen) == expected_total:
+            break
+        if len(seen) > expected_total:
+            raise RuntimeError("Senate filing count exceeds reported total")
 
     return filings
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Replace the most recent Senate PTR filings from the official feed.")
-    parser.add_argument("--days", type=int, default=RECENT_DAYS)
-    parser.add_argument("--limit", type=int, default=MAX_FILINGS)
-    args = parser.parse_args()
-
-    session = create_senate_session()
-    members_db = load_members_lookup()
-    valid_tickers = load_valid_tickers()
-    filings = load_recent_senate_filings(session, days=args.days, limit=args.limit)
-
-    summary = {
-        "filings_seen": len(filings),
-        "filings_with_trades": 0,
-        "paper_unmapped_filings": 0,
-        "rows_replaced": 0,
-        "rows_inserted": 0,
-        "failed_doc_ids": [],
-    }
-
-    for filing in filings:
-        try:
-            existing_count, inserted_count = replace_senate_doc(
-                session,
-                filing["doc_key"],
-                filing,
-                members_db,
-                valid_tickers,
-            )
-        except Exception as exc:
-            if "/search/view/paper/" in filing["source_url"] and "No Senate trades parsed" in str(exc):
-                summary["paper_unmapped_filings"] += 1
-                print(f"Synced senate:{filing['doc_key']} {filing['published_date']} status=paper-unmapped")
-                continue
-            print(f"Failed senate:{filing['doc_key']} {filing['published_date']} error={exc}")
-            summary["failed_doc_ids"].append(filing["doc_key"])
-            continue
-
-        summary["filings_with_trades"] += 1
-        summary["rows_replaced"] += existing_count
-        summary["rows_inserted"] += inserted_count
-        print(
-            f"Synced senate:{filing['doc_key']} {filing['published_date']} "
-            f"replaced={existing_count} inserted={inserted_count}"
-        )
-
-    summary["parse_failures"] = len(summary["failed_doc_ids"])
-    print("SUMMARY_JSON:" + json.dumps(summary, sort_keys=True))
-
-    if summary["failed_doc_ids"]:
-        raise SystemExit(1)
+    from capture_congress import main as capture
+    capture(chamber="Senate")
 
 
 if __name__ == "__main__":

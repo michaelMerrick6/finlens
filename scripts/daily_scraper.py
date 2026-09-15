@@ -20,15 +20,16 @@ def log(msg: str):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}")
 
 SCRIPT_CONFIG = {
+    "capture_congress.py": {"scraper_name": "congress_capture", "source_name": "congress", "fatal_parse_failures": True},
     "ingest_house_official.py": {
         "scraper_name": "house_official_daily",
         "source_name": "congress_house",
-        "fatal_parse_failures": False,
+        "fatal_parse_failures": True,
     },
     "sync_recent_house_filings.py": {
         "scraper_name": "house_recent_sync",
         "source_name": "congress_house",
-        "fatal_parse_failures": False,
+        "fatal_parse_failures": True,
     },
     "ingest_senate_official.py": {
         "scraper_name": "senate_official_daily",
@@ -73,7 +74,7 @@ SCRIPT_CONFIG = {
     "audit_recent_congress_coverage.py": {
         "scraper_name": "congress_recent_audit",
         "source_name": "congress_audit",
-        "fatal_parse_failures": False,
+        "fatal_parse_failures": True,
     },
     "capture_capitol_trades_leads.py": {
         "scraper_name": "capitol_trades_capture",
@@ -310,36 +311,9 @@ def main():
     
     results = {}
     
-    # 1) Official House PDF scraper (electronic filings)
-    results["House PDFs"] = run_script(
-        os.path.join(base_dir, "ingest_house_official.py"),
-        supabase=supabase,
-        parent_run_id=pipeline_run_id,
-        mode=mode,
-        critical=False,
-    )
-    results["House Recent Sync"] = run_script(
-        os.path.join(base_dir, "sync_recent_house_filings.py"),
-        supabase=supabase,
-        parent_run_id=pipeline_run_id,
-        mode=mode,
-        critical=False,
-    )
-    
-    # 2) Official Senate scraper
-    results["Senate"] = run_script(
-        os.path.join(base_dir, "ingest_senate_official.py"),
-        supabase=supabase,
-        parent_run_id=pipeline_run_id,
-        mode=mode,
-        critical=False,
-    )
-    results["Senate Recent Sync"] = run_script(
-        os.path.join(base_dir, "sync_recent_senate_filings.py"),
-        supabase=supabase,
-        parent_run_id=pipeline_run_id,
-        mode=mode,
-        critical=False,
+    results["Congress Capture"] = run_script(
+        os.path.join(base_dir, "capture_congress.py"),
+        supabase=supabase, parent_run_id=pipeline_run_id, mode=mode, critical=False,
     )
     results["Member Backfill"] = run_script(
         os.path.join(base_dir, "..", "ops", "backfill_recent_politician_member_ids.py"),
@@ -499,9 +473,7 @@ def main():
         log(f"  {status} {name}")
     log(f"{'='*50}")
     
-    house_core_ok = results.get("House Recent Sync", False) or results.get("House PDFs", False)
-    senate_core_ok = results.get("Senate Recent Sync", False) or results.get("Senate", False)
-    congress_core_ok = house_core_ok and senate_core_ok
+    congress_core_ok = results.get("Congress Capture", False) and results.get("Congress Audit", False)
     insider_core_ok = results.get("SEC Recent Sync", False) or results.get("SEC Edgar", False)
     freshness_ok = results.get("Trade Freshness Guard", False)
     fund_core_ok = os.environ.get("FINLENS_RUN_13F_DAILY", "1") != "1" or results.get("13F", False)
@@ -526,9 +498,7 @@ def main():
     if not alert_core_ok:
         core_failures.append("alerts")
 
-    # Keep the nightly fallback quiet unless the core data/alert path is broken.
-    # Audit and optional delivery-channel failures are visible in mission control,
-    # but should not generate GitHub failure emails when the pipeline is usable.
+    # Congressional coverage failures are required failures, including source audits.
     if not any(results.values()) or core_failures:
         if core_failures:
             log(f"Core pipeline failures: {', '.join(core_failures)}; marking pipeline run failed.")

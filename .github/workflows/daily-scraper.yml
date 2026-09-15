@@ -15,8 +15,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: nightly-trade-data-monitor
-  cancel-in-progress: true
+  group: congress-data-and-signals
+  cancel-in-progress: false
 
 jobs:
   scrape-and-ingest:
@@ -44,6 +44,9 @@ jobs:
         pip install -r scripts/requirements.txt
 
     - name: Run Tests
+      env:
+        SUPABASE_URL: https://example.supabase.co
+        SUPABASE_SERVICE_KEY: test-key
       if: github.event_name == 'workflow_dispatch'
       run: python scripts/run_tests.py
 
@@ -65,10 +68,12 @@ jobs:
         TWEET_CANDIDATE_SIGNAL_EVENT_LIMIT: ''
         SIGNAL_EVENT_SIGNAL_EVENTS_UPSERT_CHUNK_SIZE: '75'
         SIGNAL_EVENT_RAW_FILINGS_UPSERT_CHUNK_SIZE: '50'
+        HOUSE_AUDIT_LIMIT: '5'
+        SENATE_AUDIT_LIMIT: '5'
+        CONGRESS_AUDIT_DOCUMENT_TIMEOUT: '30'
+        CAPTURE_FRESHNESS_CHECKS: 'insider'
         FINLENS_DAILY_MODE: '1'
         FINLENS_RUN_13F_DAILY: '1'
-        HOUSE_RECENT_SYNC_CARRYOVER_DAYS: '90'
-        HOUSE_RECENT_SYNC_CARRYOVER_DOC_LIMIT: '60'
         CAPITOL_TRADES_LOOKBACK_DAYS: '21'
         CAPITOL_TRADES_MAX_PAGES: '20'
         CAPITOL_TRADES_RECONCILE_DAYS: '45'
@@ -133,10 +138,12 @@ jobs:
         TWEET_CANDIDATE_SIGNAL_EVENT_LIMIT: ''
         SIGNAL_EVENT_SIGNAL_EVENTS_UPSERT_CHUNK_SIZE: '75'
         SIGNAL_EVENT_RAW_FILINGS_UPSERT_CHUNK_SIZE: '50'
+        HOUSE_AUDIT_LIMIT: '5'
+        SENATE_AUDIT_LIMIT: '5'
+        CONGRESS_AUDIT_DOCUMENT_TIMEOUT: '30'
+        CAPTURE_FRESHNESS_CHECKS: 'insider'
         FINLENS_DAILY_MODE: '1'
         FINLENS_RUN_13F_DAILY: '1'
-        HOUSE_RECENT_SYNC_CARRYOVER_DAYS: '90'
-        HOUSE_RECENT_SYNC_CARRYOVER_DOC_LIMIT: '60'
         CAPITOL_TRADES_LOOKBACK_DAYS: '21'
         CAPITOL_TRADES_MAX_PAGES: '20'
         CAPITOL_TRADES_RECONCILE_DAYS: '45'
