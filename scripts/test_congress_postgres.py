@@ -18,9 +18,13 @@ class CongressPostgresTests(unittest.TestCase):
             IF NOT EXISTS(SELECT FROM pg_roles WHERE rolname='authenticated') THEN CREATE ROLE authenticated; END IF;
             IF NOT EXISTS(SELECT FROM pg_roles WHERE rolname='service_role') THEN CREATE ROLE service_role; END IF;
         END $$""")
+        cls.conn.execute("SET search_path TO public, extensions")
         root = Path(__file__).resolve().parents[1]
         for name in ['supabase_schema.sql', 'supabase_vail_phase1.sql', 'supabase_vail_phase14_congress_capture.sql']:
             cls.conn.execute((root/name).read_text())
+        # Supabase installs uuid-ossp outside public; security-definer RPCs must not depend on its search path.
+        cls.conn.execute('CREATE SCHEMA IF NOT EXISTS extensions')
+        cls.conn.execute('ALTER EXTENSION "uuid-ossp" SET SCHEMA extensions')
 
     @classmethod
     def tearDownClass(cls):

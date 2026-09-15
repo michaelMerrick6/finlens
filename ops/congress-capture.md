@@ -10,6 +10,7 @@ Production rollout verification is recorded in the deployment task and the local
 
 ## Capture behavior
 
+- The hourly workflow captures and audits official sources. Secondary Capitol Trades lead capture remains in nightly maintenance; its rate limits do not block official capture.
 - `python scripts/capture_congress.py` handles both chambers, even if one fails. The former official-ingest and recent-sync commands delegate to it. Core and nightly pipelines invoke it once.
 - Discovery inventories all House PTR indexes from 2012 and exhausts the Senate feed from the same date. Set `--start-year` to change this explicit boundary. Missing/malformed indexes, duplicate keys, changing Senate totals, and truncated pagination are errors.
 - Discovery registers every filing before processing limits apply. Existing transaction `-0` rows do not establish completion. Rediscovery preserves retry history; changed metadata invalidates an old worker's claim.

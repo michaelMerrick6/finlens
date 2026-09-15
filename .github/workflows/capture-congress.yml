@@ -61,9 +61,6 @@ jobs:
         CONGRESS_AUDIT_DOCUMENT_TIMEOUT: '30'
         FINLENS_DAILY_MODE: '1'
         PYTHONPATH: ${{ github.workspace }}/scripts:${{ github.workspace }}/ops
-        CAPITOL_TRADES_LOOKBACK_DAYS: '21'
-        CAPITOL_TRADES_MAX_PAGES: '20'
-        CAPITOL_TRADES_AUDIT_DAYS: '21'
       run: |
         cd scripts
         status=0
@@ -72,10 +69,6 @@ jobs:
         python ../ops/backfill_recent_politician_member_ids.py || status=1
         echo "=== Congress Audit ==="
         python ../ops/audit_recent_congress_coverage.py || status=1
-        echo "=== Capitol Lead Capture ==="
-        python capture_capitol_trades_leads.py || status=1
-        echo "=== Capitol Gap Audit ==="
-        python ../ops/audit_capitol_trades_gaps.py || status=1
         exit "$status"
 
     - name: Notify on Failure

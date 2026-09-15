@@ -24,7 +24,7 @@ GRANT ALL ON public.congress_filings TO service_role;
 
 -- Preserve correction history before removing obsolete signals and their dependents.
 CREATE TABLE IF NOT EXISTS public.congress_corrections (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id uuid PRIMARY KEY DEFAULT pg_catalog.gen_random_uuid(),
     filing_id text NOT NULL,
     corrected_at timestamptz NOT NULL DEFAULT now(),
     snapshot jsonb NOT NULL
@@ -77,7 +77,7 @@ END $$;
 
 CREATE OR REPLACE FUNCTION public.claim_congress_filing(target_chamber text, recent_first boolean)
 RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
-DECLARE candidate congress_filings; token uuid := uuid_generate_v4();
+DECLARE candidate congress_filings; token uuid := pg_catalog.gen_random_uuid();
 BEGIN
     SELECT * INTO candidate FROM congress_filings
     WHERE chamber = target_chamber AND next_attempt_at <= now()
