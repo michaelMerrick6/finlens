@@ -6,6 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from scripts.ingest_house_official import (
+    HouseScanReviewRequired,
     detect_house_non_public_only_lines,
     extract_transactions_from_layout_lines,
     extract_transactions_from_lines,
@@ -14,6 +15,34 @@ from scripts.ingest_house_official import (
 
 
 class HouseParserRegressionTests(unittest.TestCase):
+    def test_wrapped_amount_is_not_part_of_asset_name(self):
+        lines = [
+            'SP Nokia Corporation Sponsored S (partial) 05/11/2026 06/02/2026 $15,001 -',
+            'American Depositary Shares (NOK) $50,000', '[ST]', 'F S : New',
+        ]
+        trades = extract_transactions_from_layout_lines(lines, '1', 'Laurel', 'Lee', 2026,
+                    [dict(id='L000597', first_name='Laurel', last_name='Lee')], [])
+        self.assertEqual(trades[0]['amount_range'], '$15,001 - $50,000')
+        self.assertEqual(trades[0]['asset_type'], 'ST')
+        self.assertNotIn('$50,000', trades[0]['asset_name'])
+
+    def test_inline_government_security_type_and_wrapped_amount(self):
+        lines = ['US Treasury Note 06/30/27 [GS] P 07/01/2026 07/13/2026 $15,001 -', '$50,000', 'F S : New']
+        trades = extract_transactions_from_layout_lines(lines, '1', 'Rob', 'Bresnahan', 2026,
+                    [dict(id='B001327', first_name='Robert', last_name='Bresnahan')], [])
+        self.assertEqual(trades[0]['amount_range'], '$15,001 - $50,000')
+        self.assertEqual(trades[0]['asset_type'], 'GS')
+        self.assertEqual(trades[0]['asset_name'], 'US Treasury Note 06/30/27')
+        with self.assertRaises(HouseScanReviewRequired):
+            extract_transactions_from_layout_lines(lines[:1], '1', 'Rob', 'Bresnahan', 2026, [], [])
+
+    def test_incomplete_disclosure_amount_is_rejected(self):
+        from parser_write_policy import read_only_parser_scope
+        with read_only_parser_scope(), self.assertRaises(HouseScanReviewRequired):
+            extract_transactions_from_layout_lines(
+                ['Example (MSFT) [ST] P 07/01/2026 07/02/2026 $15,001'],
+                '1', 'Test', 'Member', 2026, [], [])
+
     def test_scanned_date_parser_recovers_truncated_year_digit(self):
         self.assertEqual(parse_house_scanned_date("05/21/1", 2015), "2015-05-21")
         self.assertEqual(parse_house_scanned_date("6/8/1", 2015), "2015-06-08")
@@ -155,7 +184,7 @@ class HouseParserRegressionTests(unittest.TestCase):
 
     def test_layout_parser_marks_option_rows_when_op_marker_is_inline(self):
         lines = [
-            "JT Microsoft Corporation - Common Stock [OP] P 03/25/2026 04/08/2026 $500,001",
+            "JT Microsoft Corporation - Common Stock [OP] P 03/25/2026 04/08/2026 $500,001 - $1,000,000",
             "Description: Call options; Strike price $320; Expires 06/18/2026",
         ]
 

@@ -45,7 +45,7 @@ HOUSE_TX_RE = re.compile(
     r"(?P<tail>.*)$"
 )
 HOUSE_AMOUNT_RE = re.compile(
-    r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+)"
+    r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+)"
 )
 HOUSE_TICKER_RE = re.compile(r"\(([A-Za-z]{1,6})\)")
 HOUSE_LAYOUT_TICKER_RE = re.compile(r"\(([A-Za-z]{1,6})\)(?:\s+\[(?P<asset_type>[A-Z]{2})\])?")
@@ -1339,10 +1339,17 @@ def extract_transactions_from_layout_lines(
             continue
 
         raw_asset_name = HOUSE_LAYOUT_OWNER_PREFIX_RE.sub("", tx_match.group("asset_name")).strip()
+        inline_type = HOUSE_ASSET_TYPE_RE.search(raw_asset_name)
+        asset_type = inline_type.group("asset_type") if inline_type else "Stock"
+        if inline_type:
+            raw_asset_name = normalize_line(raw_asset_name[:inline_type.start()])
         asset_name_parts = [raw_asset_name]
-        asset_type = "Stock"
         fallback_texts = [line]
-        detail_started = False
+        detail_started = inline_type is not None
+        amount_range = tx_match.group("amount").strip()
+        pending_amount = not re.fullmatch(r"(?:Over|Under)\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+", amount_range)
+        if pending_amount and not line[tx_match.end("amount"):].lstrip().startswith("-"):
+            raise HouseScanReviewRequired("Layout row: incomplete amount range")
 
         for lookahead in range(index + 1, min(len(filtered_lines), index + 8)):
             next_line = filtered_lines[lookahead]
@@ -1351,7 +1358,17 @@ def extract_transactions_from_layout_lines(
             if HOUSE_LAYOUT_ROW_RE.search(next_line):
                 break
 
+            if pending_amount:
+                # pdftotext can place the upper bucket beside an asset-name
+                # continuation. Consume only the final currency value in that line.
+                upper_amount = re.search(r"\$[0-9,]+\s*$", next_line)
+                if upper_amount:
+                    amount_range += " - " + upper_amount.group().strip()
+                    next_line = next_line[:upper_amount.start()].strip()
+                    pending_amount = False
             fallback_texts.append(next_line)
+            if not next_line:
+                continue
 
             if not detail_started:
                 asset_match = HOUSE_ASSET_TYPE_RE.search(next_line)
@@ -1369,6 +1386,9 @@ def extract_transactions_from_layout_lines(
 
                 asset_name_parts.append(next_line)
                 continue
+
+        if pending_amount:
+            raise HouseScanReviewRequired("Layout row: missing upper amount bound")
 
         asset_name = clean_house_asset_name(normalize_line(" ".join(part for part in asset_name_parts if part)))
         if len(re.sub(r"[^A-Za-z0-9]", "", asset_name)) < 3:
@@ -1392,7 +1412,6 @@ def extract_transactions_from_layout_lines(
         published_date = parse_house_date(tx_match.group("notif_date")) or tx_date
         tx_code = tx_match.group("tx_code").upper()
         tx_type = {"P": "buy", "S": "sell", "E": "exchange"}.get(tx_code, "unknown")
-        amount_range = tx_match.group("amount").strip()
         detail_blob = " ".join(fallback_texts)
         option_metadata = extract_politician_option_metadata(asset_name, detail_blob, asset_type=asset_type)
         asset_type = normalize_politician_asset_type(
