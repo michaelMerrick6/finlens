@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9116326.pdf",
+  "source_sha256": "be114957d03486636e639fe9d6c124c71ba8634e2f38f5dfb672eee92502ad2d",
+  "published_date": "2026-09-02",
+  "member_id": "W000829",
+  "politician_name": "Tony Wied",
+  "chamber": "House",
+  "row_count": 8,
+  "review_note": "All eight rows reviewed; maturity and partial-sale boxes retained as sales, Treasury instruments classified as bonds.",
+  "rows": [
+    {"page": 1, "row": 1, "owner": "JT", "asset_name": "Schwab Short-Term U.S. Treasury ETF", "ticker": "SCHO", "asset_type": "ETF", "transaction_date": "2026-08-14", "transaction_type": "sell", "amount_range": "$50,001 - $100,000"},
+    {"page": 1, "row": 2, "owner": "JT", "asset_name": "Salesforce Inc", "ticker": "CRM", "asset_type": "Stock", "transaction_date": "2026-08-14", "transaction_type": "buy", "amount_range": "$15,001 - $50,000"},
+    {"page": 1, "row": 3, "owner": "JT", "asset_name": "ServiceNow Inc", "ticker": "NOW", "asset_type": "Stock", "transaction_date": "2026-08-14", "transaction_type": "buy", "amount_range": "$15,001 - $50,000"},
+    {"page": 1, "row": 4, "owner": "JT", "asset_name": "HubSpot Inc", "ticker": "HUBS", "asset_type": "Stock", "transaction_date": "2026-08-14", "transaction_type": "buy", "amount_range": "$15,001 - $50,000"},
+    {"page": 2, "row": 1, "owner": "JT", "asset_name": "The Trade Desk Inc Class A", "ticker": "TTD", "asset_type": "Stock", "transaction_date": "2026-08-14", "transaction_type": "sell", "amount_range": "$15,001 - $50,000"},
+    {"page": 2, "row": 2, "owner": "JT", "asset_name": "Upstart Holdings Inc", "ticker": "UPST", "asset_type": "Stock", "transaction_date": "2026-08-14", "transaction_type": "sell", "amount_range": "$15,001 - $50,000"},
+    {"page": 2, "row": 3, "owner": "JT", "asset_name": "US Treasury Note 1.5% matured", "ticker": "US-TREAS", "asset_type": "Bond", "transaction_date": "2026-08-15", "transaction_type": "sell", "amount_range": "$250,001 - $500,000"},
+    {"page": 2, "row": 4, "owner": "JT", "asset_name": "US Treasury 270-day Treasury Bill due 02/25/27", "ticker": "US-TREAS", "asset_type": "Bond", "transaction_date": "2026-08-31", "transaction_type": "buy", "amount_range": "$250,001 - $500,000"}
+  ]
+}

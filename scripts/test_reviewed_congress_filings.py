@@ -1,5 +1,8 @@
 import hashlib
 import unittest
+import json
+import tempfile
+from pathlib import Path
 from unittest.mock import patch
 from PIL import Image
 import reviewed_congress_filings as reviewed
@@ -49,6 +52,48 @@ class ReviewedFilingsTests(unittest.TestCase):
             self.assertEqual(len(reviewed.reviewed_senate_trades(SENATE, [im], 'B001277', '2026-08-31')), 111)
             with self.assertRaisesRegex(ValueError, 'metadata changed'):
                 reviewed.reviewed_senate_trades(SENATE, [im], 'wrong-member', '2026-08-31')
+
+    def test_new_reviewed_sources_preserve_all_physical_rows(self):
+        expected = {'house-2026-9116267': 274, 'house-2026-9116290': 11,
+                    'house-2026-9116292': 10, 'house-2026-9116308': 7,
+                    'house-2026-9116311': 0, 'house-2026-9116326': 8,
+                    'senate-3a4c5095-028a-4614-a692-836719da4e63': 46,
+                    'senate-ec20cd93-6702-4a29-b3a6-983f4b17f365': 32}
+        for key, count in expected.items():
+            data = reviewed.load_reviewed_filing(key)
+            self.assertEqual(len(reviewed.reviewed_trades(key, data)), count)
+            self.assertEqual(len({(r['page'], r['row']) for r in data['rows']}), count)
+        mann = reviewed.load_reviewed_filing('house-2026-9116292')
+        self.assertEqual({r['transaction_date'] for r in mann['rows']}, {'2024-08-20', '2024-09-09'})
+        self.assertEqual(mann['published_date'], '2026-08-13')
+
+    def test_empty_review_requires_explicit_evidence_and_unchanged_source(self):
+        key = 'house-2026-9116311'
+        data = reviewed.load_reviewed_filing(key)
+        with self.assertRaisesRegex(ValueError, 'source changed'):
+            reviewed.reviewed_house_trades(key, b'changed declaration')
+        with tempfile.TemporaryDirectory() as directory:
+            data.pop('verified_no_trades')
+            Path(directory, key + '.json').write_text(json.dumps(data))
+            with patch.object(reviewed, 'REVIEW_DIR', Path(directory)), self.assertRaisesRegex(ValueError, 'no-transaction evidence'):
+                reviewed.load_reviewed_filing(key)
+
+    def test_reviewed_empty_declaration_does_not_fall_back_to_ocr(self):
+        import sync_recent_house_filings as sync
+        key = 'house-2026-9116311'
+        data = reviewed.load_reviewed_filing(key)
+        source = b'reviewed one-page declaration'
+        data['source_sha256'] = hashlib.sha256(source).hexdigest()
+        filing = dict(year=2026, doc_id='9116311', filing_date_raw='8/20/2026')
+        with patch.object(reviewed, 'load_reviewed_filing', return_value=data), \
+             patch.object(sync.requests, 'get') as get, \
+             patch.object(sync, 'extract_best_text_transactions') as parser:
+            get.return_value.content = source
+            self.assertEqual(sync.parse_house_doc(filing, [], []), ('no_trade', []))
+            parser.assert_not_called()
+            filing['filing_date_raw'] = '8/21/2026'
+            with self.assertRaisesRegex(ValueError, 'metadata changed'):
+                sync.parse_house_doc(filing, [], [])
 
     def test_no_path_traversal(self):
         with self.assertRaises(ValueError):

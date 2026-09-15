@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9116290.pdf",
+  "source_sha256": "7cc36ca57a26ba0331fff01f6210d58d41719f074017442c14fc47983b27b42d",
+  "published_date": "2026-08-12",
+  "member_id": "F000459",
+  "politician_name": "Charles J. Fleischmann",
+  "chamber": "House",
+  "row_count": 11,
+  "review_note": "Both source pages visually reviewed; all 11 ETF rows retained.",
+  "rows": [
+    {"page": 1, "row": 1, "owner": "JT", "asset_name": "Global X Defense Tech ETF", "ticker": "SHLD", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 1, "row": 2, "owner": "JT", "asset_name": "Invesco S&P SmallCap Quality ETF", "ticker": "XSHQ", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 1, "row": 3, "owner": "JT", "asset_name": "iShares 10-20 Year Treasury Bond ETF", "ticker": "TLH", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "sell", "amount_range": "$15,001 - $50,000"},
+    {"page": 1, "row": 4, "owner": "JT", "asset_name": "iShares Core MSCI Europe ETF", "ticker": "IEUR", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 1, "row": 5, "owner": "JT", "asset_name": "ProShares S&P MidCap 400 Dividend Aristocrats ETF", "ticker": "REGL", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 1, "owner": "JT", "asset_name": "SPDR Portfolio S&P 500 Growth ETF", "ticker": "SPYG", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 2, "owner": "JT", "asset_name": "SPDR S&P Aerospace & Defense ETF", "ticker": "XAR", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 3, "owner": "JT", "asset_name": "SPDR Portfolio Intermediate Term Treasury ETF", "ticker": "SPTI", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "buy", "amount_range": "$15,001 - $50,000"},
+    {"page": 2, "row": 4, "owner": "JT", "asset_name": "VanEck Gold Miners ETF", "ticker": "GDX", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 5, "owner": "JT", "asset_name": "Vanguard FTSE Pacific ETF", "ticker": "VPL", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 6, "owner": "JT", "asset_name": "SPDR Gold MiniShares Trust", "ticker": "GLDM", "asset_type": "ETF", "transaction_date": "2026-07-28", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"}
+  ]
+}

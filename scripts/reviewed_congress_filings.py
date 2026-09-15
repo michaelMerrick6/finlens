@@ -21,6 +21,8 @@ def load_reviewed_filing(prefix: str) -> dict | None:
     data = json.loads(path.read_text())
     if data['version'] != 1 or len(data['rows']) != data['row_count']:
         raise ValueError(f'Invalid reviewed filing: {prefix}')
+    if not data["rows"] and not (data.get("verified_no_trades") is True and data.get("review_note")):
+        raise ValueError(f"Empty reviewed filing lacks no-transaction evidence: {prefix}")
     locations = set()
     for row in data['rows']:
         location = (row['page'], row['row'])

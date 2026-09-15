@@ -178,6 +178,17 @@ def parse_house_doc(filing: dict, members_db: list[dict], company_lookup: list[d
     pdf_resp = requests.get(pdf_url, timeout=(10, 60))
     pdf_resp.raise_for_status()
 
+    # An explicitly reviewed empty declaration is distinct from failed extraction.
+    from reviewed_congress_filings import reviewed_house_trades, load_reviewed_filing
+    prefix = f"house-{year}-{doc_id}"
+    reviewed = reviewed_house_trades(prefix, pdf_resp.content)
+    if reviewed is not None:
+        metadata = load_reviewed_filing(prefix)
+        filed = datetime.strptime(filing["filing_date_raw"], "%m/%d/%Y").date().isoformat()
+        if metadata["published_date"] != filed:
+            raise ValueError(f"Reviewed House filing metadata changed: {prefix}")
+        return ("trades" if reviewed else "no_trade"), reviewed
+
     transactions, pdf_lines = extract_best_text_transactions(
         pdf_resp.content,
         doc_id,

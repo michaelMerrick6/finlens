@@ -66,6 +66,9 @@ FIRST_NAME_ALIAS_GROUPS = (
     {"dave", "david"},
     {"jim", "jimmy", "james"},
     {"rick", "richard"},
+    {"rob", "robert", "bob"},
+    {"ro", "rohit"},
+    {"tim", "timothy"},
     {"ted", "rafael"},
     {"tom", "tommy", "thomas"},
 )

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9116311.pdf",
+  "source_sha256": "aa3092ca162c206e04512a28baf0e06619e49252779e035cdf10e5afa6ccbe8c",
+  "published_date": "2026-08-20",
+  "member_id": "R000395",
+  "politician_name": "Harold Dallas Rogers",
+  "chamber": "House",
+  "row_count": 0,
+  "verified_no_trades": true,
+  "review_note": "Single source page explicitly states Nothing to report for July 2026; all transaction cells are empty. Example row excluded.",
+  "rows": [
+
+  ]
+}

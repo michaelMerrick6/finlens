@@ -44,6 +44,9 @@ FIRST_NAME_ALIAS_GROUPS = (
     {"dave", "david"},
     {"jim", "jimmy", "james"},
     {"rick", "richard"},
+    {"rob", "robert", "bob"},
+    {"ro", "rohit"},
+    {"tim", "timothy"},
     {"ted", "rafael"},
     {"tom", "tommy", "thomas"},
 )
@@ -189,6 +192,7 @@ def resolve_member_id_from_full_name(full_name: str, members_db: list[dict], tar
     if len(tokens) < 2:
         return resolve_member_id(full_name, "", members_db, target_chamber=target_chamber)
 
+    matching_ids = set()
     for member in members_db:
         if is_placeholder_member(member):
             continue
@@ -202,7 +206,10 @@ def resolve_member_id_from_full_name(full_name: str, members_db: list[dict], tar
         if tokens[-len(member_last_tokens) :] != member_last_tokens:
             continue
         if first_name_tokens_match(tokens[: -len(member_last_tokens)], member["first_name"]):
-            return member["id"]
+            matching_ids.add(member["id"])
+
+    if len(matching_ids) == 1:
+        return next(iter(matching_ids))
 
     return resolve_member_id(" ".join(tokens[:-1]), tokens[-1], members_db, target_chamber=target_chamber)
 

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9116292.pdf",
+  "source_sha256": "7bc49307a68e1dcfc8676fb885118da00f7fcf5b51a297eae214a65e564f209d",
+  "published_date": "2026-08-13",
+  "member_id": "M000871",
+  "politician_name": "Tracey Mann",
+  "chamber": "House",
+  "row_count": 10,
+  "review_note": "Both pages explicitly print 2024 transaction dates and 08/04/2026 notification dates. Preserve source dates despite the late filing.",
+  "rows": [
+    {"page": 1, "row": 1, "owner": "SP", "asset_name": "Apple Incorporated", "ticker": "AAPL", "asset_type": "Stock", "transaction_date": "2024-08-20", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 1, "row": 2, "owner": "SP", "asset_name": "Alphabet Incorporated", "ticker": "GOOGL", "asset_type": "Stock", "transaction_date": "2024-08-20", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 1, "row": 3, "owner": "SP", "asset_name": "Microsoft Corporation", "ticker": "MSFT", "asset_type": "Stock", "transaction_date": "2024-08-20", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 1, "row": 4, "owner": "SP", "asset_name": "Meta Platforms", "ticker": "META", "asset_type": "Stock", "transaction_date": "2024-08-20", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 1, "owner": "SP", "asset_name": "Nvidia Corporation", "ticker": "NVDA", "asset_type": "Stock", "transaction_date": "2024-08-20", "transaction_type": "buy", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 2, "owner": "SP", "asset_name": "Apple Incorporated", "ticker": "AAPL", "asset_type": "Stock", "transaction_date": "2024-09-09", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 3, "owner": "SP", "asset_name": "Alphabet Incorporated", "ticker": "GOOGL", "asset_type": "Stock", "transaction_date": "2024-09-09", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 4, "owner": "SP", "asset_name": "Microsoft Corporation", "ticker": "MSFT", "asset_type": "Stock", "transaction_date": "2024-09-09", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 5, "owner": "SP", "asset_name": "Meta Platforms", "ticker": "META", "asset_type": "Stock", "transaction_date": "2024-09-09", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"},
+    {"page": 2, "row": 6, "owner": "SP", "asset_name": "Nvidia Corporation", "ticker": "NVDA", "asset_type": "Stock", "transaction_date": "2024-09-09", "transaction_type": "sell", "amount_range": "$1,001 - $15,000"}
+  ]
+}

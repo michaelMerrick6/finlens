@@ -3,7 +3,7 @@ import re
 
 from emit_signal_events import build_politician_events
 
-PARSER_VERSION = "2026-09-15.1"
+PARSER_VERSION = "2026-09-15.2"
 
 
 def filing_key(chamber, filing):
