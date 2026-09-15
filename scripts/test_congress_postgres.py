@@ -98,6 +98,18 @@ class CongressPostgresTests(unittest.TestCase):
         self.publish([],empty=True)
         self.assertEqual(self.conn.execute('SELECT doc_id FROM politician_trades').fetchone()[0],'house-2026-1234-0')
 
+    def test_prefix_replacement_under_linguistic_collation(self):
+        collation = self.conn.execute("SELECT collname FROM pg_collation WHERE collname='en-x-icu'").fetchone()
+        if not collation:
+            self.skipTest('ICU English collation unavailable')
+        for table,column in [('politician_trades','doc_id'),('raw_filings','source_document_id'),('signal_events','source_document_id')]:
+            self.conn.execute(f'ALTER TABLE {table} ALTER COLUMN {column} TYPE text COLLATE "en-x-icu"')
+        self.publish(self.rows(2))
+        self.publish(self.rows(1))
+        self.assertEqual(self.count('politician_trades'),1)
+        self.assertEqual(self.count('raw_filings'),1)
+        self.assertEqual(self.count('signal_events'),1)
+
     def test_legacy_uppercase_signal_is_replaced_without_duplicate(self):
         self.conn.execute("INSERT INTO politician_trades(member_id,politician_name,chamber,ticker,transaction_date,published_date,transaction_type,amount_range,doc_id) VALUES('TEST','Test Member','House','TST','2026-08-25','2026-09-01','buy','$1,001 - $15,000','HOUSE-2026-999-0')")
         self.conn.execute("INSERT INTO signal_events(source,signal_type,source_document_id,ticker,actor_name,actor_type,title,summary) VALUES('congress','politician_trade','HOUSE-2026-999-0','TST','Test Member','politician','Old','Old')")
