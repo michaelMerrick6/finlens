@@ -1,0 +1,3 @@
+
+# Preserve original disclosure PDFs as binary evidence.
+artifacts/pelosi-audit/sources/*.pdf binary
