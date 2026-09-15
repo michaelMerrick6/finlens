@@ -2094,3 +2094,63 @@ small {
 .brief-stock-story p { font-size:15px; line-height:1.85; }
 .brief-stock-story p a { text-decoration:underline; font-size:12px; }
 .brief-stock-story .brief-story-note { font-size:12px; color:#71806c; }
+
+.account-menu { position:relative; }
+.account-panel { position:absolute; right:0; top:calc(100% + 10px); width:290px; max-width:calc(100vw - 32px); padding:22px; background:var(--paper); border:1px solid #dce2d5; border-radius:10px; box-shadow:0 12px 32px #203a2415; z-index:100; }
+.account-email { display:block; overflow-wrap:anywhere; font-size:14px; margin:12px 0; }
+.account-panel p { font-size:12px; line-height:1.8; color:#71806c; }
+.account-panel > a, .account-panel > button { display:flex; justify-content:space-between; width:100%; padding:12px 0; border:0; border-top:1px solid #e2e7dc; background:transparent; color:var(--ink); text-align:left; font-size:13px; }
+.account-panel > a:hover, .account-panel > button:hover { color:#57764b; }
+
+.hq-marketing-layout { display:grid; grid-template-columns:minmax(220px, .8fr) minmax(0,1.4fr); gap:24px; margin-top:24px; align-items:start; }
+.hq-candidates { display:grid; gap:8px; max-height:650px; overflow:auto; }
+.hq-candidate { text-align:left; padding:18px; background:transparent; border:1px solid #dbe1d5; border-radius:6px; cursor:pointer; color:inherit; }
+.hq-candidate strong,.hq-candidate small {display:block;}
+.hq-candidate small {margin-top:8px;}
+.hq-candidate.selected {background:#edf1e5;border-color:#8ca67b;}
+.hq-marketing-layout textarea {width:100%;resize:vertical;min-height:200px;padding:14px;font:inherit;line-height:1.65;border:1px solid #dbe1d5;border-radius:6px;background:white;color:inherit;}
+.hq-evidence {white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:260px;overflow:auto;}
+@media(max-width:700px){.hq-marketing-layout{grid-template-columns:1fr;}.hq-candidates{max-height:300px;}}
+
+/* Sunday Brief: one introduction, one signup, one edition. */
+.brief-landing { max-width:1040px; padding-bottom:72px; }
+.brief-hero { display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:24px; padding:60px 0 32px; }
+.brief-hero h1 { font-size:clamp(42px,5vw,64px); line-height:1.08; margin:20px 0; letter-spacing:-.035em; }
+.brief-hero-copy > p { font-size:18px; line-height:1.65; max-width:390px; color:#65745f; margin:0; }
+.brief-hero .brief-meta { margin-top:22px; }
+.brief-monument { display:block; width:100%; height:auto; }
+.brief-landing .brief-signup { padding:22px 26px; }
+.brief-latest { margin-top:38px; padding:30px 0 0; border-top:1px solid #dce2d5; }
+.brief-latest h2 { font-size:clamp(27px,3vw,34px); margin:15px 0 12px; line-height:1.2; }
+.brief-latest p { max-width:610px; font-size:15px; line-height:1.75; color:#65745f; margin:0 0 20px; }
+@media(max-width:640px) { .brief-hero {grid-template-columns:1fr;gap:8px;padding-top:36px;} .brief-monument {max-width:360px;margin:0 auto;} .brief-hero-copy > p {max-width:100%;} .brief-latest{margin-top:28px;} }
+
+.politician-heading { display:flex; align-items:center; justify-content:space-between; gap:32px; }
+.politician-heading-copy { flex:1; min-width:0; }
+.chamber-illustration { display:block; width:36%; max-width:430px; height:auto; flex-shrink:0; pointer-events:none; }
+@media(max-width:1000px) { .chamber-illustration {width:29%;} }
+@media(max-width:760px) { .chamber-illustration {display:none;} .politician-heading {display:block;} }
+.chamber-feature {width:36%;max-width:430px;flex-shrink:0;}
+.chamber-feature .chamber-illustration {width:100%;}
+.chamber-caption {min-height:45px;display:flex;justify-content:center;align-items:center;gap:10px;font-size:12px;color:#65745f;text-align:center;}
+.chamber-caption small {display:block;font-size:10px;margin-top:5px;color:#7c8974;}
+.chamber-caption-enter {animation:chamber-caption-in 450ms ease-out;}
+@keyframes chamber-caption-in {from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1000px){.chamber-feature{width:29%;}}
+@media(max-width:760px){.chamber-feature{display:none;}}
+@media(prefers-reduced-motion:reduce){.chamber-caption-enter{animation:none;}}
+
+.politician-activity { margin-top:20px; }
+.politician-activity .chamber-caption { justify-content:flex-start; text-align:left; }
+.brief-confirmation { position:relative; }
+.brief-confirmation h2 { margin:12px 0 20px; }
+.brief-confirmation p { line-height:1.7; }
+.brief-confirmation strong { overflow-wrap:anywhere; }
+.brief-confirmation .button { margin-top:16px; }
+.option-label {position:relative;display:block;width:fit-content;margin:6px 0 0;padding:0;font-size:11px;line-height:1.5;color:#71806c;cursor:help;}
+.option-tooltip {display:none;position:absolute;bottom:calc(100% + 7px);left:0;width:230px;padding:12px;background:#fff;border:1px solid #dbe1d5;border-radius:6px;box-shadow:0 4px 16px #213c2614;color:#314a3a;font-size:12px;line-height:1.6;z-index:20;}
+.option-tooltip > * {display:block;}
+.option-tooltip .option-term {display:flex;justify-content:space-between;gap:16px;}
+.option-term b {font-weight:500;}
+.option-tooltip small {margin-top:8px;font-size:10px;}
+.option-label:hover .option-tooltip,.option-label:focus .option-tooltip {display:block;}

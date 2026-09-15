@@ -1,0 +1,555 @@
+{
+  "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9102968.pdf",
+  "sha256": "c93a59ea5001af5058ad3e931897a1518963279061058216811fa4e31e6484ec",
+  "reporting_year": 2012,
+  "status": "schedule_visually_transcribed_pending_duplicate_and_full_filing_review",
+  "row_count": 36,
+  "rows": [
+    {
+      "page": 12,
+      "source_row": 1,
+      "asset": "820 Sir Francis Drake Blvd.",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2012-08-29"
+      ],
+      "amount_min": 5000001,
+      "amount_max": 25000000,
+      "capital_gain_over_200": "Yes",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 12,
+      "source_row": 2,
+      "asset": "Apple Inc. Common Stock - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-05-23"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 12,
+      "source_row": 3,
+      "asset": "Facebook Inc. Common Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-05-23"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 12,
+      "source_row": 4,
+      "asset": "J. Crew Group Inc. Common Stock (Sale in Prior Year - Residual Distribution)",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2012-01-19"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "capital_gain_over_200": "Yes",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014",
+      "economic_type": "residual_distribution"
+    },
+    {
+      "page": 12,
+      "source_row": 5,
+      "asset": "Nine Hundred One Battery",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2012-12-28"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "capital_gain_over_200": "Yes",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 12,
+      "source_row": 6,
+      "asset": "Oakwood Homes Corp. Bonds (Sale in Prior Year - Residual Distribution)",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2012-01-27"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "capital_gain_over_200": "Yes",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014",
+      "economic_type": "residual_distribution"
+    },
+    {
+      "page": 13,
+      "source_row": 1,
+      "asset": "United Football League - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-07"
+      ],
+      "amount_min": 500001,
+      "amount_max": 1000000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 2,
+      "asset": "United Football League - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-14"
+      ],
+      "amount_min": 500001,
+      "amount_max": 1000000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 3,
+      "asset": "United Football League - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-20"
+      ],
+      "amount_min": 500001,
+      "amount_max": 1000000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 4,
+      "asset": "United Football League - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-09"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 5,
+      "asset": "United Football League - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-17"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 6,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-05-08"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 7,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-05-16"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 8,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-06-20"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 13,
+      "source_row": 9,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-07-18"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 1,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-07-27"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 2,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-08-08"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 3,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-08-15"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 4,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-08-30"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 5,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-08-30"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 6,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-18"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 7,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-20"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 8,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-24"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 9,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-25"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 10,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-09-28"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 14,
+      "source_row": 11,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-02"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014",
+      "review_note": "Same date/range appears at page 14 final row and page 15 first row. Preserve source rows; possible page-boundary duplicate, do not aggregate until resolved.",
+      "aggregation_hold": true
+    },
+    {
+      "page": 15,
+      "source_row": 1,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-02"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014",
+      "review_note": "Same date/range appears at page 14 final row and page 15 first row. Preserve source rows; possible page-boundary duplicate, do not aggregate until resolved.",
+      "aggregation_hold": true
+    },
+    {
+      "page": 15,
+      "source_row": 2,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-02"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 3,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-10"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 4,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-10-17"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 5,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-11-01"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 6,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-11-01"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 7,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-11-23"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 8,
+      "asset": "United Football League Sacramento Team - Additional Investment",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2012-12-31"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "capital_gain_over_200": "N/A",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 15,
+      "source_row": 9,
+      "asset": "Vizu Corporation Preferred Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2012-07-13"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "capital_gain_over_200": "Yes",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "source_row": 1,
+      "asset": "Vizu LLC",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2012-07-13"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "capital_gain_over_200": "Yes",
+      "amount_scope": "reported source row",
+      "database_status": "missing_pre_2014"
+    }
+  ]
+}

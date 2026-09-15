@@ -1,0 +1,474 @@
+{
+  "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+  "sha256": "d4e3621104cea329c294cce5162af31434b285899cfd0ee1a88a0c0191e89a17",
+  "reporting_year": 2025,
+  "filed": "2026-05-15",
+  "scope": "Ticker-bearing securities in Schedule A only; excludes private assets, cash and untickered funds. Not a complete portfolio.",
+  "limitations": [
+    "Value ranges do not provide exact share counts.",
+    "None is retained as reported, not converted into a numerical zero.",
+    "Current positions require subsequent disclosures and corporate-action reconciliation.",
+    "SP identifies spouse ownership, not Nancy Pelosi personal ownership."
+  ],
+  "rows": [
+    {
+      "page": 1,
+      "ticker_as_filed": "AB",
+      "asset_type_as_filed": "OL",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000",
+      "value_min": 1000001,
+      "value_max": 5000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 1,
+      "ticker_as_filed": "GOOGL",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 1,
+      "ticker_as_filed": "GOOGL",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000",
+      "value_min": 1000001,
+      "value_max": 5000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 50,
+          "strike": 150,
+          "expiration": "2026-01-16",
+          "kind": "call"
+        },
+        {
+          "contracts": 20,
+          "strike": 150,
+          "expiration": "2027-01-15",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "AMZN",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "AMZN",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "$500,001 - $1,000,000",
+      "value_min": 500001,
+      "value_max": 1000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 50,
+          "strike": 150,
+          "expiration": "2026-01-16",
+          "kind": "call"
+        },
+        {
+          "contracts": 20,
+          "strike": 120,
+          "expiration": "2027-01-15",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "AXP",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000",
+      "value_min": 1000001,
+      "value_max": 5000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "AAPL",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "AAPL",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000",
+      "value_min": 250001,
+      "value_max": 500000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 20,
+          "strike": 100,
+          "expiration": "2027-01-15",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "T",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000",
+      "value_min": 100001,
+      "value_max": 250000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 2,
+      "ticker_as_filed": "SQ",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000",
+      "value_min": 250001,
+      "value_max": 500000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 3,
+      "ticker_as_filed": "AVGO",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 3,
+      "ticker_as_filed": "AVGO",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "None",
+      "value_min": null,
+      "value_max": null,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 200,
+          "strike": 80,
+          "expiration": "2025-06-20",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "ticker_as_filed": "CLNE",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$1,001 - $15,000",
+      "value_min": 1001,
+      "value_max": 15000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 3,
+      "ticker_as_filed": "CMCSA",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$500,001 - $1,000,000",
+      "value_min": 500001,
+      "value_max": 1000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 3,
+      "ticker_as_filed": "CRWD",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000",
+      "value_min": 1000001,
+      "value_max": 5000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 3,
+      "ticker_as_filed": "DBX",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000",
+      "value_min": 250001,
+      "value_max": 500000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 4,
+      "ticker_as_filed": "IBKR",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$500,001 - $1,000,000",
+      "value_min": 500001,
+      "value_max": 1000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 4,
+      "ticker_as_filed": "MSFT",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 4,
+      "ticker_as_filed": "MORN",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000",
+      "value_min": 100001,
+      "value_max": 250000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 4,
+      "ticker_as_filed": "NFLX",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000",
+      "value_min": 1000001,
+      "value_max": 5000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 5,
+      "ticker_as_filed": "NVDA",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 5,
+      "ticker_as_filed": "NVDA",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "$500,001 - $1,000,000",
+      "value_min": 500001,
+      "value_max": 1000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 50,
+          "strike": 80,
+          "expiration": "2026-01-16",
+          "kind": "call"
+        },
+        {
+          "contracts": 20,
+          "strike": 100,
+          "expiration": "2027-01-15",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 5,
+      "ticker_as_filed": "PANW",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000",
+      "value_min": 1000001,
+      "value_max": 5000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 5,
+      "ticker_as_filed": "PYPL",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "None",
+      "value_min": null,
+      "value_max": null,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 5,
+      "ticker_as_filed": "QCOM",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$15,001 - $50,000",
+      "value_min": 15001,
+      "value_max": 50000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 6,
+      "ticker_as_filed": "RBLX",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000",
+      "value_min": 250001,
+      "value_max": 500000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 6,
+      "ticker_as_filed": "CRM",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 6,
+      "ticker_as_filed": "TEM",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000",
+      "value_min": 100001,
+      "value_max": 250000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 50,
+          "strike": 20,
+          "expiration": "2026-01-16",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 6,
+      "ticker_as_filed": "V",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000",
+      "value_min": 5000001,
+      "value_max": 25000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 6,
+      "ticker_as_filed": "VST",
+      "asset_type_as_filed": "OP",
+      "owner": "SP",
+      "reported_value": "$500,001 - $1,000,000",
+      "value_min": 500001,
+      "value_max": 1000000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false,
+      "contracts_as_described": [
+        {
+          "contracts": 50,
+          "strike": 50,
+          "expiration": "2026-01-16",
+          "kind": "call"
+        }
+      ]
+    },
+    {
+      "page": 7,
+      "ticker_as_filed": "DIS",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "None",
+      "value_min": null,
+      "value_max": null,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    },
+    {
+      "page": 7,
+      "ticker_as_filed": "WBD",
+      "asset_type_as_filed": "ST",
+      "owner": "SP",
+      "reported_value": "$50,001 - $100,000",
+      "value_min": 50001,
+      "value_max": 100000,
+      "shares": null,
+      "status": "visually_checked_against_schedule_A",
+      "current_holding_verified": false
+    }
+  ],
+  "review": "All 32 ticker-bearing Schedule A entries visually checked across PDF pages 1\u20137: ticker, type, owner and asset value range. Option descriptions checked including page continuations."
+}

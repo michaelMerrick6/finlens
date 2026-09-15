@@ -1,0 +1,69 @@
+{
+  "status": "all seven reviewed Schedule B rows match all seven stored 2023-date rows; broader source completeness not certified",
+  "source_sha256": "d2f1264cd6d9bf0eeacf3d12fe61511cfb98393aa00fe80a49689e75135c6ccf",
+  "rows": [
+    {
+      "db_id": "a7ebae7b-e2e9-4530-bcb8-4bd310aaf7f1",
+      "doc_id": "house-2023-20022664-0",
+      "ticker": "AAPL",
+      "transaction_date": "2023-03-17",
+      "annual_page": 6,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Option exercise"
+    },
+    {
+      "db_id": "efb08c82-9430-4bdd-be01-f5c5c7a39efd",
+      "doc_id": "house-2023-20023080-0",
+      "ticker": "AAPL",
+      "transaction_date": "2023-05-08",
+      "annual_page": 6,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Charitable contribution"
+    },
+    {
+      "db_id": "f7053ed9-fd24-473e-8c06-3e77e6121cac",
+      "doc_id": "house-2023-20023192-0",
+      "ticker": "AAPL",
+      "transaction_date": "2023-06-15",
+      "annual_page": 6,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Option exercise"
+    },
+    {
+      "db_id": "780cade9-51e7-402b-ab60-3fd187e60151",
+      "doc_id": "house-2023-20023192-1",
+      "ticker": "MSFT",
+      "transaction_date": "2023-06-15",
+      "annual_page": 6,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Option exercise"
+    },
+    {
+      "db_id": "87e57fe1-d7e3-4793-9d56-a9ca5f647f84",
+      "doc_id": "house-2023-20024186-0",
+      "ticker": "NVDA",
+      "transaction_date": "2023-11-22",
+      "annual_page": 7,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Call options"
+    },
+    {
+      "db_id": "9c8547fd-ae69-4457-9a6c-439f2170c192",
+      "doc_id": "house-2023-20022664-1",
+      "ticker": "N/A",
+      "transaction_date": "2023-03-09",
+      "annual_page": 7,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Private investment"
+    },
+    {
+      "db_id": "9bb79dbb-90ca-4dde-a97d-5794b482e154",
+      "doc_id": "house-2023-20022320-0",
+      "ticker": "RBLX",
+      "transaction_date": "2023-01-20",
+      "annual_page": 7,
+      "visual_review": "checked PDF pages 6\u20137",
+      "economic_type": "Expired worthless"
+    }
+  ]
+}

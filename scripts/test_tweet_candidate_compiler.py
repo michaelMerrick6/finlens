@@ -1,4 +1,4 @@
-from tweet_candidate_compiler import build_broadcast_candidates, build_tweet_candidates
+from tweet_candidate_compiler import build_broadcast_candidates, build_tweet_candidates, apply_twitter_editorial
 
 
 def test_congress_cluster_candidate() -> None:
@@ -106,7 +106,7 @@ def test_broadcast_queue_keeps_canonical_compiled_insider_cluster() -> None:
 
     rows = build_broadcast_candidates([event])
 
-    assert {row["channel"] for row in rows} == {"twitter", "discord_premium"}
+    assert {row["channel"] for row in rows} == {"discord_premium"}
     assert {row["candidate_key"] for row in rows} == {
         "broadcast::insider_cluster::avbc::buy::2026-04-21"
     }
@@ -459,7 +459,7 @@ def test_broadcast_queue_keeps_one_canonical_cross_source_window() -> None:
 
     rows = build_broadcast_candidates([event])
 
-    assert {row["channel"] for row in rows} == {"twitter", "discord_premium"}
+    assert {row["channel"] for row in rows} == {"discord_premium"}
     assert {row["candidate_key"] for row in rows} == {
         "broadcast::cross_source_accumulation::tsm::buy::2026-06-23"
     }
@@ -602,7 +602,7 @@ def test_broadcast_candidates_expand_to_x_and_discord() -> None:
     }
     rows = build_broadcast_candidates([event], minimum_importance=0.88)
     channels = {row["channel"] for row in rows}
-    assert channels == {"twitter", "discord_premium"}
+    assert channels == {"discord_premium"}
 
 
 def test_meaningful_insider_change_candidate_added_at_25_percent() -> None:
@@ -828,7 +828,20 @@ def test_repeated_moves_by_one_insider_do_not_create_candidate_cluster() -> None
     assert "insider_cluster" not in {row["rule_key"] for row in rows}
 
 
+def test_twitter_editorial_threshold_and_cluster_exception() -> None:
+    def candidate(signal="politician_trade", **fields):
+        return {"payload": {"signal_type": signal, "ticker": "AAPL", "direction": "buy", "actor_name": "Nancy Pelosi", "amount_range": "$25,001 - $50,000", **fields}}
+    assert apply_twitter_editorial(candidate()) is not None
+    assert apply_twitter_editorial(candidate(amount_range="$15,001 - $50,000")) is None
+    assert apply_twitter_editorial(candidate("insider_trade")) is None
+    cluster = candidate("congress_cluster", amount_range="$1,001 - $15,000", cluster_actor_count=2, cluster_window_days=10)
+    assert apply_twitter_editorial(cluster) is not None
+    cluster["payload"]["direction"] = "sell"
+    assert apply_twitter_editorial(cluster) is None
+
+
 def main() -> None:
+    test_twitter_editorial_threshold_and_cluster_exception()
     test_congress_cluster_candidate()
     test_compiled_insider_cluster_candidate()
     test_broadcast_queue_ignores_legacy_compiled_insider_clusters()

@@ -1,13 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { AccountMenu } from "./account-menu";
 import { useAccount } from "./account-provider";
 import { Icon } from "./icon";
 export function SiteHeader() {
   const path = usePathname();
-  const { session, openSignIn, signOut } = useAccount();
-  const [error, setError] = useState("");
+  const { session, openSignIn } = useAccount();
   return (
     <>
       <header className="site-header">
@@ -53,18 +52,7 @@ export function SiteHeader() {
               A clearer view of public trades.
             </span>
             {session ? (
-              <button
-                className="button secondary small"
-                onClick={async () => {
-                  try {
-                    await signOut();
-                  } catch {
-                    setError("Could not sign out. Please try again.");
-                  }
-                }}
-              >
-                Sign out
-              </button>
+              <AccountMenu key={session.user.id} />
             ) : (
               <button className="button secondary small" onClick={openSignIn}>
                 Sign in <Icon name="arrow" size={15} />
@@ -73,11 +61,6 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
-      {error && (
-        <p role="alert" className="error container">
-          {error}
-        </p>
-      )}
     </>
   );
 }

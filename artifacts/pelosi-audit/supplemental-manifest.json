@@ -1,0 +1,74 @@
+[
+  {
+    "doc_id": "10008189",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10008189.pdf",
+    "sha256": "19425ac20aa0d8a7f24e29ea525fe54e6d65bcedf8bb54160f6e7c27a0444ee2",
+    "pages": 11,
+    "text_chars": 15564,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "10008188",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/10008188.pdf",
+    "sha256": "aceffb4534648cd26b073b199149c280e09d85b5737b35f2ce08b58c2068c268",
+    "pages": 11,
+    "text_chars": 15369,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "10008154",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10008154.pdf",
+    "sha256": "7fe2fe48a376cb3b91f6d9fd03d43c3e2e31e16d5470cebd2e79f14836fee641",
+    "pages": 11,
+    "text_chars": 15564,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "10005768",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10005768.pdf",
+    "sha256": "3014ed14acc8699b7baafb6b0ee8e84eaa05fb09f7deae59d8bef3ec2b1a0787",
+    "pages": 11,
+    "text_chars": 15115,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "9106227",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+    "sha256": "8cc2cd99b1bc01570ede12fa84b45e25accadd5c1d9445819d3803f02d7b4b52",
+    "pages": 1,
+    "text_chars": 0,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "20002236",
+    "url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+    "sha256": "156bf1a3d902c84b72c94b4c617bab725b3c240d68e8db9502d551354843de10",
+    "pages": 2,
+    "text_chars": 1229,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "20001991",
+    "url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20001991.pdf",
+    "sha256": "bd010410807cc38814218e99f8269ed5410294466698d875a0bbd9821e608ea9",
+    "pages": 2,
+    "text_chars": 1818,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "10000512",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/10000512.pdf",
+    "sha256": "4c9aa8eaff25c19e69f7b8f7a36d2c6d3167a1c8d35d307b108dfa37e87169e8",
+    "pages": 11,
+    "text_chars": 15376,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  },
+  {
+    "doc_id": "8214491",
+    "url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2013/8214491.pdf",
+    "sha256": "20ff470a32949a4081a28ed8a866f315a31eaa3147f6bbdbd4e66d617184c59f",
+    "pages": 2,
+    "text_chars": 1,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host"
+  }
+]

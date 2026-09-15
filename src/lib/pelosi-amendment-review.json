@@ -1,0 +1,130 @@
+{
+  "house-2014-20002236-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+    "superseded_by": "house-2015-20003320-0"
+  },
+  "house-2015-20003320-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+    "economic_type": "call_option_purchase"
+  },
+  "house-2014-20002236-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+    "superseded_by": "house-2015-20003320-2"
+  },
+  "house-2015-20003320-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+    "economic_type": "call_option_purchase"
+  },
+  "house-2014-20002236-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+    "superseded_by": "house-2015-20003320-1"
+  },
+  "house-2015-20003320-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+    "economic_type": "call_option_purchase"
+  },
+  "house-2014-20002236-3": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+    "superseded_by": "house-2015-20003320-3"
+  },
+  "house-2015-20003320-3": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+    "economic_type": "call_option_purchase"
+  },
+  "house-2014-20002236-4": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+    "superseded_by": "house-2015-20003320-5"
+  },
+  "house-2015-20003320-5": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+    "economic_type": "call_option_purchase"
+  },
+  "house-2015-20002351-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20002351.pdf",
+    "superseded_by": "house-2015-20003320-4"
+  },
+  "house-2015-20003320-4": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+    "economic_type": "call_option_purchase"
+  },
+  "house-2022-20020515-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+    "superseded_by": "house-2022-20020561-0"
+  },
+  "house-2022-20020561-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+    "economic_type": "public_partnership_units"
+  },
+  "house-2022-20020515-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+    "superseded_by": "house-2022-20020561-1"
+  },
+  "house-2022-20020561-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+    "economic_type": "option_exercise_into_shares"
+  },
+  "house-2022-20020515-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+    "superseded_by": "house-2022-20020561-2"
+  },
+  "house-2022-20020561-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+    "economic_type": "option_exercise_into_shares"
+  },
+  "house-2022-20020515-3": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+    "superseded_by": "house-2022-20020561-3"
+  },
+  "house-2022-20020561-3": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+    "economic_type": "option_exercise_into_shares"
+  },
+  "house-2022-20020515-4": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+    "superseded_by": "house-2022-20020561-4"
+  },
+  "house-2022-20020561-4": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+    "economic_type": "option_exercise_into_shares"
+  },
+  "house-2021-20018011-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018011.pdf",
+    "superseded_by": "house-2021-20018539-0"
+  },
+  "house-2021-20018539-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+    "economic_type": "public_partnership_units"
+  },
+  "house-2021-20018355-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018355.pdf",
+    "superseded_by": "house-2021-20018539-1"
+  },
+  "house-2021-20018539-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+    "economic_type": "public_partnership_units"
+  },
+  "house-2021-20018355-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018355.pdf",
+    "superseded_by": "house-2021-20018539-2"
+  },
+  "house-2021-20018539-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+    "economic_type": "public_partnership_units"
+  },
+  "house-2020-20015042-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20015042.pdf",
+    "superseded_by": "house-2020-20016961-0"
+  },
+  "house-2020-20016961-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016961.pdf",
+    "economic_type": "call_option_sale"
+  },
+  "house-2020-20015042-2": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20015042.pdf",
+    "superseded_by": "house-2020-20016961-1"
+  },
+  "house-2020-20016961-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016961.pdf",
+    "economic_type": "call_option_sale"
+  }
+}

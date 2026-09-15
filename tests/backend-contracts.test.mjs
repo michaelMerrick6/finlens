@@ -11,7 +11,7 @@ function load(path, dependencies = {}) {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
   vm.runInNewContext(code, { exports, Date, URL, process: { env: { NODE_ENV: 'production' } },
-    require(name) { if (!(name in dependencies)) throw new Error(`Unexpected dependency ${name}`); return dependencies[name]; },
+    require(name) { if (path === 'src/lib/reviewed-politician-trades.ts' && /^\.\/pelosi-(?:202[2-5]|amendment)-review\.json$/.test(name)) return { default: JSON.parse(fs.readFileSync('src/lib/' + name.slice(2), 'utf8')) }; if (!(name in dependencies)) throw new Error(`Unexpected dependency ${name}`); return dependencies[name]; },
   });
   return exports;
 }

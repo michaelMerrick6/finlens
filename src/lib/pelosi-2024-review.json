@@ -1,0 +1,52 @@
+{
+  "house-2024-20024625-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20024625.pdf",
+    "amount_range": "$1,000,001 - $5,000,000",
+    "asset_type": "AB",
+    "asset_name": "Forge Investments private investment",
+    "description": "Investment in private fund owning Databricks stock.",
+    "activity_label": "Private investment",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+    "annual_page": 7
+  },
+  "house-2024-20025368-3": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20025368.pdf",
+    "amount_range": "$500,001 - $1,000,000",
+    "asset_type": "ST",
+    "asset_name": "V common stock",
+    "description": "Sold 2,000 shares.",
+    "activity_label": "Sale",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+    "annual_page": 7
+  },
+  "house-2024-20025819-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20025819.pdf",
+    "amount_range": "$250,001 - $500,000",
+    "asset_type": "AB",
+    "asset_name": "REOF XXVI private investment",
+    "description": "Investment in private real estate LLC.",
+    "activity_label": "Private investment",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+    "annual_page": 7
+  },
+  "house-2025-20026590-6": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20026590.pdf",
+    "amount_range": "$1,000,001 - $5,000,000",
+    "asset_type": "ST",
+    "asset_name": "PANW common stock",
+    "description": "Exercised 140 call options (14,000 shares) at a strike price of $100. Annual reports expiration 12/20/24; original purchase descriptions report 1/17/25. Expiration discrepancy unresolved.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+    "annual_page": 7
+  },
+  "house-2025-20026590-4": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20026590.pdf",
+    "amount_range": "$500,001 - $1,000,000",
+    "asset_type": "ST",
+    "asset_name": "NVDA common stock",
+    "description": "Exercised 500 call options (50,000 shares) at a strike price of $12 with expiration 12/20/24.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+    "annual_page": 7
+  }
+}

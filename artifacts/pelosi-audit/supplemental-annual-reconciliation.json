@@ -1,0 +1,535 @@
+[
+  {
+    "doc_id": "10008189",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10008189.pdf",
+    "sha256": "19425ac20aa0d8a7f24e29ea525fe54e6d65bcedf8bb54160f6e7c27a0444ee2",
+    "pages": 11,
+    "text_chars": 15564,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host",
+    "filing_header": "f inanciaL DiScLoSure rePortClerk of the House of Representatives \u2022 Legislative Resource Center \u2022 135 Cannon Building \u2022 Washington, DC 20515fiLer informationname:Hon. Nancy Pelosi Status:Member State/District:CA12 fiLing informationfiling type:Amendment Report filing year:2014 filing Date:07/7/2015 ScHeDuLe a: aSSetS anD \"unearneD\" incomeassetowner value of assetincome type(s)income tx. > $1,000?11 Zinfandel Lane - Home & VineyardJT $5,000,001 -$25,000,000Grape Sales $5,001 - $15,000 g fedcLOCATION: St. Helena/Napa, CA, US1600 Atlas Peak Road -",
+    "schedule_b_text": " tranSactionSassetowner Datetx. typeamountcap. gains >$200?Alcoa Inc. (AA)SP 10/23/2014S $15,001 - $50,000g fedcBlucora, Inc. (BCOR)SP 10/23/2014S $1,001 - $15,000g fedcbBroadcom Corporation - Class A (BRCM)SP 10/23/2014S $1,001 - $15,000g fedcDow Chemical Company (DOW)SP 10/23/2014S $15,001 - $50,000g fedcbEmulex Corporation (ELX)SP 10/23/2014S $1,001 - $15,000g fedcEntropic Communications, Inc. (ENTR)SP 10/23/2014S $1,001 - $15,000g fedcHertz Global Holdings, Inc (HTZ)11/5/2014 P $15,001 - $50,000asset\nowner value of assetincome type(s)income tx. > $1,000?\nD\nESCRIPTION: Purchase of 50 call options with a strike price of $22 and an expiration date of 1/15/16Hertz Global Holdings, Inc (HTZ)11/6/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 150 call options with a strike price of $22 and an expiration date of 1/15/16Hertz Global Holdings, Inc (HTZ)11/25/2014 P $100,001 -$250,000DESCRIPTION: Purchase of 200 call options with a strike price of $22 and an expiration date of 1/15/16Hertz Global Holdings, Inc (HTZ)11/28/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 100 call options with a strike price of $22 and an expiration date of 1/15/16McGrath RentCorp (MGRC)SP 09/22/2014S (partial)$50,001 -$100,000g fedcbDESCRIPTION: Contribution of shares held personally to The Paul & Nancy Pelosi Charitable Foundation via transfer between brokerage accounts.Robert Half International Inc. (RHI)SP 09/22/2014S $100,001 -$250,000g fedcbDESCRIPTION: Contribution of shares held personally to The Paul & Nancy Pelosi Charitable Foundation via transfer between brokerage accounts.Shutterfly, Inc. (SFLY)SP 10/23/2014S $15,001 - $50,000g fedcbSunEdison, Inc. (SUNE)SP 10/24/2014P $100,001 -$250,000Visa Inc. (V)12/29/2014 S (partial)$250,001 -$500,000g fedcbDESCRIPTION: Sale of 1000 SharesVisa Inc. (V)12/30/2014 S (partial)$100,001 -$250,000g fedcbDESCRIPTION: Sale of 500 SharesWalt Disney Company (DIS)11/28/2014 P $1,001 - $15,000DESCRIPTION: Purchase of 8 call options with a strike price of $90 and an expiration date of 1/15/16Walt Disney Company (DIS)12/10/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 92 call options with a strike price of $90 and an expiration date of 1/15/16",
+    "parsed_date_direction_ranges": [
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "11/5/2014",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "11/6/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "11/25/2014",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "11/28/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "09/22/2014",
+        "S",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "09/22/2014",
+        "S",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/24/2014",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "12/29/2014",
+        "S",
+        "250,001",
+        "500,000"
+      ],
+      [
+        "12/30/2014",
+        "S",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "11/28/2014",
+        "P",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "12/10/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ]
+    ],
+    "status": "pending_visual_and_amendment_reconciliation"
+  },
+  {
+    "doc_id": "10008188",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/10008188.pdf",
+    "sha256": "aceffb4534648cd26b073b199149c280e09d85b5737b35f2ce08b58c2068c268",
+    "pages": 11,
+    "text_chars": 15369,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host",
+    "filing_header": "f inancial DiScloSure rePortClerk of the House of Representatives \u2022 Legislative Resource Center \u2022 135 Cannon Building \u2022 Washington, DC 20515filer informationname:Hon. Nancy Pelosi Status:Member State/District:CA12 filing informationfiling type:Amendment Report filing year:2013 filing Date:07/7/2015 ScHeDule a: aSSetS anD \"unearneD\" incomeassetowner value of assetincome type(s)income tx. > $1,000?11 Zinfandel Lane - Home & VineyardJT $5,000,001 -$25,000,000Grape Sales $100,001 - $1,000,000g fedcLOCATION: St. Helena/Napa, CA, US1600 Atlas Peak Ro",
+    "schedule_b_text": " tranSactionSassetowner Datetx. typeamountcap. gains >$200?The Active Network, Inc. (ACTV)SP 11/26/2013S $50,001 -$100,000g fedcbUnited Football League Sacramento Mountain Lions TeamSP 07/2/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 07/18/2013P $100,001 -$250,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 07/24/2013P $50,001 -$100,000asset\nowner value of assetincome type(s)income tx. > $1,000?\nL\nOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 08/2/2013P $250,001 -$500,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 09/30/2013P $50,001 -$100,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 10/21/2013P $100,001 -$250,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/20/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/24/2013P $50,001 -$100,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/30/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/30/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseVizu Corporation Preferred StockSP 10/7/2013S $1,001 - $15,000g fedcbDESCRIPTION: Investment in Digital Brand Advertising Management Company - San Francisco, CA",
+    "parsed_date_direction_ranges": [
+      [
+        "11/26/2013",
+        "S",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "07/2/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "07/18/2013",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "07/24/2013",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "08/2/2013",
+        "P",
+        "250,001",
+        "500,000"
+      ],
+      [
+        "09/30/2013",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "10/21/2013",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "12/20/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "12/24/2013",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "12/30/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "12/30/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/7/2013",
+        "S",
+        "1,001",
+        "15,000"
+      ]
+    ],
+    "status": "pending_visual_and_amendment_reconciliation"
+  },
+  {
+    "doc_id": "10008154",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10008154.pdf",
+    "sha256": "7fe2fe48a376cb3b91f6d9fd03d43c3e2e31e16d5470cebd2e79f14836fee641",
+    "pages": 11,
+    "text_chars": 15564,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host",
+    "filing_header": "f inanciaL DiScLoSure rePortClerk of the House of Representatives \u2022 Legislative Resource Center \u2022 135 Cannon Building \u2022 Washington, DC 20515fiLer informationname:Hon. Nancy Pelosi Status:Member State/District:CA12 fiLing informationfiling type:Amendment Report filing year:2014 filing Date:07/7/2015 ScHeDuLe a: aSSetS anD \"unearneD\" incomeassetowner value of assetincome type(s)income tx. > $1,000?11 Zinfandel Lane - Home & VineyardJT $5,000,001 -$25,000,000Grape Sales $5,001 - $15,000 g fedcLOCATION: St. Helena/Napa, CA, US1600 Atlas Peak Road -",
+    "schedule_b_text": " tranSactionSassetowner Datetx. typeamountcap. gains >$200?Alcoa Inc. (AA)SP 10/23/2014S $15,001 - $50,000g fedcBlucora, Inc. (BCOR)SP 10/23/2014S $1,001 - $15,000g fedcbBroadcom Corporation - Class A (BRCM)SP 10/23/2014S $1,001 - $15,000g fedcDow Chemical Company (DOW)SP 10/23/2014S $15,001 - $50,000g fedcbEmulex Corporation (ELX)SP 10/23/2014S $1,001 - $15,000g fedcEntropic Communications, Inc. (ENTR)SP 10/23/2014S $1,001 - $15,000g fedcHertz Global Holdings, Inc (HTZ)11/5/2014 P $15,001 - $50,000asset\nowner value of assetincome type(s)income tx. > $1,000?\nD\nESCRIPTION: Purchase of 50 call options with a strike price of $22 and an expiration date of 1/15/16Hertz Global Holdings, Inc (HTZ)11/6/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 150 call options with a strike price of $22 and an expiration date of 1/15/16Hertz Global Holdings, Inc (HTZ)11/25/2014 P $100,001 -$250,000DESCRIPTION: Purchase of 200 call options with a strike price of $22 and an expiration date of 1/15/16Hertz Global Holdings, Inc (HTZ)11/28/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 100 call options with a strike price of $22 and an expiration date of 1/15/16McGrath RentCorp (MGRC)SP 09/22/2014S (partial)$50,001 -$100,000g fedcbDESCRIPTION: Contribution of shares held personally to The Paul & Nancy Pelosi Charitable Foundation via transfer between brokerage accounts.Robert Half International Inc. (RHI)SP 09/22/2014S $100,001 -$250,000g fedcbDESCRIPTION: Contribution of shares held personally to The Paul & Nancy Pelosi Charitable Foundation via transfer between brokerage accounts.Shutterfly, Inc. (SFLY)SP 10/23/2014S $15,001 - $50,000g fedcbSunEdison, Inc. (SUNE)SP 10/24/2014P $100,001 -$250,000Visa Inc. (V)12/29/2014 S (partial)$250,001 -$500,000g fedcbDESCRIPTION: Sale of 1000 SharesVisa Inc. (V)12/30/2014 S (partial)$100,001 -$250,000g fedcbDESCRIPTION: Sale of 500 SharesWalt Disney Company (DIS)11/28/2014 P $1,001 - $15,000DESCRIPTION: Purchase of 8 call options with a strike price of $90 and an expiration date of 1/15/16Walt Disney Company (DIS)12/10/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 92 call options with a strike price of $90 and an expiration date of 1/15/16",
+    "parsed_date_direction_ranges": [
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "11/5/2014",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "11/6/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "11/25/2014",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "11/28/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "09/22/2014",
+        "S",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "09/22/2014",
+        "S",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/24/2014",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "12/29/2014",
+        "S",
+        "250,001",
+        "500,000"
+      ],
+      [
+        "12/30/2014",
+        "S",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "11/28/2014",
+        "P",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "12/10/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ]
+    ],
+    "status": "pending_visual_and_amendment_reconciliation"
+  },
+  {
+    "doc_id": "10005768",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10005768.pdf",
+    "sha256": "3014ed14acc8699b7baafb6b0ee8e84eaa05fb09f7deae59d8bef3ec2b1a0787",
+    "pages": 11,
+    "text_chars": 15115,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host",
+    "filing_header": "f inanciaL DiScLoSure rePortClerk of the House of Representatives \u2022 Legislative Resource Center \u2022 135 Cannon Building \u2022 Washington, DC 20515fiLer informationname:Hon. Nancy Pelosi Status:Member State/District:CA12 fiLing informationfiling type:Annual Report filing year:2014 filing Date:05/15/2015 ScHeDuLe a: aSSetS anD \"unearneD\" incomeassetowner value of assetincome type(s)income tx. > $1,000?11 Zinfandel Lane - Home & VineyardJT $5,000,001 -$25,000,000Grape Sales $5,001 - $15,000 g fedcLOCATION: St. Helena/Napa, CA, US1600 Atlas Peak Road - R",
+    "schedule_b_text": " tranSactionSassetowner Datetx. typeamountcap. gains >$200?Alcoa Inc. (AA)SP 10/23/2014S $15,001 - $50,000g fedcBlucora, Inc. (BCOR)SP 10/23/2014S $1,001 - $15,000g fedcbBroadcom Corporation - Class A (BRCM)SP 10/23/2014S $1,001 - $15,000g fedcDow Chemical Company (DOW)SP 10/23/2014S $15,001 - $50,000g fedcbEmulex Corporation (ELX)SP 10/23/2014S $1,001 - $15,000g fedcEntropic Communications, Inc. (ENTR)SP 10/23/2014S $1,001 - $15,000g fedcHertz Global Holdings, Inc (HTZ)11/5/2014 P $15,001 - $50,000asset\nowner value of assetincome type(s)income tx. > $1,000?\nD\nESCRIPTION: Purchase of 50 OptionsHertz Global Holdings, Inc (HTZ)11/6/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 150 OptionsHertz Global Holdings, Inc (HTZ)11/25/2014 P $100,001 -$250,000DESCRIPTION: Purchase of 200 OptionsHertz Global Holdings, Inc (HTZ)11/28/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 100 OptionsMcGrath RentCorp (MGRC)SP 09/22/2014S (partial)$50,001 -$100,000g fedcbDESCRIPTION: Contribution of shares held personally to The Paul & Nancy Pelosi Charitable Foundation via transfer between brokerage accounts.Robert Half International Inc. (RHI)SP 09/22/2014S $100,001 -$250,000g fedcbDESCRIPTION: Contribution of shares held personally to The Paul & Nancy Pelosi Charitable Foundation via transfer between brokerage accounts.Shutterfly, Inc. (SFLY)SP 10/23/2014S $15,001 - $50,000g fedcbSunEdison, Inc. (SUNE)SP 10/24/2014P $100,001 -$250,000Visa Inc. (V)12/29/2014 S (partial)$250,001 -$500,000g fedcbDESCRIPTION: Sale of 1000 SharesVisa Inc. (V)12/30/2014 S (partial)$100,001 -$250,000g fedcbDESCRIPTION: Sale of 500 SharesWalt Disney Company (DIS)11/28/2014 P $1,001 - $15,000DESCRIPTION: Purchase of 8 OptionsWalt Disney Company (DIS)12/10/2014 P $50,001 -$100,000DESCRIPTION: Purchase of 92 Options",
+    "parsed_date_direction_ranges": [
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "11/5/2014",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "11/6/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "11/25/2014",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "11/28/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "09/22/2014",
+        "S",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "09/22/2014",
+        "S",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "10/23/2014",
+        "S",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/24/2014",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "12/29/2014",
+        "S",
+        "250,001",
+        "500,000"
+      ],
+      [
+        "12/30/2014",
+        "S",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "11/28/2014",
+        "P",
+        "1,001",
+        "15,000"
+      ],
+      [
+        "12/10/2014",
+        "P",
+        "50,001",
+        "100,000"
+      ]
+    ],
+    "status": "pending_visual_and_amendment_reconciliation"
+  },
+  {
+    "doc_id": "10000512",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/10000512.pdf",
+    "sha256": "4c9aa8eaff25c19e69f7b8f7a36d2c6d3167a1c8d35d307b108dfa37e87169e8",
+    "pages": 11,
+    "text_chars": 15376,
+    "discovery": "secondary inventory; PDF retrieved directly from official House host",
+    "filing_header": "f inancial DiScloSure rePortClerk of the House of Representatives \u2022 Legislative Resource Center \u2022 B-106 Cannon Building \u2022 Washington, DC 20515filer informationname:Ms. Nancy Pelosi Status:Member State/District:CA12 filing informationfiling type:Annual Report filing year:2013 filing Date:05/15/2014 ScHeDule a: aSSetS anD \"unearneD\" incomeassetowner value of assetincome type(s)income tx. > $1,000?11 Zinfandel Lane - Home & VineyardJT $5,000,001 -$25,000,000Grape Sales $100,001 - $1,000,000g fedcLOCATION: St. Helena/Napa, CA, US1600 Atlas Peak Roa",
+    "schedule_b_text": " tranSactionSassetowner Datetx. typeamountcap. gains >$200?The Active Network, Inc. (ACTV)SP 11/26/2013S $50,001 -$100,000g fedcbUnited Football League Sacramento Mountain Lions TeamSP 07/2/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 07/18/2013P $100,001 -$250,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 07/24/2013P $50,001 -$100,000asset\nowner value of assetincome type(s)income tx. > $1,000?\nL\nOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 08/2/2013P $250,001 -$500,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 09/30/2013P $50,001 -$100,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 10/21/2013P $100,001 -$250,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/20/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/24/2013P $50,001 -$100,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/30/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseUnited Football League Sacramento Mountain Lions TeamSP 12/30/2013P $15,001 - $50,000LOCATION: Sacramento/Sacramento, CA, USDESCRIPTION: Ltd. Partnership Interest in Football FranchiseVizu Corporation Preferred StockSP 10/7/2013S $1,001 - $15,000g fedcbDESCRIPTION: Investment in Digital Brand Advertising Management Company - San Francisco, CA",
+    "parsed_date_direction_ranges": [
+      [
+        "11/26/2013",
+        "S",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "07/2/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "07/18/2013",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "07/24/2013",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "08/2/2013",
+        "P",
+        "250,001",
+        "500,000"
+      ],
+      [
+        "09/30/2013",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "10/21/2013",
+        "P",
+        "100,001",
+        "250,000"
+      ],
+      [
+        "12/20/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "12/24/2013",
+        "P",
+        "50,001",
+        "100,000"
+      ],
+      [
+        "12/30/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "12/30/2013",
+        "P",
+        "15,001",
+        "50,000"
+      ],
+      [
+        "10/7/2013",
+        "S",
+        "1,001",
+        "15,000"
+      ]
+    ],
+    "status": "pending_visual_and_amendment_reconciliation"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "original": "10000512",
+    "amendment": "10008188",
+    "date_direction_ranges_equal": true,
+    "schedule_text_equal": true
+  },
+  {
+    "original": "10005768",
+    "amendment": "10008154",
+    "date_direction_ranges_equal": true,
+    "schedule_text_equal": false
+  },
+  {
+    "original": "10008154",
+    "amendment": "10008189",
+    "date_direction_ranges_equal": true,
+    "schedule_text_equal": true
+  }
+]

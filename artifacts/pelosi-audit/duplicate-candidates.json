@@ -1,0 +1,1264 @@
+[
+  {
+    "identity": [
+      "AAPL",
+      "2018-09-20",
+      "buy",
+      "$500,001"
+    ],
+    "status": "distinct",
+    "rows": [
+      {
+        "id": "0013c1b0-2177-418f-86a5-48c54718a0b1",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2018-09-20",
+        "published_date": "2018-10-25",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2018/20010452.pdf",
+        "doc_id": "house-2018-20010452-1",
+        "created_at": "2026-04-10T06:13:39.799897+00:00",
+        "asset_name": "apple Inc. [sT] c e f g $1,000,000 [OP] | Call option"
+      },
+      {
+        "id": "ca0557ec-5132-47ff-8d1b-f1423e3256f3",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2018-09-20",
+        "published_date": "2018-10-25",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2018/20010452.pdf",
+        "doc_id": "house-2018-20010452-2",
+        "created_at": "2026-04-10T06:13:39.799897+00:00",
+        "asset_name": "apple Inc. [sT] d e f g $1,000,000 [OP] | Call option"
+      }
+    ],
+    "evidence": "Two exercises: 50 calls at $130 and 50 at $140.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded"
+  },
+  {
+    "identity": [
+      "HTZ",
+      "2014-11-25",
+      "buy",
+      "$100,001 - $250,000"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "00e38a08-0c24-45bc-b963-b923b91e87bf",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-25",
+        "published_date": "2015-07-07",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$100,001 - $250,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+        "doc_id": "house-2015-20003320-1",
+        "created_at": "2026-04-10T06:13:48.366811+00:00",
+        "asset_name": "2000005579 Hertz global Holdings, Inc [OP] | Call option"
+      },
+      {
+        "id": "ef77fcd4-d9c6-4be0-b3c9-ac320a1cb76e",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-25",
+        "published_date": "2014-12-17",
+        "transaction_type": "buy",
+        "asset_type": "Stock",
+        "amount_range": "$100,001 - $250,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+        "doc_id": "house-2014-20002236-2",
+        "created_at": "2026-04-01T20:34:36.699552+00:00",
+        "asset_name": "Hertz global Holdings, Inc"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "V",
+      "2019-08-07",
+      "sell",
+      "$100,001"
+    ],
+    "status": "two_source_rows_plus_amendment_link_ambiguous",
+    "rows": [
+      {
+        "id": "029aea57-5942-427d-9960-a4c0ecb78b21",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "V",
+        "transaction_date": "2019-08-07",
+        "published_date": "2019-09-18",
+        "transaction_type": "sell",
+        "asset_type": "Stock",
+        "amount_range": "$100,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2019/20012288.pdf",
+        "doc_id": "house-2019-20012288-2",
+        "created_at": "2026-04-04T06:51:16.816187+00:00",
+        "asset_name": "Visa Inc.  [ST] c d e f g $250,000"
+      },
+      {
+        "id": "1f5c7551-5cee-42d4-ae77-6fe82b1388b1",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "V",
+        "transaction_date": "2019-08-07",
+        "published_date": "2019-09-18",
+        "transaction_type": "sell",
+        "asset_type": "Stock",
+        "amount_range": "$100,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2019/20012288.pdf",
+        "doc_id": "house-2019-20012288-1",
+        "created_at": "2026-04-04T06:51:16.816187+00:00",
+        "asset_name": "Visa Inc.  [ST] b c e f g $250,000"
+      },
+      {
+        "id": "ad1e4ac8-c8e9-4519-a4e8-4fc9c91b6163",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "V",
+        "transaction_date": "2019-08-07",
+        "published_date": "2019-09-19",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$100,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2019/20012343.pdf",
+        "doc_id": "house-2019-20012343-0",
+        "created_at": "2026-04-10T06:13:35.605418+00:00",
+        "asset_name": "2000054698 SP Visa Inc. [ST] b c e f g $250,000"
+      }
+    ],
+    "evidence": "Two original identical 1,000-share entries and one amendment. Original text lacks entry IDs; cannot select superseded row reliably.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded",
+    "annual_corroboration": {
+      "file": "2019-10035243.pdf",
+      "page": 7,
+      "sha256": "2edfe75e1935bcdcafd4696c21440162fd76194d47c0ade15e79087826c6d416",
+      "visual_review": "Annual contains two separate identical entries, matching original PTR multiplicity."
+    },
+    "limitation": "Corroborates disclosed row count, not independent proof of separate brokerage executions."
+  },
+  {
+    "identity": [
+      "BE",
+      "2026-07-28",
+      "buy",
+      "$500,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "05413074-7615-459f-93d4-21c4182b2667",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "BE",
+        "transaction_date": "2026-07-28",
+        "published_date": "2026-08-21",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035143.pdf",
+        "doc_id": "house-2026-20035143-3",
+        "created_at": "2026-09-05T01:11:22.361512+00:00",
+        "asset_name": "Bloom Energy Corporation Class A Common Stock [OP] | Call option | Strike $100 | Expires 2027-06-17"
+      },
+      {
+        "id": "1efc8f9d-b8a1-4b39-9e7a-99c7f05ca4bd",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "BE",
+        "transaction_date": "2026-07-28",
+        "published_date": "2026-08-21",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035143.pdf",
+        "doc_id": "house-2026-20035143-2",
+        "created_at": "2026-09-05T01:11:22.361512+00:00",
+        "asset_name": "Bloom Energy Corporation Class A Common Stock"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "FB",
+      "2020-01-16",
+      "buy",
+      "$250,001"
+    ],
+    "status": "distinct",
+    "rows": [
+      {
+        "id": "0a035279-0ae7-48eb-8977-2eca6fad37e9",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "FB",
+        "transaction_date": "2020-01-16",
+        "published_date": "2020-02-11",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20015042.pdf",
+        "doc_id": "house-2020-20015042-4",
+        "created_at": "2026-04-10T06:13:23.007664+00:00",
+        "asset_name": "Facebook, Inc. - Class a [sT] d e f g $500,000 [OP] | Call option"
+      },
+      {
+        "id": "3f7cacdf-80b6-4f1f-b4d4-85f0c0de97fe",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "FB",
+        "transaction_date": "2020-01-16",
+        "published_date": "2020-02-11",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20015042.pdf",
+        "doc_id": "house-2020-20015042-3",
+        "created_at": "2026-04-10T06:13:23.007664+00:00",
+        "asset_name": "Facebook, Inc. - Class a [sT] d c f g $500,000 [OP] | Call option"
+      }
+    ],
+    "evidence": "Exercises: 30 calls at $140 and 20 at $150.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded"
+  },
+  {
+    "identity": [
+      "AB",
+      "2022-01-27",
+      "buy",
+      "$250,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "100672ae-e39f-424f-9bc0-371c7f9688c2",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2022-01-27",
+        "published_date": "2022-02-28",
+        "transaction_type": "buy",
+        "asset_type": "STOCK",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+        "doc_id": "house-2022-20020515-0",
+        "created_at": "2026-04-10T06:13:04.930545+00:00",
+        "asset_name": "AllianceBernstein Holding l.P. d e f g units [Ol] $500,000"
+      },
+      {
+        "id": "4869c16e-84ba-4733-9ead-1353aaa71e56",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2022-01-27",
+        "published_date": "2022-03-04",
+        "transaction_type": "buy",
+        "asset_type": "STOCK",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+        "doc_id": "house-2022-20020561-0",
+        "created_at": "2026-04-10T06:13:06.253596+00:00",
+        "asset_name": "2000090459 SP AllianceBernstein Holding l.P. d e f g units [Ol] $500,000"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "AB",
+      "2021-02-23",
+      "buy",
+      "$500,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "206ed242-f791-4bca-be48-bfb358b26e2a",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2021-02-23",
+        "published_date": "2021-03-09",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018355.pdf",
+        "doc_id": "house-2021-20018355-1",
+        "created_at": "2026-04-10T06:13:16.592187+00:00",
+        "asset_name": "AllianceBernstein Holding l.P. f g d c units"
+      },
+      {
+        "id": "52ce0dfe-cdd5-4cc9-9a53-87c01c764078",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2021-02-23",
+        "published_date": "2021-04-09",
+        "transaction_type": "buy",
+        "asset_type": "OL",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+        "doc_id": "house-2021-20018539-2",
+        "created_at": "2026-04-10T06:13:17.870014+00:00",
+        "asset_name": "2000076482 SP AllianceBernstein Holding L.P. d e f g Units"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "HTZ",
+      "2014-11-06",
+      "buy",
+      "$50,001 - $100,000"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "2f37f64e-5441-4cf2-a2f6-92d5b870330c",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-06",
+        "published_date": "2015-07-07",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$50,001 - $100,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+        "doc_id": "house-2015-20003320-2",
+        "created_at": "2026-04-10T06:13:48.366811+00:00",
+        "asset_name": "2000005578 Hertz global Holdings, Inc [OP] | Call option"
+      },
+      {
+        "id": "7eaccef8-88b7-472e-b4e6-c01582991b1d",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-06",
+        "published_date": "2014-12-17",
+        "transaction_type": "buy",
+        "asset_type": "Stock",
+        "amount_range": "$50,001 - $100,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+        "doc_id": "house-2014-20002236-1",
+        "created_at": "2026-04-01T20:34:36.699552+00:00",
+        "asset_name": "Hertz global Holdings, Inc"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "AAPL",
+      "2021-12-30",
+      "sell",
+      "$500,001"
+    ],
+    "status": "distinct_contributions",
+    "rows": [
+      {
+        "id": "346c98c2-403c-47b7-819e-6855230c2fca",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2021-12-30",
+        "published_date": "2022-01-12",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020208.pdf",
+        "doc_id": "house-2022-20020208-0",
+        "created_at": "2026-04-10T06:13:03.876999+00:00",
+        "asset_name": "Apple Inc. [ST] d e f g $1,000,000"
+      },
+      {
+        "id": "740d34d6-9908-4770-a5c4-2e4a90a73f9c",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2021-12-30",
+        "published_date": "2022-01-12",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020208.pdf",
+        "doc_id": "house-2022-20020208-1",
+        "created_at": "2026-04-10T06:13:03.876999+00:00",
+        "asset_name": "Apple Inc. [ST] d e f g $1,000,000"
+      }
+    ],
+    "evidence": "3,000 shares to Georgetown and 3,000 to Trinity College; not market sales.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded"
+  },
+  {
+    "identity": [
+      "DIS",
+      "2014-12-10",
+      "buy",
+      "$50,001 - $100,000"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "3b79e050-11b1-4217-a827-0dc6b4c6da62",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "DIS",
+        "transaction_date": "2014-12-10",
+        "published_date": "2015-01-12",
+        "transaction_type": "buy",
+        "asset_type": "STOCK",
+        "amount_range": "$50,001 - $100,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20002351.pdf",
+        "doc_id": "house-2015-20002351-2",
+        "created_at": "2026-04-10T06:13:47.150101+00:00",
+        "asset_name": "Walt Disney Company"
+      },
+      {
+        "id": "9e719451-3b21-4370-a75d-3608c7da8425",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "DIS",
+        "transaction_date": "2014-12-10",
+        "published_date": "2015-07-07",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$50,001 - $100,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+        "doc_id": "house-2015-20003320-4",
+        "created_at": "2026-04-10T06:13:48.366811+00:00",
+        "asset_name": "2000006116 Walt Disney Company [OP] | Call option"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "PYPL",
+      "2022-01-21",
+      "buy",
+      "$500,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "3c80ee85-ff0b-4ce7-80fc-d000778a903e",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "PYPL",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-02-28",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+        "doc_id": "house-2022-20020515-3",
+        "created_at": "2026-04-10T06:13:04.930545+00:00",
+        "asset_name": "PayPal Holdings, Inc. [ST] d e f g $1,000,000 [OP] | Call option"
+      },
+      {
+        "id": "e1267a29-bc16-4c60-b75e-11102c08d823",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "PYPL",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-03-04",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+        "doc_id": "house-2022-20020561-3",
+        "created_at": "2026-04-10T06:13:06.253596+00:00",
+        "asset_name": "2000090458 SP PayPal Holdings, Inc. d e f g [OP] | Call option"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "DIS",
+      "2014-11-28",
+      "buy",
+      "$1,001 - $15,000"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "43f2e047-1115-485b-9d86-c4c295d303e1",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "DIS",
+        "transaction_date": "2014-11-28",
+        "published_date": "2014-12-17",
+        "transaction_type": "buy",
+        "asset_type": "Stock",
+        "amount_range": "$1,001 - $15,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+        "doc_id": "house-2014-20002236-4",
+        "created_at": "2026-04-01T20:34:36.699552+00:00",
+        "asset_name": "Walt Disney Company"
+      },
+      {
+        "id": "7e89de82-1458-4f6b-bd86-80c4aea50b0c",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "DIS",
+        "transaction_date": "2014-11-28",
+        "published_date": "2015-07-07",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,001 - $15,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+        "doc_id": "house-2015-20003320-5",
+        "created_at": "2026-04-10T06:13:48.366811+00:00",
+        "asset_name": "2000005580 Walt Disney Company [OP] | Call option"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "AXP",
+      "2022-01-21",
+      "buy",
+      "$250,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "460fbf28-523c-4a51-b607-59e2b986ef25",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AXP",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-03-04",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+        "doc_id": "house-2022-20020561-1",
+        "created_at": "2026-04-10T06:13:06.253596+00:00",
+        "asset_name": "2000090455 SP American Express Company c d e f [OP] | Call option"
+      },
+      {
+        "id": "e89679fc-0cc3-4f51-aaa2-92840f04edf5",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AXP",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-02-28",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+        "doc_id": "house-2022-20020515-1",
+        "created_at": "2026-04-10T06:13:04.930545+00:00",
+        "asset_name": "American Express Company c d e g [OP] | Call option"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "V",
+      "2020-05-08",
+      "sell",
+      "$500,001"
+    ],
+    "status": "preserve_two_source_reported_rows",
+    "rows": [
+      {
+        "id": "4a5f8bb5-0f9a-4dd8-9fca-0a00fdbb1ae0",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "V",
+        "transaction_date": "2020-05-08",
+        "published_date": "2020-06-09",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016726.pdf",
+        "doc_id": "house-2020-20016726-8",
+        "created_at": "2026-04-10T06:13:26.34813+00:00",
+        "asset_name": "Visa Inc. [ST] d e f g b $1,000,000"
+      },
+      {
+        "id": "ed8a41d3-d244-4844-91e8-d36a247ace0e",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "V",
+        "transaction_date": "2020-05-08",
+        "published_date": "2020-06-09",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016726.pdf",
+        "doc_id": "house-2020-20016726-7",
+        "created_at": "2026-04-10T06:13:26.34813+00:00",
+        "asset_name": "Visa Inc. [ST] c d e f g $1,000,000"
+      }
+    ],
+    "evidence": "Two identical 3,000-share entries in original filing. Preserve both pending annual reconciliation.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded",
+    "annual_corroboration": {
+      "file": "2020-10039988.pdf",
+      "page": 10,
+      "sha256": "f3328a23092c56bd872fee505918c3d213605503019ad07671cc27baa625c8ad",
+      "visual_review": "Annual contains two separate identical entries, matching original PTR multiplicity."
+    },
+    "limitation": "Corroborates disclosed row count, not independent proof of separate brokerage executions."
+  },
+  {
+    "identity": [
+      "AAPL",
+      "2018-02-02",
+      "buy",
+      "$100,001 - $250,000"
+    ],
+    "status": "distinct",
+    "rows": [
+      {
+        "id": "54667b4f-3cb9-4a6f-97f2-346963f80f4f",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2018-02-02",
+        "published_date": "2018-02-26",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$100,001 - $250,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2018/20009030.pdf",
+        "doc_id": "house-2018-20009030-0",
+        "created_at": "2026-04-10T06:13:37.687233+00:00",
+        "asset_name": "apple Inc. [OP] | Call option"
+      },
+      {
+        "id": "83757844-2342-4aa7-97dd-aa6085b4ec86",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2018-02-02",
+        "published_date": "2018-02-26",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$100,001 - $250,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2018/20009030.pdf",
+        "doc_id": "house-2018-20009030-1",
+        "created_at": "2026-04-10T06:13:37.687233+00:00",
+        "asset_name": "apple Inc. [OP] | Call option"
+      }
+    ],
+    "evidence": "Two call purchases with $140/$130 strikes.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded"
+  },
+  {
+    "identity": [
+      "AMZN",
+      "2020-01-16",
+      "sell",
+      "$250,001"
+    ],
+    "status": "two_distinct_contract_sales_with_two_superseded_originals",
+    "rows": [
+      {
+        "id": "58a1c1c8-8c57-44cd-8dd6-68f90ff73dc8",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AMZN",
+        "transaction_date": "2020-01-16",
+        "published_date": "2020-02-11",
+        "transaction_type": "sell",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20015042.pdf",
+        "doc_id": "house-2020-20015042-2",
+        "created_at": "2026-04-10T06:13:23.007664+00:00",
+        "asset_name": "amazon.com, Inc. [sT] d e f g $500,000 [OP] | Call option"
+      },
+      {
+        "id": "6bbff3af-6ef1-431d-87c3-777f625f82d9",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AMZN",
+        "transaction_date": "2020-01-16",
+        "published_date": "2020-07-20",
+        "transaction_type": "sell",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016961.pdf",
+        "doc_id": "house-2020-20016961-1",
+        "created_at": "2026-04-10T06:13:27.735081+00:00",
+        "asset_name": "2000060676 SP Amazon.com, Inc. d e f g [OP] | Call option"
+      },
+      {
+        "id": "80da0fe2-3166-40a9-84ec-720d28560b79",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AMZN",
+        "transaction_date": "2020-01-16",
+        "published_date": "2020-02-11",
+        "transaction_type": "sell",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20015042.pdf",
+        "doc_id": "house-2020-20015042-1",
+        "created_at": "2026-04-10T06:13:23.007664+00:00",
+        "asset_name": "amazon.com, Inc. [sT] d e f g $500,000 [OP] | Call option"
+      },
+      {
+        "id": "9fe92173-49ad-43f2-93c3-90ae01558125",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AMZN",
+        "transaction_date": "2020-01-16",
+        "published_date": "2020-07-20",
+        "transaction_type": "sell",
+        "asset_type": "OP",
+        "amount_range": "$250,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016961.pdf",
+        "doc_id": "house-2020-20016961-0",
+        "created_at": "2026-04-10T06:13:27.735081+00:00",
+        "asset_name": "2000060675 SP Amazon.com, Inc. d e f g [OP] | Call option"
+      }
+    ],
+    "evidence": "Two strikes $1,700/$1,600, each repeated in amendment 20016961; preserve both contract events, supersede originals after visual review.",
+    "review_method": "Amended PDF page 1 visually checked; source text matched by strike; exact ID mapping saved."
+  },
+  {
+    "identity": [
+      "DIS",
+      "2022-01-21",
+      "buy",
+      "$1,000,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "76fc7c2b-21c3-4f35-8bf7-a3f115ed9063",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "DIS",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-03-04",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+        "doc_id": "house-2022-20020561-4",
+        "created_at": "2026-04-10T06:13:06.253596+00:00",
+        "asset_name": "2000090457 SP Walt Disney Company c d e f [OP] | Call option"
+      },
+      {
+        "id": "e9563c90-72e7-4d02-aabb-23703873fed9",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "DIS",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-02-28",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+        "doc_id": "house-2022-20020515-4",
+        "created_at": "2026-04-10T06:13:04.930545+00:00",
+        "asset_name": "Walt Disney Company [ST] d e f g $5,000,000 [OP] | Call option"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "BE",
+      "2026-07-24",
+      "buy",
+      "$1,000,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "79d372d0-4c71-4cd3-9836-9e00fcf395f4",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "BE",
+        "transaction_date": "2026-07-24",
+        "published_date": "2026-08-21",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035143.pdf",
+        "doc_id": "house-2026-20035143-0",
+        "created_at": "2026-09-05T01:11:22.361512+00:00",
+        "asset_name": "Bloom Energy Corporation Class A Common Stock"
+      },
+      {
+        "id": "e975cf4e-ab95-4466-876f-4fce75113f05",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "BE",
+        "transaction_date": "2026-07-24",
+        "published_date": "2026-08-21",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035143.pdf",
+        "doc_id": "house-2026-20035143-1",
+        "created_at": "2026-09-05T01:11:22.361512+00:00",
+        "asset_name": "Bloom Energy Corporation Class A Common Stock [OP] | Call option | Strike $100 | Expires 2027-06-17"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "AAPL",
+      "2020-05-08",
+      "sell",
+      "$500,001"
+    ],
+    "status": "distinct",
+    "rows": [
+      {
+        "id": "86a97512-db46-4faa-a76b-0149f3b3448a",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2020-05-08",
+        "published_date": "2020-06-09",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016726.pdf",
+        "doc_id": "house-2020-20016726-0",
+        "created_at": "2026-04-10T06:13:26.34813+00:00",
+        "asset_name": "apple Inc. [ST] e f g c b $1,000,000"
+      },
+      {
+        "id": "c71dd2f4-9496-4b35-bb77-9b645a080e61",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2020-05-08",
+        "published_date": "2020-06-09",
+        "transaction_type": "sell",
+        "asset_type": "STOCK",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016726.pdf",
+        "doc_id": "house-2020-20016726-1",
+        "created_at": "2026-04-10T06:13:26.34813+00:00",
+        "asset_name": "apple Inc. [ST] b c d e g $1,000,000"
+      }
+    ],
+    "evidence": "Sales of 1,700 and 3,000 shares.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded"
+  },
+  {
+    "identity": [
+      "AB",
+      "2021-02-18",
+      "buy",
+      "$500,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "8922aa5a-c0fb-467c-ad5a-b55694486c7b",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2021-02-18",
+        "published_date": "2021-03-09",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018355.pdf",
+        "doc_id": "house-2021-20018355-0",
+        "created_at": "2026-04-10T06:13:16.592187+00:00",
+        "asset_name": "AllianceBernstein Holding l.P. e f g c units"
+      },
+      {
+        "id": "cf493eeb-96ed-4af7-8be1-1fa6e4015e32",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2021-02-18",
+        "published_date": "2021-04-09",
+        "transaction_type": "buy",
+        "asset_type": "OL",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+        "doc_id": "house-2021-20018539-1",
+        "created_at": "2026-04-10T06:13:17.870014+00:00",
+        "asset_name": "2000076481 SP AllianceBernstein Holding L.P. d e f g Units"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "HTZ",
+      "2014-11-28",
+      "buy",
+      "$50,001 - $100,000"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "98d72495-756e-4ad2-b803-a132402fb529",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-28",
+        "published_date": "2015-07-07",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$50,001 - $100,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+        "doc_id": "house-2015-20003320-3",
+        "created_at": "2026-04-10T06:13:48.366811+00:00",
+        "asset_name": "2000005581 Hertz global Holdings, Inc [OP] | Call option"
+      },
+      {
+        "id": "bb756878-4fd0-47d3-bc4e-07c9328dd07f",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-28",
+        "published_date": "2014-12-17",
+        "transaction_type": "buy",
+        "asset_type": "Stock",
+        "amount_range": "$50,001 - $100,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+        "doc_id": "house-2014-20002236-3",
+        "created_at": "2026-04-01T20:34:36.699552+00:00",
+        "asset_name": "Hertz global Holdings, Inc"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "PYPL",
+      "2020-06-12",
+      "buy",
+      "$500,001"
+    ],
+    "status": "preserve_two_source_reported_rows",
+    "rows": [
+      {
+        "id": "9c0a0733-cddd-41bc-827a-1f7a0668f367",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "PYPL",
+        "transaction_date": "2020-06-12",
+        "published_date": "2020-07-20",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016961.pdf",
+        "doc_id": "house-2020-20016961-6",
+        "created_at": "2026-04-10T06:13:27.735081+00:00",
+        "asset_name": "PayPal Holdings, Inc. d e f g"
+      },
+      {
+        "id": "cd20cc10-5098-40ae-8593-ba238b345bab",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "PYPL",
+        "transaction_date": "2020-06-12",
+        "published_date": "2020-07-20",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016961.pdf",
+        "doc_id": "house-2020-20016961-5",
+        "created_at": "2026-04-10T06:13:27.735081+00:00",
+        "asset_name": "PayPal Holdings, Inc. d e f g"
+      }
+    ],
+    "evidence": "Two identical 5,000-share entries in original filing. Preserve both pending annual reconciliation.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded",
+    "annual_corroboration": {
+      "file": "2020-10039988.pdf",
+      "page": 9,
+      "sha256": "f3328a23092c56bd872fee505918c3d213605503019ad07671cc27baa625c8ad",
+      "visual_review": "Annual contains two separate identical entries, matching original PTR multiplicity."
+    },
+    "limitation": "Corroborates disclosed row count, not independent proof of separate brokerage executions."
+  },
+  {
+    "identity": [
+      "AB",
+      "2020-12-22",
+      "buy",
+      "$500,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "a90b1ac6-de53-4982-ab53-6780991b661e",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2020-12-22",
+        "published_date": "2021-01-21",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018011.pdf",
+        "doc_id": "house-2021-20018011-0",
+        "created_at": "2026-04-10T06:13:15.506683+00:00",
+        "asset_name": "AllianceBernstein Holding l.P. f e d c units"
+      },
+      {
+        "id": "a997e8f7-9f09-4ab7-b8c9-7e449c5c4650",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AB",
+        "transaction_date": "2020-12-22",
+        "published_date": "2021-04-09",
+        "transaction_type": "buy",
+        "asset_type": "OL",
+        "amount_range": "$500,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+        "doc_id": "house-2021-20018539-0",
+        "created_at": "2026-04-10T06:13:17.870014+00:00",
+        "asset_name": "2000074389 SP AllianceBernstein Holding L.P. g c d e Units"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "HTZ",
+      "2014-11-05",
+      "buy",
+      "$15,001 - $50,000"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "b45a12dd-652f-4566-b0b4-4837f8e48bdf",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-05",
+        "published_date": "2015-07-07",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$15,001 - $50,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+        "doc_id": "house-2015-20003320-0",
+        "created_at": "2026-04-10T06:13:48.366811+00:00",
+        "asset_name": "2000005577 Hertz global Holdings, Inc [OP] | Call option"
+      },
+      {
+        "id": "b9b47179-2f80-478b-a22a-eef1132de3b6",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "HTZ",
+        "transaction_date": "2014-11-05",
+        "published_date": "2014-12-17",
+        "transaction_type": "buy",
+        "asset_type": "Stock",
+        "amount_range": "$15,001 - $50,000",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2014/20002236.pdf",
+        "doc_id": "house-2014-20002236-0",
+        "created_at": "2026-04-01T20:34:36.699552+00:00",
+        "asset_name": "Hertz global Holdings, Inc"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "AAPL",
+      "2022-01-21",
+      "buy",
+      "$1,000,001"
+    ],
+    "status": "candidate only; source review required",
+    "rows": [
+      {
+        "id": "bada3a3a-b251-4e56-9a0f-868482d657b8",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-03-04",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020561.pdf",
+        "doc_id": "house-2022-20020561-2",
+        "created_at": "2026-04-10T06:13:06.253596+00:00",
+        "asset_name": "2000090456 SP Apple Inc. [ST] d e f g $5,000,000 [OP] | Call option"
+      },
+      {
+        "id": "e637a9f2-7a03-4c81-8119-7dcc810fb69a",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "AAPL",
+        "transaction_date": "2022-01-21",
+        "published_date": "2022-02-28",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020515.pdf",
+        "doc_id": "house-2022-20020515-2",
+        "created_at": "2026-04-10T06:13:04.930545+00:00",
+        "asset_name": "Apple Inc. [ST] d e f g $5,000,000 [OP] | Call option"
+      }
+    ]
+  },
+  {
+    "identity": [
+      "MSFT",
+      "2021-03-19",
+      "buy",
+      "$1,000,001"
+    ],
+    "status": "distinct",
+    "rows": [
+      {
+        "id": "dc7b7405-f4fb-4412-abc9-9b999f20022d",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "MSFT",
+        "transaction_date": "2021-03-19",
+        "published_date": "2021-04-09",
+        "transaction_type": "buy",
+        "asset_type": "ST",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+        "doc_id": "house-2021-20018539-4",
+        "created_at": "2026-04-10T06:13:17.870014+00:00",
+        "asset_name": "Microsoft Corporation d e f g"
+      },
+      {
+        "id": "e0c2ea00-436b-4da5-beea-e748389d1e0b",
+        "member_id": "P000197",
+        "politician_name": "Nancy Pelosi",
+        "chamber": "House",
+        "party": "Unknown",
+        "ticker": "MSFT",
+        "transaction_date": "2021-03-19",
+        "published_date": "2021-04-09",
+        "transaction_type": "buy",
+        "asset_type": "OP",
+        "amount_range": "$1,000,001",
+        "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2021/20018539.pdf",
+        "doc_id": "house-2021-20018539-3",
+        "created_at": "2026-04-10T06:13:17.870014+00:00",
+        "asset_name": "Microsoft Corporation d e f g [OP] | Call option"
+      }
+    ],
+    "evidence": "Exercises: 150 calls at $130 and 100 at $140.",
+    "review_method": "official PDF extracted text; visual review pending unless separately recorded"
+  }
+]

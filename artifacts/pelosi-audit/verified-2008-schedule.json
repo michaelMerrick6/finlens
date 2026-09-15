@@ -1,0 +1,512 @@
+{
+  "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2009/8142737.pdf",
+  "original_doc_id": "8140536",
+  "reporting_year": 2008,
+  "status": "schedule_visually_transcribed_amendment_applied_pending_full_filing_review",
+  "row_count": 33,
+  "rows": [
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 1,
+      "asset": "Akamai Technologies Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-11-19"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 2,
+      "asset": "American International Group Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-12-31"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014",
+      "amendment_note": "June 11, 2009 cover letter explicitly corrects partial sale to complete sale; no remaining AIG interest."
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 3,
+      "asset": "Americas Doctors.com Preferred Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-12-29"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 4,
+      "asset": "Apple Inc. Common Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-01-15",
+        "2008-01-16"
+      ],
+      "amount_min": 5000001,
+      "amount_max": 25000000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 5,
+      "asset": "Apple Inc. Common Stock",
+      "owner": "SP",
+      "activity": "partial_sale",
+      "dates": [
+        "2008-11-17",
+        "2008-11-24"
+      ],
+      "amount_min": 500001,
+      "amount_max": 1000000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 6,
+      "asset": "AT&T Inc. Common Stock",
+      "owner": "SP",
+      "activity": "partial_sale",
+      "dates": [
+        "2008-11-21"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 7,
+      "asset": "Auberge du Soleil - Purchase of Additional Ltd. Partnership Interest",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-04-04"
+      ],
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 8,
+      "asset": "Avalon Pharmaceuticals Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-11-03"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 9,
+      "asset": "Biz360 Inc. Preferred Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-04-10"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 10,
+      "asset": "Bullhorn LLC",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-12-29"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 16,
+      "printed_page": 15,
+      "source_row": 11,
+      "asset": "Cardiac Science Corp. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-10-14"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 1,
+      "asset": "Clean Energy Fuels Corp. Common Stock",
+      "owner": "SP",
+      "activity": "partial_sale",
+      "dates": [
+        "2008-10-14"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 2,
+      "asset": "Critical Path Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-05-29"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 3,
+      "asset": "Cryocor Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-06-04"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 4,
+      "asset": "Digital Fountain Preferred Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-08-05"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 5,
+      "asset": "General Electric Co. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-11-19"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 6,
+      "asset": "Getty Images Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-07-03"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 7,
+      "asset": "Granite Ventures LP - Additional Ltd. Partnership Interest in Investment Fund",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-06-03"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 8,
+      "asset": "Internap Network Services Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-12-31"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 9,
+      "asset": "Johnson & Johnson Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-10-27",
+        "2008-11-21"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 10,
+      "asset": "Morningstar Inc. Common Stock",
+      "owner": "SP",
+      "activity": "partial_sale",
+      "dates": [
+        "2008-10-21"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 17,
+      "printed_page": 16,
+      "source_row": 11,
+      "asset": "Navteq Corp. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-07-10"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 1,
+      "asset": "Odyssey LLC",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-02-08"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 2,
+      "asset": "Overstock.com Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-10-21",
+        "2008-11-03"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 3,
+      "asset": "Quest Energy Partners LP",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-12-31"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 4,
+      "asset": "Rackspace Hosting Inc. Common Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-08-07"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 5,
+      "asset": "Rackspace Hosting Inc. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-11-19"
+      ],
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 6,
+      "asset": "Research in Motion Ltd. Common Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-06-25"
+      ],
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 7,
+      "asset": "Research in Motion Ltd. Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-11-19"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 8,
+      "asset": "Starbucks Corporation Common Stock",
+      "owner": "SP",
+      "activity": "sell",
+      "dates": [
+        "2008-01-02"
+      ],
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 9,
+      "asset": "Visa Inc. Common Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-03-18",
+        "2008-03-25",
+        "2008-06-04"
+      ],
+      "amount_min": 1000001,
+      "amount_max": 5000000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 10,
+      "asset": "Visa Inc. Common Stock",
+      "owner": "SP",
+      "activity": "partial_sale",
+      "dates": [
+        "2008-11-24"
+      ],
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    },
+    {
+      "page": 18,
+      "printed_page": 17,
+      "source_row": 11,
+      "asset": "Yahoo Inc. Common Stock",
+      "owner": "SP",
+      "activity": "buy",
+      "dates": [
+        "2008-02-08"
+      ],
+      "amount_min": 500001,
+      "amount_max": 1000000,
+      "amount_scope": "reported source row; do not assign full range separately to each date",
+      "database_status": "missing_pre_2014"
+    }
+  ],
+  "sha256": "d217971c43f38c0604227d841086e86ce0abadbb280c6c51a9f8001de60531ba"
+}

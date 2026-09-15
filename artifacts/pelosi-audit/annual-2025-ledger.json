@@ -1,0 +1,323 @@
+[
+  {
+    "asset": "Vistra Corp. Common Stock (VST) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "01/14/2025",
+    "direction": "P",
+    "low": "500,001",
+    "high": "1,000,000",
+    "description": "D: Purchased 50 call options with a strike price of $50 and an expiration date of 1/16/26.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "97dbd826-068e-484d-838b-8e305a46a599"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "Tempus AI, Inc. - Class A Common Stock (TEM) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "01/14/2025",
+    "direction": "P",
+    "low": "50,001",
+    "high": "100,000",
+    "description": "D: Purchased 50 call options with a strike price of $20 and an expiration date of 1/16/26.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "4dff7a37-0848-4f43-a6a3-61a202f8f563"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "Amazon.com, Inc. - Common Stock (AMZN) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "01/14/2025",
+    "direction": "P",
+    "low": "250,001",
+    "high": "500,000",
+    "description": "D: Purchased 50 call options with a strike price of $150 and an expiration date of 1/16/26.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "b19db0a9-81fd-4151-8903-651ca164cd41"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "Alphabet Inc. - Class A Common Stock (GOOGL) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "01/14/2025",
+    "direction": "P",
+    "low": "250,001",
+    "high": "500,000",
+    "description": "D: Purchased 50 call options with a strike price of $150 and an expiration date of 1/16/26.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "22d0ba4b-82c4-422c-8abf-1e55c0c97315"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "NVIDIA Corporation - Common Stock (NVDA) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "01/14/2025",
+    "direction": "P",
+    "low": "250,001",
+    "high": "500,000",
+    "description": "D: Purchased 50 call options with a strike price of $80 and an expiration date of 1/16/26.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "8ead70f3-2739-4b33-a7dd-f5c554d36c10"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "Matthews International Mutual Fund [OT]",
+    "type": "OT",
+    "owner": "SP",
+    "date": "06/20/2025",
+    "direction": "S",
+    "low": "15,001",
+    "high": "50,000",
+    "description": "L: US\nD: Sale of 2,822 units.\nC: Loss of $28,948 on sale.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [],
+    "economic_type": "sale",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "Broadcom Inc. - Common Stock (AVGO) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "06/20/2025",
+    "direction": "P",
+    "low": "1,000,001",
+    "high": "5,000,000",
+    "description": "Asset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200?\nD: Exercised 200 call options purchased 6/24/24 (20,000 shares) at a strike price of $80 with an expiration date of 6/20/25.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "53f34925-c8b2-4bd8-a2fe-4722394caeec"
+    ],
+    "economic_type": "option_exercise",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 7
+  },
+  {
+    "asset": "Apple Inc. - Common Stock (AAPL) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "10/22/2025",
+    "direction": "S",
+    "low": "100,001",
+    "high": "250,000",
+    "description": "D: Contribution of 382 shares held personally to Trinity University in Washington, DC.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "8eaa4313-b9a6-4912-9807-f9a54cee6351"
+    ],
+    "economic_type": "contribution",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Apple Inc. - Common Stock (AAPL) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/24/2025",
+    "direction": "S",
+    "low": "5,000,001",
+    "high": "25,000,000",
+    "description": "D: Sold 45,000 shares.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "71b3dd14-acd5-45fe-a33f-43535b23fd7f"
+    ],
+    "economic_type": "sale",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "NVIDIA Corporation - Common Stock (NVDA) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/24/2025",
+    "direction": "S",
+    "low": "1,000,001",
+    "high": "5,000,000",
+    "description": "D: Sold 20,000 shares.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "32cc1736-d89a-4908-afa2-bbe3769f1c0a"
+    ],
+    "economic_type": "sale",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Amazon.com, Inc. - Common Stock (AMZN) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/24/2025",
+    "direction": "S",
+    "low": "1,000,001",
+    "high": "5,000,000",
+    "description": "D: Sold 20,000 shares.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "22274f75-096d-45d3-85c0-e9bbfcf9f213"
+    ],
+    "economic_type": "sale",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Walt Disney Company (DIS) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "S",
+    "low": "1,000,001",
+    "high": "5,000,000",
+    "description": "D: Sold 10,000 shares.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "0086a442-e10e-49fe-b64e-d3eb8c94c139"
+    ],
+    "economic_type": "sale",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "PayPal Holdings, Inc. - Common Stock (PYPL) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "S",
+    "low": "250,001",
+    "high": "500,000",
+    "description": "D: Sold 5,000 shares.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "9063bdba-a6a6-4962-b77e-487feb31cdf9"
+    ],
+    "economic_type": "sale",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Alphabet Inc. - Class A Common Stock (GOOGL) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "S",
+    "low": "1,000,001",
+    "high": "5,000,000",
+    "description": "D: Contribution of 7,704 shares held personally to Donor-Advised Fund.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "cd2ac643-5fc4-4c74-b8d4-33fc40f5b105"
+    ],
+    "economic_type": "contribution",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Apple Inc. - Common Stock (AAPL) [ST]",
+    "type": "ST",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "S",
+    "low": "5,000,001",
+    "high": "25,000,000",
+    "description": "D: Contribution of 28,200 shares to Donor-Advised Fund.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "30ec93e1-e074-4f53-96d8-dc1792c4711e"
+    ],
+    "economic_type": "contribution",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "NVIDIA Corporation - Common Stock (NVDA) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "P",
+    "low": "100,001",
+    "high": "250,000",
+    "description": "D: Purchased 20 call options with a strike price of $100 and an expiration date of 1/15/27.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "2464998d-601a-427a-a5b2-682f14effe95"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Amazon.com, Inc. - Common Stock (AMZN) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "P",
+    "low": "100,001",
+    "high": "250,000",
+    "description": "D: Purchased 20 call options with a strike price of $120 and an expiration date of 1/15/27.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "eb117a3e-53c4-43fb-8dcf-8ebade11ea1d"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Apple Inc. - Common Stock (AAPL) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "P",
+    "low": "250,001",
+    "high": "500,000",
+    "description": "Asset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200?\nD: Purchased 20 call options with a strike price of $100 and an expiration date of 1/15/27.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "d2a43c4d-5c1e-4497-a8da-5a6c9ab31f3f"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 8
+  },
+  {
+    "asset": "Alphabet Inc. - Class A Common Stock (GOOGL) [OP]",
+    "type": "OP",
+    "owner": "SP",
+    "date": "12/30/2025",
+    "direction": "P",
+    "low": "250,001",
+    "high": "500,000",
+    "description": "D: Purchased 20 call options with a strike price of $150 and an expiration date of 1/15/27.\n* For the complete list of asset type abbreviations, please visit https://fd.house.gov/reference/asset-type-codes.aspx.",
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+    "matched_db_ids": [
+      "25a9edd3-d7ff-4bf1-9656-ab74503118b7"
+    ],
+    "economic_type": "option_purchase",
+    "visual_review": "checked against PDF pages 7\u20139",
+    "source_page": 9
+  }
+]

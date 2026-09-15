@@ -1731,7 +1731,11 @@ def build_broadcast_candidates(
     for candidate in twitter_candidates:
         channels = BROADCAST_CHANNELS_BY_RULE_KEY.get(str(candidate.get("rule_key") or "").strip(), ["twitter"])
         for channel in channels:
-            cloned = clone_candidate_for_channel(candidate, channel)
+            if channel == "twitter":
+                editorial = apply_twitter_editorial(candidate)
+                if editorial is None:
+                    continue
+            cloned = clone_candidate_for_channel(editorial if channel == "twitter" else candidate, channel)
             dedupe_key = f"{cloned['channel']}::{cloned['candidate_key']}"
             if dedupe_key in seen_keys:
                 continue
@@ -1739,3 +1743,25 @@ def build_broadcast_candidates(
             broadcast_candidates.append(cloned)
 
     return broadcast_candidates
+
+
+def apply_twitter_editorial(candidate: dict) -> dict | None:
+    """Politician-only Twitter drafts; conservative disclosed minimum threshold."""
+    payload = candidate.get("payload") or {}
+    signal = str(payload.get("signal_type") or "")
+    if signal not in {"politician_trade", "politician_trade_grouped", "congress_cluster"}:
+        return None
+    amount = float(payload.get("cluster_combined_lower_bound") or payload.get("group_combined_lower_bound") or parse_amount_lower_bound(payload.get("amount_range")) or 0)
+    clustered_buy = (signal == "congress_cluster" and payload.get("direction") == "buy"
+                     and int(payload.get("cluster_actor_count") or 0) >= 2
+                     and 0 < int(payload.get("cluster_window_days") or 0) <= 14)
+    if amount < 25000 and not clustered_buy:
+        return None
+    direction = {"buy": "purchases", "sell": "sales"}.get(payload.get("direction"))
+    ticker = payload.get("ticker")
+    if not direction or not ticker:
+        return None
+    subject = f"{payload.get('cluster_actor_count')} members of Congress" if signal == "congress_cluster" else (payload.get("actor_name") or "A member of Congress")
+    combined = " combined" if signal != "politician_trade" else ""
+    text = f"{subject} disclosed {direction} of ${ticker}.\n\nAt least ${amount:,.0f} in reported {direction}{combined}.\n\nExplore the disclosures: https://www.vail.finance/analysis"
+    return {**candidate, "draft_text": text}

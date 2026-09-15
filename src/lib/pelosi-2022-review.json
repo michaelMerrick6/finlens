@@ -1,0 +1,88 @@
+{
+  "house-2022-20021837-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20021837.pdf",
+    "asset_type": "ST",
+    "asset_name": "Alphabet Inc. - Class C Capital Stock (GOOG) [ST]",
+    "amount_range": "$1,000,001 - $5,000,000",
+    "description": "D: Exercised 200 call options purchased 12/17/21 (20,000 shares) at a strike price of $100 with an expiration date of 9/16/22.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 8,
+    "ticker": "GOOG"
+  },
+  "house-2022-20021374-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20021374.pdf",
+    "asset_type": "ST",
+    "asset_name": "NVIDIA Corporation (NVDA) [ST]",
+    "amount_range": "$1,000,001 - $5,000,000",
+    "description": "D: Exercised 200 call options (20,000 shares) expiring 6/17/22 at a strike price of $100.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 9
+  },
+  "house-2022-20021675-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20021675.pdf",
+    "asset_type": "AB",
+    "asset_name": "REOF XX, LLC [AB]",
+    "amount_range": "$15,001 - $50,000",
+    "description": "D: Additional investment in LLC which acquired five Courtyard by Marriott hotels located in Fairfax, VA (one), suburban Baltimore, MD (two) and San Antonio, TX (two).",
+    "activity_label": "Private investment",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 9,
+    "ticker": null
+  },
+  "house-2023-20022260-8": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20022260.pdf",
+    "asset_type": "AB",
+    "asset_name": "REOF XX, LLC [AB]",
+    "amount_range": "$15,001 - $50,000",
+    "description": "D: Additional investment in LLC which acquired five Courtyard by Marriott hotels located in Fairfax, VA (one), suburban Baltimore, MD (two) and San Antonio, TX (two).",
+    "activity_label": "Private investment",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 9,
+    "ticker": null
+  },
+  "house-2023-20022260-10": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20022260.pdf",
+    "asset_type": "OP",
+    "asset_name": "Salesforce, Inc. (CRM) [OP]",
+    "amount_range": "$9.00",
+    "description": "D: Sold 130 call options purchased 12/20/21 with a strike price of $210 and an expiration date of 1/20/23. C: Sold 130 call options purchased 12/20/21 (13,000 shares) at a price of $0.01 per share for a total loss of $733,691. Source discrepancy unresolved: reported $9 amount does not equal 13,000 shares times $0.01. Exact proceeds are not verified.",
+    "activity_label": "Call options",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 10,
+    "exclude_from_totals": true
+  },
+  "house-2022-20020662-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020662.pdf",
+    "asset_type": "ST",
+    "asset_name": "Tesla, Inc. (TSLA) [ST]",
+    "amount_range": "$1,000,001 - $5,000,000",
+    "description": "D: Exercised 25 call options (2,500 shares) expiring 3/18/22 at a strike price of $500.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 10
+  },
+  "house-2022-20021837-3": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20021837.pdf",
+    "asset_type": "OP",
+    "asset_name": "Walt Disney Company (DIS) [OP]",
+    "amount_range": "$1.00",
+    "description": "D: 50 call options purchased 12/17/21 with a strike price of $130 and an expiration date of 9/16/22 expired with no value. C: 50 call options purchased 12/17/21 with a strike price of $130 and an expiration date of 9/16/22 expired with no value for a total loss of $132,824.",
+    "activity_label": "Expired worthless",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 10,
+    "exclude_from_totals": true
+  },
+  "house-2022-20020916-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2022/20020916.pdf",
+    "asset_type": "ST",
+    "asset_name": "Warner Bros. Discovery, Inc. - Series A (WBD) [ST]",
+    "amount_range": "$50,001 - $100,000",
+    "description": "D: 2419 shares received as the result of a spinoff of AT&T (T) shares held.",
+    "activity_label": "Spinoff",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022/10053231.pdf",
+    "annual_page": 10,
+    "exclude_from_totals": true
+  }
+}

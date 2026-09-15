@@ -1,0 +1,271 @@
+{
+  "status": "14 annual entries visually checked and matched; option corporate actions and PANW expiration discrepancy still require reconciliation",
+  "rows": [
+    {
+      "date": "02/12/2024",
+      "direction": "P",
+      "low": "500,001",
+      "high": "1,000,000",
+      "transaction_date": "2024-02-12",
+      "page": 6,
+      "context": " T\nAsset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200?\nPalo Alto Networks, Inc. (PANW) [OP] SP 02/12/2024 P $500,001 -\n$1,000,000\nD: Purchased 50 call options with a strike price of $200 and an expiration date of 1/17/25.\nAsset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200?\nPalo Alto Networks, Inc. (PANW) [OP] SP ",
+      "candidate_db_ids": [
+        "12d0a434-90ed-45ac-8b14-999f1ae7dede"
+      ],
+      "status": "candidate_match",
+      "db_id": "12d0a434-90ed-45ac-8b14-999f1ae7dede",
+      "doc_id": "house-2024-20024542-0",
+      "asset_identity": "PANW",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "02/21/2024",
+      "direction": "P",
+      "low": "100,001",
+      "high": "250,000",
+      "transaction_date": "2024-02-21",
+      "page": 7,
+      "context": "ions with a strike price of $200 and an expiration date of 1/17/25.\nAsset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200?\nPalo Alto Networks, Inc. (PANW) [OP] SP 02/21/2024 P $100,001 -\n$250,000\nD: Purchased 20 call options with a strike price of $200 and an expiration date of 1/17/25.\nForge Investments, LLC [AB] SP ",
+      "candidate_db_ids": [
+        "84178272-b1c8-4526-9777-9e978ce4c6d6"
+      ],
+      "status": "candidate_match",
+      "db_id": "84178272-b1c8-4526-9777-9e978ce4c6d6",
+      "doc_id": "house-2024-20024542-1",
+      "asset_identity": "PANW",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "03/04/2024",
+      "direction": "P",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-03-04",
+      "page": 7,
+      "context": " SP 02/21/2024 P $100,001 -\n$250,000\nD: Purchased 20 call options with a strike price of $200 and an expiration date of 1/17/25.\nForge Investments, LLC [AB] SP 03/04/2024 P $1,000,001 -\n$5,000,000\nD: Investment in fund that owns Databricks stock. Databricks is a San Francisco engineering and analytic software company based on\nAI technology.\nBroadcom Inc. - Common Stock (AVGO) [OP] SP ",
+      "candidate_db_ids": [
+        "b13f1dbc-89e9-44a5-a385-ff5cf1ee7779"
+      ],
+      "status": "candidate_match",
+      "db_id": "b13f1dbc-89e9-44a5-a385-ff5cf1ee7779",
+      "doc_id": "house-2024-20024625-0",
+      "asset_identity": "Forge Investments",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "06/24/2024",
+      "direction": "P",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-06-24",
+      "page": 7,
+      "context": "s Databricks stock. Databricks is a San Francisco engineering and analytic software company based on\nAI technology.\nBroadcom Inc. - Common Stock (AVGO) [OP] SP 06/24/2024 P $1,000,001 -\n$5,000,000\nD: Purchased 20 call options with a strike price of $800 and an expiration date of 6/20/25.\nTesla, Inc. - Common Stock (TSLA) [ST] SP ",
+      "candidate_db_ids": [
+        "afa40f85-ccd9-48b6-89ec-dac1226f8e74"
+      ],
+      "status": "candidate_match",
+      "db_id": "afa40f85-ccd9-48b6-89ec-dac1226f8e74",
+      "doc_id": "house-2024-20025368-0",
+      "asset_identity": "AVGO",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "06/24/2024",
+      "direction": "S",
+      "low": "250,001",
+      "high": "500,000",
+      "transaction_date": "2024-06-24",
+      "page": 7,
+      "context": "P $1,000,001 -\n$5,000,000\nD: Purchased 20 call options with a strike price of $800 and an expiration date of 6/20/25.\nTesla, Inc. - Common Stock (TSLA) [ST] SP 06/24/2024 S $250,001 -\n$500,000\nD: Sold 2,500 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP ",
+      "candidate_db_ids": [
+        "c26fde78-b61f-4944-b5e5-18a86c85b55e"
+      ],
+      "status": "candidate_match",
+      "db_id": "c26fde78-b61f-4944-b5e5-18a86c85b55e",
+      "doc_id": "house-2024-20025368-2",
+      "asset_identity": "TSLA",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "06/26/2024",
+      "direction": "P",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-06-26",
+      "page": 7,
+      "context": "e of 6/20/25.\nTesla, Inc. - Common Stock (TSLA) [ST] SP 06/24/2024 S $250,001 -\n$500,000\nD: Sold 2,500 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP 06/26/2024 P $1,000,001 -\n$5,000,000\nD: Purchased 10,000 shares.\nVisa Inc. (V) [ST] SP ",
+      "candidate_db_ids": [
+        "6bf8727f-755d-42f8-b608-e8cccda1a342"
+      ],
+      "status": "candidate_match",
+      "db_id": "6bf8727f-755d-42f8-b608-e8cccda1a342",
+      "doc_id": "house-2024-20025368-1",
+      "asset_identity": "NVDA",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "07/01/2024",
+      "direction": "S",
+      "low": "500,001",
+      "high": "1,000,000",
+      "transaction_date": "2024-07-01",
+      "page": 7,
+      "context": "0\nD: Sold 2,500 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP 06/26/2024 P $1,000,001 -\n$5,000,000\nD: Purchased 10,000 shares.\nVisa Inc. (V) [ST] SP 07/01/2024 S\n(partial)\n$500,001 -\n$1,000,000\nD: Sold 2,000 shares.\nMicrosoft Corporation - Common Stock (MSFT) [ST] SP ",
+      "candidate_db_ids": [
+        "5bc48847-0ecd-4d19-a4f9-c279b4bbf36f"
+      ],
+      "status": "candidate_match",
+      "db_id": "5bc48847-0ecd-4d19-a4f9-c279b4bbf36f",
+      "doc_id": "house-2024-20025368-3",
+      "asset_identity": "V",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "07/26/2024",
+      "direction": "S",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-07-26",
+      "page": 7,
+      "context": "sed 10,000 shares.\nVisa Inc. (V) [ST] SP 07/01/2024 S\n(partial)\n$500,001 -\n$1,000,000\nD: Sold 2,000 shares.\nMicrosoft Corporation - Common Stock (MSFT) [ST] SP 07/26/2024 S\n(partial)\n$1,000,001 -\n$5,000,000\nD: Sold 5,000 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP ",
+      "candidate_db_ids": [
+        "e0a8114f-67d0-4e47-94bf-6499d1cd251b"
+      ],
+      "status": "candidate_match",
+      "db_id": "e0a8114f-67d0-4e47-94bf-6499d1cd251b",
+      "doc_id": "house-2024-20025535-0",
+      "asset_identity": "MSFT",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "07/26/2024",
+      "direction": "P",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-07-26",
+      "page": 7,
+      "context": "Corporation - Common Stock (MSFT) [ST] SP 07/26/2024 S\n(partial)\n$1,000,001 -\n$5,000,000\nD: Sold 5,000 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP 07/26/2024 P $1,000,001 -\n$5,000,000\nD: Purchased 10,000 shares.\nREOF XXVI, LLC [AB] SP ",
+      "candidate_db_ids": [
+        "df45c789-5d6f-43e7-8f23-20944908fc20"
+      ],
+      "status": "candidate_match",
+      "db_id": "df45c789-5d6f-43e7-8f23-20944908fc20",
+      "doc_id": "house-2024-20025535-1",
+      "asset_identity": "NVDA",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "08/13/2024",
+      "direction": "P",
+      "low": "250,001",
+      "high": "500,000",
+      "transaction_date": "2024-08-13",
+      "page": 7,
+      "context": "\nD: Sold 5,000 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP 07/26/2024 P $1,000,001 -\n$5,000,000\nD: Purchased 10,000 shares.\nREOF XXVI, LLC [AB] SP 08/13/2024 P $250,001 -\n$500,000\nD: Investment in LLC which is acquiring and managing a commercial office property at 631 Howard Street in San Francisco, CA.\nPalo Alto Networks, Inc. (PANW) [ST] SP ",
+      "candidate_db_ids": [
+        "c9727a50-b6fd-4fcb-aae3-ad791da1ee09"
+      ],
+      "status": "candidate_match",
+      "db_id": "c9727a50-b6fd-4fcb-aae3-ad791da1ee09",
+      "doc_id": "house-2024-20025819-0",
+      "asset_identity": "REOF XXVI",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "12/20/2024",
+      "direction": "P",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-12-20",
+      "page": 7,
+      "context": "vestment in LLC which is acquiring and managing a commercial office property at 631 Howard Street in San Francisco, CA.\nPalo Alto Networks, Inc. (PANW) [ST] SP 12/20/2024 P $1,000,001 -\n$5,000,000\nD: Exercised 140 call options purchased 2/12/24 & 2/21/24 (14,000 shares) at a strike price of $100 with an expiration date of\n12/20/24.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP ",
+      "candidate_db_ids": [
+        "bf43392c-9154-42a2-bd87-251873b41077"
+      ],
+      "status": "candidate_match",
+      "db_id": "bf43392c-9154-42a2-bd87-251873b41077",
+      "doc_id": "house-2025-20026590-6",
+      "asset_identity": "PANW",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "12/20/2024",
+      "direction": "P",
+      "low": "500,001",
+      "high": "1,000,000",
+      "transaction_date": "2024-12-20",
+      "page": 7,
+      "context": "ons purchased 2/12/24 & 2/21/24 (14,000 shares) at a strike price of $100 with an expiration date of\n12/20/24.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP 12/20/2024 P $500,001 -\n$1,000,000\nD: Exercised 500 call options purchased 11/22/23 (50,000 shares) at a strike price of $12 with an expiration date of 12/20/24.\nAsset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200? 5 p p / / 3 5 p p / / 4\nApple Inc. - Common Stock (AAPL) [ST] SP ",
+      "candidate_db_ids": [
+        "9452cf20-f902-4d67-96a1-1195f2768ac7"
+      ],
+      "status": "candidate_match",
+      "db_id": "9452cf20-f902-4d67-96a1-1195f2768ac7",
+      "doc_id": "house-2025-20026590-4",
+      "asset_identity": "NVDA",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "12/31/2024",
+      "direction": "S",
+      "low": "5,000,001",
+      "high": "25,000,000",
+      "transaction_date": "2024-12-31",
+      "page": 8,
+      "context": "f $12 with an expiration date of 12/20/24.\nAsset Owner Date Tx.\nType\nAmount Cap.\nGains >\n$200? 5 p p / / 3 5 p p / / 4\nApple Inc. - Common Stock (AAPL) [ST] SP 12/31/2024 S\n(partial)\n$5,000,001 -\n$25,000,000\nD: Sold 31,600 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP ",
+      "candidate_db_ids": [
+        "8eb9f4bc-164e-47fd-908b-5782efff9957"
+      ],
+      "status": "candidate_match",
+      "db_id": "8eb9f4bc-164e-47fd-908b-5782efff9957",
+      "doc_id": "house-2025-20026590-2",
+      "asset_identity": "AAPL",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    },
+    {
+      "date": "12/31/2024",
+      "direction": "S",
+      "low": "1,000,001",
+      "high": "5,000,000",
+      "transaction_date": "2024-12-31",
+      "page": 8,
+      "context": "pple Inc. - Common Stock (AAPL) [ST] SP 12/31/2024 S\n(partial)\n$5,000,001 -\n$25,000,000\nD: Sold 31,600 shares.\nNVIDIA Corporation - Common Stock (NVDA) [ST] SP 12/31/2024 S\n(partial)\n$1,000,001 -\n$5,000,000\nD: Sold 10,000 shares.\n* For the complete list of asset type abbreviations, please visit https://fd.house.gov/reference/asset-type-codes.aspx.\n",
+      "candidate_db_ids": [
+        "ae29eb66-b846-4eec-8160-c0c8ce022a3f"
+      ],
+      "status": "candidate_match",
+      "db_id": "ae29eb66-b846-4eec-8160-c0c8ce022a3f",
+      "doc_id": "house-2025-20026590-3",
+      "asset_identity": "NVDA",
+      "visual_review": "Checked PDF pages 6\u20138",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10066169.pdf",
+      "sha256": "0072a625ed93e50f7bca715d8abecb0a0265ab06a1de2b120173800fdb2c9173"
+    }
+  ]
+}

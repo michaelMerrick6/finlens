@@ -1,0 +1,236 @@
+{
+  "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/10008188.pdf",
+  "sha256": "aceffb4534648cd26b073b199149c280e09d85b5737b35f2ce08b58c2068c268",
+  "reporting_year": 2013,
+  "status": "schedule_visually_checked_pending_entity_and_full_filing_reconciliation",
+  "row_count": 12,
+  "rows": [
+    {
+      "page": 7,
+      "source_row": 1,
+      "asset": "The Active Network, Inc. (ACTV)",
+      "owner": "SP",
+      "dates": [
+        "2013-11-26"
+      ],
+      "activity": "sell",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "acquisition_cash_distribution",
+      "corroborating_ptr": "8214491",
+      "source_note": "PTR notes acquisition by Vista Equity Partners and cash distributed in lieu of shares; do not double count annual/PTR."
+    },
+    {
+      "page": 7,
+      "source_row": 2,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-07-02"
+      ],
+      "activity": "buy",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 7,
+      "source_row": 3,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-07-18"
+      ],
+      "activity": "buy",
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 7,
+      "source_row": 4,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-07-24"
+      ],
+      "activity": "buy",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 8,
+      "source_row": 5,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-08-02"
+      ],
+      "activity": "buy",
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 8,
+      "source_row": 6,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-09-30"
+      ],
+      "activity": "buy",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 8,
+      "source_row": 7,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-10-21"
+      ],
+      "activity": "buy",
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 8,
+      "source_row": 8,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-12-20"
+      ],
+      "activity": "buy",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 8,
+      "source_row": 9,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-12-24"
+      ],
+      "activity": "buy",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1
+    },
+    {
+      "page": 8,
+      "source_row": 10,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-12-30"
+      ],
+      "activity": "buy",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1,
+      "aggregation_hold": true,
+      "review_note": "Two identical December 30 source rows. Letter refers to ten operating-cost items; preserve both without inventing equity purchases."
+    },
+    {
+      "page": 8,
+      "source_row": 11,
+      "asset": "United Football League Sacramento Mountain Lions Team",
+      "owner": "SP",
+      "dates": [
+        "2013-12-30"
+      ],
+      "activity": "buy",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [],
+      "economic_type": "business_operating_cost",
+      "exclude_from_equity_purchase_totals": true,
+      "classification_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013/9106227.pdf",
+      "classification_page": 1,
+      "aggregation_hold": true,
+      "review_note": "Two identical December 30 source rows. Letter refers to ten operating-cost items; preserve both without inventing equity purchases."
+    },
+    {
+      "page": 8,
+      "source_row": 12,
+      "asset": "Vizu Corporation Preferred Stock",
+      "owner": "SP",
+      "dates": [
+        "2013-10-07"
+      ],
+      "activity": "sell",
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": []
+    }
+  ]
+}

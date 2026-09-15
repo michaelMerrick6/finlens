@@ -1,3 +1,9 @@
+import annual2025Review from './pelosi-2025-review.json';
+import annual2024Review from './pelosi-2024-review.json';
+import annual2022Review from './pelosi-2022-review.json';
+import annual2023Review from './pelosi-2023-review.json';
+const annualReview = {...annual2022Review, ...annual2023Review, ...annual2024Review, ...annual2025Review};
+import amendmentReview from './pelosi-amendment-review.json';
 // Source-reviewed presentation corrections. Preserve the original database records.
 // Evidence: House PTR PDFs 20033337, 20033725, 20034836, 20035143.
 const upperBounds: Record<number, number> = {1001:15000,15001:50000,50001:100000,100001:250000,250001:500000,500001:1000000,1000001:5000000,5000001:25000000};
@@ -7,6 +13,14 @@ const exercises: Record<string,string> = {'1':'Alphabet (GOOGL)','6':'Amazon (AM
 type Reviewable = { doc_id?: string | null; member_id?: string | null; source_url?: string | null; amount_range?: string | null; asset_name?: string | null; asset_type?: string | null; description?: string | null; filing_status?: string | null };
 function applyReviewedCorrections<T extends Reviewable>(trade:T): T & { activity_note?: string; is_contribution?: boolean } {
   const id=trade.doc_id || '';
+  const annual = (annualReview as Record<string, {source_url:string;amount_range:string;asset_type:string;asset_name:string;description:string;activity_label:string;ticker?:string|null;exclude_from_totals?:boolean}>)[id];
+  if (trade.member_id==='P000197' && annual && trade.source_url===annual.source_url) {
+    return {...trade, amount_range:annual.amount_range,asset_type:annual.asset_type,asset_name:annual.asset_name,
+      description:annual.description,activity_label:annual.activity_label,
+      ...(annual.exclude_from_totals ? {exclude_from_totals:true}:{}),
+      ...('ticker' in annual ? {ticker:annual.ticker}:{}),activity_note:'Reported owner: spouse. Fields verified against the annual disclosure.'};
+  }
+
   const filing=id.replace(/-\d+$/, '');
   const match=filing.match(/^house-(\d{4})-(\d+)$/);
   if(trade.member_id!=='P000197'||!reviewedFilings.has(filing)||!match||trade.source_url!==`https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/${match[1]}/${match[2]}.pdf`)return trade;
@@ -25,11 +39,24 @@ function applyReviewedCorrections<T extends Reviewable>(trade:T): T & { activity
   return result;
 }
 export function isReviewedPublicPartnership(trade: Reviewable) {
+  const correction = (amendmentReview as Record<string, {source_url:string; economic_type?:string}>)[trade.doc_id || ''];
+  if (trade.member_id==='P000197' && correction?.economic_type==='public_partnership_units' && trade.source_url===correction.source_url) return true;
   return trade.doc_id==='house-2026-20033725-0' && trade.member_id==='P000197' && trade.source_url==='https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf';
 }
 
 
 export function reviewPoliticianTrade<T extends Reviewable>(raw:T): T & {activity_note?:string;activity_label?:string;is_contribution?:boolean;exclude_from_totals?:boolean} {
+ const correction = (amendmentReview as Record<string, {source_url:string; superseded_by?:string; economic_type?:string}>)[raw.doc_id || ''];
+ if (raw.member_id === 'P000197' && correction && raw.source_url === correction.source_url) {
+  if (correction.superseded_by) return {...raw, exclude_from_totals:true, activity_label:'Superseded filing', activity_note:`Replaced by amended disclosure ${correction.superseded_by}. Preserved for provenance; excluded from totals.`};
+  const exercise=correction.economic_type==='option_exercise_into_shares';
+  const partnership=correction.economic_type==='public_partnership_units';
+  const min=Number((raw.amount_range || '').replace(/[$,]/g,''));
+  return {...raw, asset_type:exercise?'ST':partnership?'OL':'OP',
+   amount_range:upperBounds[min]?`$${min.toLocaleString('en-US')} - $${upperBounds[min].toLocaleString('en-US')}`:raw.amount_range,
+   exclude_from_totals:false, activity_label:exercise?'Option exercise':partnership?'Partnership units':'Call options',
+   activity_note:'Reported owner: spouse. Amendment reconciled with original; counted once.'+(exercise?' Shares acquired through option exercise.':'')};
+ }
  const trade=applyReviewedCorrections(raw);
  const text=[trade.description,trade.asset_name,trade.activity_note].filter(Boolean).join(' ');
  const aesId=trade.doc_id?.match(/^house-2026-(20034375|20034528)-0$/)?.[1];

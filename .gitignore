@@ -63,3 +63,6 @@ senate_*.png
 *FD.xml
 *FD.zip
 test.json
+
+# Rendered audit scratch files
+/tmp/

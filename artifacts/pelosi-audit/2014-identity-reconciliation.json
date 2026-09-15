@@ -1,0 +1,458 @@
+{
+  "status": "reviewed proposal; not applied to production; not portfolio completeness certification",
+  "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014/10008189.pdf",
+  "amendment_source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2015/20003320.pdf",
+  "amendment_sha256": "08e03b6d84b01231685e581dab1ac6498536894a3f9e86e0926d8d2c7a490490",
+  "amendment_visual_review": "page 1: all six rows expressly Amended; dates, tickers, ranges, call quantities and terms verified",
+  "raw_db_rows": 24,
+  "canonical_source_events": 18,
+  "superseded_duplicates": 6,
+  "rows": [
+    {
+      "page": 7,
+      "source_row": 1,
+      "asset": "Alcoa Inc. (AA)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "32155a12-d4e6-472b-853a-797de85dd711"
+      ],
+      "canonical_db_id": "32155a12-d4e6-472b-853a-797de85dd711",
+      "superseded_db_ids": [],
+      "historical_ticker": "AA",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 7,
+      "source_row": 2,
+      "asset": "Blucora, Inc. (BCOR)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "24652f75-4395-457a-bc38-2dd264a21c37"
+      ],
+      "canonical_db_id": "24652f75-4395-457a-bc38-2dd264a21c37",
+      "superseded_db_ids": [],
+      "historical_ticker": "BCOR",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 7,
+      "source_row": 3,
+      "asset": "Broadcom Corporation - Class A (BRCM)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "df37a496-552b-49cf-9b91-36cbdbf3b322"
+      ],
+      "canonical_db_id": "df37a496-552b-49cf-9b91-36cbdbf3b322",
+      "superseded_db_ids": [],
+      "historical_ticker": "BRCM",
+      "entity_mapping_review_required": true,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 7,
+      "source_row": 4,
+      "asset": "Dow Chemical Company (DOW)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "e89476ca-5984-4c4b-9637-8d46de0b1338"
+      ],
+      "canonical_db_id": "e89476ca-5984-4c4b-9637-8d46de0b1338",
+      "superseded_db_ids": [],
+      "historical_ticker": "DOW",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 7,
+      "source_row": 5,
+      "asset": "Emulex Corporation (ELX)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "d7d954bf-813b-4063-bda3-00bbd198247f"
+      ],
+      "canonical_db_id": "d7d954bf-813b-4063-bda3-00bbd198247f",
+      "superseded_db_ids": [],
+      "historical_ticker": "ELX",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 7,
+      "source_row": 6,
+      "asset": "Entropic Communications, Inc. (ENTR)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "edeed003-6e22-4b3d-acce-dea0242b2cb4"
+      ],
+      "canonical_db_id": "edeed003-6e22-4b3d-acce-dea0242b2cb4",
+      "superseded_db_ids": [],
+      "historical_ticker": "ENTR",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 7,
+      "source_row": 7,
+      "asset": "Hertz Global Holdings, Inc (HTZ)",
+      "owner": null,
+      "dates": [
+        "2014-11-05"
+      ],
+      "activity": "buy",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "b45a12dd-652f-4566-b0b4-4837f8e48bdf",
+        "b9b47179-2f80-478b-a22a-eef1132de3b6"
+      ],
+      "economic_type": "call_option_purchase",
+      "contracts": 50,
+      "strike_price": 22,
+      "expiration_date": "2016-01-15",
+      "canonical_db_id": "b45a12dd-652f-4566-b0b4-4837f8e48bdf",
+      "superseded_db_ids": [
+        "b9b47179-2f80-478b-a22a-eef1132de3b6"
+      ],
+      "historical_ticker": "HTZ",
+      "entity_mapping_review_required": false,
+      "reconciliation": "amended option supersedes original"
+    },
+    {
+      "page": 8,
+      "source_row": 8,
+      "asset": "Hertz Global Holdings, Inc (HTZ)",
+      "owner": null,
+      "dates": [
+        "2014-11-06"
+      ],
+      "activity": "buy",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "2f37f64e-5441-4cf2-a2f6-92d5b870330c",
+        "7eaccef8-88b7-472e-b4e6-c01582991b1d"
+      ],
+      "economic_type": "call_option_purchase",
+      "contracts": 150,
+      "strike_price": 22,
+      "expiration_date": "2016-01-15",
+      "canonical_db_id": "2f37f64e-5441-4cf2-a2f6-92d5b870330c",
+      "superseded_db_ids": [
+        "7eaccef8-88b7-472e-b4e6-c01582991b1d"
+      ],
+      "historical_ticker": "HTZ",
+      "entity_mapping_review_required": false,
+      "reconciliation": "amended option supersedes original"
+    },
+    {
+      "page": 8,
+      "source_row": 9,
+      "asset": "Hertz Global Holdings, Inc (HTZ)",
+      "owner": null,
+      "dates": [
+        "2014-11-25"
+      ],
+      "activity": "buy",
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "00e38a08-0c24-45bc-b963-b923b91e87bf",
+        "ef77fcd4-d9c6-4be0-b3c9-ac320a1cb76e"
+      ],
+      "economic_type": "call_option_purchase",
+      "contracts": 200,
+      "strike_price": 22,
+      "expiration_date": "2016-01-15",
+      "canonical_db_id": "00e38a08-0c24-45bc-b963-b923b91e87bf",
+      "superseded_db_ids": [
+        "ef77fcd4-d9c6-4be0-b3c9-ac320a1cb76e"
+      ],
+      "historical_ticker": "HTZ",
+      "entity_mapping_review_required": false,
+      "reconciliation": "amended option supersedes original"
+    },
+    {
+      "page": 8,
+      "source_row": 10,
+      "asset": "Hertz Global Holdings, Inc (HTZ)",
+      "owner": null,
+      "dates": [
+        "2014-11-28"
+      ],
+      "activity": "buy",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "98d72495-756e-4ad2-b803-a132402fb529",
+        "bb756878-4fd0-47d3-bc4e-07c9328dd07f"
+      ],
+      "economic_type": "call_option_purchase",
+      "contracts": 100,
+      "strike_price": 22,
+      "expiration_date": "2016-01-15",
+      "canonical_db_id": "98d72495-756e-4ad2-b803-a132402fb529",
+      "superseded_db_ids": [
+        "bb756878-4fd0-47d3-bc4e-07c9328dd07f"
+      ],
+      "historical_ticker": "HTZ",
+      "entity_mapping_review_required": false,
+      "reconciliation": "amended option supersedes original"
+    },
+    {
+      "page": 8,
+      "source_row": 11,
+      "asset": "McGrath RentCorp (MGRC)",
+      "owner": "SP",
+      "dates": [
+        "2014-09-22"
+      ],
+      "activity": "sell",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "31232646-ef49-4eeb-94d5-12562bdac06a"
+      ],
+      "economic_type": "charitable_contribution",
+      "exclude_from_sale_totals": true,
+      "source_note": "Contribution to Paul & Nancy Pelosi Charitable Foundation; transfer between brokerage accounts.",
+      "canonical_db_id": "31232646-ef49-4eeb-94d5-12562bdac06a",
+      "superseded_db_ids": [],
+      "historical_ticker": "MGRC",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 8,
+      "source_row": 12,
+      "asset": "Robert Half International Inc. (RHI)",
+      "owner": "SP",
+      "dates": [
+        "2014-09-22"
+      ],
+      "activity": "sell",
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "a4abce92-1205-485c-a42d-c8a873d32ce6"
+      ],
+      "economic_type": "charitable_contribution",
+      "exclude_from_sale_totals": true,
+      "source_note": "Contribution to Paul & Nancy Pelosi Charitable Foundation; transfer between brokerage accounts.",
+      "canonical_db_id": "a4abce92-1205-485c-a42d-c8a873d32ce6",
+      "superseded_db_ids": [],
+      "historical_ticker": "RHI",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 8,
+      "source_row": 13,
+      "asset": "Shutterfly, Inc. (SFLY)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-23"
+      ],
+      "activity": "sell",
+      "amount_min": 15001,
+      "amount_max": 50000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "1d3feb32-5a11-488e-828d-aa2f5c114b8b"
+      ],
+      "canonical_db_id": "1d3feb32-5a11-488e-828d-aa2f5c114b8b",
+      "superseded_db_ids": [],
+      "historical_ticker": "SFLY",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 8,
+      "source_row": 14,
+      "asset": "SunEdison, Inc. (SUNE)",
+      "owner": "SP",
+      "dates": [
+        "2014-10-24"
+      ],
+      "activity": "buy",
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "d71897fb-c261-4739-ac91-683fa1fcfd07"
+      ],
+      "canonical_db_id": "d71897fb-c261-4739-ac91-683fa1fcfd07",
+      "superseded_db_ids": [],
+      "historical_ticker": "SUNE",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 8,
+      "source_row": 15,
+      "asset": "Visa Inc. (V)",
+      "owner": null,
+      "dates": [
+        "2014-12-29"
+      ],
+      "activity": "partial_sale",
+      "amount_min": 250001,
+      "amount_max": 500000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "a30faa5d-d054-4d47-992c-bedc24bbc160"
+      ],
+      "shares": 1000,
+      "canonical_db_id": "a30faa5d-d054-4d47-992c-bedc24bbc160",
+      "superseded_db_ids": [],
+      "historical_ticker": "V",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 8,
+      "source_row": 16,
+      "asset": "Visa Inc. (V)",
+      "owner": null,
+      "dates": [
+        "2014-12-30"
+      ],
+      "activity": "partial_sale",
+      "amount_min": 100001,
+      "amount_max": 250000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "1e9d3f30-5d97-4f3e-a735-8528eed65bbc"
+      ],
+      "shares": 500,
+      "canonical_db_id": "1e9d3f30-5d97-4f3e-a735-8528eed65bbc",
+      "superseded_db_ids": [],
+      "historical_ticker": "V",
+      "entity_mapping_review_required": false,
+      "reconciliation": "asset/date/direction/range identity matched"
+    },
+    {
+      "page": 8,
+      "source_row": 17,
+      "asset": "Walt Disney Company (DIS)",
+      "owner": null,
+      "dates": [
+        "2014-11-28"
+      ],
+      "activity": "buy",
+      "amount_min": 1001,
+      "amount_max": 15000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "43f2e047-1115-485b-9d86-c4c295d303e1",
+        "7e89de82-1458-4f6b-bd86-80c4aea50b0c"
+      ],
+      "economic_type": "call_option_purchase",
+      "contracts": 8,
+      "strike_price": 90,
+      "expiration_date": "2016-01-15",
+      "canonical_db_id": "7e89de82-1458-4f6b-bd86-80c4aea50b0c",
+      "superseded_db_ids": [
+        "43f2e047-1115-485b-9d86-c4c295d303e1"
+      ],
+      "historical_ticker": "DIS",
+      "entity_mapping_review_required": false,
+      "reconciliation": "amended option supersedes original"
+    },
+    {
+      "page": 8,
+      "source_row": 18,
+      "asset": "Walt Disney Company (DIS)",
+      "owner": null,
+      "dates": [
+        "2014-12-10"
+      ],
+      "activity": "buy",
+      "amount_min": 50001,
+      "amount_max": 100000,
+      "amount_scope": "reported source row",
+      "visual_review": "checked against PDF pages 7\u20138",
+      "candidate_db_ids": [
+        "3b79e050-11b1-4217-a827-0dc6b4c6da62",
+        "9e719451-3b21-4370-a75d-3608c7da8425"
+      ],
+      "economic_type": "call_option_purchase",
+      "contracts": 92,
+      "strike_price": 90,
+      "expiration_date": "2016-01-15",
+      "canonical_db_id": "9e719451-3b21-4370-a75d-3608c7da8425",
+      "superseded_db_ids": [
+        "3b79e050-11b1-4217-a827-0dc6b4c6da62"
+      ],
+      "historical_ticker": "DIS",
+      "entity_mapping_review_required": false,
+      "reconciliation": "amended option supersedes original"
+    }
+  ]
+}

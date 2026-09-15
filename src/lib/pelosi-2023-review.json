@@ -1,0 +1,73 @@
+{
+  "house-2023-20022664-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20022664.pdf",
+    "asset_type": "ST",
+    "asset_name": "AAPL common stock",
+    "amount_range": "$500,001 - $1,000,000",
+    "description": "Exercised 100 call options (10,000 shares) at a strike price of $80, expiration 3/17/23.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 6
+  },
+  "house-2023-20023080-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20023080.pdf",
+    "asset_type": "ST",
+    "asset_name": "AAPL common stock",
+    "amount_range": "$500,001 - $1,000,000",
+    "description": "Charitable contribution of 2,900 shares to Trinity College.",
+    "activity_label": "Charitable contribution",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 6
+  },
+  "house-2023-20023192-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20023192.pdf",
+    "asset_type": "ST",
+    "asset_name": "AAPL common stock",
+    "amount_range": "$250,001 - $500,000",
+    "description": "Exercised 50 call options (5,000 shares) at a strike price of $80, expiration 6/16/23.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 6
+  },
+  "house-2023-20023192-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20023192.pdf",
+    "asset_type": "ST",
+    "asset_name": "MSFT common stock",
+    "amount_range": "$500,001 - $1,000,000",
+    "description": "Exercised 50 call options (5,000 shares) at a strike price of $180, expiration 6/16/23.",
+    "activity_label": "Option exercise",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 6
+  },
+  "house-2023-20024186-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20024186.pdf",
+    "asset_type": "OP",
+    "asset_name": "NVDA call options",
+    "amount_range": "$1,000,001 - $5,000,000",
+    "description": "Purchased 50 call options at a strike price of $120, expiration 12/20/24.",
+    "activity_label": "Call options",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 7
+  },
+  "house-2023-20022664-1": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20022664.pdf",
+    "asset_type": "AB",
+    "asset_name": "REOF XXV, LLC private investment",
+    "amount_range": "$500,001 - $1,000,000",
+    "description": "Investment in REOF XXV, LLC, a private real estate investment.",
+    "activity_label": "Private investment",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 7
+  },
+  "house-2023-20022320-0": {
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2023/20022320.pdf",
+    "asset_type": "OP",
+    "asset_name": "RBLX call options",
+    "amount_range": "$1.00",
+    "description": "100 call options at strike $100 expired worthless on 1/20/23. Filing reports $1.00 as amount and $303,001 total loss; $1 is not sale proceeds.",
+    "activity_label": "Expired worthless",
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023/10059734.pdf",
+    "annual_page": 7,
+    "exclude_from_totals": true
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -23,6 +24,8 @@ type Context = {
   mutate: (path: string, body: object, method?: string) => Promise<void>;
   signOut: () => Promise<void>;
   refresh: () => void;
+  reauthenticate: () => Promise<void>;
+  hqAccess: { current: { userId: string; password: string } | null };
 };
 // Keep one browser auth client across development hot reloads as well as renders.
 const browserAuth = globalThis as typeof globalThis & {
@@ -55,6 +58,7 @@ export function AccountProvider({
   const [client] = useState(() =>
     getBrowserClient(url, publicKey),
   );
+  const hqAccess = useRef<{ userId: string; password: string } | null>(null);
   const activeUser = useRef<string | undefined>(undefined);
   const [session, setSession] = useState<Session | null>(null);
   const [account, setAccount] = useState<AccountState | null>(null);
@@ -92,6 +96,7 @@ export function AccountProvider({
       if (!active) return;
       if (!next) setLoading(false);
       if (activeUser.current !== next?.user.id) {
+        hqAccess.current = null;
         setAccount(null);
         setError("");
         setLoading(Boolean(next));
@@ -158,9 +163,20 @@ export function AccountProvider({
     if (data.state) setAccount(data.state);
     else setRevision((n) => n + 1);
   }
+  const reauthenticate = useCallback(async () => {
+    await client?.auth.signOut({ scope: "local" });
+    hqAccess.current = null;
+    setSession(null);
+    setAccount(null);
+    setSent(false);
+    setLoginError("Your session has expired. Please sign in again to continue.");
+    setOpen(true);
+  }, [client]);
+
   return (
     <AccountContext.Provider
       value={{
+        hqAccess,
         account,
         session,
         loading,
@@ -172,10 +188,12 @@ export function AccountProvider({
         },
         mutate,
         refresh: () => setRevision((n) => n + 1),
+        reauthenticate,
         signOut: async () => {
-          const result = await client?.auth.signOut();
+          const result = await client?.auth.signOut({ scope: "local" });
           if (result?.error) throw result.error;
           setAccount(null);
+          hqAccess.current = null;
           setSession(null);
         },
       }}

@@ -1,0 +1,138 @@
+{
+  "status": "19 annual source rows matched uniquely to stored records; not all-history certification",
+  "rows": [
+    {
+      "annual_row": 1,
+      "page": 7,
+      "db_id": "97dbd826-068e-484d-838b-8e305a46a599",
+      "doc_id": "house-2025-20026590-8",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 2,
+      "page": 7,
+      "db_id": "4dff7a37-0848-4f43-a6a3-61a202f8f563",
+      "doc_id": "house-2025-20026590-7",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 3,
+      "page": 7,
+      "db_id": "b19db0a9-81fd-4151-8903-651ca164cd41",
+      "doc_id": "house-2025-20026590-1",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 4,
+      "page": 7,
+      "db_id": "22d0ba4b-82c4-422c-8abf-1e55c0c97315",
+      "doc_id": "house-2025-20026590-0",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 5,
+      "page": 7,
+      "db_id": "8ead70f3-2739-4b33-a7dd-f5c554d36c10",
+      "doc_id": "house-2025-20026590-5",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 6,
+      "page": 7,
+      "db_id": "5c863d6c-2280-4f3b-ada4-3417c1e0a3cc",
+      "doc_id": "house-2025-20030630-1",
+      "identity_evidence": "exact Matthews asset name/date/direction/full amount; stored ticker T is incorrect"
+    },
+    {
+      "annual_row": 7,
+      "page": 7,
+      "db_id": "53f34925-c8b2-4bd8-a2fe-4722394caeec",
+      "doc_id": "house-2025-20030630-0",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 8,
+      "page": 8,
+      "db_id": "8eaa4313-b9a6-4912-9807-f9a54cee6351",
+      "doc_id": "house-2025-20033337-0",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 9,
+      "page": 8,
+      "db_id": "71b3dd14-acd5-45fe-a33f-43535b23fd7f",
+      "doc_id": "house-2026-20033725-7",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 10,
+      "page": 8,
+      "db_id": "32cc1736-d89a-4908-afa2-bbe3769f1c0a",
+      "doc_id": "house-2026-20033725-11",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 11,
+      "page": 8,
+      "db_id": "22274f75-096d-45d3-85c0-e9bbfcf9f213",
+      "doc_id": "house-2026-20033725-5",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 12,
+      "page": 8,
+      "db_id": "0086a442-e10e-49fe-b64e-d3eb8c94c139",
+      "doc_id": "house-2026-20033725-17",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 13,
+      "page": 8,
+      "db_id": "9063bdba-a6a6-4962-b77e-487feb31cdf9",
+      "doc_id": "house-2026-20033725-13",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 14,
+      "page": 8,
+      "db_id": "cd2ac643-5fc4-4c74-b8d4-33fc40f5b105",
+      "doc_id": "house-2026-20033725-3",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 15,
+      "page": 8,
+      "db_id": "30ec93e1-e074-4f53-96d8-dc1792c4711e",
+      "doc_id": "house-2026-20033725-9",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 16,
+      "page": 8,
+      "db_id": "2464998d-601a-427a-a5b2-682f14effe95",
+      "doc_id": "house-2026-20033725-10",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 17,
+      "page": 8,
+      "db_id": "eb117a3e-53c4-43fb-8dcf-8ebade11ea1d",
+      "doc_id": "house-2026-20033725-4",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 18,
+      "page": 8,
+      "db_id": "d2a43c4d-5c1e-4497-a8da-5a6c9ab31f3f",
+      "doc_id": "house-2026-20033725-8",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    },
+    {
+      "annual_row": 19,
+      "page": 9,
+      "db_id": "25a9edd3-d7ff-4bf1-9656-ab74503118b7",
+      "doc_id": "house-2026-20033725-2",
+      "identity_evidence": "ticker/date/direction/minimum amount"
+    }
+  ]
+}

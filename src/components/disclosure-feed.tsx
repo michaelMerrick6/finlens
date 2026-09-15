@@ -13,6 +13,7 @@ import {
 import { formatPoliticianAmountRange } from "@/lib/politician-amount-range";
 import { Icon } from "./icon";
 import { Avatar, CompanyLogo } from "./identity-images";
+import { OptionLabel } from "./option-label";
 import { Modal } from "./modal";
 
 export { Avatar } from "./identity-images";
@@ -41,6 +42,7 @@ export function TradeDetails({
           {trade.activity_label || (trade.is_contribution ? "Contribution" : directionLabel(trade.transaction_type))}
         </span>
         <h3 className="asset-identity"><CompanyLogo ticker={trade.ticker} />{trade.ticker}</h3>
+        <OptionLabel trade={trade} />
         <p>{trade.asset_name || "Disclosed security"}</p>
         {trade.activity_note && <p className="fine-print">{trade.activity_note}</p>}
       </div>
@@ -355,6 +357,7 @@ function DisclosureFeedContent({
                   <small className="asset-description">
                     {trade.asset_name || "Disclosed security"}
                   </small>
+                  <OptionLabel trade={trade} />
                 </td>
                 <td>
                   <span className={`badge ${trade.transaction_type}`}>

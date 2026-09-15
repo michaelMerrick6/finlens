@@ -1,4 +1,5 @@
 export type Disclosure = {
+  asset_type?: string | null;
   activity_note?: string;
   activity_label?: string;
   is_contribution?: boolean;

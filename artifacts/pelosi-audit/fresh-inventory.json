@@ -1,0 +1,1108 @@
+{
+  "checked_at": "2026-09-14T07:45:05.881875+00:00",
+  "years": [
+    {
+      "year": 2008,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2008FD.txt",
+      "status": "checked",
+      "sha256": "890a10753cad38b8bb9318eebd7ccebf7ae59b3731890920e2541ff7e23b2c8c",
+      "filings": [
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA08",
+          "Year": "2008",
+          "Filing Year": "2007",
+          "FilingDate": "5/15/2008",
+          "DocID": "8135973",
+          "DisclosureType": "FD"
+        }
+      ]
+    },
+    {
+      "year": 2009,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2009FD.txt",
+      "status": "checked",
+      "sha256": "eabe5388e603d13777ceafb59cd4ab05d8c90de7ecb3ab196c45f132036d2d9f",
+      "filings": [
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA08",
+          "Year": "2009",
+          "Filing Year": "2008",
+          "FilingDate": "5/15/2009",
+          "DocID": "8140536",
+          "DisclosureType": "FD"
+        },
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "A",
+          "StateDst": "CA08",
+          "Year": "2009",
+          "Filing Year": "2008",
+          "FilingDate": "6/12/2009",
+          "DocID": "8142737",
+          "DisclosureType": "FD"
+        }
+      ]
+    },
+    {
+      "year": 2010,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2010FD.txt",
+      "status": "checked",
+      "sha256": "7caec76b2c303d80ae67df4e189a9414257ec31e84010e6adfeea2cc32b52ca8",
+      "filings": [
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "A",
+          "StateDst": "CA08",
+          "Year": "2010",
+          "Filing Year": "2009",
+          "FilingDate": "6/8/2010",
+          "DocID": "8147383",
+          "DisclosureType": "FD"
+        },
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA08",
+          "Year": "2010",
+          "Filing Year": "2009",
+          "FilingDate": "5/17/2010",
+          "DocID": "8147382",
+          "DisclosureType": "FD"
+        }
+      ]
+    },
+    {
+      "year": 2011,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2011FD.txt",
+      "status": "checked",
+      "sha256": "926e34278476c51995827d9d384579204ed828a7e8fca23e5c205f86f42f7713",
+      "filings": [
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA08",
+          "Year": "2011",
+          "Filing Year": "2010",
+          "FilingDate": "5/16/2011",
+          "DocID": "8202691",
+          "DisclosureType": "FD"
+        }
+      ]
+    },
+    {
+      "year": 2012,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2012FD.txt",
+      "status": "checked",
+      "sha256": "1b616011a76711aec107dd4ab743b64fda29fce3b85cea6e20a01e60c4548de3",
+      "filings": [
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA08",
+          "Year": "2012",
+          "Filing Year": "2011",
+          "FilingDate": "5/15/2012",
+          "DocID": "8205631",
+          "DisclosureType": "FD"
+        }
+      ]
+    },
+    {
+      "year": 2013,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2013FD.txt",
+      "status": "checked",
+      "sha256": "ea6bcddb68f3901f652c20a38237d5fdfc4ab56ae8872f7769bda7bcb05fbc57",
+      "filings": [
+        {
+          "Prefix": "HONORABLE",
+          "Last": "PELOSI",
+          "First": "NANCY",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2013",
+          "Filing Year": "2012",
+          "FilingDate": "5/15/2013",
+          "DocID": "9102968",
+          "DisclosureType": "FD"
+        }
+      ]
+    },
+    {
+      "year": 2014,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2014FD.txt",
+      "status": "checked",
+      "sha256": "97bc30abb35fb35e895b87e9b0c27a91a7eeae1aad646be03160df32868735a5",
+      "filings": []
+    },
+    {
+      "year": 2015,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2015FD.txt",
+      "status": "checked",
+      "sha256": "9f48c5bafe7867d3e00d79203a6c9275a16ed7069725d9dd4909a15c54417c8d",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "A",
+          "StateDst": "CA12",
+          "Year": "2015",
+          "FilingDate": "6/3/2016",
+          "DocID": "10012829"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2015",
+          "FilingDate": "5/16/2016",
+          "DocID": "10010857"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2015",
+          "FilingDate": "1/12/2015",
+          "DocID": "20002351"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2015",
+          "FilingDate": "7/7/2015",
+          "DocID": "20003320"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2015",
+          "FilingDate": "7/28/2015",
+          "DocID": "20003475"
+        }
+      ]
+    },
+    {
+      "year": 2016,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2016FD.txt",
+      "status": "checked",
+      "sha256": "bae681274410bf3d407dd20fdf439cb483f0cdd362d2dd542cca4d01d48c79c9",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2016",
+          "FilingDate": "5/15/2017",
+          "DocID": "10015814"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2016",
+          "FilingDate": "2/2/2016",
+          "DocID": "20004503"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2016",
+          "FilingDate": "2/17/2016",
+          "DocID": "20004596"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2016",
+          "FilingDate": "5/24/2016",
+          "DocID": "20005096"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2016",
+          "FilingDate": "8/17/2016",
+          "DocID": "20005689"
+        }
+      ]
+    },
+    {
+      "year": 2017,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2017FD.txt",
+      "status": "checked",
+      "sha256": "f7169c7efa5d2acc276b73bdfd8d5f4e8ea0ae3f6bc8879da16b97b158c85b90",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2017",
+          "FilingDate": "5/14/2018",
+          "DocID": "10020995"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2017",
+          "FilingDate": "2/6/2017",
+          "DocID": "20006683"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2017",
+          "FilingDate": "2/14/2017",
+          "DocID": "20006735"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2017",
+          "FilingDate": "7/20/2017",
+          "DocID": "20007655"
+        }
+      ]
+    },
+    {
+      "year": 2018,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2018FD.txt",
+      "status": "checked",
+      "sha256": "5a01e89436ceafff1d198c576cdfb8d8276f180ffdfe64877db0327f9083535d",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "5/15/2019",
+          "DocID": "10026982"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "1/10/2018",
+          "DocID": "20008699"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "2/26/2018",
+          "DocID": "20009030"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "4/16/2018",
+          "DocID": "20009293"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "9/6/2018",
+          "DocID": "20009481"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "10/25/2018",
+          "DocID": "20010452"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2018",
+          "FilingDate": "11/8/2018",
+          "DocID": "20010631"
+        }
+      ]
+    },
+    {
+      "year": 2019,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2019FD.txt",
+      "status": "checked",
+      "sha256": "58707c2b9079fc87d9029cfa5263cd24335805cbf30bec9ea0253368d0af7dab",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "8/13/2020",
+          "DocID": "10035243"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "3/11/2019",
+          "DocID": "20011279"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "7/11/2019",
+          "DocID": "20011965"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "8/13/2019",
+          "DocID": "20012127"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "9/18/2019",
+          "DocID": "20012288"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "9/19/2019",
+          "DocID": "20012343"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "X",
+          "StateDst": "CA12",
+          "Year": "2019",
+          "FilingDate": "4/15/2020",
+          "DocID": "30010482"
+        }
+      ]
+    },
+    {
+      "year": 2020,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2020FD.txt",
+      "status": "checked",
+      "sha256": "36cffbf74db5e101ce840f7eed9cb48b580c789e3c7f6a544984fc3b75b784ad",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "8/13/2021",
+          "DocID": "10039988"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "2/11/2020",
+          "DocID": "20015042"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "3/3/2020",
+          "DocID": "20016155"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "4/1/2020",
+          "DocID": "20016340"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "6/9/2020",
+          "DocID": "20016726"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "7/20/2020",
+          "DocID": "20016961"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "9/3/2020",
+          "DocID": "20017123"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "10/4/2020",
+          "DocID": "20017460"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "12/10/2020",
+          "DocID": "20017834"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "X",
+          "StateDst": "CA12",
+          "Year": "2020",
+          "FilingDate": "4/26/2021",
+          "DocID": "30013923"
+        }
+      ]
+    },
+    {
+      "year": 2021,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2021FD.txt",
+      "status": "checked",
+      "sha256": "061672974e5550d47775e736e18fc6e6f8f94782418692d003b7731739452b7f",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "5/16/2022",
+          "DocID": "10047356"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "1/21/2021",
+          "DocID": "20018011"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "3/9/2021",
+          "DocID": "20018355"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "4/9/2021",
+          "DocID": "20018539"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "7/2/2021",
+          "DocID": "20019004"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "8/20/2021",
+          "DocID": "20019331"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2021",
+          "FilingDate": "12/29/2021",
+          "DocID": "20020106"
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2022FD.txt",
+      "status": "checked",
+      "sha256": "bb968ddebcfd5ae227051e9e4df61521634f12caeaf182220a77469b33696d73",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA11",
+          "Year": "2022",
+          "FilingDate": "5/15/2023",
+          "DocID": "10053231"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "1/12/2022",
+          "DocID": "20020208"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "2/28/2022",
+          "DocID": "20020515"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "3/4/2022",
+          "DocID": "20020561"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "3/21/2022",
+          "DocID": "20020662"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "5/3/2022",
+          "DocID": "20020916"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "6/3/2022",
+          "DocID": "20021142"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "7/14/2022",
+          "DocID": "20021374"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "7/26/2022",
+          "DocID": "20021438"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "9/9/2022",
+          "DocID": "20021675"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "10/14/2022",
+          "DocID": "20021837"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2022",
+          "FilingDate": "11/30/2022",
+          "DocID": "20022063"
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2023FD.txt",
+      "status": "checked",
+      "sha256": "a4c31259973d759c9e94cc650573362331bb24ae41cf8a1456fb5380c604fec3",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA11",
+          "Year": "2023",
+          "FilingDate": "5/15/2024",
+          "DocID": "10059734"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2023",
+          "FilingDate": "1/25/2023",
+          "DocID": "20022320"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2023",
+          "FilingDate": "4/6/2023",
+          "DocID": "20022664"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2023",
+          "FilingDate": "6/6/2023",
+          "DocID": "20023080"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2023",
+          "FilingDate": "6/22/2023",
+          "DocID": "20023192"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2023",
+          "FilingDate": "12/21/2023",
+          "DocID": "20024186"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA12",
+          "Year": "2023",
+          "FilingDate": "1/12/2023",
+          "DocID": "20022260"
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024FD.txt",
+      "status": "checked",
+      "sha256": "2d7179e8d08584bd8307e23e25180d7a5d067bf4048287f7dc5f252e7a072ac7",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA11",
+          "Year": "2024",
+          "FilingDate": "5/15/2025",
+          "DocID": "10066169"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2024",
+          "FilingDate": "2/23/2024",
+          "DocID": "20024542"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2024",
+          "FilingDate": "3/21/2024",
+          "DocID": "20024625"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2024",
+          "FilingDate": "7/2/2024",
+          "DocID": "20025368"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2024",
+          "FilingDate": "7/30/2024",
+          "DocID": "20025535"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2024",
+          "FilingDate": "9/11/2024",
+          "DocID": "20025819"
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025FD.txt",
+      "status": "checked",
+      "sha256": "54636cef944c250164d7899bf2a5d763c463d8ab7ad343cc6e295cd097d8335d",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "CA11",
+          "Year": "2025",
+          "FilingDate": "5/15/2026",
+          "DocID": "10075701"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2025",
+          "FilingDate": "1/17/2025",
+          "DocID": "20026590"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2025",
+          "FilingDate": "7/9/2025",
+          "DocID": "20030630"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2025",
+          "FilingDate": "10/24/2025",
+          "DocID": "20033337"
+        }
+      ]
+    },
+    {
+      "year": 2026,
+      "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2026FD.txt",
+      "status": "checked",
+      "sha256": "8725dfb7657aeb32a7d68a155da96c8c13a04680508d300d3743a6b44604625f",
+      "filings": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2026",
+          "FilingDate": "1/23/2026",
+          "DocID": "20033725"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2026",
+          "FilingDate": "6/23/2026",
+          "DocID": "20034836"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Pelosi",
+          "First": "Nancy",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "CA11",
+          "Year": "2026",
+          "FilingDate": "8/21/2026",
+          "DocID": "20035143"
+        }
+      ]
+    }
+  ],
+  "new_filings": []
+}
