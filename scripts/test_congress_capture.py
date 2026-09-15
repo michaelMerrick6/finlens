@@ -68,6 +68,17 @@ class CongressCaptureTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             load_recent_senate_filings(session, days=30, limit=None)
 
+    def test_unstable_senate_pages_are_refetched_in_disjoint_date_ranges(self):
+        from datetime import date
+        import sync_recent_senate_filings as senate
+        with patch.object(senate,'congress_today',return_value=date(2026,9,14)), \
+             patch.object(senate,'load_recent_senate_filings',side_effect=[
+                 senate.SenatePaginationError('duplicate at page boundary'),[{'doc_key':'one'}],[{'doc_key':'two'}]]) as fetch:
+            rows=senate.load_senate_interval(object(),date(2026,9,1),date(2026,9,4))
+        self.assertEqual(len(rows),2)
+        self.assertEqual(fetch.call_args_list[1].kwargs['end_date'],date(2026,9,2))
+        self.assertEqual(fetch.call_args_list[2].kwargs['days'],11)
+
     def test_empty_extraction_cannot_delete_a_filing(self):
         db = MagicMock()
         with self.assertRaises(ValueError):

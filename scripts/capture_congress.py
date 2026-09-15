@@ -23,11 +23,14 @@ def discover(client, chamber, start_year):
             register_filings(client, chamber, filings)
             count += len(filings)
         return count
-    from sync_recent_senate_filings import create_senate_session, load_recent_senate_filings
+    from sync_recent_senate_filings import create_senate_session, load_senate_interval
+    count = 0
     with create_senate_session() as session:
-        filings = load_recent_senate_filings(session, days=(congress_today() - date(start_year, 1, 1)).days, limit=None)
-    register_filings(client, chamber, filings)
-    return len(filings)
+        for year in range(congress_today().year, start_year - 1, -1):
+            filings = load_senate_interval(session, date(year, 1, 1), min(date(year, 12, 31), congress_today()))
+            register_filings(client, chamber, filings)
+            count += len(filings)
+    return count
 
 
 def parse_claim(chamber, filing, members, lookup):

@@ -44,6 +44,11 @@ GRANT ALL ON public.congress_delivery_tombstones TO service_role;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_politician_trades_doc_id_unique
     ON public.politician_trades(doc_id) WHERE doc_id IS NOT NULL;
 
+-- Range predicates use these indexes even in cached RPC plans.
+CREATE INDEX IF NOT EXISTS idx_congress_trade_filing_prefix ON public.politician_trades(lower(doc_id));
+CREATE INDEX IF NOT EXISTS idx_congress_raw_filing_prefix ON public.raw_filings(lower(source_document_id)) WHERE source='congress';
+CREATE INDEX IF NOT EXISTS idx_congress_signal_filing_prefix ON public.signal_events(lower(source_document_id)) WHERE source='congress' AND signal_type='politician_trade';
+
 -- Index dependency IDs only, rather than scanning every signal payload per trade.
 CREATE OR REPLACE FUNCTION public.signal_dependency_ids(payload jsonb)
 RETURNS text[] LANGUAGE sql IMMUTABLE PARALLEL SAFE AS $$
@@ -148,19 +153,19 @@ BEGIN
         WHERE e->>'source' IS DISTINCT FROM 'congress' OR NOT (e->>'source_document_id' = ANY(trade_keys))) THEN
         RAISE EXCEPTION 'Foreign signal or raw filing';
     END IF;
-    SELECT count(*) INTO prior_count FROM politician_trades WHERE lower(doc_id) LIKE target_filing_id || '-%';
+    SELECT count(*) INTO prior_count FROM politician_trades WHERE lower(doc_id) >= target_filing_id || '-' AND lower(doc_id) < target_filing_id || '.';
     SELECT EXISTS (
-        (SELECT to_jsonb(t) - 'id' - 'created_at' FROM politician_trades t WHERE lower(doc_id) LIKE target_filing_id || '-%'
+        (SELECT to_jsonb(t) - 'id' - 'created_at' FROM politician_trades t WHERE lower(doc_id) >= target_filing_id || '-' AND lower(doc_id) < target_filing_id || '.'
          EXCEPT SELECT value FROM jsonb_array_elements(trades))
         UNION ALL
         (SELECT value FROM jsonb_array_elements(trades)
-         EXCEPT SELECT to_jsonb(t) - 'id' - 'created_at' FROM politician_trades t WHERE lower(doc_id) LIKE target_filing_id || '-%')
+         EXCEPT SELECT to_jsonb(t) - 'id' - 'created_at' FROM politician_trades t WHERE lower(doc_id) >= target_filing_id || '-' AND lower(doc_id) < target_filing_id || '.')
     ) INTO changed;
 
     IF changed THEN
         SELECT coalesce(array_agg(id), ARRAY[]::uuid[]) INTO changed_ids FROM signal_events
         WHERE source='congress' AND signal_type='politician_trade'
-          AND lower(source_document_id) LIKE target_filing_id || '-%';
+          AND lower(source_document_id) >= target_filing_id || '-' AND lower(source_document_id) < target_filing_id || '.';
         -- Invalidate derived events transitively; their compiler will rebuild from current rows.
         WITH RECURSIVE affected(id) AS (
             SELECT unnest(changed_ids)
@@ -172,9 +177,9 @@ BEGIN
         removed_ids := removed_ids || ARRAY(SELECT id FROM signal_events WHERE id=ANY(changed_ids)
             AND NOT (source_document_id=ANY(trade_keys)));
         snapshot := jsonb_build_object(
-            'trades', (SELECT coalesce(jsonb_agg(to_jsonb(t)), '[]') FROM politician_trades t WHERE lower(doc_id) LIKE target_filing_id || '-%'),
+            'trades', (SELECT coalesce(jsonb_agg(to_jsonb(t)), '[]') FROM politician_trades t WHERE lower(doc_id) >= target_filing_id || '-' AND lower(doc_id) < target_filing_id || '.'),
             'signals', (SELECT coalesce(jsonb_agg(to_jsonb(e)), '[]') FROM signal_events e WHERE id=ANY(removed_ids || changed_ids)),
-            'raw_filings', (SELECT coalesce(jsonb_agg(to_jsonb(r)), '[]') FROM raw_filings r WHERE source='congress' AND lower(source_document_id) LIKE target_filing_id || '-%'),
+            'raw_filings', (SELECT coalesce(jsonb_agg(to_jsonb(r)), '[]') FROM raw_filings r WHERE source='congress' AND lower(source_document_id) >= target_filing_id || '-' AND lower(source_document_id) < target_filing_id || '.'),
             'deliveries', (SELECT coalesce(jsonb_agg(to_jsonb(d)), '[]') FROM alert_deliveries d WHERE signal_event_id=ANY(removed_ids || changed_ids))
         );
         IF to_regclass('public.tweet_candidates') IS NOT NULL THEN
@@ -194,7 +199,7 @@ BEGIN
     INSERT INTO companies(ticker,name) SELECT 'N/A','Unmapped asset'
         WHERE EXISTS (SELECT 1 FROM jsonb_array_elements(trades) t WHERE t->>'ticker'='N/A')
         ON CONFLICT(ticker) DO NOTHING;
-    DELETE FROM politician_trades WHERE lower(doc_id) LIKE target_filing_id || '-%' AND NOT (doc_id=ANY(trade_keys));
+    DELETE FROM politician_trades WHERE lower(doc_id) >= target_filing_id || '-' AND lower(doc_id) < target_filing_id || '.' AND NOT (doc_id=ANY(trade_keys));
     INSERT INTO politician_trades(member_id,politician_name,chamber,party,ticker,asset_name,
         transaction_date,published_date,transaction_type,asset_type,amount_range,source_url,doc_id)
     SELECT member_id,politician_name,chamber,party,ticker,asset_name,transaction_date,published_date,
@@ -206,7 +211,7 @@ BEGIN
         transaction_date=EXCLUDED.transaction_date,published_date=EXCLUDED.published_date,
         transaction_type=EXCLUDED.transaction_type,asset_type=EXCLUDED.asset_type,
         amount_range=EXCLUDED.amount_range,source_url=EXCLUDED.source_url;
-    DELETE FROM raw_filings WHERE source='congress' AND lower(source_document_id) LIKE target_filing_id || '-%'
+    DELETE FROM raw_filings WHERE source='congress' AND lower(source_document_id) >= target_filing_id || '-' AND lower(source_document_id) < target_filing_id || '.'
         AND NOT (source_document_id=ANY(trade_keys));
     INSERT INTO raw_filings(source,filing_type,source_document_id,source_url,ticker,filer_name,filed_at,payload)
     SELECT source,filing_type,source_document_id,source_url,ticker,filer_name,filed_at,payload

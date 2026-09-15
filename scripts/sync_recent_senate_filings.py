@@ -25,7 +25,11 @@ RECENT_DAYS = int(os.environ.get("SENATE_RECENT_SYNC_DAYS", "30"))
 MAX_FILINGS = int(os.environ.get("SENATE_RECENT_SYNC_LIMIT", "100"))
 
 
-def load_recent_senate_filings(session, *, days: int, limit: int | None) -> list[dict]:
+class SenatePaginationError(ValueError):
+    pass
+
+
+def load_recent_senate_filings(session, *, days: int, limit: int | None, end_date=None) -> list[dict]:
     cutoff = congress_today() - timedelta(days=days)
     filings: list[dict] = []
     seen: set[str] = set()
@@ -39,7 +43,7 @@ def load_recent_senate_filings(session, *, days: int, limit: int | None) -> list
             "report_types": "[11]",
             "filer_types": "[]",
             "submitted_start_date": cutoff.strftime("%m/%d/%Y 00:00:00"),
-            "submitted_end_date": "",
+            "submitted_end_date": end_date.strftime("%m/%d/%Y 23:59:59") if end_date else "",
             "candidate_state": "",
             "senator_state": "",
             "office_id": "",
@@ -74,7 +78,7 @@ def load_recent_senate_filings(session, *, days: int, limit: int | None) -> list
             if not filed_date:
                 raise ValueError("Invalid Senate filing date")
             filed_dt = datetime.strptime(filed_date, "%Y-%m-%d").date()
-            if filed_dt < cutoff:
+            if filed_dt < cutoff or (end_date and filed_dt > end_date):
                 raise ValueError("Senate filing outside requested window")
             link_html = str(row[3])
             match = re.search(r'href=[\'"]([^\'"]+)[\'"]', link_html)
@@ -85,7 +89,7 @@ def load_recent_senate_filings(session, *, days: int, limit: int | None) -> list
                 raise ValueError("Unrecognized Senate document URL")
             doc_key = detail_path.rstrip("/").split("/")[-1].lower()
             if doc_key in seen:
-                raise ValueError("Duplicate Senate filing during pagination")
+                raise SenatePaginationError("Duplicate Senate filing during pagination")
             seen.add(doc_key)
             filings.append(
                 {
@@ -104,6 +108,19 @@ def load_recent_senate_filings(session, *, days: int, limit: int | None) -> list
             raise RuntimeError("Senate filing count exceeds reported total")
 
     return filings
+
+
+def load_senate_interval(session, start_date, end_date):
+    """Split unstable page boundaries without silently accepting duplicate/missing rows."""
+    try:
+        return load_recent_senate_filings(session, days=(congress_today() - start_date).days,
+                                         limit=None, end_date=end_date)
+    except SenatePaginationError:
+        if start_date >= end_date:
+            raise
+        midpoint = start_date + (end_date - start_date) // 2
+        return (load_senate_interval(session, start_date, midpoint)
+                + load_senate_interval(session, midpoint + timedelta(days=1), end_date))
 
 
 def main() -> None:
