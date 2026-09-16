@@ -80,7 +80,7 @@ class DispatchTests(unittest.TestCase):
         with patch.object(email,'RESEND_API_KEY','test'),patch.object(email,'RESEND_FROM_EMAIL','sender@example.invalid'),patch.object(email.requests,'post') as post:
             post.return_value.status_code=429
             with self.assertRaises(delivery.DeliveryRateLimited):
-                email.send_email('test@example.invalid',{'title':'Test'},'delivery-1')
+                email.send_digest('test@example.invalid',{'subject':'Test','html':'Test','text':'Test'},'delivery-1')
 
     def test_timeout_is_not_automatically_resent(self):
         db=Database()
@@ -109,8 +109,9 @@ class DispatchTests(unittest.TestCase):
     def test_email_has_stable_provider_idempotency_key(self):
         with patch.object(email,'RESEND_API_KEY','test'),patch.object(email,'RESEND_FROM_EMAIL','sender@example.invalid'),patch.object(email.requests,'post') as post:
             post.return_value.status_code=200
-            email.send_email('test@example.invalid',{'title':'<Test>'},'delivery-1')
-            self.assertEqual(post.call_args.kwargs['headers']['Idempotency-Key'],'vail-delivery-delivery-1')
+            post.return_value.json.return_value={'id':'provider-test'}
+            email.send_digest('test@example.invalid',{'subject':'Test','html':'&lt;Test&gt;','text':'<Test>'},'delivery-1')
+            self.assertEqual(post.call_args.kwargs['headers']['Idempotency-Key'],'vail-daily-digest-delivery-1')
             self.assertIn('&lt;Test&gt;',post.call_args.kwargs['json']['html'])
 
 

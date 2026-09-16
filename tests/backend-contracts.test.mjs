@@ -164,3 +164,34 @@ test('activity context flags compensation and keeps restricted stock out of tota
  const ordinary=reviewPoliticianTrade({asset_type:'ST',asset_name:'Example Common Stock'});
  assert.equal(ordinary.exclude_from_totals,undefined);
 });
+
+function sentEmailRoute({ userId = 'user-a', authenticated = true, data = [], failed = false } = {}) {
+  const calls = [];
+  class ApiRouteError extends Error { constructor(status, code, message) { super(message); this.status=status; this.code=code; } }
+  const route = load('src/app/api/account/notifications/route.ts', {
+    'next/server': next,
+    '@/lib/auth-server': { ApiRouteError, requireApiUser: async () => { if (!authenticated) throw new ApiRouteError(401,'AUTH_REQUIRED','Sign in'); return {id:userId}; } },
+    '@/lib/supabase-admin': { getAdminSupabase: () => ({rpc: async (name,args) => { calls.push({name,args}); return {data,error:failed ? {message:'private failure'} : null}; }}) },
+    '@/lib/account-route': {accountRouteErrorResponse: error => next.NextResponse.json({error:error.message},{status:error.status || 500})},
+  });
+  return {...route,calls};
+}
+test('sent email history is scoped to authenticated account, ignores user ID supplied by caller', async () => {
+  const route=sentEmailRoute({data:Array.from({length:21},(_,id)=>({id}))});
+  const result=await route.GET({url:'https://vail.finance/api/account/notifications?user_id=user-b'});
+  assert.equal(result.status,200);assert.equal(result.body.notifications.length,20);assert.equal(result.body.hasMore,true);
+  assert.equal(route.calls[0].args.p_user_id,'user-a');
+});
+test('sent email detail is scoped, hides unavailable records, and rejects invalid pagination', async () => {
+  const route=sentEmailRoute({data:null});
+  const result=await route.GET({url:'https://vail.finance/api/account/notifications?id=00000000-0000-0000-0000-000000000001'});
+  assert.equal(result.status,404);assert.equal(route.calls[0].args.p_user_id,'user-a');
+  const invalid=await route.GET({url:'https://vail.finance/api/account/notifications?offset=-1'});assert.equal(invalid.status,400);
+  const anonymous=sentEmailRoute({authenticated:false});
+  assert.equal((await anonymous.GET({url:'https://vail.finance/api/account/notifications'})).status,401);
+  assert.equal(anonymous.calls.length,0);
+});
+test('sent email database failures do not look like successful empty history', async () => {
+  const route=sentEmailRoute({failed:true});const result=await route.GET({url:'https://vail.finance/api/account/notifications'});
+  assert.equal(result.status,503);assert.ok(!JSON.stringify(result).includes('private failure'));
+});

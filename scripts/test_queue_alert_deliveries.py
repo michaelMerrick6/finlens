@@ -256,7 +256,7 @@ def test_politician_trade_matches_politician_follow_by_member_id() -> None:
     assert (deliveries[0].get("payload") or {}).get("matched_actor_keys") == ["politician:k000389"]
 
 
-def test_politician_filing_summary_matches_politician_follow_by_member_id() -> None:
+def test_daily_email_queues_raw_trades_instead_of_clipped_summaries() -> None:
     events = [
         {
             "id": "summary-1",
@@ -319,7 +319,7 @@ def test_politician_filing_summary_matches_politician_follow_by_member_id() -> N
     )
 
     assert len(deliveries) == 1
-    assert deliveries[0]["signal_event_id"] == "summary-1"
+    assert deliveries[0]["signal_event_id"] == "trade-1"
     assert (deliveries[0].get("payload") or {}).get("reasons") == ["watchlist_actor_match"]
     assert (deliveries[0].get("payload") or {}).get("matched_actor_keys") == ["politician:k000389"]
 
@@ -477,7 +477,7 @@ def main() -> None:
     test_cluster_alert_watchlist_only_queues_selected_channels()
     test_capped_cluster_delivery_rpc_preserves_channels_and_limit()
     test_politician_trade_matches_politician_follow_by_member_id()
-    test_politician_filing_summary_matches_politician_follow_by_member_id()
+    test_daily_email_queues_raw_trades_instead_of_clipped_summaries()
     test_fund_filing_reminder_matches_fund_follow()
     test_fund_filing_received_matches_fund_follow()
     test_fund_position_change_does_not_match_fund_follow()

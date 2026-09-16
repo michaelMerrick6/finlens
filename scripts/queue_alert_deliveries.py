@@ -8,6 +8,7 @@ from congress_trade_history import enrich_events_with_congress_buy_history
 from congress_relevance import enrich_events_with_member_roles
 from insider_holdings import enrich_events_with_insider_position_changes
 from notification_targets import event_actor_match_keys
+from daily_email_digest import AGGREGATE_TYPES
 from notification_compiler import is_compiled_notification_event
 from pipeline_support import emit_summary, get_supabase_client, utc_now
 
@@ -206,6 +207,8 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
         if behavior.get("suppressed"):
             continue
         for subscription in global_subscriptions:
+            if subscription.get("channel") == "email" and signal_type in AGGREGATE_TYPES:
+                continue
             if not event_matches_subscription(event, subscription, behavior=behavior):
                 continue
             destination = (subscription.get("destination") or "").strip()
@@ -226,9 +229,6 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
         matched_follow_rows: list[dict] = list(watchlist_tickers.get(event_ticker, []))
         for actor_match_key in event_actor_match_keys(event):
             matched_follow_rows.extend(watchlist_actors.get(actor_match_key, []))
-
-        if str(event["id"]) in actor_summary_coverage:
-            matched_follow_rows = [row for row in matched_follow_rows if row.get("match_type") != "actor"]
 
         matched_by_watchlist: dict[str, list[dict]] = defaultdict(list)
         for follow_row in matched_follow_rows:
@@ -252,9 +252,13 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
                 for row in matched_rows
             )
             for subscription in subscriptions_by_watchlist.get(watchlist_id, []):
+                if subscription.get("channel") == "email" and signal_type in AGGREGATE_TYPES:
+                    continue
                 channel_matched_rows = [
                     row
                     for row in matched_rows
+                    if not (subscription.get("channel") != "email" and row.get("match_type") == "actor"
+                            and str(event["id"]) in actor_summary_coverage)
                     if row.get("match_type") != "cluster" or subscription.get("channel") in (row.get("channels") or set())
                 ]
                 if not channel_matched_rows:
@@ -439,16 +443,19 @@ def main():
         cluster_alert_watchlists,
     )
     cluster_deliveries = [
-        delivery for delivery in subscription_deliveries if delivery.get("_cluster_alert_user_id")
+        delivery for delivery in subscription_deliveries
+        if delivery.get("_cluster_alert_user_id") and delivery.get("channel") != "email"
     ]
     standard_deliveries = [
-        delivery for delivery in subscription_deliveries if not delivery.get("_cluster_alert_user_id")
+        {key: value for key, value in delivery.items() if not key.startswith("_")}
+        for delivery in subscription_deliveries
+        if not delivery.get("_cluster_alert_user_id") or delivery.get("channel") == "email"
     ]
     standard_deliveries.extend(queue_global_discord_deliveries(events, subscriptions))
     standard_deliveries.extend(queue_owner_sms_signal_deliveries(events))
 
     if standard_deliveries:
-        supabase.table("alert_deliveries").upsert(standard_deliveries, on_conflict="delivery_key").execute()
+        supabase.table("alert_deliveries").upsert(standard_deliveries, on_conflict="delivery_key", ignore_duplicates=True).execute()
     capped_result = queue_capped_cluster_deliveries(supabase, cluster_deliveries)
     deliveries_queued = len(standard_deliveries) + capped_result["deliveries_queued"]
 

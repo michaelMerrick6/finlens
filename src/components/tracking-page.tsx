@@ -5,6 +5,7 @@ import { useAccount } from "./account-provider";
 import { CompanyLogo } from "./identity-images";
 import { Avatar, DisclosureFeed } from "./disclosure-feed";
 import { playTrackingOpenSound } from "@/lib/tracking-chime";
+import { SentNotifications } from "./sent-notifications";
 import { AddTracking } from "./add-tracking";
 import { Icon } from "./icon";
 import type { AccountState } from "@/lib/account-types";
@@ -22,12 +23,12 @@ function EmailPreference({ account }: { account: AccountState }) {
         <h3>Your list. Your pace.</h3>
         <p>
           {active
-            ? `Activity alerts are on for ${account.subscriptions.email.destination}.`
+            ? `Daily email roundups are on for ${account.subscriptions.email.destination}.`
             : "Check in whenever you like, or receive new activity by email."}
         </p>
         <small>
-          Alerts include purchases and sales, after a new disclosure is
-          detected.
+          At most one email a day, combining all your tracked people and stocks.
+          The prior day’s new disclosures are sent after 8 a.m. Eastern. No new activity, no email.
         </small>
         {error && (
           <p className="error" role="alert">
@@ -68,6 +69,7 @@ export function TrackingPage() {
   const { account, session, loading, error, openSignIn, refresh, mutate } =
     useAccount();
   const [adding, setAdding] = useState(false);
+  const [view, setView] = useState<"tracking" | "sent">("tracking");
   const [removing, setRemoving] = useState("");
   const [saveError, setSaveError] = useState("");
   if (!session && !loading)
@@ -179,6 +181,11 @@ export function TrackingPage() {
       </div>
       {adding && <AddTracking onClose={() => setAdding(false)} />}
       <EmailPreference account={account} />
+      <div className="tracking-view-switch" role="group" aria-label="Tracking views">
+        <button aria-pressed={view === "tracking"} onClick={() => setView("tracking")}>Tracking</button>
+        <button aria-pressed={view === "sent"} onClick={() => setView("sent")}>Sent</button>
+      </div>
+      {view === "sent" ? <SentNotifications key={account.user.id} /> : <>
       <div className="tracking-list-heading">
         <h2>Your list</h2>
         <span>
@@ -325,6 +332,7 @@ export function TrackingPage() {
           tracked stocks remain available through their links above.
         </p>
       )}
+      </>}
     </main>
   );
 }
