@@ -25,3 +25,7 @@ Apply supabase_vail_phase19_research_screens.sql. Run scripts/sync_research_clas
 ## Verification
 
 npm run test:backend includes research filter/auth/ownership contracts. scripts/test_research_database.py with isolated VAIL_TEST_POSTGRES_DSN verifies concurrency, quota enforcement, private privileges, and saved-screen limits. Test actual model interpretations against fixed expected filters before changing the prompt/model. The initial six-question live evaluation covers counts, year-to-date all-activity, industry classification, forecasts, historical committee membership, and unsupported valuation criteria. It is a smoke evaluation, not proof that all natural-language queries are reliable; users can inspect/edit filters.
+
+## Chat-first interface
+
+The screener keeps the current conversation visible and displays deterministic criteria chips above the latest results. Edit criteria opens the optional manual form. New search clears conversation and criteria; new interpretation requests omit prior context server-side even if the client supplies it. Only mode=followup carries the last applied filters. Neutral defaults use all activity and one distinct politician; minimum-buyer restrictions must be requested. Saved screens continue to store validated filters, not model prose. Conversation history lasts only for the current mounted page and is cleared on account changes.

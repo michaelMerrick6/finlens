@@ -1,6 +1,6 @@
 import { aggregateAnalysis, type AnalysisTrade } from './congress-analysis';
 export type ScreenFilters = { days: number; basis: 'disclosure'|'trade'; activity: 'buy'|'sell'|'all'; minPoliticians: number; ticker: string|null; industry: string|null; memberId: string|null; committeeId: string|null; chamber: 'all'|'House'|'Senate' };
-export const DEFAULT_SCREEN: ScreenFilters = {days:30,basis:'disclosure',activity:'buy',minPoliticians:3,ticker:null,industry:null,memberId:null,committeeId:null,chamber:'all'};
+export const DEFAULT_SCREEN: ScreenFilters = {days:30,basis:'disclosure',activity:'all',minPoliticians:1,ticker:null,industry:null,memberId:null,committeeId:null,chamber:'all'};
 export type Classification = {ticker:string;company_name:string;industry:string|null;source_url:string;verified_at:string};
 export type ScreenCatalog = {industries:string[];committees:{id:string;name:string;snapshotId:string;verifiedAt:string}[];members:{id:string;name:string;chamber:string}[]};
 export function validateScreen(value: unknown): ScreenFilters {
