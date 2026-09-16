@@ -83,10 +83,9 @@ def parse_amount_lower_bound(amount_range: str | None) -> float:
     raw = str(amount_range or "").strip().lower()
     if not raw:
         return 0.0
-    if "over $" in raw:
-        digits = re.sub(r"[^\d]", "", raw)
-        return float(digits or 0)
-    matches = re.findall(r"\$?([\d,]+)", raw)
+    if raw.startswith("under "):
+        return 0.0
+    matches = re.findall(r"\$?([\d,]+(?:\.\d+)?)", raw)
     if not matches:
         return 0.0
     return float(matches[0].replace(",", ""))

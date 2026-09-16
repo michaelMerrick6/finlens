@@ -5,6 +5,9 @@ def test_parse_amount_lower_bound() -> None:
     assert parse_amount_lower_bound("$100,001 - $250,000") == 100001
     assert parse_amount_lower_bound("Over $1,000,000") == 1000000
     assert parse_amount_lower_bound(None) == 0
+    assert parse_amount_lower_bound("$318.74") == 318.74
+    assert parse_amount_lower_bound("Over $1,000,000.50") == 1000000.50
+    assert parse_amount_lower_bound("Under $1,001") == 0
 
 
 def test_non_clean_congress_asset_is_suppressed() -> None:
