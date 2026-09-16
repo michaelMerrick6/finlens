@@ -32,3 +32,9 @@ test('new questions ignore supplied previous filters; only explicit follow-ups i
  for(const mode of [undefined,'new','followup']){const r=await route.POST({text:async()=>JSON.stringify({action:'interpret',question:'what stocks were bought last week',mode,previous:{...DEFAULT_SCREEN,minPoliticians:3}})});assert.equal(r.status,200);}
  assert.equal(inputs[0],null);assert.equal(inputs[1],null);assert.equal(inputs[2].minPoliticians,3);
 });
+test('ranking explanation reports ties rather than inventing a unique winner or motives',()=>{
+ const {summarizeScreen}=load('src/lib/research-screen.ts');
+ const result={...evaluateScreen([trade('1'),trade('2','P000197',{ticker:'AMD'})],DEFAULT_SCREEN,classification,null,null),filters:DEFAULT_SCREEN,start:'2026-08-18',end:'2026-09-16'};
+ const text=summarizeScreen(result);assert.match(text,/tie for first/);assert.match(text,/1 politician each/);assert.match(text,/not investment merit or the reasons/);
+ assert.match(summarizeScreen({...result,stocks:[]}),/No matching companies/);
+});

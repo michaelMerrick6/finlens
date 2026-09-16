@@ -2279,3 +2279,6 @@ small {
 .research-followup { border-top: 1px solid #e1e7d9; padding-top: 1rem; }
 .research-followup > p { grid-column: 1/-1; margin: 0; }
 @media(max-width:640px) { .research-new { position: static; margin: .5rem 0; } }
+
+.research-result-answer { background: #edf3e6; border-left: 3px solid #8da57a; padding: 1rem; line-height: 1.7; margin-bottom: 1.5rem; }
+.research-chat-composer { margin: 1.5rem 0; }

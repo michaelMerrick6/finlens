@@ -30,3 +30,14 @@ export function evaluateScreen(rows:AnalysisTrade[], f:ScreenFilters, classifica
  return {stocks,coverage:{eligibleTickers:groups.stocks.length,classifiedTickers:classified,unclassifiedTickers:groups.stocks.length-classified},excluded:groups.excluded};
 }
 export type ScreenResult = ReturnType<typeof evaluateScreen> & {filters:ScreenFilters;start:string;end:string;scanned:number;computedAt:string;committeeVerifiedAt:string|null};
+
+// Explain the deterministic ranking, including ties, without inferring trade motives.
+export function summarizeScreen(result: ScreenResult): string {
+ const stocks=result.stocks;
+ if(!stocks.length)return 'No matching companies were found in the available records for this question.';
+ const max=Math.max(...stocks.map(s=>s.politicians));
+ const leaders=stocks.filter(s=>s.politicians===max);
+ const names=leaders.slice(0,5).map(s=>s.ticker).join(', ')+(leaders.length>5?` and ${leaders.length-5} others`:'');
+ const action=result.filters.activity==='buy'?'purchasing':result.filters.activity==='sell'?'selling':'trading';
+ return `${names} ${leaders.length===1?'ranks first':'tie for first'} by distinct politicians ${action}, with ${max} ${max===1?'politician':'politicians'}${leaders.length>1?' each':''} in the matching records from ${result.start} to ${result.end} (${result.filters.basis==='disclosure'?'disclosure':'transaction'} dates). This measures reported activity, not investment merit or the reasons for a trade.`;
+}

@@ -15,13 +15,15 @@ export async function POST(request:Request){
  if(body.action==='interpret'){
  const user=await requireApiUser(request);
  if(typeof body.question!=='string'||body.question.trim().length<3||body.question.length>1000)throw new ApiRouteError(400,'INVALID_QUESTION','Enter a question between 3 and 1,000 characters.');
- if(!process.env.OPENAI_API_KEY)throw new ApiRouteError(503,'NOT_CONFIGURED','Conversational research is not configured. Use the filters below.');
+ if(!process.env.OPENAI_API_KEY)throw new ApiRouteError(503,'NOT_CONFIGURED','Conversational research is not configured. Please try again later.');
  if(body.mode!==undefined && body.mode!=='new' && body.mode!=='followup')throw new ApiRouteError(400,'INVALID_MODE','Choose a new search or follow-up.');
  if(body.mode==='followup' && !body.previous)throw new ApiRouteError(400,'MISSING_CONTEXT','Run a screen before refining it.');
+ const conversation=body.conversation??[];
+ if(!Array.isArray(conversation)||conversation.length>3||conversation.some(t=>!t||typeof t.question!=='string'||t.question.length>1000||typeof t.answer!=='string'||t.answer.length>700))throw new ApiRouteError(400,'INVALID_CONVERSATION','Conversation is too long. Start a new search.');
  const claim=await getAdminSupabase().rpc('claim_research_request',{p_user:user.id});
  if(claim.error)throw new ApiRouteError(503,'USAGE_UNAVAILABLE','Research usage is temporarily unavailable.');
- if(!claim.data)throw new ApiRouteError(429,'DAILY_LIMIT','You have used your 20 daily research questions. Filters remain available.');
- const interpretation=await interpretScreen(body.question,(await researchData()).catalog,body.mode==='followup'?body.previous:null);
+ if(!claim.data)throw new ApiRouteError(429,'DAILY_LIMIT','You have used your 20 daily research questions. Please try again tomorrow.');
+ const interpretation=await interpretScreen(body.question,(await researchData()).catalog,body.mode==='followup'?body.previous:null,conversation);
  return NextResponse.json(interpretation,{headers:{'Cache-Control':'private, no-store'}});
  }
  if(body.action!=='screen')throw new ApiRouteError(400,'INVALID_ACTION','Unknown research action.');
