@@ -2196,3 +2196,19 @@ small {
   .site-header nav a { flex-shrink:0; white-space:nowrap; }
   .header-end { flex-shrink:0; }
 }
+
+/* Sourced committee memberships and dated archive observations. */
+.committee-section { margin: 2.5rem 0 3.5rem; }
+.committee-note { color: var(--muted, #6d786b); font-size: .875rem; line-height: 1.6; margin: .75rem 0; }
+.committee-list { list-style: none; padding: 0; margin: 1.25rem 0; border-top: 1px solid var(--border, #dfe4da); }
+.committee-list li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--border, #dfe4da); }
+.committee-list a { text-underline-offset: 3px; }
+.committee-parent { display: block; font-size: .75rem; color: var(--muted, #6d786b); margin-bottom: .3rem; }
+.committee-role { flex-shrink: 0; font-size: .8rem; padding: .3rem .6rem; background: #eef1e7; border-radius: 4px; }
+.committee-status { padding: .8rem; background: #fff3d9; border-radius: 5px; }
+.committee-history { padding: 1rem 0; }
+.committee-history summary { cursor: pointer; }
+.committee-history-list { max-height: 28rem; overflow-y: auto; }
+.committee-history-list details { padding: .8rem 0; border-bottom: 1px solid var(--border, #dfe4da); }
+.committee-history-list ul { margin: .8rem 0; padding-left: 1.3rem; }
+@media (max-width: 640px) { .committee-list li { align-items: flex-start; } .committee-role { max-width: 7rem; } }

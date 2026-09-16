@@ -1,0 +1,45 @@
+name: Verify Committee Assignments
+on:
+  schedule:
+    - cron: '10 11 * * *'
+  workflow_dispatch:
+    inputs:
+      backfill:
+        description: 'Import archived observations from 2024 onward (includes preceding baseline)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: committee-assignment-sync
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r scripts/requirements.txt
+      - run: python scripts/test_committee_assignments.py
+      - name: Verify and publish official current rosters
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python scripts/sync_committee_assignments.py --write
+      - name: Import archive observations
+        if: inputs.backfill == true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python scripts/sync_committee_assignments.py --write --backfill
+      - name: Save diagnostic evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: committee-sync-evidence
+          path: artifacts/committee-research/
+          retention-days: 14

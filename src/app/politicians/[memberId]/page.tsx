@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { PoliticianCommittees } from "@/components/politician-committees";
 import { cache } from "react";
 import { notFound } from "next/navigation";
 import { getPoliticianWorkspaceData } from "@/lib/politician-workspace-server";
@@ -66,6 +68,9 @@ export default async function Page({
           <Icon name="arrow" size={16} />
         </Link>
       </div>
+      <Suspense fallback={<p>Loading committee assignments…</p>}>
+        <PoliticianCommittees memberId={memberId} />
+      </Suspense>
       <DisclosureFeed
         key={memberId}
         memberId={memberId}
