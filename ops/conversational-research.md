@@ -31,3 +31,9 @@ npm run test:backend includes research filter/auth/ownership contracts. scripts/
 The screen is entirely conversational: one composer remains available after successful answers, unsupported requests, and errors. No manual criteria panel or starting-criteria chips are shown. New search clears context. The last three question/answer pairs are bounded and validated server-side so clarification replies remain meaningful even when there was no successful screen. Saved screens retain validated query filters.
 
 Popularity is defined as the number of distinct politicians in matching records, with ties explicitly reported. The model translates scope; deterministic application code supplies the ranking and counts. An accompanying request for an explanation does not reject a supported ranking; motives and causal explanations remain unknown. Unsupported selection conditions (such as PE ratios) still block a broader search. Dates and source evidence remain visible with results.
+
+## Evidence-led briefs
+
+Each successful turn now retains its own result snapshot and renders a newsletter-style brief with up to three featured companies. A deterministic writing step composes the finding and company paragraphs from the query results, including ties, distinct-politician counts, transaction counts, names and reported dates. It adds no outside company narrative or financial forecasts. Every featured section exposes its underlying disclosures, and remaining matches are expandable. Follow-up input follows the entire answer. Source and coverage details remain available in a collapsed section.
+
+Price performance is not yet included. The existing Python market-price helper can fall back between adjusted and unadjusted closes and expose a raw current quote alongside adjusted history. Before using it for comparative performance, establish consistent adjustment semantics, observation dates, benchmark alignment, non-trading-day treatment, and missing-data behavior.

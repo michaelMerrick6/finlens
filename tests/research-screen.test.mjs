@@ -38,3 +38,15 @@ test('ranking explanation reports ties rather than inventing a unique winner or 
  const text=summarizeScreen(result);assert.match(text,/tie for first/);assert.match(text,/1 politician each/);assert.match(text,/not investment merit or the reasons/);
  assert.match(summarizeScreen({...result,stocks:[]}),/No matching companies/);
 });
+test('research briefs attach names, dates, and evidence to ranked companies',()=>{
+ const {buildResearchBrief}=load('src/lib/research-brief.ts');
+ const rows=[trade('1'),trade('2','P000197'),trade('3','K000389',{ticker:'AMD',transaction_type:'sell'})];
+ const result={...evaluateScreen(rows,DEFAULT_SCREEN,classification,null,null),filters:DEFAULT_SCREEN,start:'2026-08-18',end:'2026-09-16'};
+ const brief=buildResearchBrief(result);assert.match(brief.title,/NVIDIA leads/);assert.equal(brief.sections[0].members.length,2);assert.match(brief.sections[0].dates,/2026-08-01/);assert.match(brief.sections[1].paragraphs[0],/report sales/);
+ assert.equal(brief.sections[0].ticker,'NVDA');assert.match(brief.sections[0].paragraphs[1],/AMD/);
+});
+test('research brief preserves ties, empty results and missing dates',()=>{
+ const {buildResearchBrief}=load('src/lib/research-brief.ts');
+ const result={...evaluateScreen([trade('1','K000389',{transaction_date:null}),trade('2','P000197',{ticker:'AMD',transaction_date:null})],DEFAULT_SCREEN,[],null,null),filters:DEFAULT_SCREEN,start:'2026-08-18',end:'2026-09-16'};
+ const brief=buildResearchBrief(result);assert.match(brief.title,/share the lead/);assert.match(brief.sections[0].paragraphs[1],/tied/);assert.equal(brief.sections[0].dates,'Transaction dates are unavailable.');assert.equal(buildResearchBrief({...result,stocks:[]}).sections.length,0);
+});

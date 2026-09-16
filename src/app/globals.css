@@ -2267,7 +2267,7 @@ small {
 .research-new { position: absolute; right: 0; top: 0; }
 .research-conversation { display: grid; gap: 1rem; margin: 1.5rem 0; }
 .research-turn p { line-height: 1.6; margin: 0; padding: .85rem 1rem; }
-.research-turn p > span { display: block; font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .3rem; color: #65755e; }
+.research-turn .research-user > span { display: block; font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .3rem; color: #65755e; }
 .research-user { background: #f3f5f0; border-radius: 8px; }
 .research-answer { border-left: 2px solid #a0b88c; margin-top: .5rem !important; }
 .research-criteria { margin-top: 1.2rem; }
@@ -2282,3 +2282,29 @@ small {
 
 .research-result-answer { background: #edf3e6; border-left: 3px solid #8da57a; padding: 1rem; line-height: 1.7; margin-bottom: 1.5rem; }
 .research-chat-composer { margin: 1.5rem 0; }
+
+/* Research answers use the same reading rhythm as the Sunday Brief. */
+.research-page { max-width: 880px; }
+.research-page .research-panel { background: transparent; border: 0; border-radius: 0; padding: 1rem 0 2rem; }
+.research-conversation { gap: 3rem; }
+.research-turn .research-user { padding: 1rem 1.2rem; margin-bottom: 2rem; font-size: .9rem; }
+.research-turn .research-answer { border: 0; margin: 0 !important; padding: 0; }
+.research-editorial { padding: 0; }
+.research-editorial .brief-edition { gap: 1rem; flex-wrap: wrap; }
+.research-editorial .research-brief-title { font-size: clamp(28px,4vw,38px); line-height: 1.2; margin: 1.6rem 0 1.2rem; }
+.research-turn .research-editorial p { padding: 0; margin: 1rem 0; line-height: 1.85; }
+.research-turn .research-editorial .research-brief-lead { color: #53654f; font-size: 1rem; }
+.research-turn .research-editorial .brief-window { padding: 1rem 1.2rem; margin: 1.6rem 0; font-size: .8rem; }
+.research-editorial .brief-stock-story h3 { font-size: 28px; font-weight: 500; line-height: 1.3; margin: 1.8rem 0 1.2rem; }
+.research-editorial .brief-stock-heading { font-size: .85rem; }
+.research-editorial .brief-stock-heading .muted { font-weight: 400; }
+.research-editorial .research-brief-people { font-size: .85rem; }
+.research-brief-people a { text-decoration: underline; text-decoration-color: #bfccb5; text-underline-offset: 3px; }
+.research-inline-evidence > summary { font-size: .8rem; font-weight: 600; cursor: pointer; color: #315840; }
+.research-all-matches, .research-sources { margin-top: 1.5rem; padding: 1rem 0; border-top: 1px solid #dce2d5; }
+.research-all-matches > summary, .research-sources > summary, .research-save-details > summary { cursor: pointer; font-size: .85rem; }
+.research-sources { font-size: .75rem; color: #65745f; }
+.research-save-details { margin: 1rem 0; }
+.research-chat-composer { border-top: 1px solid #dce2d5; padding-top: 1.5rem; }
+.research-turn .research-editorial .brief-story-note { font-size: .75rem; color: #71806c; }
+@media(max-width:640px){ .research-editorial .brief-stock-story h3{font-size:24px;} .research-editorial .research-stock > summary{grid-template-columns:60px minmax(0,1fr);} }
