@@ -1,7 +1,6 @@
 "use client";
 import { readPublicPage, storePublicPage } from "@/lib/public-page-cache";
 import { useEffect,useState } from 'react';
-import { ResearchScreen } from './research-screen';
 import { AnalysisStockTools } from './analysis-stock-tools';
 import { Avatar, CompanyLogo } from './identity-images';
 import { TradeDetails } from './disclosure-feed';
@@ -30,9 +29,7 @@ export function AnalysisPage(){
  function reset(){setBusy(true);setError('');setData(null);setLimit(25);setSelected(null);}
  const stocks=[...(data?.stocks||[])].sort((a,b)=>(sort==='net'?(Number(a.unknownAmounts>0)-Number(b.unknownAmounts>0) || (a.unknownAmounts>0 ? 0 : (b.purchaseMin+b.purchaseMax-b.saleMin-b.saleMax-a.purchaseMin-a.purchaseMax+a.saleMin+a.saleMax)/2)):sort==='money'?b.purchaseMin-a.purchaseMin:sort==='sellers'?b.sellers-a.sellers:b.buyers-a.buyers)||a.ticker.localeCompare(b.ticker));
  const visibleStocks=stocks.filter(s=>`${s.ticker} ${[...s.trades].sort((a,b)=>(b.published_date||'').localeCompare(a.published_date||'')||(b.transaction_date||'').localeCompare(a.transaction_date||'')).map(t=>t.asset_name||'').join(' ')}`.toLowerCase().includes(query.trim().toLowerCase()));
- return <><div className="page-heading"><span className="eyebrow">CONGRESSIONAL ACTIVITY</span><h1>See the bigger picture.</h1><p>Explore the stocks politicians bought and sold during your selected period.</p></div>
- <ResearchScreen/>
- <h2 className="research-market-heading">Congressional activity overview</h2>
+ return <><div className="page-heading"><span className="eyebrow">CONGRESSIONAL ACTIVITY</span><h1>Activity overview.</h1><p>Explore the stocks politicians bought and sold during your selected period.</p></div>
  <div className="analysis-controls">{[
  ['Period',period,setPeriod,[['7','Last 7 days'],['30','Last 30 days'],['ytd','Year to date'],['year','Last 12 months']]],
  ['Timing',basis,setBasis,[['filed','Newly disclosed'],['trade','Transaction date']]],

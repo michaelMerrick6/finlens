@@ -24,12 +24,12 @@ function ResearchScreenContent(){
  setMessage(d.message);if(d.supported){setFilters(d.filters);await screen(d.filters,version);}
  }catch(e){if(version===sequence.current)setError(e instanceof Error?e.message:'Research failed.');}finally{if(version===sequence.current)setBusy(false);}}
  return <section className="research-panel" aria-labelledby="research-heading">
- <div className="research-heading"><span className="eyebrow">RESEARCH · BETA</span><h2 id="research-heading">Ask a question. Explore the evidence.</h2><p>Screen companies using disclosed congressional activity and current committee assignments.</p></div>
+ <div className="research-heading"><span className="eyebrow">RESEARCH · BETA</span><h1 id="research-heading">Research screener.</h1><p>Screen companies using disclosed congressional activity and current committee assignments.</p></div>
  <form className="research-question" onSubmit={e=>{e.preventDefault();void ask();}}><label htmlFor="research-question">What would you like to research?</label><textarea id="research-question" maxLength={1000} value={question} onChange={e=>setQuestion(e.target.value)} placeholder="Which stocks had at least three politicians buying in the last 30 days?" rows={2}/><button className="button primary" disabled={busy||!catalog||!available||question.trim().length<3}>{busy?'Researching…':'Ask Vail'}</button></form>
  <div className="research-examples">{['Stocks bought by at least three politicians in the last 30 days','What has Ro Khanna disclosed this year?','Semiconductor stocks bought by two politicians in the last 90 days'].map(q=><button key={q} type="button" onClick={()=>setQuestion(q)}>{q}</button>)}</div>
  <p className="fine-print">{available?'Sign in to ask up to 20 questions per day. Refine a result with a follow-up question or edit its filters.':'Conversational research is not configured. You can still run a screen using the filters.'}</p>
  {message&&<p className="research-interpretation" role="status">{message}</p>}
- <details className="research-filter-details" open><summary>Screening filters</summary><div className="research-filters">
+ <details className="research-filter-details"><summary>Screening filters</summary><div className="research-filters">
  <label>Last days<input type="number" min={1} max={366} value={filters.days} onChange={e=>edit('days',Number(e.target.value))}/></label>
  <label>Timing<select value={filters.basis} onChange={e=>edit('basis',e.target.value as ScreenFilters['basis'])}><option value="disclosure">Disclosure date</option><option value="trade">Transaction date</option></select></label>
  <label>Activity<select value={filters.activity} onChange={e=>edit('activity',e.target.value as ScreenFilters['activity'])}><option value="buy">Purchases</option><option value="sell">Sales</option><option value="all">Purchases & sales</option></select></label>
