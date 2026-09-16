@@ -550,7 +550,10 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
             continue
         # The Clerk roster splits Steube as firstname="W." and middlename="Gregory".
         # Official full name: https://clerk.house.gov/members/S001214
-        member_first = "W. Gregory" if member['id'] == 'S001214' else member["first_name"]
+        # Franklin's stored first name is "C."; the current Clerk roster uses "Scott".
+        # https://clerk.house.gov/members/F000472
+        official_first_names = {'S001214': 'W. Gregory', 'F000472': 'Scott'}
+        member_first = official_first_names.get(member['id'], member["first_name"])
         if first_name_tokens_match(first_tokens, member_first):
             matching_ids.add(member["id"])
 

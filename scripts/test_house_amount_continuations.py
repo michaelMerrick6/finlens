@@ -30,9 +30,11 @@ class HouseAmountTests(unittest.TestCase):
             with self.assertRaises(HouseScanReviewRequired): self.parse(rows,layout='Second Fund' in ' '.join(rows))
 
     def test_official_steube_middle_name_and_fletcher_alias(self):
-        members=[dict(id='S001214',first_name='W.',last_name='Steube',chamber='House'),
+        members=[dict(id='F000472',first_name='C.',last_name='Franklin',chamber='House'),
+                 dict(id='S001214',first_name='W.',last_name='Steube',chamber='House'),
                  dict(id='F000468',first_name='Lizzie',last_name='Fletcher',chamber='House')]
         with read_only_parser_scope():
+            self.assertEqual(resolve_member_id('Scott Scott','Franklin',members),'F000472')
             self.assertEqual(resolve_member_id('Greg','Steube',members),'S001214')
             self.assertEqual(resolve_member_id('Elizabeth','Fletcher',members),'F000468')
 
