@@ -1,0 +1,64 @@
+name: Backfill Congress History
+
+on:
+  workflow_dispatch:
+    inputs:
+      batches_remaining:
+        description: 'Maximum batches including this run (1–100)'
+        required: true
+        default: '20'
+        type: string
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: congress-data-and-signals
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Validate batch budget
+        env:
+          BATCHES_REMAINING: ${{ inputs.batches_remaining }}
+        run: python -c 'import os; n=int(os.environ["BATCHES_REMAINING"]); assert 1 <= n <= 100, "Budget must be 1–100"'
+      - name: Install OCR and Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr poppler-utils
+          pip install -r scripts/requirements.txt
+      - name: Process historical queue
+        id: capture
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FINLENS_DAILY_MODE: '1'
+        run: python scripts/capture_congress.py --backfill --limit 500 --seconds 360 --document-timeout 60 --summary-path artifacts/backfill-summary.json
+      - name: Save coverage and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backfill-summary
+          path: artifacts/backfill-summary.json
+          if-no-files-found: error
+      - name: Continue bounded backfill
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BATCHES_REMAINING: ${{ inputs.batches_remaining }}
+        run: python scripts/continue_congress_backfill.py artifacts/backfill-summary.json --batches-remaining "$BATCHES_REMAINING"
+      - name: Surface filings requiring review
+        if: steps.capture.outcome == 'failure'
+        run: |
+          echo 'Some filings remain unresolved; see the durable queue and summary artifact.'
+          exit 1

@@ -12,6 +12,7 @@ permissions:
 concurrency:
   group: congress-data-and-signals
   cancel-in-progress: false
+  queue: max
 
 jobs:
   capture-congress:

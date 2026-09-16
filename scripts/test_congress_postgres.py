@@ -20,7 +20,7 @@ class CongressPostgresTests(unittest.TestCase):
         END $$""")
         cls.conn.execute("SET search_path TO public, extensions")
         root = Path(__file__).resolve().parents[1]
-        for name in ['supabase_schema.sql', 'supabase_vail_phase1.sql', 'supabase_vail_phase14_congress_capture.sql']:
+        for name in ['supabase_schema.sql', 'supabase_vail_phase1.sql', 'supabase_vail_phase14_congress_capture.sql', 'supabase_vail_phase15_congress_backfill.sql']:
             cls.conn.execute((root/name).read_text())
         # Supabase installs uuid-ossp outside public; security-definer RPCs must not depend on its search path.
         cls.conn.execute('CREATE SCHEMA IF NOT EXISTS extensions')
@@ -57,6 +57,18 @@ class CongressPostgresTests(unittest.TestCase):
 
     def count(self, table):
         return self.conn.execute(f'SELECT count(*) FROM {table}').fetchone()[0]
+
+    def test_backfill_claim_excludes_complete_failed_and_live_leases(self):
+        for key in ['house-2026-failed','house-2026-live','house-2026-expired','house-2026-complete']:
+            self.register(key)
+        self.conn.execute("UPDATE congress_filings SET status='failed' WHERE filing_id='house-2026-failed'")
+        self.conn.execute("UPDATE congress_filings SET status='complete' WHERE filing_id='house-2026-complete'")
+        self.conn.execute("UPDATE congress_filings SET status='processing',lease_until=now()+interval '1 minute' WHERE filing_id='house-2026-live'")
+        self.conn.execute("UPDATE congress_filings SET status='processing',lease_until=now()-interval '1 minute' WHERE filing_id='house-2026-expired'")
+        claimed = [self.conn.execute("SELECT claim_congress_backfill('House')").fetchone()[0] for _ in range(3)]
+        self.assertEqual({r['filing_id'] for r in claimed if r}, {'house-2026-123','house-2026-expired'})
+        self.assertIsNone(claimed[-1])
+        self.assertTrue(all(r['claim_token'] and r['status']=='processing' for r in claimed if r))
 
     def test_failed_replacement_preserves_all_original_tables(self):
         self.publish(self.rows(2))

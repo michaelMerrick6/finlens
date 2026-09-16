@@ -45,7 +45,7 @@ HOUSE_TX_RE = re.compile(
     r"(?P<tail>.*)$"
 )
 HOUSE_AMOUNT_RE = re.compile(
-    r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+)"
+    r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+\.[0-9]{2})(?![0-9,.])"
 )
 HOUSE_TICKER_RE = re.compile(r"\(([A-Za-z]{1,6})\)")
 HOUSE_LAYOUT_TICKER_RE = re.compile(r"\(([A-Za-z]{1,6})\)(?:\s+\[(?P<asset_type>[A-Z]{2})\])?")
@@ -56,7 +56,7 @@ HOUSE_LAYOUT_ROW_RE = re.compile(
     r"(?P<tx_code>[PSEpse])(?:\s+\((?P<qualifier>[^)]+)\))?\s+"
     r"(?P<tx_date>\d{1,2}/\d{1,2}/\d{4})\s+"
     r"(?P<notif_date>\d{1,2}/\d{1,2}/\d{4})\s+"
-    r"(?P<amount>Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+)"
+    r"(?P<amount>Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+\.[0-9]{2}|\$[0-9,]+)(?![0-9,.])"
 )
 HOUSE_OWNER_PREFIX_RE = re.compile(r"^(?:SP|DC|JT|C|D|S)\s+", re.IGNORECASE)
 HOUSE_LAYOUT_OWNER_PREFIX_RE = re.compile(r"^(?:(?:SP|DC|JT|C|D|S)\s+)+", re.IGNORECASE)
@@ -69,6 +69,8 @@ FIRST_NAME_ALIAS_GROUPS = (
     {"rob", "robert", "bob"},
     {"ro", "rohit"},
     {"tim", "timothy"},
+    {"greg", "gregory"},
+    {"lizzie", "elizabeth"},
     {"ted", "rafael"},
     {"tom", "tommy", "thomas"},
 )
@@ -79,6 +81,7 @@ HOUSE_HEADER_FRAGMENTS = (
     "PERIODIC TRANSACTION REPORT",
     "ID OWNER ASSET TRANSACTION",
     "TYPE DATE NOTIFICATION",
+    "TYPE DATE GAINS",
     "DATE AMOUNT CAP",
     "GAINS >",
     "FILING ID #",
@@ -545,7 +548,10 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
         member_last_key = "".join(normalize_name_tokens(member["last_name"]))
         if not member_last_key or member_last_key != last_key:
             continue
-        if first_name_tokens_match(first_tokens, member["first_name"]):
+        # The Clerk roster splits Steube as firstname="W." and middlename="Gregory".
+        # Official full name: https://clerk.house.gov/members/S001214
+        member_first = "W. Gregory" if member['id'] == 'S001214' else member["first_name"]
+        if first_name_tokens_match(first_tokens, member_first):
             matching_ids.add(member["id"])
 
     # A surname or active flag alone cannot establish the filing's identity.
@@ -1267,7 +1273,7 @@ def extract_transactions_from_lines(
         if not tx_match:
             raise HouseScanReviewRequired("Text row: missing transaction fields")
 
-        amount_match = HOUSE_AMOUNT_RE.search(detail_blob)
+        amount_match = HOUSE_AMOUNT_RE.match(tx_match.group("tail").strip())
         if not amount_match:
             raise HouseScanReviewRequired("Text row: missing amount")
 
@@ -1347,21 +1353,23 @@ def extract_transactions_from_layout_lines(
         fallback_texts = [line]
         detail_started = inline_type is not None
         amount_range = tx_match.group("amount").strip()
-        pending_amount = not re.fullmatch(r"(?:Over|Under)\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+", amount_range)
+        pending_amount = not re.fullmatch(r"(?:Over|Under)\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+\.[0-9]{2}", amount_range)
         if pending_amount and not line[tx_match.end("amount"):].lstrip().startswith("-"):
             raise HouseScanReviewRequired("Layout row: incomplete amount range")
 
-        for lookahead in range(index + 1, min(len(filtered_lines), index + 8)):
+        for lookahead in range(index + 1, len(filtered_lines)):
             next_line = filtered_lines[lookahead]
-            if should_skip_house_line(next_line):
+            if any(next_line.upper().startswith(prefix) for prefix in HOUSE_STOP_PREFIXES):
                 break
+            if should_skip_house_line(next_line):
+                continue
             if HOUSE_LAYOUT_ROW_RE.search(next_line):
                 break
 
             if pending_amount:
                 # pdftotext can place the upper bucket beside an asset-name
                 # continuation. Consume only the final currency value in that line.
-                upper_amount = re.search(r"\$[0-9,]+\s*$", next_line)
+                upper_amount = re.search(r"\$[0-9,]+\s*$", next_line) if ":" not in next_line else None
                 if upper_amount:
                     amount_range += " - " + upper_amount.group().strip()
                     next_line = next_line[:upper_amount.start()].strip()

@@ -1,5 +1,7 @@
 """Discover official filings, claim durable work, and publish complete documents."""
 import argparse
+import json
+from pathlib import Path
 from datetime import date, datetime
 import os
 import time
@@ -56,11 +58,12 @@ def parse_claim(chamber, filing, members, lookup):
         return trades
 
 
-def capture_chamber(client, chamber, *, start_year, limit, seconds, document_timeout):
+def capture_chamber(client, chamber, *, start_year, limit, seconds, document_timeout, backfill=False):
     summary = {"chamber": chamber, "filings_seen": 0, "filings_completed": 0,
                "records_inserted": 0, "failed_doc_ids": [], "discovery_errors": []}
     try:
-        summary["filings_seen"] = discover(client, chamber, start_year)
+        if not backfill:
+            summary["filings_seen"] = discover(client, chamber, start_year)
     except Exception as exc:
         # A source outage must not prevent retrying already discovered work.
         summary["discovery_errors"].append(str(exc))
@@ -76,9 +79,9 @@ def capture_chamber(client, chamber, *, start_year, limit, seconds, document_tim
         if deadline - time.monotonic() < document_timeout + 10:
             break
         # Reserve every fourth slot for oldest due work, so retries/history cannot starve.
-        claim = client.rpc("claim_congress_filing", {
-            "target_chamber": chamber, "recent_first": index % 4 != 3,
-        }).execute().data
+        claim = client.rpc("claim_congress_backfill" if backfill else "claim_congress_filing",
+            {"target_chamber": chamber} if backfill else
+            {"target_chamber": chamber, "recent_first": index % 4 != 3}).execute().data
         if not claim:
             break
         key, token = claim["filing_id"], claim["claim_token"]
@@ -105,6 +108,8 @@ def capture_chamber(client, chamber, *, start_year, limit, seconds, document_tim
                        "error_message": str(exc)}).execute()
             print(f"Review/retry required {key}: {exc}", flush=True)
     unresolved = client.table("congress_filings").select("filing_id", count="exact").eq("chamber", chamber).neq("status", "complete").limit(1).execute()
+    pending = client.table("congress_filings").select("filing_id", count="exact").eq("chamber", chamber).in_("status", ["pending", "processing"]).limit(1).execute()
+    summary["filings_pending"] = pending.count
     summary["filings_unresolved"] = unresolved.count
     summary["coverage_complete"] = unresolved.count == 0 and not summary["discovery_errors"]
     summary["parse_failures"] = len(summary["failed_doc_ids"]) + len(summary["discovery_errors"])
@@ -118,6 +123,8 @@ def main(chamber=None):
     parser.add_argument("--limit", type=int, default=int(os.environ.get("CONGRESS_CAPTURE_LIMIT", "40")))
     parser.add_argument("--seconds", type=int, default=int(os.environ.get("CONGRESS_CAPTURE_SECONDS", "240")), help="Processing budget per chamber; remaining work stays queued")
     parser.add_argument("--document-timeout", type=int, default=45)
+    parser.add_argument("--backfill", action="store_true", help="Process untouched/expired work only; skip discovery and completed/failed retries")
+    parser.add_argument("--summary-path", type=Path)
     args = parser.parse_args()
     if not 2012 <= args.start_year <= congress_today().year or args.limit < 1 or not 0 < args.document_timeout < 540 or args.seconds <= args.document_timeout + 10:
         parser.error("Invalid year, work limit, processing budget or document timeout")
@@ -126,14 +133,18 @@ def main(chamber=None):
     for selected in (["House", "Senate"] if args.chamber == "both" else [args.chamber]):
         try:
             summaries.append(capture_chamber(client, selected, start_year=args.start_year,
-                limit=args.limit, seconds=args.seconds, document_timeout=args.document_timeout))
+                limit=args.limit, seconds=args.seconds, document_timeout=args.document_timeout, backfill=args.backfill))
         except Exception as exc:
             summaries.append({"chamber": selected, "parse_failures": 1, "error": str(exc)})
-    emit_summary({"chambers": summaries, "parse_failures": sum(row["parse_failures"] for row in summaries),
+    report = {"chambers": summaries, "parse_failures": sum(row["parse_failures"] for row in summaries),
         "records_seen": sum(row.get("filings_seen", 0) for row in summaries),
         "records_inserted": sum(row.get("records_inserted", 0) for row in summaries),
         "failed_doc_ids": [key for row in summaries for key in row.get("failed_doc_ids", [])],
-        "coverage_complete": all(row.get("coverage_complete", False) for row in summaries)})
+        "coverage_complete": all(row.get("coverage_complete", False) for row in summaries)}
+    if args.summary_path:
+        args.summary_path.parent.mkdir(parents=True, exist_ok=True)
+        args.summary_path.write_text(json.dumps(report, indent=2) + "\n")
+    emit_summary(report)
     if any(row["parse_failures"] for row in summaries):
         raise SystemExit(1)
 
