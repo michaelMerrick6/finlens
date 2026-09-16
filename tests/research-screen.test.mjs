@@ -50,3 +50,14 @@ test('research brief preserves ties, empty results and missing dates',()=>{
  const result={...evaluateScreen([trade('1','K000389',{transaction_date:null}),trade('2','P000197',{ticker:'AMD',transaction_date:null})],DEFAULT_SCREEN,[],null,null),filters:DEFAULT_SCREEN,start:'2026-08-18',end:'2026-09-16'};
  const brief=buildResearchBrief(result);assert.match(brief.title,/share the lead/);assert.match(brief.sections[0].paragraphs[1],/tied/);assert.equal(brief.sections[0].dates,'Transaction dates are unavailable.');assert.equal(buildResearchBrief({...result,stocks:[]}).sections.length,0);
 });
+test('purchase amount ranking orders money ahead of buyer count without inventing upper bounds',()=>{
+ const {purchaseAmounts,formatPurchaseRange}=load('src/lib/research-screen.ts');
+ const rows=[trade('1'),trade('2','P000197'),trade('3','T000278',{ticker:'AMD',amount_range:'$100,001 - $250,000'}),trade('4','T000278',{ticker:'AMD',amount_range:'$1,000,001'})];
+ const result=evaluateScreen(rows,{...DEFAULT_SCREEN,activity:'buy',rank:'purchase_amount'},classification,null,null);
+ assert.equal(result.stocks[0].ticker,'AMD');assert.equal(result.stocks[0].disclosedPurchases.min,100001);assert.equal(result.stocks[0].disclosedPurchases.missing,1);assert.match(formatPurchaseRange(result.stocks[0].disclosedPurchases),/partial/);
+ assert.equal(purchaseAmounts([trade('5','P000197',{amount_range:'Over $50,000,000'})]).known,0);
+ const {buildResearchBrief}=load('src/lib/research-brief.ts');const brief=buildResearchBrief({...result,filters:{...DEFAULT_SCREEN,activity:'buy',rank:'purchase_amount'},start:'2026-08-03',end:'2026-09-16'});assert.match(brief.title,/purchase minimum/);assert.match(brief.sections[0].headline,/100,001/);assert.doesNotMatch(brief.title,/distinct buyers/);
+});
+test('old saved screens keep their prior ranking and incompatible amount modes are rejected',()=>{
+ const {rank,...legacy}=DEFAULT_SCREEN;assert.equal(validateScreen(legacy).rank,'politicians');assert.throws(()=>validateScreen({...DEFAULT_SCREEN,rank:'purchase_amount',activity:'sell'}));assert.throws(()=>validateScreen({...DEFAULT_SCREEN,rank:'profit'}));
+});

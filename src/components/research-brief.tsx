@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CompanyLogo } from './identity-images';
 import { TradeDetails } from './disclosure-feed';
 import { buildResearchBrief } from '@/lib/research-brief';
-import type { ScreenResult } from '@/lib/research-screen';
+import { formatPurchaseRange, type ScreenResult } from '@/lib/research-screen';
 import type { AnalysisTrade } from '@/lib/congress-analysis';
 import { dateLabel } from '@/lib/ui-format';
 
@@ -24,7 +24,7 @@ export function ResearchBrief({result}:{result:ScreenResult}) {
  <p className="brief-story-note">{section.dates}</p>
  <details className="research-inline-evidence"><summary>Explore {stock.ticker} disclosures · {stock.trades.length} records</summary>{evidence(stock.trades)}</details>
  </section>;})}
- {result.stocks.length>3&&<details className="research-all-matches"><summary>View all {result.stocks.length} matching companies</summary><p className="fine-print">Ranked by distinct politicians. Transaction counts break display ties.</p>{result.stocks.slice(0,limit).map(stock=><details className="research-stock" key={stock.ticker}><summary><strong>{stock.ticker}</strong><span>{stock.company?.company_name||stock.trades[0]?.asset_name}</span><span>{stock.politicians} politicians · {stock.trades.length} transactions</span></summary>{evidence(stock.trades)}</details>)}{result.stocks.length>limit&&<button className="button secondary" onClick={()=>setLimit(n=>n+25)}>Show more companies</button>}</details>}
+ {result.stocks.length>3&&<details className="research-all-matches"><summary>View all {result.stocks.length} matching companies</summary><p className="fine-print">{result.filters.rank==='purchase_amount'?'Ranked by summed disclosed purchase lower bounds; missing amounts excluded. Ranges may overlap.':'Ranked by distinct politicians. Transaction counts break display ties.'}</p>{result.stocks.slice(0,limit).map(stock=><details className="research-stock" key={stock.ticker}><summary><strong>{stock.ticker}</strong><span>{stock.company?.company_name||stock.trades[0]?.asset_name}</span><span>{result.filters.rank==='purchase_amount'?formatPurchaseRange(stock.disclosedPurchases):`${stock.politicians} politicians · ${stock.trades.length} transactions`}</span></summary>{evidence(stock.trades)}</details>)}{result.stocks.length>limit&&<button className="button secondary" onClick={()=>setLimit(n=>n+25)}>Show more companies</button>}</details>}
  <details className="research-sources"><summary>Sources & methodology</summary><p>Computed {new Date(result.computedAt).toLocaleString()}. Available records only; recent imports may take five minutes to appear. This brief uses stocks and ETFs matching {result.filters.activity==='all'?'purchases and sales':result.filters.activity==='buy'?'purchases':'sales'}, with at least {result.filters.minPoliticians} distinct politician(s), {result.filters.chamber==='all'?'both chambers':result.filters.chamber}.</p>
  <p>{result.coverage.classifiedTickers} of {result.coverage.eligibleTickers} eligible tickers have an SEC classification. {result.coverage.unclassifiedTickers} are unclassified{result.filters.industry?' and excluded from this industry search':''}. Industry and committee classifications reflect current information, not necessarily their historical status.</p>
  {result.filters.committeeId&&<p>Current committee roster verified {dateLabel(result.committeeVerifiedAt)}. This does not establish membership at the time of a trade.</p>}
