@@ -1,5 +1,5 @@
 import { reviewPoliticianTrade } from './reviewed-politician-trades';
-export type AnalysisTrade = {id:string;doc_id:string;member_id:string|null;politician_name:string|null;ticker:string|null;asset_type:string|null;amount_range:string|null;asset_name:string|null;transaction_type:string;transaction_date:string|null;published_date:string|null;source_url:string|null};
+export type AnalysisTrade = {chamber?:string;id:string;doc_id:string;member_id:string|null;politician_name:string|null;ticker:string|null;asset_type:string|null;amount_range:string|null;asset_name:string|null;transaction_type:string;transaction_date:string|null;published_date:string|null;source_url:string|null};
 function bounds(raw:string|null){
  const standard:Record<number,number>={1001:15000,15001:50000,50001:100000,100001:250000,250001:500000,500001:1000000,1000001:5000000,5000001:25000000,25000001:50000000};
  const bare=(raw||'').match(/^\$([\d,]+)$/);
