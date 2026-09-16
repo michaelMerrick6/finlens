@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9116249.pdf",
+  "source_sha256": "6578dc8f56ca3b087743fa89e5cf82140de1444a7f09f9d3709b5cd63fdb366e",
+  "published_date": "2026-07-21",
+  "member_id": "C001053",
+  "politician_name": "Tom Cole",
+  "chamber": "House",
+  "row_count": 1,
+  "review_note": "Single source page: one private CHS stock sale. Handwritten asset expansion appears in the asset header; repeated date and circled Sale in header describe the same row, not a second transaction. Sale box and amount B checked.",
+  "rows": [
+    {
+      "page": 1,
+      "row": 1,
+      "asset_name": "CHS Stock (Private)",
+      "ticker": "N/A",
+      "asset_type": "HN",
+      "transaction_date": "2026-06-30",
+      "transaction_type": "sell",
+      "amount_range": "$15,001 - $50,000"
+    }
+  ]
+}

@@ -20,7 +20,7 @@ class CongressPostgresTests(unittest.TestCase):
         END $$""")
         cls.conn.execute("SET search_path TO public, extensions")
         root = Path(__file__).resolve().parents[1]
-        for name in ['supabase_schema.sql', 'supabase_vail_phase1.sql', 'supabase_vail_phase14_congress_capture.sql', 'supabase_vail_phase15_congress_backfill.sql']:
+        for name in ['supabase_schema.sql', 'supabase_vail_phase1.sql', 'supabase_vail_phase14_congress_capture.sql', 'supabase_vail_phase15_congress_backfill.sql', 'supabase_vail_phase16_congress_publication_timeout.sql']:
             cls.conn.execute((root/name).read_text())
         # Supabase installs uuid-ossp outside public; security-definer RPCs must not depend on its search path.
         cls.conn.execute('CREATE SCHEMA IF NOT EXISTS extensions')

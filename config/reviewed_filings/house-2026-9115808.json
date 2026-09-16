@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9115808.pdf",
+  "source_sha256": "05b2fa3becd71c9bb141690130708079407e52a6e169cdacf42a467e09e0bda5",
+  "published_date": "2026-05-08",
+  "member_id": "R000395",
+  "politician_name": "Harold Dallas Rogers",
+  "chamber": "House",
+  "row_count": 1,
+  "review_note": "One handwritten transaction spans three ruled lines. Purchase and amount A are marked. Notification date is blank; filing date comes from the official index. Source does not identify a unique fund ticker.",
+  "rows": [
+    {
+      "page": 1,
+      "row": 1,
+      "asset_name": "St Str SPDR ETF",
+      "ticker": "N/A",
+      "asset_type": "ETF",
+      "transaction_date": "2026-03-31",
+      "transaction_type": "buy",
+      "amount_range": "$1,001 - $15,000"
+    }
+  ]
+}

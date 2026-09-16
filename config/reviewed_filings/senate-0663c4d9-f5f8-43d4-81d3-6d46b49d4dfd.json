@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "source_url": "https://efdsearch.senate.gov/search/view/paper/0663c4d9-f5f8-43d4-81d3-6d46b49d4dfd/",
+  "image_rgb_sha256": [
+    "f3e59531b6fdb26b13c62bef1e208791f61ece75c0f5b29c6ff0d183f72a662d",
+    "d559da13ae52aa28f4632a68eda5490ca54026ea6c25991d059dd7da96f717eb"
+  ],
+  "published_date": "2024-03-05",
+  "member_id": "B001277",
+  "politician_name": "Richard Blumenthal",
+  "chamber": "Senate",
+  "row_count": 3,
+  "review_note": "Both pages visually reviewed: page 1 enclosure letter; page 2 contains three sales under three account headings. Printed example rows and empty rows excluded.",
+  "rows": [
+    {
+      "page": 2,
+      "row": 2,
+      "owner": "Spouse",
+      "account": "Peter L Malkin Family 9 LLC",
+      "asset_name": "Valiant Capital Partners LP",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-01-29",
+      "transaction_type": "sell",
+      "amount_range": "$250,001 - $500,000"
+    },
+    {
+      "page": 2,
+      "row": 5,
+      "owner": "Spouse",
+      "account": "Hedge Holdings LLC",
+      "asset_name": "Valiant Capital Partners LP",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-01-30",
+      "transaction_type": "sell",
+      "amount_range": "$100,001 - $250,000"
+    },
+    {
+      "page": 2,
+      "row": 8,
+      "owner": "Spouse",
+      "account": "Other One LLC",
+      "asset_name": "Valiant Capital Partners LP",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-01-29",
+      "transaction_type": "sell",
+      "amount_range": "$50,001 - $100,000"
+    }
+  ]
+}

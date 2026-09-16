@@ -54,7 +54,10 @@ class ReviewedFilingsTests(unittest.TestCase):
                 reviewed.reviewed_senate_trades(SENATE, [im], 'wrong-member', '2026-08-31')
 
     def test_new_reviewed_sources_preserve_all_physical_rows(self):
-        expected = {'house-2026-9116267': 274, 'house-2026-9116290': 11,
+        expected = {'house-2026-9115711': 0, 'house-2026-9115762': 0,
+                    'house-2026-9116146': 0, 'house-2026-9115808': 1,
+                    'house-2026-9116249': 1, 'senate-0663c4d9-f5f8-43d4-81d3-6d46b49d4dfd': 3,
+                    'house-2026-9116267': 274, 'house-2026-9116290': 11,
                     'house-2026-9116292': 10, 'house-2026-9116308': 7,
                     'house-2026-9116311': 0, 'house-2026-9116326': 8,
                     'senate-3a4c5095-028a-4614-a692-836719da4e63': 46,
