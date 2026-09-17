@@ -50,3 +50,24 @@ test('coverage detects new or missing filings and refuses malformed indexes', ()
  assert.equal(coverage.comparePelosiIndex(header + lines.split('\n')[0]), 'review-needed');
  assert.equal(coverage.comparePelosiIndex('<html>unavailable</html>'), 'unavailable');
 });
+
+test('full annual inventory accounts for all entries and attaches REOF once', () => {
+ const full = load('src/lib/pelosi-full-holdings.ts', name => JSON.parse(fs.readFileSync('src/lib/' + name, 'utf8')));
+ const other = full.getPelosiOtherAssets();
+ assert.equal(other.length, 36);
+ assert.equal(other.filter(p => p.reported_value !== 'None').length, 32);
+ assert.equal(full.getPelosiExcludedAssets().length, 7);
+ assert.equal(other.filter(p => p.changes.length).length, 1);
+ const reof = other.find(p => p.name === 'REOF XXV, LLC');
+ assert.equal(reof.changes.length, 1);
+ assert.equal(reof.reported_value, '$500,001 - $1,000,000');
+ assert.equal(other.find(p => p.name.startsWith('Congressional Credit')).owner, null);
+ assert.equal(other.find(p => p.name === 'The Art of Power Book Contract').reported_value, 'Undetermined');
+ assert.equal(new Set(other.map(p => p.name)).size, 36);
+});
+
+test('an amendment to the baseline year triggers a review', () => {
+ const header = 'Last\tFirst\tDocID\tFilingType\n';
+ assert.equal(coverage.comparePelosiIndex(header + 'Pelosi\tNancy\tANNUAL\tO', ['ANNUAL']), 'matched');
+ assert.equal(coverage.comparePelosiIndex(header + 'Pelosi\tNancy\tANNUAL\tO\nPelosi\tNancy\tAMENDMENT\tA', ['ANNUAL']), 'review-needed');
+});

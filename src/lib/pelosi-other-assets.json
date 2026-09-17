@@ -1,0 +1,260 @@
+{
+  "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075701.pdf",
+  "sha256": "d4e3621104cea329c294cce5162af31434b285899cfd0ee1a88a0c0191e89a17",
+  "reporting_year": 2025,
+  "review": "All 36 non-ticker Schedule A entries visually reviewed on pages 1\u20137; Financial Leasing Services range continues onto page 4. Blank owner cells preserved.",
+  "rows": [
+    {
+      "page": 1,
+      "name": "11 Zinfandel Lane \u2014 Home & Vineyard",
+      "kind": "property",
+      "owner": "JT",
+      "reported_value": "$5,000,001 - $25,000,000"
+    },
+    {
+      "page": 1,
+      "name": "25 Point Lobos \u2014 Commercial Property",
+      "kind": "property",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000"
+    },
+    {
+      "page": 1,
+      "name": "45 Belden Place \u2014 Four Story Commercial Building",
+      "kind": "property",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000"
+    },
+    {
+      "page": 2,
+      "name": "Aristotle LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$15,001 - $50,000"
+    },
+    {
+      "page": 2,
+      "name": "Auberge du Soleil",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000"
+    },
+    {
+      "page": 2,
+      "name": "Bank of America \u2014 San Francisco checking (spouse)",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "$1,001 - $15,000"
+    },
+    {
+      "page": 2,
+      "name": "Bank of America \u2014 San Francisco checking (joint)",
+      "kind": "cash",
+      "owner": "JT",
+      "reported_value": "$1,001 - $15,000"
+    },
+    {
+      "page": 2,
+      "name": "Bank of America \u2014 Washington checking",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "None"
+    },
+    {
+      "page": 3,
+      "name": "Borel Real Estate Company",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$15,001 - $50,000"
+    },
+    {
+      "page": 3,
+      "name": "City Car Services LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$50,001 - $100,000"
+    },
+    {
+      "page": 3,
+      "name": "City National Bank \u2014 Checking Account",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "None"
+    },
+    {
+      "page": 3,
+      "name": "City National Securities \u2014 Brokerage Money Market Account",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "None"
+    },
+    {
+      "page": 3,
+      "name": "Congressional Credit Union \u2014 Checking Account",
+      "kind": "cash",
+      "owner": null,
+      "reported_value": "$250,001 - $500,000"
+    },
+    {
+      "page": 3,
+      "name": "EDI Associates",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000"
+    },
+    {
+      "page": 3,
+      "name": "Financial Leasing Services",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000"
+    },
+    {
+      "page": 4,
+      "name": "Forge Investments, LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000"
+    },
+    {
+      "page": 4,
+      "name": "Forty-Five Belden Corporation",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000"
+    },
+    {
+      "page": 4,
+      "name": "Global Ambassador Concierge LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$15,001 - $50,000"
+    },
+    {
+      "page": 4,
+      "name": "Heritage Bank \u2014 Checking Account",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "$15,001 - $50,000"
+    },
+    {
+      "page": 4,
+      "name": "Matthews International Mutual Fund",
+      "kind": "fund",
+      "owner": "SP",
+      "reported_value": "None"
+    },
+    {
+      "page": 4,
+      "name": "Nautilus Leasing Services",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$50,001 - $100,000"
+    },
+    {
+      "page": 4,
+      "name": "Nine Forty Five Battery LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000"
+    },
+    {
+      "page": 5,
+      "name": "Piatti Restaurant Company",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000"
+    },
+    {
+      "page": 5,
+      "name": "REOF XX, LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000"
+    },
+    {
+      "page": 5,
+      "name": "REOF XXI, LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000"
+    },
+    {
+      "page": 5,
+      "name": "REOF XXII, LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$100,001 - $250,000"
+    },
+    {
+      "page": 5,
+      "name": "REOF XXV, LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$500,001 - $1,000,000"
+    },
+    {
+      "page": 5,
+      "name": "REOF XXVI, LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000"
+    },
+    {
+      "page": 6,
+      "name": "Russell Ranch LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$1,000,001 - $5,000,000"
+    },
+    {
+      "page": 6,
+      "name": "Stoneridge LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$250,001 - $500,000"
+    },
+    {
+      "page": 6,
+      "name": "The Art of Power Book Contract",
+      "kind": "intellectual-property",
+      "owner": null,
+      "reported_value": "Undetermined"
+    },
+    {
+      "page": 6,
+      "name": "Thirteen Hundred One Sansome LLC",
+      "kind": "private",
+      "owner": "SP",
+      "reported_value": "$5,000,001 - $25,000,000"
+    },
+    {
+      "page": 6,
+      "name": "Tripath Technology Inc. Common Stock",
+      "kind": "unlisted-stock",
+      "owner": "SP",
+      "reported_value": "$1 - $1,000"
+    },
+    {
+      "page": 6,
+      "name": "U.S. Bank \u2014 Checking Account",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "$1,001 - $15,000"
+    },
+    {
+      "page": 6,
+      "name": "U.S. Bank \u2014 Pelosi Trust Checking Account",
+      "kind": "cash",
+      "owner": "SP",
+      "reported_value": "$1 - $1,000"
+    },
+    {
+      "page": 7,
+      "name": "Wells Fargo Bank \u2014 Checking Account",
+      "kind": "cash",
+      "owner": "JT",
+      "reported_value": "$15,001 - $50,000"
+    }
+  ]
+}

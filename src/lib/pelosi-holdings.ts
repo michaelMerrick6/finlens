@@ -62,3 +62,12 @@ export const pelosiHoldingsCoverage = {
   baselineDate: '2025-12-31', latestFiling: changes.latest_filing_reviewed,
   reviewedDocuments: [...new Set(changes.events.map(e => e.doc_id.split('-')[2]))],
 };
+
+export const pelosiCompanyNames: Record<string, string> = {
+  AAPL: 'Apple', AB: 'AllianceBernstein', AMZN: 'Amazon', AVGO: 'Broadcom', AXP: 'American Express',
+  BE: 'Bloom Energy', CLNE: 'Clean Energy Fuels', CMCSA: 'Comcast', CRM: 'Salesforce', CRWD: 'CrowdStrike',
+  DBX: 'Dropbox', GOOGL: 'Alphabet Class A', IBKR: 'Interactive Brokers', INTC: 'Intel', MORN: 'Morningstar',
+  MSFT: 'Microsoft', NFLX: 'Netflix', NVDA: 'NVIDIA', PANW: 'Palo Alto Networks', QCOM: 'Qualcomm',
+  RBLX: 'Roblox', T: 'AT&T', SQ: 'Block (symbol as filed)', TEM: 'Tempus AI', V: 'Visa', VSNT: 'Versant', VST: 'Vistra',
+  WBD: 'Warner Bros. Discovery', UBER: 'Uber',
+};
