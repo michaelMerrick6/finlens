@@ -2308,3 +2308,5 @@ small {
 .research-chat-composer { border-top: 1px solid #dce2d5; padding-top: 1.5rem; }
 .research-turn .research-editorial .brief-story-note { font-size: .75rem; color: #71806c; }
 @media(max-width:640px){ .research-editorial .brief-stock-story h3{font-size:24px;} .research-editorial .research-stock > summary{grid-template-columns:60px minmax(0,1fr);} }
+
+.profile-actions { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }

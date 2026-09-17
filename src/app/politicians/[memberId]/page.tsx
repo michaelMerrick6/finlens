@@ -1,4 +1,3 @@
-import { PelosiHoldings } from "@/components/pelosi-holdings";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PoliticianCommittees } from "@/components/politician-committees";
@@ -53,7 +52,10 @@ export default async function Page({
             {summary.state || "State not listed"}
           </p>
         </div>
-        <TrackButton id={memberId} name={summary.displayName} />
+        <div className="profile-actions">
+          <TrackButton id={memberId} name={summary.displayName} />
+          {memberId === "P000197" && <Link className="button secondary" href={`/politicians/${memberId}/holdings`}>View estimated holdings</Link>}
+        </div>
       </section>
       <div className="profile-context">
         <div>
@@ -72,7 +74,7 @@ export default async function Page({
       <Suspense fallback={<p>Loading committee assignments…</p>}>
         <PoliticianCommittees memberId={memberId} />
       </Suspense>
-      {memberId === "P000197" && <Suspense fallback={<p>Loading reviewed holdings…</p>}><PelosiHoldings /></Suspense>}
+
       <DisclosureFeed
         key={memberId}
         memberId={memberId}
