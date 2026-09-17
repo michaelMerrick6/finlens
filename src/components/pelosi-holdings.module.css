@@ -1,0 +1,19 @@
+.section { margin: 3rem 0; padding: 2rem 0; border-top: 1px solid #dce2d7; color: #273e35; }
+.section h2 { font-family: Georgia, serif; font-size: 2rem; margin: .7rem 0; }
+.section h3 { margin: 2rem 0 .5rem; font-size: 1.2rem; }
+.section p { line-height: 1.65; margin: .65rem 0; }
+.intro { max-width: 48rem; }
+.note { background: #eef2e7; border-left: 3px solid #9db088; padding: 1rem 1.2rem; margin: 1.4rem 0; font-size: .9rem; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin: 1rem 0; }
+.card { border: 1px solid #dce2d7; border-radius: 8px; padding: 1rem; background: #fff; font-size: .9rem; }
+.row { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.label { color: #526748; font-size: .8rem; }
+.evidence { margin-top: .9rem; font-size: .85rem; }
+.evidence ul { padding-left: 1.2rem; line-height: 1.65; }
+.evidence li { margin-bottom: .5rem; }
+.section a { text-decoration: underline; }
+.group { border-top: 1px solid #dce2d7; margin-top: 1.5rem; padding-top: 1.2rem; }
+.group > summary { font-weight: 600; }
+.group > .card { margin-top: .7rem; }
+.section summary { cursor: pointer; }
+@media (max-width: 650px) { .grid { grid-template-columns: 1fr; } .section h2 { font-size: 1.7rem; } }
