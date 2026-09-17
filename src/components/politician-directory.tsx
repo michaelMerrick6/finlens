@@ -1,6 +1,7 @@
 "use client";
 import { readPublicPage, storePublicPage } from "@/lib/public-page-cache";
 import Link from "next/link";
+import { fetchDirectoryPage } from "@/lib/directory-request";
 import { Suspense, useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Avatar } from "./disclosure-feed";
@@ -49,16 +50,13 @@ function DirectoryContent() {
   const [retry, setRetry] = useState(0);
   useEffect(() => {
     const controller = new AbortController();
-    fetch(
+    fetchDirectoryPage(
       `/api/politicians?${new URLSearchParams({ q: search, chamber, sort, offset: String(offset) })}`,
-      { signal: controller.signal },
+      controller.signal,
     )
-      .then(async (r) => {
-        if (!r.ok) throw new Error("Unable to load politicians.");
-        return r.json();
-      })
       .then((data) => {
         if (!controller.signal.aborted) {
+          setError("");
           if (offset === 0) storePublicPage(cacheKey, data);
           setMembers((old) =>
             offset === 0 ? data.members : [...old, ...data.members],

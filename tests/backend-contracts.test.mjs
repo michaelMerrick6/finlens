@@ -10,7 +10,7 @@ function load(path, dependencies = {}) {
   const code = ts.transpileModule(fs.readFileSync(path, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
-  vm.runInNewContext(code, { exports, Date, URL, process: { env: { NODE_ENV: 'production' } },
+  vm.runInNewContext(code, { exports, Date, URL, setTimeout, clearTimeout, process: { env: { NODE_ENV: 'production' } },
     require(name) { if (path === 'src/lib/reviewed-politician-trades.ts' && /^\.\/pelosi-(?:202[2-5]|amendment)-review\.json$/.test(name)) return { default: JSON.parse(fs.readFileSync('src/lib/' + name.slice(2), 'utf8')) }; if (!(name in dependencies)) throw new Error(`Unexpected dependency ${name}`); return dependencies[name]; },
   });
   return exports;
@@ -194,4 +194,44 @@ test('sent email detail is scoped, hides unavailable records, and rejects invali
 test('sent email database failures do not look like successful empty history', async () => {
   const route=sentEmailRoute({failed:true});const result=await route.GET({url:'https://vail.finance/api/account/notifications'});
   assert.equal(result.status,503);assert.ok(!JSON.stringify(result).includes('private failure'));
+});
+
+
+test('directory retries temporary failures and preserves the requested page', async () => {
+  const { fetchDirectoryPage } = load('src/lib/directory-request.ts');
+  const controller = new AbortController();
+  const requests = [];
+  const result = await fetchDirectoryPage('/api/politicians?offset=24', controller.signal, async (url, options) => {
+    requests.push(url);
+    assert.equal(options.signal, controller.signal);
+    if (requests.length === 1) throw new Error('connection reset');
+    if (requests.length === 2) return new Response('', { status: 503 });
+    return Response.json({ members: [{ id: 'K000389' }], nextOffset: 48 });
+  });
+  assert.equal(result.members[0].id, 'K000389');
+  assert.equal(result.nextOffset, 48);
+  assert.deepEqual(requests, Array(3).fill('/api/politicians?offset=24'));
+});
+
+test('directory retries are bounded and permanent errors fail immediately', async () => {
+  const { fetchDirectoryPage } = load('src/lib/directory-request.ts');
+  for (const [status, expected] of [[503, 3], [400, 1]]) {
+    let calls = 0;
+    await assert.rejects(fetchDirectoryPage('/api/politicians', new AbortController().signal, async () => {
+      calls++; return new Response('', { status });
+    }), /Unable to load politicians/);
+    assert.equal(calls, expected);
+  }
+});
+
+test('directory cancels pending retries when filters change', async () => {
+  const { fetchDirectoryPage } = load('src/lib/directory-request.ts');
+  const controller = new AbortController();
+  let calls = 0;
+  const pending = fetchDirectoryPage('/api/politicians', controller.signal, async () => {
+    calls++; setTimeout(() => controller.abort(), 10);
+    return new Response('', { status: 503 });
+  });
+  await assert.rejects(pending, /abort/i);
+  assert.equal(calls, 1);
 });

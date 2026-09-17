@@ -56,7 +56,7 @@ export function SiteHeader() {
               ["/analysis", "Analysis"],
               ["/tracking", "Tracking"],
               ["/sunday-brief", "Sunday Brief"],
-            ].map(([href, label]) => href === "/analysis" ? <AnalysisNavigation key={path} path={path} /> : (
+            ].map(([href, label]) => href === "/analysis" ? <AnalysisNavigation key={`analysis-menu:${path}`} path={path} /> : (
               <Link
                 key={href}
                 href={href}
