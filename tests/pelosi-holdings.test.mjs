@@ -71,3 +71,27 @@ test('an amendment to the baseline year triggers a review', () => {
  assert.equal(coverage.comparePelosiIndex(header + 'Pelosi\tNancy\tANNUAL\tO', ['ANNUAL']), 'matched');
  assert.equal(coverage.comparePelosiIndex(header + 'Pelosi\tNancy\tANNUAL\tO\nPelosi\tNancy\tAMENDMENT\tA', ['ANNUAL']), 'review-needed');
 });
+
+const quantities = load('src/lib/pelosi-share-reconciliation.ts', () => { throw new Error('Unexpected runtime dependency'); });
+test('share estimates account for sales and avoid applying splits twice', () => {
+ const expected = { NVDA: 45000, AVGO: 20000, PANW: 14000, BE: 15000, INTC: 10000, TEM: 5000, VST: 5000, VSNT: 776 };
+ for (const [ticker, shares] of Object.entries(expected)) {
+  const result = quantities.reconcilePelosiShares(rows.find(p => p.ticker === ticker && p.kind === 'stock'));
+  assert.equal(result.shares, shares, ticker);
+  assert.equal(result.status, 'estimated');
+  assert.ok(result.assumptions.length >= 2);
+ }
+ const stockRows = rows.filter(p => p.kind === 'stock' || p.kind === 'units');
+ assert.equal(stockRows.filter(p => quantities.reconcilePelosiShares(p).status === 'estimated').length, 8);
+ assert.equal(stockRows.filter(p => quantities.reconcilePelosiShares(p).status === 'unresolved').length, 20);
+});
+test('unknown openings, owner mismatches and contradictory balances never become exact holdings', () => {
+ const nvidia = rows.find(p => p.ticker === 'NVDA' && p.kind === 'stock');
+ assert.equal(quantities.reconcilePelosiShares({...nvidia, owner: 'JT'}).shares, null);
+ assert.equal(quantities.reconcilePelosiShares({...nvidia, shareChange: -50000}).shares, null);
+ for (const ticker of ['AAPL', 'MSFT', 'WBD', 'AB']) {
+  assert.equal(quantities.reconcilePelosiShares(rows.find(p => p.ticker === ticker && p.kind !== 'call')).shares, null);
+ }
+ const bloom = rows.find(p => p.ticker === 'BE' && p.kind === 'stock');
+ assert.equal(quantities.reconcilePelosiShares({...bloom, reportedValue: '$1,001 - $15,000'}).shares, null);
+});

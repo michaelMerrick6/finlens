@@ -169,3 +169,15 @@ REOF XXV's July 2026 investment is linked to its existing annual entry, not coun
 Re-downloaded the annual PDF and all three 2026 PTRs; all four SHA-256 values match the reviewed sources. Re-fetched 2025/2026 indexes: no additional Pelosi filings. Results retained in holdings-source-refresh.json. Runtime freshness now checks both baseline-year and subsequent-year indexes, so a newly indexed annual amendment triggers review.
 
 Third-party check: Quiver's public Pelosi profile describes estimates based on trades, annual filings and price changes; it warns annual holdings may contain parsing errors and exclude later transactions. The retrieved public page did not expose holdings rows, so no position-by-position third-party validation is claimed. No external holdings have been copied or substituted for official evidence.
+
+## Stock quantity reconciliation — September 17, 2026 UTC
+
+Added `src/lib/pelosi-share-reconciliation.ts` and a per-stock reconciliation view. All 28 public stock/unit positions are classified: eight conditional quantity estimates and twenty unresolved quantities. No stock total is marked verified. Estimated quantities are NVDA 45,000; AVGO 20,000; PANW 14,000; BE 15,000; INTC 10,000; TEM 5,000; VST 5,000; VSNT 776. These depend on inferred zero openings and no unobserved subsequent changes, with assumptions visible beside the calculations.
+
+NVDA: visually rechecked 2022 annual page 5 (stock value None), 2024 pages 7–8 (+10,000 +10,000 +50,000 -10,000), and incorporated reviewed 2025 sale (-20,000) plus 2026 exercise (+5,000). 2023 annual lists options only. None is not globally converted to zero: this explicit assumption is local to the conditional model. The 2024 purchases and exercise quantities are already post-split; multiplying them again is wrong.
+
+AVGO: 2024 annual lists calls, no common stock; reviewed 2025 exercise delivers 20,000 already-adjusted shares. PANW: disclosed 14,000 exercise shares used conditionally; conflicting expiration descriptions remain visible. Five new stock positions use reviewed 2026 acquisitions with an explicit zero-opening assumption because the 2025 annual lacks those stock entries. None of these assumptions establishes a brokerage balance.
+
+WBD historical spinoff receipt of 2,419 shares is retained as evidence but not promoted to current quantity. Corporate-transaction reconciliation remains outstanding (issuer published shareholder approval of Paramount transaction in 2026; approval is not proof of closing). Other older positions retain unresolved status because a reported value range and net changes do not establish opening shares. This pass does not claim all old annual holdings or every corporate action have been reconciled, nor an independent second-person review.
+
+Validation covers all eight arithmetic results, no double split, owner isolation, contradictory negative results, unknown starting positions, and a baseline entry blocking the new-position zero assumption. Default CI includes these tests.
