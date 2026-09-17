@@ -110,8 +110,16 @@ export async function buildPoliticianLivePortfolio(
   disclosureHoldings: PoliticianDisclosureHolding[] = [],
 ): Promise<PoliticianLivePortfolioSummary> {
   const latestDisclosureHoldings = eligibleDisclosureHoldings(disclosureHoldings);
+  if (!latestDisclosureHoldings.length) {
+    // Transaction history alone cannot establish the starting portfolio.
+    return { holdingCount: 0, totalEstimatedCurrentValue: 0, totalEstimatedCostBasis: 0,
+      totalEstimatedUnrealizedGain: 0, eligibleTradeCount: 0, pricedTradeCount: 0,
+      skippedTradeCount: trades.length, priceAsOf: null, disclosureSnapshotDate: null,
+      disclosureHoldingCount: 0, holdings: [] };
+  }
+
   const disclosureSnapshotDate = latestDisclosureHoldings.reduce<string | null>((latest, holding) => {
-    const current = normalizeProfileDate(holding.filingDate);
+    const current = normalizeProfileDate(holding.valuationDate);
     if (!current) {
       return latest;
     }
@@ -135,7 +143,7 @@ export async function buildPoliticianLivePortfolio(
   const earliestByTicker = earliestTradeDateByTicker(eligibleTrades);
   for (const holding of latestDisclosureHoldings) {
     const ticker = normalizeProfileTicker(holding.ticker);
-    const filedAt = normalizeProfileDate(holding.filingDate);
+    const filedAt = normalizeProfileDate(holding.valuationDate);
     if (!ticker || !filedAt) {
       continue;
     }
@@ -168,7 +176,7 @@ export async function buildPoliticianLivePortfolio(
 
   for (const holding of latestDisclosureHoldings) {
     const ticker = normalizeProfileTicker(holding.ticker);
-    const filedAt = normalizeProfileDate(holding.filingDate);
+    const filedAt = normalizeProfileDate(holding.valuationDate);
     const amountRange = parsePoliticianAmountRange(holding.valueRange);
     if (!ticker || !filedAt || !amountRange) {
       continue;

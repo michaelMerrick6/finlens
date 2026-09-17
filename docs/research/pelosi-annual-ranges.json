@@ -1,0 +1,376 @@
+{
+  "AAPL": {
+    "conditional_min": 26251,
+    "conditional_max": 91959,
+    "constraints": [
+      {
+        "year": 2022,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2022-12-30",
+          "close": 129.92999267578125
+        },
+        "subsequent_net_shares": -93082,
+        "remaining_min": -54599,
+        "remaining_max": 99329
+      },
+      {
+        "year": 2023,
+        "value_min": 25000001,
+        "value_max": 50000000,
+        "price": {
+          "date": "2023-12-29",
+          "close": 192.52999877929688
+        },
+        "subsequent_net_shares": -105182,
+        "remaining_min": 24668,
+        "remaining_max": 154517
+      },
+      {
+        "year": 2024,
+        "value_min": 25000001,
+        "value_max": 50000000,
+        "price": {
+          "date": "2024-12-31",
+          "close": 250.4199981689453
+        },
+        "subsequent_net_shares": -73582,
+        "remaining_min": 26251,
+        "remaining_max": 126082
+      },
+      {
+        "year": 2025,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 271.8599853515625
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 18392,
+        "remaining_max": 91959
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "CRM": {
+    "conditional_min": 19002,
+    "conditional_max": 37710,
+    "constraints": [
+      {
+        "year": 2022,
+        "value_min": 1000001,
+        "value_max": 5000000,
+        "price": {
+          "date": "2022-12-30",
+          "close": 132.58999633789062
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 7543,
+        "remaining_max": 37710
+      },
+      {
+        "year": 2023,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2023-12-29",
+          "close": 263.1400146484375
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 19002,
+        "remaining_max": 95006
+      },
+      {
+        "year": 2024,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2024-12-31",
+          "close": 334.3299865722656
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 14956,
+        "remaining_max": 74776
+      },
+      {
+        "year": 2025,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 264.9100036621094
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 18875,
+        "remaining_max": 94371
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "T": {
+    "conditional_min": 4026,
+    "conditional_max": 10064,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 100001,
+        "value_max": 250000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 24.84000015258789
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 4026,
+        "remaining_max": 10064
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "CLNE": {
+    "conditional_min": 477,
+    "conditional_max": 7142,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 1001,
+        "value_max": 15000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 2.0999999046325684
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 477,
+        "remaining_max": 7142
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "IBKR": {
+    "conditional_min": 7775,
+    "conditional_max": 15549,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 500001,
+        "value_max": 1000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 64.30999755859375
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 7775,
+        "remaining_max": 15549
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "MORN": {
+    "conditional_min": 461,
+    "conditional_max": 1150,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 100001,
+        "value_max": 250000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 217.30999755859375
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 461,
+        "remaining_max": 1150
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "QCOM": {
+    "conditional_min": 88,
+    "conditional_max": 292,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 15001,
+        "value_max": 50000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 171.0500030517578
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 88,
+        "remaining_max": 292
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "AMZN": {
+    "conditional_min": 26662,
+    "conditional_max": 113309,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 230.82000732421875
+        },
+        "subsequent_net_shares": 5000,
+        "remaining_min": 26662,
+        "remaining_max": 113309
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "CMCSA": {
+    "conditional_min": 16729,
+    "conditional_max": 33456,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 500001,
+        "value_max": 1000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 29.89,
+          "feed_adjusted_close": 28.013120651245117,
+          "source": "https://www.sec.gov/Archives/edgar/data/1166691/000119312526177138/cmcsa-20260424.htm"
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 16729,
+        "remaining_max": 33456
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "GOOGL": {
+    "conditional_min": 20975,
+    "conditional_max": 84872,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 313.0
+        },
+        "subsequent_net_shares": 5000,
+        "remaining_min": 20975,
+        "remaining_max": 84872
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "V": {
+    "conditional_min": 14257,
+    "conditional_max": 71283,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 5000001,
+        "value_max": 25000000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 350.7099914550781
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 14257,
+        "remaining_max": 71283
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  },
+  "WBD": {
+    "conditional_min": 1735,
+    "conditional_max": 3469,
+    "constraints": [
+      {
+        "year": 2025,
+        "value_min": 50001,
+        "value_max": 100000,
+        "price": {
+          "date": "2025-12-31",
+          "close": 28.81999969482422
+        },
+        "subsequent_net_shares": 0,
+        "remaining_min": 1735,
+        "remaining_max": 3469
+      }
+    ],
+    "assumptions": [
+      "Annual value brackets reflect the last trading-day closing price",
+      "Same stock class and owner across annuals",
+      "All intervening share changes captured; no omitted acquisitions, gifts, reinvestments or disposals",
+      "No subsequent stock splits during the modeled period",
+      "Range is model-dependent, not a statistical confidence interval"
+    ]
+  }
+}

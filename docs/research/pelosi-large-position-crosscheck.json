@@ -1,0 +1,35 @@
+[
+  {
+    "ticker": "MSFT",
+    "baseline_shares_under_existing_assumptions": 25000,
+    "close": 483.6199951171875,
+    "implied_2025_value": 12090499.877929688,
+    "disclosed_min": 5000001,
+    "disclosed_max": 25000000,
+    "within_bracket": true,
+    "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1766966400&period2=1767398400&interval=1d&events=splits",
+    "note": "Consistency check only; annual bracket does not confirm exact shares. NVIDIA excludes the subsequent 5,000-share 2026 exercise."
+  },
+  {
+    "ticker": "NVDA",
+    "baseline_shares_under_existing_assumptions": 40000,
+    "close": 186.5,
+    "implied_2025_value": 7460000.0,
+    "disclosed_min": 5000001,
+    "disclosed_max": 25000000,
+    "within_bracket": true,
+    "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1766966400&period2=1767398400&interval=1d&events=splits",
+    "note": "Consistency check only; annual bracket does not confirm exact shares. NVIDIA excludes the subsequent 5,000-share 2026 exercise."
+  },
+  {
+    "ticker": "AVGO",
+    "baseline_shares_under_existing_assumptions": 20000,
+    "close": 346.1000061035156,
+    "implied_2025_value": 6922000.1220703125,
+    "disclosed_min": 5000001,
+    "disclosed_max": 25000000,
+    "within_bracket": true,
+    "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?period1=1766966400&period2=1767398400&interval=1d&events=splits",
+    "note": "Consistency check only; annual bracket does not confirm exact shares. NVIDIA excludes the subsequent 5,000-share 2026 exercise."
+  }
+]

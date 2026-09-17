@@ -8,7 +8,7 @@ export async function checkPelosiHoldingsCoverage() {
   try {
     const statuses = await Promise.all([2025, 2026].map(async year => {
       const response = await fetch(`https://disclosures-clerk.house.gov/public_disc/financial-pdfs/${year}FD.txt`, {
-        next: { revalidate: 3600 }, signal: AbortSignal.timeout(6000),
+        next: { revalidate: 86400 }, signal: AbortSignal.timeout(6000),
       });
       if (!response.ok) return 'unavailable' as const;
       return comparePelosiIndex(await response.text(), year === 2025

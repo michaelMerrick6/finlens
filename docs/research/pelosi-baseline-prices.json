@@ -1,0 +1,156 @@
+{
+  "AAPL": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?period1=1672185600&period2=1767398400&interval=1d&events=splits",
+    "prices": {
+      "2022": {
+        "date": "2022-12-30",
+        "close": 129.92999267578125
+      },
+      "2023": {
+        "date": "2023-12-29",
+        "close": 192.52999877929688
+      },
+      "2024": {
+        "date": "2024-12-31",
+        "close": 250.4199981689453
+      },
+      "2025": {
+        "date": "2025-12-31",
+        "close": 271.8599853515625
+      }
+    },
+    "splits": {}
+  },
+  "CRM": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/CRM?period1=1672185600&period2=1767398400&interval=1d&events=splits",
+    "prices": {
+      "2022": {
+        "date": "2022-12-30",
+        "close": 132.58999633789062
+      },
+      "2023": {
+        "date": "2023-12-29",
+        "close": 263.1400146484375
+      },
+      "2024": {
+        "date": "2024-12-31",
+        "close": 334.3299865722656
+      },
+      "2025": {
+        "date": "2025-12-31",
+        "close": 264.9100036621094
+      }
+    },
+    "splits": {}
+  },
+  "T": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/T?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 24.84000015258789
+      }
+    },
+    "splits": {}
+  },
+  "CLNE": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/CLNE?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 2.0999999046325684
+      }
+    },
+    "splits": {}
+  },
+  "CMCSA": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/CMCSA?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 29.89,
+        "feed_adjusted_close": 28.013120651245117,
+        "source": "https://www.sec.gov/Archives/edgar/data/1166691/000119312526177138/cmcsa-20260424.htm"
+      }
+    },
+    "splits": {
+      "1767623400": {
+        "date": 1767623400,
+        "numerator": 1067.0,
+        "denominator": 1000.0,
+        "splitRatio": "1067:1000"
+      }
+    },
+    "corporate_action_review": "January 2026 1067:1000 feed event is a spinoff price adjustment, not a share split. Use issuer-confirmed unadjusted December 31 close; parent share count unchanged."
+  },
+  "IBKR": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/IBKR?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 64.30999755859375
+      }
+    },
+    "splits": {}
+  },
+  "MORN": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/MORN?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 217.30999755859375
+      }
+    },
+    "splits": {}
+  },
+  "QCOM": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/QCOM?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 171.0500030517578
+      }
+    },
+    "splits": {}
+  },
+  "AMZN": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 230.82000732421875
+      }
+    },
+    "splits": {}
+  },
+  "GOOGL": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 313.0
+      }
+    },
+    "splits": {}
+  },
+  "V": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/V?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 350.7099914550781
+      }
+    },
+    "splits": {}
+  },
+  "WBD": {
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/WBD?period1=1766966400&period2=1789603200&interval=1d&events=splits",
+    "prices": {
+      "2025": {
+        "date": "2025-12-31",
+        "close": 28.81999969482422
+      }
+    },
+    "splits": {}
+  }
+}

@@ -11,7 +11,7 @@
     "test:billing": "node --test tests/billing-server.test.mjs tests/billing-lifecycle.test.mjs",
     "test:python": "python3 scripts/run_tests.py",
     "test:pagination": "node --test tests/filtered-page.test.mjs",
-    "test:backend": "node --test tests/backend-contracts.test.mjs tests/research-screen.test.mjs tests/pelosi-amendments.test.mjs tests/pelosi-holdings.test.mjs"
+    "test:backend": "node --test tests/backend-contracts.test.mjs tests/research-screen.test.mjs tests/pelosi-amendments.test.mjs tests/pelosi-holdings.test.mjs tests/reviewed-holdings.test.mjs"
   },
   "engines": {
     "node": ">=22.13.0"

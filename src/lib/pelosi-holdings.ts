@@ -50,7 +50,7 @@ export function buildPelosiHoldings(asOf = new Date().toISOString().slice(0, 10)
     if (event.share_delta || event.kind === 'private_investment_quantity_unknown') {
       const p = position(event.owner, event.ticker, event.kind === 'private_investment_quantity_unknown' ? 'private' : event.kind === 'public_partnership_units_purchase' ? 'units' : 'stock');
       p.shareChange += event.share_delta;
-      p.evidence.push({ ...evidence, note: event.share_delta ? `${evidence.note}: +${event.share_delta.toLocaleString('en-US')} ${p.kind === 'units' ? 'units' : 'shares'}` : 'Private investment; quantity not disclosed' });
+      p.evidence.push({ ...evidence, note: event.share_delta ? `${evidence.note}: ${event.share_delta > 0 ? '+' : ''}${event.share_delta.toLocaleString('en-US')} ${p.kind === 'units' ? 'units' : 'shares'}` : 'Private investment; quantity not disclosed' });
     }
   }
   for (const p of positions.values()) {

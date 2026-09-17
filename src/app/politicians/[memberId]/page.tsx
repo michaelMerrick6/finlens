@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getReviewedBaseline } from "@/lib/reviewed-holdings";
 import { Suspense } from "react";
 import { PoliticianCommittees } from "@/components/politician-committees";
 import { cache } from "react";
@@ -54,7 +55,7 @@ export default async function Page({
         </div>
         <div className="profile-actions">
           <TrackButton id={memberId} name={summary.displayName} />
-          {memberId === "P000197" && <Link className="button secondary" href={`/politicians/${memberId}/holdings`}>View estimated holdings</Link>}
+          {(memberId === "P000197" || getReviewedBaseline(memberId)) && <Link className="button secondary" href={`/politicians/${memberId}/holdings`}>View estimated holdings</Link>}
         </div>
       </section>
       <div className="profile-context">

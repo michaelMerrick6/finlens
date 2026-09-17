@@ -1,0 +1,314 @@
+{
+  "review_date": "2026-09-17",
+  "status": "No additional complete share-count baseline established",
+  "visa_purchase_anchor": {
+    "source": "https://www.legistorm.com/stormfeed/view_rss/382260/office/1978/title/pelosi-spokesman-statement-on-60-minutes-report.html",
+    "source_type": "Archived Pelosi office statement; not a brokerage statement",
+    "purchases": [
+      {
+        "date": "2008-03-18",
+        "shares": 5000
+      },
+      {
+        "date": "2008-03-25",
+        "shares": 10000
+      },
+      {
+        "date": "2008-06-04",
+        "shares": 5000
+      }
+    ],
+    "purchase_total": 20000,
+    "is_confirmed_position_balance": false,
+    "blocking_event": {
+      "date": "2008-11-24",
+      "type": "partial sale",
+      "dollar_min": 15001,
+      "dollar_max": 50000,
+      "shares": null,
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2009/8140536.pdf#page=17"
+    },
+    "other_gaps": [
+      "Validate against amended 2008 annual",
+      "Complete subsequent event chain including ambiguous 2019 sales"
+    ]
+  },
+  "older_filing_search_hits": [
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p05.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p07.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p07.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p09.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p11.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p12.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p12.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p15.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2008-8135973-p16.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p05.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p07.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p07.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p09.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p10.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p12.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p12.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p14.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p15.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p16.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p16.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8140536-p17.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p06.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p08.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p08.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p10.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p11.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p13.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p13.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p15.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p16.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p17.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p17.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2009-8142737-p18.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p05.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p06.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p06.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p08.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p09.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p11.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p11.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p13.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147382-p14.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2010-8147383-p02.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p05.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p06.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p07.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p08.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p09.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p10.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p11.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p12.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p13.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2011-8202691-p15.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p05.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p06.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p07.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p08.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p09.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p10.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p10.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2012-8205631-p12.txt",
+      "company": "Visa"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p05.txt",
+      "company": "Apple"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p06.txt",
+      "company": "Comcast"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p06.txt",
+      "company": "Clean Energy"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p08.txt",
+      "company": "Morningstar"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p08.txt",
+      "company": "Interactive Brokers"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p09.txt",
+      "company": "Salesforce"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p09.txt",
+      "company": "QualComm"
+    },
+    {
+      "file": "artifacts/pelosi-audit/ocr/2013-9102968-p11.txt",
+      "company": "Visa"
+    }
+  ]
+}

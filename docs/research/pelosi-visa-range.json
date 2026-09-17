@@ -1,0 +1,82 @@
+{
+  "status": "research_scenario_not_approved_for_public_holdings",
+  "quote": {
+    "date": "2008-11-24",
+    "split_adjusted_low": "11.444999694824219",
+    "split_adjusted_high": "12.5",
+    "subsequent_split_factor": 4,
+    "source": "https://query1.finance.yahoo.com/v8/finance/chart/V?period1=1227484800&period2=1227657600&interval=1d&events=splits"
+  },
+  "2008_sale_shares_min": 301,
+  "2008_sale_shares_max": 1092,
+  "scenarios": [
+    {
+      "2019_shares_sold": 1000,
+      "remaining_min": 15632,
+      "remaining_max": 18796
+    },
+    {
+      "2019_shares_sold": 2000,
+      "remaining_min": 14632,
+      "remaining_max": 17796
+    }
+  ],
+  "after_split_disposals": [
+    [
+      "2015-12-29",
+      5000
+    ],
+    [
+      "2015-12-30",
+      2000
+    ],
+    [
+      "2016-07-21",
+      1250
+    ],
+    [
+      "2017-12-21",
+      1750
+    ],
+    [
+      "2017-12-28",
+      5000
+    ],
+    [
+      "2020-05-08",
+      3000
+    ],
+    [
+      "2020-05-08",
+      3000
+    ],
+    [
+      "2022-06-21",
+      10000
+    ],
+    [
+      "2022-11-08",
+      20000
+    ],
+    [
+      "2024-07-01",
+      2000
+    ]
+  ],
+  "assumptions": [
+    "2008 purchases exhaust opening shares; no other holdings or unreviewed changes",
+    "2008 sale price within regular-session daily high/low, no fees and whole shares",
+    "Daily OHLC is split-adjusted by four; raw prices restored before inferring sale shares",
+    "2019 amended identity unresolved: one or two 1,000-share sales",
+    "Both 2020 3,000-share rows are distinct as represented in PTR and annual",
+    "Early annual amendment/inventory review and cross-year completeness remain to be completed"
+  ],
+  "source_links": [
+    "https://www.legistorm.com/stormfeed/view_rss/382260/office/1978/title/pelosi-spokesman-statement-on-60-minutes-report.html",
+    "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2009/8142737.pdf#page=18",
+    "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2019/20012288.pdf",
+    "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2019/20012343.pdf",
+    "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2020/20016726.pdf",
+    "https://www.sec.gov/Archives/edgar/data/1403161/000140316115000013/v093015.htm"
+  ]
+}

@@ -30,6 +30,7 @@ export type PoliticianDisclosureHolding = {
   key: string;
   docId: string;
   filingDate: string;
+  valuationDate: string;
   filingType: string | null;
   filingTypeLabel: string | null;
   ticker: string | null;

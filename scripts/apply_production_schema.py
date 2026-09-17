@@ -22,6 +22,7 @@ PRODUCTION_SQL_FILES = [
     ROOT_DIR / "supabase_vail_phase13_engagement.sql",
     ROOT_DIR / "ops" / "sql" / "supabase_pipeline_performance.sql",
     ROOT_DIR / "supabase_vail_phase14_congress_capture.sql",
+    ROOT_DIR / "supabase_vail_pelosi_holdings_sync.sql",
 ]
 
 

@@ -8,6 +8,7 @@ export type PoliticianDisclosureHolding = {
   key: string;
   docId: string;
   filingDate: string;
+  valuationDate: string;
   filingType: string | null;
   filingTypeLabel: string | null;
   ticker: string | null;
@@ -26,6 +27,7 @@ type RawDisclosureHoldingRow = {
     member_id?: string | null;
     doc_id?: string | null;
     filing_date?: string | null;
+    period_covered_end?: string | null;
     filing_type?: string | null;
     filing_type_label?: string | null;
     asset_name?: string | null;
@@ -51,12 +53,8 @@ function normalizeTicker(value: string | null | undefined) {
 }
 
 function disclosureKey(row: RawDisclosureHoldingRow) {
-  const ticker = normalizeTicker(row.payload?.ticker);
-  if (ticker) {
-    return `ticker:${ticker}`;
-  }
-  const assetName = trim(row.payload?.asset_name).toLowerCase();
-  return assetName ? `asset:${assetName}` : trim(row.source_document_id);
+  // Preserve accounts, ownership and asset classes even when tickers repeat.
+  return trim(row.source_document_id);
 }
 
 function lowerBound(valueRange: string | null | undefined) {
@@ -81,10 +79,9 @@ export async function getLatestPoliticianDisclosureHoldings(memberId: string): P
     throw new Error('Disclosure history exceeds the supported snapshot window; refusing a partial portfolio.');
   }
 
-  const rows = history.rows.filter((row) => {
-    const valueRange = trim(row.payload?.value_range).toLowerCase();
-    return row.payload?.product_eligible !== false && valueRange !== 'none';
-  });
+  // Select the document before filtering out None/ineligible rows: an empty newer
+  // annual must never resurrect positions from an older filing.
+  const rows = history.rows.filter(row => ['A', 'O', 'W'].includes(trim(row.payload?.filing_type)));
   if (!rows.length) {
     return [];
   }
@@ -105,11 +102,15 @@ export async function getLatestPoliticianDisclosureHoldings(memberId: string): P
   }
 
   const latestRows = rows.filter((row) => trim(row.payload?.filing_date || row.filed_at) === latestFilingDate);
+  const documents = new Set(latestRows.map(row => trim(row.payload?.doc_id)));
+  if (documents.size !== 1 || latestRows.some(row => row.payload?.filing_type === 'W')) {
+    throw new Error('Annual amendment or competing baselines require review.');
+  }
   const byKey = new Map<string, RawDisclosureHoldingRow>();
 
   for (const row of latestRows) {
     const valueRange = trim(row.payload?.value_range);
-    if (!valueRange) {
+    if (!valueRange || valueRange.toLowerCase() === 'none' || row.payload?.product_eligible === false) {
       continue;
     }
     const key = disclosureKey(row);
@@ -128,7 +129,12 @@ export async function getLatestPoliticianDisclosureHoldings(memberId: string): P
         return null;
       }
 
+      const valuationDate = trim(payload.period_covered_end);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(valuationDate) || valuationDate > trim(payload.filing_date || row.filed_at)) {
+        throw new Error('Annual holdings valuation date needs source review.');
+      }
       return {
+        valuationDate,
         key: disclosureKey(row),
         docId: trim(payload.doc_id || row.source_document_id),
         filingDate: trim(payload.filing_date || row.filed_at),

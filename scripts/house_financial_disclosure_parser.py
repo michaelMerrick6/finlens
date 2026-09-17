@@ -9,14 +9,15 @@ from pypdf import PdfReader
 
 CONTROL_CHARS_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
 WHITESPACE_RE = re.compile(r"\s+")
-ASSET_TYPE_RE = re.compile(r"\[(?P<asset_type>[A-Z]{2})\]")
+ASSET_TYPE_RE = re.compile(r"\[(?P<asset_type>[A-Z0-9]{2})\]")
 PERIOD_COVERED_RE = re.compile(
     r"Period Covered:\s*(?P<start>\d{1,2}/\d{1,2}/\d{4})\s*[–-]\s*(?P<end>\d{1,2}/\d{1,2}/\d{4})",
     re.IGNORECASE,
 )
 TICKER_RE = re.compile(r"\(([A-Za-z][A-Za-z0-9.\-]{0,9})\)")
+STANDARD_VALUE_UPPER = {1001:15000,15001:50000,50001:100000,100001:250000,250001:500000,500001:1000000,1000001:5000000,5000001:25000000,25000001:50000000}
 VALUE_RANGE_RE = re.compile(
-    r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|None)",
+    r"(Spouse/DC\s+Over\s+\$[0-9,]+|Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|None|Undetermined)",
     re.IGNORECASE,
 )
 OWNER_RE = re.compile(r"^(?P<owner>JT|SP|DC|S|D|C)\b", re.IGNORECASE)
@@ -131,11 +132,13 @@ def is_section_header(line: str) -> bool:
 
 def is_section_stop(line: str) -> bool:
     upper = line.upper()
-    return any(marker in upper for marker in SECTION_STOP_MARKERS)
+    # House PDFs often use a font whose missing glyphs leave "S B: T"
+    # after control-character cleanup. This still marks Schedule B, not assets.
+    return bool(re.match(r"^(?:S|SCHEDULE|SECTION)\s+[B-J]\s*:", upper)) or any(marker in upper for marker in SECTION_STOP_MARKERS)
 
 
 def should_skip_line(line: str) -> bool:
-    if not line:
+    if not line or line in {'$1,000?', '$200?'}:
         return True
     upper = line.upper()
     if any(upper.startswith(prefix) for prefix in SECTION_SKIP_PREFIXES):
@@ -172,7 +175,91 @@ def iter_section_a_lines(pdf_bytes: bytes) -> tuple[list[str], str]:
 
 
 def build_asset_blocks(lines: Iterable[str]) -> list[str]:
-    normalized_lines = [normalize_line(line) for line in lines if normalize_line(line)]
+    source_lines = [normalize_line(line) for line in lines if normalize_line(line)]
+    normalized_lines = []
+    cursor = 0
+    while cursor < len(source_lines):
+        line = source_lines[cursor]
+        typed = ASSET_TYPE_RE.search(line)
+        if typed and cursor + 1 < len(source_lines):
+            tail = line[typed.end():]
+            partial = re.fullmatch(r"\s*(?:(SP|JT|DC|S|D|C)\s+)?\$([\d,]+)\s*-\s*(.*)", tail)
+            upper = re.match(r"^\$([\d,]+)(?:\s|$)", source_lines[cursor + 1])
+            if partial and not partial[3].startswith('$') and upper and int(upper[1].replace(',', '')) == STANDARD_VALUE_UPPER.get(int(partial[2].replace(',', ''))):
+                continuation = source_lines[cursor + 1][upper.end():]
+                normalized_lines.append(f"{line[:typed.end()]} {partial[1] or ''} ${partial[2]} - ${upper[1]} {partial[3]} {continuation}")
+                cursor += 2
+                continue
+        normalized_lines.append(line)
+        cursor += 1
+    # An account row can end a page with its value, while its asset name/type
+    # starts the next page. Rejoin only an explicit account-arrow + full value
+    # followed immediately by a typed asset with no fields after its type.
+    joined: list[str] = []
+    cursor = 0
+    while cursor < len(normalized_lines):
+        line = normalized_lines[cursor]
+        # A split value column is recoverable only with an account anchor and
+        # an exact standard disclosure bracket. Never take an income-column
+        # number as the asset value or combine different asset rows.
+        partial = re.match(r"^(.*?)⇒\s*(?:(SP|JT|DC|S|D|C)\s+)?\$([\d,]+)\s*-\s*([^$]*)", line)
+        standard_upper = STANDARD_VALUE_UPPER
+        repaired = False
+        if partial and not ASSET_TYPE_RE.search(line) and not VALUE_RANGE_RE.match(line[partial.start(3)-1:]):
+            lower = int(partial[3].replace(',', ''))
+            name_parts = []
+            for offset in range(1, 4):
+                at = cursor + offset
+                if at >= len(normalized_lines): break
+                part = normalized_lines[at]
+                if '⇒' in part: break
+                typed = ASSET_TYPE_RE.search(part)
+                if not typed:
+                    if '$' in part: break
+                    name_parts.append(part)
+                    continue
+                name_parts.append(part[:typed.end()])
+                tail = part[typed.end():].strip()
+                end = at
+                if not tail and at + 1 < len(normalized_lines):
+                    end = at + 1
+                    tail = normalized_lines[end]
+                upper = re.match(r"^\$([\d,]+)(?![\d,])(?:\s|$)", tail)
+                if upper and int(upper[1].replace(',', '')) == standard_upper.get(lower):
+                    joined.append(f"{partial[1]}⇒ {' '.join(name_parts)} {partial[2] or ''} ${partial[3]} - ${upper[1]} {tail[upper.end():]}")
+                    cursor = end + 1
+                    repaired = True
+                break
+        if repaired:
+            continue
+        # Complete values can precede a wrapped name, too. Match the first
+        # column after the account marker, never a later income bracket.
+        full = re.search(r"⇒\s*(?:(SP|JT|DC|S|D|C)\s+)?(" + VALUE_RANGE_RE.pattern + r")", line, re.I)
+        repaired = False
+        if full and not ASSET_TYPE_RE.search(line):
+            name_parts = []
+            for offset in range(1, 4):
+                at = cursor + offset
+                if at >= len(normalized_lines): break
+                part = normalized_lines[at]
+                if '⇒' in part: break
+                typed = ASSET_TYPE_RE.search(part)
+                if not typed:
+                    if '$' in part: break
+                    name_parts.append(part)
+                    continue
+                tail = part[typed.end():].strip()
+                if not VALUE_RANGE_RE.search(tail):
+                    name_parts.append(part[:typed.end()])
+                    prefix = line[:full.start()] + '⇒'
+                    joined.append(f"{prefix} {' '.join(name_parts)} {full[1] or ''} {full[2]} {line[full.end():]} {tail}")
+                    cursor = at + 1
+                    repaired = True
+                break
+        if not repaired:
+            joined.append(line)
+            cursor += 1
+    normalized_lines = joined
     blocks: list[str] = []
     pending_prefix: list[str] = []
     current_lines: list[str] = []
@@ -189,6 +276,11 @@ def build_asset_blocks(lines: Iterable[str]) -> list[str]:
             continue
 
         if current_lines:
+            if line.endswith('⇒'):
+                blocks.append(' '.join(current_lines))
+                current_lines = []
+                pending_prefix = [line]
+                continue
             if looks_like_asset_name_prefix(line) and next_line and ASSET_TYPE_RE.search(next_line):
                 blocks.append(" ".join(current_lines))
                 current_lines = []
@@ -209,11 +301,14 @@ def looks_like_asset_name_prefix(line: str) -> bool:
     upper = line.upper()
     if not line or "[" in line:
         return False
+    # Dollar continuations belong to the current row, never the next asset name.
+    if re.match(r"^(?:(?:SP|JT|DC|S|D|C)\s+)?\$", line, re.I):
+        return False
     if VALUE_RANGE_RE.search(line):
         return False
     if any(hint in upper for hint in BLOCK_METADATA_HINTS):
         return False
-    if upper.startswith(("LOCATION:", "DESCRIPTION:", "FILED", "SOURCE TYPE", "OWNER CREDITOR", "POSITION NAME")):
+    if upper.startswith(("LOCATION:", "DESCRIPTION:", "L:", "D:", "FILED", "SOURCE TYPE", "OWNER CREDITOR", "POSITION NAME")):
         return False
     return True
 
@@ -238,12 +333,12 @@ def parse_asset_block(block: str) -> HouseDisclosureHolding | None:
         return None
 
     after = normalize_line(block[asset_match.end() :])
-    value_match = VALUE_RANGE_RE.search(after)
-    if not value_match:
-        return None
-
     owner_match = OWNER_RE.match(after)
     owner = owner_match.group("owner").upper() if owner_match else None
+    value_column = after[owner_match.end():].strip() if owner_match else after
+    value_match = VALUE_RANGE_RE.match(value_column)
+    if not value_match:
+        return None
     value_range = normalize_line(value_match.group(0)).replace(" - ", " - ")
 
     return HouseDisclosureHolding(

@@ -1,0 +1,95 @@
+[
+  {
+    "member_id": "P000197",
+    "name": "Nancy Pelosi",
+    "chamber": "House",
+    "first": "Nancy",
+    "last": "Pelosi",
+    "district": "CA11"
+  },
+  {
+    "member_id": "M001157",
+    "name": "Michael McCaul",
+    "chamber": "House",
+    "first": "Michael T.",
+    "last": "McCaul",
+    "district": "TX10"
+  },
+  {
+    "member_id": "K000389",
+    "name": "Ro Khanna",
+    "chamber": "House",
+    "first": "Rohit",
+    "last": "Khanna",
+    "district": "CA17"
+  },
+  {
+    "member_id": "A000383",
+    "name": "Alan Armstrong",
+    "chamber": "Senate",
+    "first": "Alan",
+    "last": "Armstrong"
+  },
+  {
+    "member_id": "G000583",
+    "name": "Josh Gottheimer",
+    "chamber": "House",
+    "first": "Josh",
+    "last": "Gottheimer",
+    "district": "NJ05"
+  },
+  {
+    "member_id": "M001232",
+    "name": "April McClain Delaney",
+    "chamber": "House",
+    "first": "April McClain",
+    "last": "Delaney",
+    "district": "MD06"
+  },
+  {
+    "member_id": "C001123",
+    "name": "Gilbert Cisneros",
+    "chamber": "House",
+    "first": "Gilbert",
+    "last": "Cisneros",
+    "district": "CA31"
+  },
+  {
+    "member_id": "F000110",
+    "name": "Cleo Fields",
+    "chamber": "House",
+    "first": "Cleo",
+    "last": "Fields",
+    "district": "LA06"
+  },
+  {
+    "member_id": "M001190",
+    "name": "Markwayne Mullin",
+    "chamber": "Senate",
+    "first": "Markwayne",
+    "last": "Mullin"
+  },
+  {
+    "member_id": "H001082",
+    "name": "Kevin Hern",
+    "chamber": "House",
+    "first": "Kevin",
+    "last": "Hern",
+    "district": "OK01"
+  },
+  {
+    "member_id": "M001236",
+    "name": "Tim Moore",
+    "chamber": "House",
+    "first": "Tim",
+    "last": "Moore",
+    "district": "NC14"
+  },
+  {
+    "member_id": "M001243",
+    "name": "Dave McCormick",
+    "chamber": "Senate",
+    "first": "David H",
+    "last": "McCormick"
+  }
+]
