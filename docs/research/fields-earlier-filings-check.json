@@ -1,0 +1,87 @@
+{
+  "checked_on": "2026-09-17",
+  "member_id": "F000110",
+  "scope": "Text search of all ten 2025 PTRs in the checked House index. Candidate search only, not full row/account verification.",
+  "documents": [
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20027855.pdf",
+      "sha256": "4dd806a65b4328bbd6ae976cd09fd09c8188f07b0599a5ebb1de7fdef67a2fe3",
+      "keyword_hits": []
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20030472.pdf",
+      "sha256": "b7792e8b4cd473b26e4a1b749f28aa62f85ec8e5d46ea3742e0956e5b7da3804",
+      "keyword_hits": [
+        "Alphabet Inc. - Class C Capital Stock   P              06/05/2025 06/05/2025       $15,001 - $50,000",
+        "Alphabet Inc. - Class C Capital Stock   P              06/25/2025 06/25/2025       $50,001 -"
+      ]
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20030803.pdf",
+      "sha256": "05a5d833c10e73a34aee70cfc4266a6f4db4ce055ca86298f523efd689d7d8e9",
+      "keyword_hits": [
+        "Alphabet Inc. - Class C Capital Stock   P             07/30/2025 07/30/2025        $100,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             07/29/2025 07/29/2025        $50,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             07/29/2025 07/29/2025        $50,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             07/17/2025 07/17/2025        $100,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             07/14/2025 07/14/2025        $100,001 -"
+      ]
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20031017.pdf",
+      "sha256": "cd6cbe0c14d3b0c727deb8cd2dc74ce90ecaa5c62d44ba1c8f3bff9204a52d71",
+      "keyword_hits": [
+        "Alphabet Inc. - Class C Capital Stock   P             08/01/2025 08/04/2025         $100,001 -"
+      ]
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20032106.pdf",
+      "sha256": "606edc1951553ca8d3be8ebd242e6a44af6557d40f6968295f84cdb27d21b68b",
+      "keyword_hits": [
+        "Alphabet Inc. - Class C Capital Stock   P             09/17/2025 09/17/2025        $15,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             09/17/2025 09/17/2025        $1,001 - $15,000",
+        "Alphabet Inc. - Class C Capital Stock   P             09/17/2025 09/17/2025        $15,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             09/03/2025 09/03/2025        $100,001 -"
+      ]
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20033326.pdf",
+      "sha256": "b090e0bd9de1c30f0b9a3a4838b45282400a60a3e1c7b0810eec1f374d9b2e1b",
+      "keyword_hits": [
+        "Alphabet Inc. - Class A Common          P             10/10/2025 10/10/2025        $15,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             10/10/2025 10/10/2025        $15,001 -"
+      ]
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20033424.pdf",
+      "sha256": "d77920ed17da4938c5664fe81d29b164e51658edc8c77c71fc15e9f37a85d1dd",
+      "keyword_hits": [
+        "Alphabet Inc. - Class A Common          P             10/23/2025 10/23/2025        $100,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             10/29/2025 10/29/2025        $50,001 -"
+      ]
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20033493.pdf",
+      "sha256": "97820221489caecfdc0e704231134fd98a2525876344135627ab53fb72ed226a",
+      "keyword_hits": []
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20033559.pdf",
+      "sha256": "4d86a13b1c30f447ceb63613220afcd6eb3b0710f30db3146cd86564a32dc811",
+      "keyword_hits": []
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20033616.pdf",
+      "sha256": "b4a14090190553474a8ccc7b0489611025fa5f40ca601ef5959102ab902998c8",
+      "keyword_hits": [
+        "Alphabet Inc. - Class A Common          P             12/15/2025 12/15/2025        $15,001 -",
+        "Alphabet Inc. - Class A Common          P             12/11/2025    12/11/2025     $100,001 -",
+        "Alphabet Inc. - Class A Common          P             12/09/2025 12/09/2025        $50,001 -",
+        "Alphabet Inc. - Class A Common          P             12/01/2025 12/01/2025        $50,001 -",
+        "Alphabet Inc. - Class C Capital Stock   P             12/15/2025 12/15/2025        $1,001 - $15,000"
+      ]
+    }
+  ],
+  "result": "No defensible opening balance established for the four unmatched account positions. Earlier purchases alone do not prove initial zero holdings.",
+  "current_holdings_eligible": false
+}

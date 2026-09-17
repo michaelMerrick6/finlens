@@ -1,0 +1,201 @@
+{
+  "checked_at": "2026-09-17T18:39:35.129857+00:00",
+  "member_id": "F000110",
+  "documents": [
+    {
+      "year": 2025,
+      "id": "10074378",
+      "type": "O",
+      "filed": "5/14/2026"
+    },
+    {
+      "year": 2025,
+      "id": "20027855",
+      "type": "P",
+      "filed": "3/14/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20030472",
+      "type": "P",
+      "filed": "7/1/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20030803",
+      "type": "P",
+      "filed": "8/6/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20031017",
+      "type": "P",
+      "filed": "9/3/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20032106",
+      "type": "P",
+      "filed": "9/30/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20033326",
+      "type": "P",
+      "filed": "10/30/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20033424",
+      "type": "P",
+      "filed": "11/12/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20033493",
+      "type": "P",
+      "filed": "11/19/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20033559",
+      "type": "P",
+      "filed": "12/10/2025"
+    },
+    {
+      "year": 2025,
+      "id": "20033616",
+      "type": "P",
+      "filed": "12/17/2025"
+    },
+    {
+      "year": 2026,
+      "id": "20033732",
+      "type": "P",
+      "filed": "1/16/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20033858",
+      "type": "P",
+      "filed": "2/3/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034018",
+      "type": "P",
+      "filed": "2/24/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034179",
+      "type": "P",
+      "filed": "3/17/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034295",
+      "type": "P",
+      "filed": "4/7/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034357",
+      "type": "P",
+      "filed": "4/20/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034591",
+      "type": "P",
+      "filed": "6/3/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034800",
+      "type": "P",
+      "filed": "6/26/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20034894",
+      "type": "P",
+      "filed": "7/16/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20035023",
+      "type": "P",
+      "filed": "7/30/2026"
+    },
+    {
+      "year": 2026,
+      "id": "20035345",
+      "type": "P",
+      "filed": "9/2/2026"
+    }
+  ],
+  "source_checks": [
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074378.pdf",
+      "sha256": "2fa75af56c4a75d395dd54e23750579791cf514d0d2845dc7f69c5d897b48a30",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033732.pdf",
+      "sha256": "13d21ea4878ef3ed529a011152bf17d0f416f187b2950d135883be4d4f12b3d5",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033858.pdf",
+      "sha256": "c5cbb249a101d4a6802bcb56da073a234310aa86333da2376bd3a9d86f2b2a4b",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034018.pdf",
+      "sha256": "2bf197ff45c31c34919daff21ac9f89d705f3b78655158170cb19e7a4d4b81f0",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034179.pdf",
+      "sha256": "de338645e1f2e7546b906c688c1b1b733d527a66d474e4be9ec05025c889414a",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034295.pdf",
+      "sha256": "4b7c672633351bc9993a42c81c68285553d2e00124b2b578b26ce49c3d096053",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034357.pdf",
+      "sha256": "72fa8c0202baeec2622022cc6b3386513286820b1b6aa7d342e82fd2bb2219d0",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034591.pdf",
+      "sha256": "564ce40c050199985019f83ce2ad895200bbc27f976de77d8a8aa5402039800b",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034800.pdf",
+      "sha256": "aab374c3fb3f99ac9daf7c26a3a1e1ee365b6febf104e09559312431a2f5e0e8",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034894.pdf",
+      "sha256": "608b5187192c389d67a0bc033458d4fac3215194821982049102a5bab2a2df9b",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035023.pdf",
+      "sha256": "4ac0adc4bead48b10c0cdd3a4b832211c08e67dc538180d365257201570cc940",
+      "unchanged": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035345.pdf",
+      "sha256": "91bba9a2be22622ad127278cf9611536fbbb52046568238e89c25c1d7f0076f7",
+      "unchanged": true
+    }
+  ],
+  "new_document_ids": []
+}

@@ -6,6 +6,7 @@ no share count, starting zero balance, or current holding is inferred here.
 import json
 import re
 from collections import Counter
+from reviewed_holdings_corrections import apply_corrections
 from datetime import datetime, timezone
 from pathlib import Path
 from house_financial_disclosure_parser import ASSET_TYPE_RE, extract_ticker
@@ -31,8 +32,12 @@ def house_account(metadata, accounts):
     text=' '.join(metadata)
     found=re.search(r'\bS\s*O:\s*(.*)',text)
     if not found:return None
-    tail=key(found[1])
-    matches=[a for a in accounts if a and tail.startswith(key(a))]
+    tokens=lambda value:re.findall(r'[a-z]+|[0-9]+|[>#]', value.lower())
+    tail=tokens(found[1])
+    def starts_account(account):
+        parts=tokens(account)
+        return tail[:len(parts)]==parts and (len(tail)==len(parts) or tail[len(parts)]!='>')
+    matches=[a for a in accounts if a and starts_account(a)]
     if not matches:return 'UNRESOLVED: '+found[1][:180]
     return max(matches,key=lambda a:len(key(a)))
 
@@ -112,6 +117,8 @@ def finish(member,date,positions,events,blockers):
         candidates=[e for e in events if e['source']!=correction['source'] and e.get('filing_status')=='New' and all(e.get(k)==correction.get(k) for k in ['ticker','date','action','range','owner'])]
         correction['candidate_original_ids']=[e['id'] for e in candidates]
         for e in candidates:e['review_status']='possible-original-of-correction'
+    links=json.loads((ROOT/'docs/research/reviewed-holdings-corrections.json').read_text())['links']
+    apply_corrections(events,[link for link in links if link['member_id']==member.get('member_id')])
     counts=Counter(e['review_status'] for e in events)
     for p in positions:
         p['current_holdings_eligible']=False

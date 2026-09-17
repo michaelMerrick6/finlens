@@ -1,0 +1,521 @@
+{
+  "member_id": "F000110",
+  "as_of": "2026-09-17",
+  "publication_enabled": false,
+  "scope": "Provider split-event check and conditional estimates for four reviewed unmatched purchases; not a complete corporate-action audit.",
+  "split_evidence": {
+    "AAPL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "1e013305a6b5dc2883e5467d709c0392774a82e96f0c43f7ffba3ba14d209441",
+      "provider_name": "Apple Inc.",
+      "splits": []
+    },
+    "AMD": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AMD",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "aa2372455e4d78cd563d8f29db2ffb5157d4d12235c8137fae850314f3855ba2",
+      "provider_name": "Advanced Micro Devices, Inc.",
+      "splits": []
+    },
+    "AMZN": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "3359d4264f082be0c9c20f370503cbc7bd2dbe776d26aa4b48898a102cd4f25b",
+      "provider_name": "Amazon.com, Inc.",
+      "splits": []
+    },
+    "ARM": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/ARM",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "d2d46df4fea892134bf6b1b873c42877138301cd48a391cccbfd6db65828f5b9",
+      "provider_name": "Arm Holdings plc",
+      "splits": []
+    },
+    "AVGO": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "fdb6cd77ae28b9f90b222ce3f975435bdb474ecfc8d9f9dd9a8409fbb2699ad3",
+      "provider_name": "Broadcom Inc.",
+      "splits": []
+    },
+    "BMNR": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/BMNR",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "7841e575826851d492a4df360e3329dc171e9c9269c780d5d8e55e95dd223ce3",
+      "provider_name": "Bitmine Immersion Technologies, Inc.",
+      "splits": []
+    },
+    "CLS": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CLS",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "7575eddafb9a685c4f614c6e15f4b8aaece28303757756d1f7d5f4fad2119b9b",
+      "provider_name": "Celestica Inc.",
+      "splits": []
+    },
+    "CMG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CMG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "faa70399ec4db852f4b4af184c280adf33bdd5c4d708b171211c3edc05d92d73",
+      "provider_name": "Chipotle Mexican Grill, Inc.",
+      "splits": []
+    },
+    "CRWV": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CRWV",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "fd98c59dcc19d00834223a1800dff47f9048f96957b5185c0d579eb81c84fec8",
+      "provider_name": "CoreWeave, Inc.",
+      "splits": []
+    },
+    "CSCO": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CSCO",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "fcfd241ac9a81c0870a4dbf8b61348c92b944fbc86c0b7cb45df9e9013ccb289",
+      "provider_name": "Cisco Systems, Inc.",
+      "splits": []
+    },
+    "FIG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/FIG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "ea1a124f1b499754b89acceaeedf9043ba30df34828e0c5522a98cd2342a8175",
+      "provider_name": "Figma, Inc.",
+      "splits": []
+    },
+    "GOOG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/GOOG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "b7f515cbe9e1d2e7d0d526303ee014294b77f793e25768d7de8097ff4cfa4e18",
+      "provider_name": "Alphabet Inc.",
+      "splits": []
+    },
+    "GOOGL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "2c4be7fe87301ee173325d5d71e09a18d44c6f6dc326d1bcdf94a3da8dbdbfa0",
+      "provider_name": "Alphabet Inc.",
+      "splits": []
+    },
+    "HOOD": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/HOOD",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "0d16f2d18a61b844030007c4820bfcb327218f1035046145d4607928e6fa850c",
+      "provider_name": "Robinhood Markets, Inc.",
+      "splits": []
+    },
+    "INTC": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/INTC",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "c111182909d9ad8e5c6a41711110ff60833d637b5ba340fc0172ca11c2bd92ee",
+      "provider_name": "Intel Corporation",
+      "splits": []
+    },
+    "IREN": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/IREN",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "8497edcb702264d51d9d987aa896093e8ceb61fff675191784a6f61b72a7c433",
+      "provider_name": "IREN Limited",
+      "splits": []
+    },
+    "JPM": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/JPM",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "12ce8730bc24e46049f1ca9b998b925bac15f18d6fa044128f476058dd33aea8",
+      "provider_name": "JPMorgan Chase & Co.",
+      "splits": []
+    },
+    "LRCX": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/LRCX",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "73bbb2a7d27d80a24361237f16fb9c2e532dcea3b914fad3e176ae032efc34c2",
+      "provider_name": "Lam Research Corporation",
+      "splits": []
+    },
+    "MCD": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/MCD",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "22ccd830e15180cbecba0ba498b9d9c1326d8656e1aa22877a633985d8ce38a8",
+      "provider_name": "McDonald's Corporation",
+      "splits": []
+    },
+    "META": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/META",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "5c39d47538555b56bdacc8ec32b8b72e2d552e7daaf5fbd5c822b84277eab8b1",
+      "provider_name": "Meta Platforms, Inc.",
+      "splits": []
+    },
+    "MSFT": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "de51cbe5f15075c54f067a12996b417d6c0e1cb2d39d46d771c6d243df46dacc",
+      "provider_name": "Microsoft Corporation",
+      "splits": []
+    },
+    "MU": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/MU",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "7d6c58cfadc6e8eed335f1793eac6bb6f57cbd9532bc8a77906c0b8cdbdb8a7c",
+      "provider_name": "Micron Technology, Inc.",
+      "splits": []
+    },
+    "NFLX": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/NFLX",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "6b68c52d19aacb3745a010f05dd177849024762c9f59552394dc183d56dbcffc",
+      "provider_name": "Netflix, Inc.",
+      "splits": []
+    },
+    "NVDA": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "69e4538c1ea8a9b46457d60505474f002fece248e1e393888642380d1765decd",
+      "provider_name": "NVIDIA Corporation",
+      "splits": []
+    },
+    "OPEN": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/OPEN",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "d0d928d7718535d50902255a59f429bcb741ce21eb1575478440134026457373",
+      "provider_name": "Opendoor Technologies Inc.",
+      "splits": []
+    },
+    "ORCL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/ORCL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "9f527cd82e42564b1ad22fa1e8279d734718470690b022ac73837325a35be678",
+      "provider_name": "Oracle Corporation",
+      "splits": []
+    },
+    "PLTR": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/PLTR",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "9b07ceb7a5c054c6917a884b71a9da10a3a41691d616929a80642c4ed06e0e0a",
+      "provider_name": "Palantir Technologies Inc.",
+      "splits": []
+    },
+    "QCOM": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/QCOM",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "02f6c039c88b645a7d1017864cc44f634e1fc9eb9b08d68767a2fc3b49b35100",
+      "provider_name": "QUALCOMM Incorporated",
+      "splits": []
+    },
+    "QNT": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/QNT",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "4848f90e16421dafd79a76534ddf35a3dbc9f0b0eef40be4dd49642d363500da",
+      "provider_name": "Quantinuum Inc.",
+      "splits": []
+    },
+    "SOUN": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/SOUN",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "7fa017062e9c15fb6c89bda4a54525dc835fb1d350402c260d00fc05a4ec6081",
+      "provider_name": "SoundHound AI, Inc.",
+      "splits": []
+    },
+    "SOXX": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/SOXX",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "d2b27bf018b8416eb0bb09243e29d6e260b959679c077137664fb2d4929d2035",
+      "provider_name": "iShares Semiconductor ETF",
+      "splits": []
+    },
+    "T": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/T",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "599ce8d7b322963c83e52a5d9b984962a024438b0f1c7abb2eee90cc05a50f36",
+      "provider_name": "AT&T Inc.",
+      "splits": []
+    },
+    "TSM": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/TSM",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "3b0e5c2ff3635d6e4c6eee238775ad556d06e5fab5f2bbf1f8cf165a599143aa",
+      "provider_name": "Taiwan Semiconductor Manufacturing Company Limited",
+      "splits": []
+    },
+    "UBER": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/UBER",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "e74bddd3ec827fbdf74b199e4b4a1884bf33f07f7e97803cde2d802c838161c3",
+      "provider_name": "Uber Technologies, Inc.",
+      "splits": []
+    }
+  },
+  "purchases": [
+    {
+      "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033858.pdf#row=1",
+      "ticker": "GOOG",
+      "account": "Morgan Stanley - E*TRADE IRA",
+      "date": "2026-01-12",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033858.pdf",
+      "source_sha256": "c5cbb249a101d4a6802bcb56da073a234310aa86333da2376bd3a9d86f2b2a4b",
+      "disclosed_range": "$1,001 - $15,000",
+      "estimate": {
+        "min_acquired_shares": 2.9930630088886416,
+        "max_acquired_shares": 46.081532210946015,
+        "execution_price_bounds": [
+          325.510009765625,
+          334.44000244140625
+        ],
+        "status": "conditional-purchase-only",
+        "current_holdings_eligible": false,
+        "assumption": "Execution price lies within the daily trading range.",
+        "limitation": "Unknown opening balance. These are estimated acquired shares, not total current holdings."
+      },
+      "identity_sources": [],
+      "opening_balance_status": "not-established",
+      "current_holdings_eligible": false
+    },
+    {
+      "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034018.pdf#row=4",
+      "ticker": "LRCX",
+      "account": "Morgan Stanley - E*TRADE #2",
+      "date": "2026-02-03",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034018.pdf",
+      "source_sha256": "2bf197ff45c31c34919daff21ac9f89d705f3b78655158170cb19e7a4d4b81f0",
+      "disclosed_range": "$15,001 - $50,000",
+      "estimate": {
+        "min_acquired_shares": 60.82637376126745,
+        "max_acquired_shares": 220.38081331065678,
+        "execution_price_bounds": [
+          226.8800048828125,
+          246.6199951171875
+        ],
+        "status": "conditional-purchase-only",
+        "current_holdings_eligible": false,
+        "assumption": "Execution price lies within the daily trading range.",
+        "limitation": "Unknown opening balance. These are estimated acquired shares, not total current holdings."
+      },
+      "identity_sources": [],
+      "opening_balance_status": "not-established",
+      "current_holdings_eligible": false
+    },
+    {
+      "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034018.pdf#row=6",
+      "ticker": "MU",
+      "account": "Morgan Stanley - E*TRADE #2",
+      "date": "2026-02-03",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034018.pdf",
+      "source_sha256": "2bf197ff45c31c34919daff21ac9f89d705f3b78655158170cb19e7a4d4b81f0",
+      "disclosed_range": "$100,001 - $250,000",
+      "estimate": {
+        "min_acquired_shares": 226.09315568601903,
+        "max_acquired_shares": 613.4517722593245,
+        "execution_price_bounds": [
+          407.5299987792969,
+          442.29998779296875
+        ],
+        "status": "conditional-purchase-only",
+        "current_holdings_eligible": false,
+        "assumption": "Execution price lies within the daily trading range.",
+        "limitation": "Unknown opening balance. These are estimated acquired shares, not total current holdings."
+      },
+      "identity_sources": [],
+      "opening_balance_status": "not-established",
+      "current_holdings_eligible": false
+    },
+    {
+      "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034800.pdf#row=4",
+      "ticker": "QNT",
+      "account": "Morgan Stanley - E*TRADE #2",
+      "date": "2026-06-04",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034800.pdf",
+      "source_sha256": "aab374c3fb3f99ac9daf7c26a3a1e1ee365b6febf104e09559312431a2f5e0e8",
+      "disclosed_range": "$1,001 - $15,000",
+      "estimate": {
+        "min_acquired_shares": 14.029432675644225,
+        "max_acquired_shares": 250.45917770693188,
+        "execution_price_bounds": [
+          59.88999938964844,
+          71.3499984741211
+        ],
+        "status": "conditional-purchase-only",
+        "current_holdings_eligible": false,
+        "assumption": "Execution price lies within the daily trading range or the documented IPO offering price.",
+        "limitation": "Unknown opening balance. These are estimated acquired shares, not total current holdings."
+      },
+      "identity_sources": [
+        "https://ir.quantinuum.com/news-releases/news-release-details/quantinuum-announces-pricing-upsized-initial-public-offering-0",
+        "https://ir.quantinuum.com/news-releases/news-release-details/quantinuum-announces-closing-upsized-initial-public-offering"
+      ],
+      "opening_balance_status": "not-established",
+      "current_holdings_eligible": false
+    }
+  ],
+  "remaining": [
+    "Opening balances for four unmatched account positions.",
+    "Independent review of mergers, spinoffs, transfers and reinvestments; no split events is not proof of no corporate actions."
+  ]
+}

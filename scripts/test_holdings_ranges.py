@@ -11,8 +11,11 @@ class RangeTests(unittest.TestCase):
     def test_sale_interval_is_subtracted_in_reverse(self):
         r=self.run_model([self.event(action='S (partial)')]);self.assertEqual((r['min_shares'],r['max_shares']),(80,195))
     def test_full_sale_is_account_scoped(self):
-        self.assertEqual(self.run_model([self.event(action='S (full)')])['max_shares'],0)
+        self.assertEqual(self.run_model([self.event(action='S (full)',value_bounds=[1000,2000])])['max_shares'],0)
         self.assertEqual(self.run_model([self.event(action='S (full)',position_id='other')])['status'],'review-required')
+    def test_full_sale_cannot_erase_a_larger_inconsistent_balance(self):
+        self.assertEqual(self.run_model([self.event(action='S (full)')])['reason'],'full-sale-inconsistent-with-balance')
+
     def test_prebaseline_trades_are_not_applied_twice(self):
         self.assertEqual(self.run_model([self.event(date='2025-12-30')])['min_shares'],100)
     def test_amendments_duplicates_and_missing_prices_stop_model(self):

@@ -1,0 +1,45 @@
+{
+  "reviewed_on": "2026-09-17",
+  "publication_enabled": false,
+  "links": [
+    {
+      "member_id": "H001082",
+      "original_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035134.pdf#row=12",
+      "correction_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035196.pdf#row=1",
+      "original_sha256": "ad182ec8d9b632115329f229f9144c0390affbf4a77ae52e7debe1352ddfb81e",
+      "correction_sha256": "951740000ede6c5cb506bb14de74c7a8ce7d17d082d35f46ee4c24915583e677",
+      "original_account": "Hern Family Foundation",
+      "corrected_account": "Hern Family Revocable Trust",
+      "filing_status": "Amended",
+      "official_correction_transaction_id": "2000166537",
+      "expected": {
+        "ticker": "OGN",
+        "date": "2026-08-05",
+        "action": "S",
+        "range": "$1,001 - $15,000",
+        "owner": "JT"
+      },
+      "basis": "Visual comparison: original PDF page 2 and correction PDF page 1; unique matching ticker, date, action, amount and owner. Original PDF does not print the transaction ID, so linkage is reviewed inference, not an ID join."
+    },
+    {
+      "member_id": "H001082",
+      "original_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035134.pdf#row=14",
+      "correction_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035196.pdf#row=2",
+      "original_sha256": "ad182ec8d9b632115329f229f9144c0390affbf4a77ae52e7debe1352ddfb81e",
+      "correction_sha256": "951740000ede6c5cb506bb14de74c7a8ce7d17d082d35f46ee4c24915583e677",
+      "original_account": "Hern Family Foundation",
+      "corrected_account": "Hern Family Foundation",
+      "filing_status": "Deleted",
+      "official_correction_transaction_id": "2000166538",
+      "expected": {
+        "ticker": "VSNT",
+        "date": "2026-08-05",
+        "action": "S",
+        "range": "$1,001 - $15,000",
+        "owner": "JT"
+      },
+      "basis": "Visual comparison: original PDF page 2 and correction PDF page 1; unique matching ticker, date, action, amount and owner. Original PDF does not print the transaction ID, so linkage is reviewed inference, not an ID join."
+    }
+  ],
+  "live_source_hashes_checked_on": "2026-09-17"
+}

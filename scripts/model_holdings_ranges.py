@@ -24,12 +24,13 @@ def model_range(baseline,events,prices,as_of):
     low,high=(x/start['close'] for x in bounds)
     by_date={p['date']:p for p in prices};seen=set();trace=[]
     for e in sorted(events,key=lambda e:(e['date'],e['id'])):
+        if e.get('balance_effect')=='none':continue
         if e.get('position_id')!=baseline['id']:return fail('unmatched-account')
         if e['date']<=baseline['date'] or e['date']>as_of:continue
         if e['id'] in seen:return fail('duplicate-event')
         seen.add(e['id'])
         if e.get('review_status')!='matched-account':return fail('unresolved-event')
-        if e.get('filing_status','New')!='New':return fail('correction-needs-resolution')
+        if e.get('filing_status','New')!='New' and not (e.get('filing_status')=='Amended' and e.get('correction_resolution')=='reviewed-original-link' and e.get('replaces_event_id')):return fail('correction-needs-resolution')
         if e['action'] not in ['P','S','S (partial)','S (full)','Purchase','Sale (Partial)','Sale (Full)']:return fail('unsupported-position-change')
         amount=e.get('value_bounds');p=by_date.get(e['date'])
         if not amount or len(amount)!=2 or not all(positive(x) for x in amount) or amount[0]>amount[1]:return fail('unbounded-transaction-value')
@@ -40,9 +41,12 @@ def model_range(baseline,events,prices,as_of):
         if e['action'] in ['P','Purchase']:low+=min_delta;high+=max_delta
         else:
             if high<min_delta:return fail('sale-exceeds-modeled-balance')
+            previous_low=low
             low=max(0,low-max_delta);high-=min_delta
             # Full sale is account-scoped only: caller matched this exact account.
-            if e['action'] in ['S (full)','Sale (Full)']:low=high=0
+            if e['action'] in ['S (full)','Sale (Full)']:
+                if max_delta < previous_low:return fail('full-sale-inconsistent-with-balance')
+                low=high=0
         trace.append(dict(event=e['id'],min_shares=low,max_shares=high))
     latest=[p for p in prices if p['date']<=as_of and positive(p.get('close'))]
     if not latest:return fail('missing-latest-price')

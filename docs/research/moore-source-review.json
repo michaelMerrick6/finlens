@@ -1,0 +1,331 @@
+{
+  "member_id": "M001236",
+  "reviewed_on": "2026-09-17",
+  "scope": "Visual review of all 72 Schedule A rows on annual pages 1\u20136 and all 35 transaction rows in nine 2026 PTRs, including page continuations. Not a confirmation of current balances.",
+  "sources": [
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "sha256": "22be0a0bde4b37c0df6d654990a7c1121d0810b4928ccf7600e7bac87a049483"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf",
+      "sha256": "356695f9ca5ceea5f563c17f658d3166caab39062d23a93c15a2ba543dc950f5"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+      "sha256": "78a67194cce7e9ae32181cc93f65ae881d77e0e289b7bebb9b4fa86c532aaf58"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+      "sha256": "db7131611e417f82a17fe093c9938ae8e6f8c5779409cf6fcb530dbfe3bfe572"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+      "sha256": "b2f0f28fd95ab49b422d7e3206b249baf6fdea1bd87660cbf905625dbd3463a0"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf",
+      "sha256": "f2c2555af583fc133f43ab7f54a716886e58e1ad05461d916041746eaa87ca3e"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+      "sha256": "91d2bd34e3b3ccaae3cb3ddd7164d39698c51c29a17afa60809dec4c2d664ef8"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+      "sha256": "5346a6cd41245d74b05db4a7fc1074156d40024f6ff92200b588a760d7e2149d"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034952.pdf",
+      "sha256": "4883e3795e143b0c32dbe6e066253ac7a16d6ab6bdb41fd3f464d62405c7ca86"
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+      "sha256": "00784f80dcba4d620312cc7600bd4c3ab8a3cbf927f0b0f656610b7fc568fb98"
+    }
+  ],
+  "annual_asset_rows": 72,
+  "transaction_rows": 35,
+  "publication_enabled": false,
+  "findings": [
+    "HY year-end None conflicts with December 31 purchase and January 5 sale under the assumed account match.",
+    "PTRs omit account identifiers; unique baseline matches are inferred, not source-confirmed accounts.",
+    "T, SMPL, IHG and RYCEY lack baseline positions; no zero opening balance inferred.",
+    "SMCY is present in both Robinhood and Schwab; SMCYY is a distinct filed asset and must not be conflated.",
+    "Apple is None in Schwab but positive in TradeWinds.",
+    "Corporate actions and market symbol identity still require review."
+  ],
+  "index_check": {
+    "checked_on": "2026-09-17",
+    "years": [
+      2025,
+      2026
+    ],
+    "rows": [
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "O",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "5/14/2026",
+        "DocID": "10075481"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "2/15/2025",
+        "DocID": "20026796"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "3/11/2025",
+        "DocID": "20027944"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "4/14/2025",
+        "DocID": "20029134"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "6/13/2025",
+        "DocID": "20030516"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "6/13/2025",
+        "DocID": "20030522"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "7/9/2025",
+        "DocID": "20030637"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "8/5/2025",
+        "DocID": "20030824"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "9/3/2025",
+        "DocID": "20031020"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "10/10/2025",
+        "DocID": "20032256"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "11/12/2025",
+        "DocID": "20033413"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "12/2/2025",
+        "DocID": "20033564"
+      },
+      {
+        "year": 2025,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2025",
+        "FilingDate": "12/19/2025",
+        "DocID": "20033670"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "1/7/2026",
+        "DocID": "20033746"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "1/24/2026",
+        "DocID": "20033856"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "2/20/2026",
+        "DocID": "20034034"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "3/24/2026",
+        "DocID": "20034217"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "4/28/2026",
+        "DocID": "20034424"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "5/19/2026",
+        "DocID": "20034587"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "6/5/2026",
+        "DocID": "20034721"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "7/9/2026",
+        "DocID": "20034952"
+      },
+      {
+        "year": 2026,
+        "Prefix": "Hon.",
+        "Last": "Moore",
+        "First": "Tim",
+        "Suffix": "",
+        "FilingType": "P",
+        "StateDst": "NC14",
+        "Year": "2026",
+        "FilingDate": "8/20/2026",
+        "DocID": "20035291"
+      }
+    ]
+  }
+}
