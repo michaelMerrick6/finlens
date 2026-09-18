@@ -1,6 +1,6 @@
 # Tim Moore — verification review, September 17, 2026
 
-**Decision: source rows reviewed; current portfolio not fully verified. Publication remains disabled.**
+**Decision: source rows reviewed; current portfolio not fully verified. A dated partial-estimate page is available; unresolved positions remain excluded from its subtotal and ranking.**
 
 ## Completed
 
@@ -100,3 +100,27 @@ Moore now has a local, dated partial-estimate page at `/politicians/M001236/hold
 The presentation snapshot replaces any same-day price with a completed prior close and rejects stale, invalid or missing replacement prices. It does not claim full verification or automatic incorporation of later filings. The research pipeline's full-verification gates remain in place. No production deployment was performed.
 
 Validation: snapshot regression tests, TypeScript typecheck, focused ESLint and existing reviewed-holdings tests passed; local route opened successfully and its ranked rows, partial subtotal, exclusions and source links were inspected in the browser.
+
+## Six-position recheck — September 17, 2026
+
+Freshly fetched the official 2024, 2025 and 2026 indexes. The 2025/2026 inventories are unchanged. Fresh downloads of the annual and all nine reviewed 2026 PTRs match the ten reviewed PDF hashes. Re-extracted the four older candidate/new-filer reports and amendments (10059443, 10071812, 10067159, 10076901); their text supplies no starting balance for HY, T, SMPL, IHG or RYCEY. Reconfirmed the HON reverse split and HONA distribution from issuer sources.
+
+No position was promoted to verified. Honeywell's conditional entitlement calculation is already complete; confirmation of ownership is a separate evidence requirement. HY needs the source contradiction resolved. The other four need an opening balance. There is no newly found filing that supplies those facts. The page and its exclusions remain unchanged. Evidence and fresh source hashes are recorded in `moore-six-position-recheck.json`.
+
+## Full first-term transaction reconstruction
+
+Fetched and parsed all **21 PTRs indexed in 2025–2026**, containing **237 transaction rows** across all assets. The column parser reports no structural extraction issues. This is not a claim of visual verification of every one of the 237 rows. The 15 additional 2025 HY rows were visually checked on six PDF pages, with an independently transcribed test fixture; the two later HY rows were part of the earlier source review. Across the five target symbols there are no repeated date/action/amount/owner fingerprints and no amended/deleted rows.
+
+| Target | First reported transaction | Target rows | Result of rolling forward with an explicitly assumed zero opening balance |
+|---|---|---:|---|
+| HY | August 7, 2025 purchase | 17 | Broad range includes zero today; modeled year-end minimum is about 500 shares, contradicting annual Schedule A None. |
+| T | January 9, 2026 purchase | 6 | Approximately 0–5,496 shares; matching purchase/sale dollar brackets do not establish a full exit. |
+| SMPL | February 3, 2026 purchase | 4 | Approximately 1,869–8,174 shares acquired, with no reported sales in the indexed history. |
+| IHG | May 7, 2026 purchase | 1 | Approximately 6.7–102.5 shares acquired. |
+| RYCEY | May 7, 2026 purchase | 1 | Approximately 57–889 shares acquired. |
+
+These are **counterfactual zero-start scenarios**, not newly verified current balances. They assume no earlier ownership, complete disclosed activity, a long-only portfolio, and no unmodeled transfers or reinvestments. Price conversions use daily trading ranges on a consistent provider split basis. Corporate actions other than splits still require independent review. The three buy-only scenarios reproduce disclosed acquisition estimates; going farther back did not establish their opening positions. Neither scenarios nor annual transaction duplicates are added to the published holdings subtotal.
+
+HY annual Schedule B includes the same 16 dated 2025 transactions found in the PTR chronology, including the December 31 purchase; these are corroborating reports of the same trades, not extra trades. Its Schedule A None remains inconsistent with the long-only roll-forward. Six older HY source pages: 20031020 p2; 20032256 p1; 20033413 p1; 20033564 pp1–2; 20033670 p1.
+
+Evidence: `moore-full-transaction-history.json`. Reproduce with `scripts/reconstruct_moore_history.py`; test the independent HY transcription and scenario safeguards with `scripts/test_moore_full_history.py`. This research does not promote any position to confirmed ownership or change the live page.

@@ -1,0 +1,446 @@
+{
+  "checked_at": "2026-09-18T03:06:11.958247+00:00",
+  "member_id": "M001236",
+  "sources": [
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "expected_sha256": "22be0a0bde4b37c0df6d654990a7c1121d0810b4928ccf7600e7bac87a049483",
+      "sha256": "22be0a0bde4b37c0df6d654990a7c1121d0810b4928ccf7600e7bac87a049483",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf",
+      "expected_sha256": "356695f9ca5ceea5f563c17f658d3166caab39062d23a93c15a2ba543dc950f5",
+      "sha256": "356695f9ca5ceea5f563c17f658d3166caab39062d23a93c15a2ba543dc950f5",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+      "expected_sha256": "78a67194cce7e9ae32181cc93f65ae881d77e0e289b7bebb9b4fa86c532aaf58",
+      "sha256": "78a67194cce7e9ae32181cc93f65ae881d77e0e289b7bebb9b4fa86c532aaf58",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+      "expected_sha256": "db7131611e417f82a17fe093c9938ae8e6f8c5779409cf6fcb530dbfe3bfe572",
+      "sha256": "db7131611e417f82a17fe093c9938ae8e6f8c5779409cf6fcb530dbfe3bfe572",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+      "expected_sha256": "b2f0f28fd95ab49b422d7e3206b249baf6fdea1bd87660cbf905625dbd3463a0",
+      "sha256": "b2f0f28fd95ab49b422d7e3206b249baf6fdea1bd87660cbf905625dbd3463a0",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf",
+      "expected_sha256": "f2c2555af583fc133f43ab7f54a716886e58e1ad05461d916041746eaa87ca3e",
+      "sha256": "f2c2555af583fc133f43ab7f54a716886e58e1ad05461d916041746eaa87ca3e",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+      "expected_sha256": "91d2bd34e3b3ccaae3cb3ddd7164d39698c51c29a17afa60809dec4c2d664ef8",
+      "sha256": "91d2bd34e3b3ccaae3cb3ddd7164d39698c51c29a17afa60809dec4c2d664ef8",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+      "expected_sha256": "5346a6cd41245d74b05db4a7fc1074156d40024f6ff92200b588a760d7e2149d",
+      "sha256": "5346a6cd41245d74b05db4a7fc1074156d40024f6ff92200b588a760d7e2149d",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034952.pdf",
+      "expected_sha256": "4883e3795e143b0c32dbe6e066253ac7a16d6ab6bdb41fd3f464d62405c7ca86",
+      "sha256": "4883e3795e143b0c32dbe6e066253ac7a16d6ab6bdb41fd3f464d62405c7ca86",
+      "matches_review": true
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+      "expected_sha256": "00784f80dcba4d620312cc7600bd4c3ab8a3cbf927f0b0f656610b7fc568fb98",
+      "sha256": "00784f80dcba4d620312cc7600bd4c3ab8a3cbf927f0b0f656610b7fc568fb98",
+      "matches_review": true
+    }
+  ],
+  "all_sources_unchanged": true,
+  "filing_indexes": [
+    {
+      "year": 2024,
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024FD.txt",
+      "sha256": "8ef6e0004fee880896bdb1b05b3e2c1788808e18ebae8d484ec62f1cb1465325",
+      "documents": [
+        {
+          "Prefix": "",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "C",
+          "StateDst": "NC14",
+          "Year": "2024",
+          "FilingDate": "5/15/2024",
+          "DocID": "10059443"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "A",
+          "StateDst": "NC14",
+          "Year": "2024",
+          "FilingDate": "7/17/2025",
+          "DocID": "10071812"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "A",
+          "StateDst": "NC14",
+          "Year": "2024",
+          "FilingDate": "5/14/2026",
+          "DocID": "10076901"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "H",
+          "StateDst": "NC14",
+          "Year": "2024",
+          "FilingDate": "7/26/2025",
+          "DocID": "10067159"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "X",
+          "StateDst": "NC14",
+          "Year": "2024",
+          "FilingDate": "5/2/2025",
+          "DocID": "30023009"
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025FD.txt",
+      "sha256": "bc492e4704de7b3d261f78ac388bdb3e70f51f19414a22ec85ec8e9c1d797cc5",
+      "documents": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "O",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "5/14/2026",
+          "DocID": "10075481"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "2/15/2025",
+          "DocID": "20026796"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "3/11/2025",
+          "DocID": "20027944"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "4/14/2025",
+          "DocID": "20029134"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "6/13/2025",
+          "DocID": "20030516"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "6/13/2025",
+          "DocID": "20030522"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "7/9/2025",
+          "DocID": "20030637"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "8/5/2025",
+          "DocID": "20030824"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "9/3/2025",
+          "DocID": "20031020"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "10/10/2025",
+          "DocID": "20032256"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "11/12/2025",
+          "DocID": "20033413"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "12/2/2025",
+          "DocID": "20033564"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2025",
+          "FilingDate": "12/19/2025",
+          "DocID": "20033670"
+        }
+      ]
+    },
+    {
+      "year": 2026,
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2026FD.txt",
+      "sha256": "a4a7a2576dd750a68d8b19ff95cb1d2b9a245bf6ebad3a16efcd6bac1acc5019",
+      "documents": [
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "1/7/2026",
+          "DocID": "20033746"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "1/24/2026",
+          "DocID": "20033856"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "2/20/2026",
+          "DocID": "20034034"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "3/24/2026",
+          "DocID": "20034217"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "4/28/2026",
+          "DocID": "20034424"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "5/19/2026",
+          "DocID": "20034587"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "6/5/2026",
+          "DocID": "20034721"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "7/9/2026",
+          "DocID": "20034952"
+        },
+        {
+          "Prefix": "Hon.",
+          "Last": "Moore",
+          "First": "Tim",
+          "Suffix": "",
+          "FilingType": "P",
+          "StateDst": "NC14",
+          "Year": "2026",
+          "FilingDate": "8/20/2026",
+          "DocID": "20035291"
+        }
+      ]
+    }
+  ],
+  "older_reports": [
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10059443.pdf",
+      "sha256": "123f20ffe4a0ba5cd77d296d90213d178e1330d672994a7aa3045136b6898e30",
+      "finding": "Text review identifies HON; no HY, T, SMPL, IHG or RYCEY starting balance located. Absence is not evidence of zero ownership."
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10071812.pdf",
+      "sha256": "50b119308fe2d8b76ae3705e1462e66f614aeae54cfd598b049d20dabf6843fd",
+      "finding": "Text review identifies HON; no HY, T, SMPL, IHG or RYCEY starting balance located. Absence is not evidence of zero ownership."
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10067159.pdf",
+      "sha256": "1bf4481ffaa428357bd689721d53d6d3b0271bb7838380a604718f1cec4629da",
+      "finding": "Text review identifies HON; no HY, T, SMPL, IHG or RYCEY starting balance located. Absence is not evidence of zero ownership."
+    },
+    {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10076901.pdf",
+      "sha256": "1601310bd10fd9a73bb5297e15ae264ee49e3a74ebda14308bd6f5ac5c4448e1",
+      "finding": "Text review identifies HON; no HY, T, SMPL, IHG or RYCEY starting balance located. Absence is not evidence of zero ownership."
+    }
+  ],
+  "result": "No new evidence establishing the six current balances; retain exclusions.",
+  "positions": [
+    {
+      "ticker": "HY",
+      "status": "conflicting-baseline",
+      "verified_current_holding": false
+    },
+    {
+      "ticker": "HON",
+      "status": "conditional-entitlement-only",
+      "verified_current_holding": false
+    },
+    {
+      "ticker": "T",
+      "status": "unknown-opening-balance",
+      "verified_current_holding": false
+    },
+    {
+      "ticker": "SMPL",
+      "status": "unknown-opening-balance",
+      "verified_current_holding": false
+    },
+    {
+      "ticker": "IHG",
+      "status": "unknown-opening-balance",
+      "verified_current_holding": false
+    },
+    {
+      "ticker": "RYCEY",
+      "status": "unknown-opening-balance",
+      "verified_current_holding": false
+    }
+  ],
+  "issuer_actions_rechecked": [
+    "https://investor.honeywell.com/reverse-stock-split",
+    "https://www.honeywellaerospace.com/us/en/company/newsroom/2026/06/honeywell-aerospace-spin-off-begins-trading-nasdaq"
+  ]
+}
