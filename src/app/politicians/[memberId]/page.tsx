@@ -55,7 +55,7 @@ export default async function Page({
         </div>
         <div className="profile-actions">
           <TrackButton id={memberId} name={summary.displayName} />
-          {(memberId === "P000197" || getReviewedBaseline(memberId)) && <Link className="button secondary" href={`/politicians/${memberId}/holdings`}>View estimated holdings</Link>}
+          {(memberId === "P000197" || memberId === "M001236" || getReviewedBaseline(memberId)) && <Link className="button secondary" href={`/politicians/${memberId}/holdings`}>View estimated holdings</Link>}
         </div>
       </section>
       <div className="profile-context">

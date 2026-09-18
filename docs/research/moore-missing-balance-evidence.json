@@ -1,0 +1,305 @@
+{
+  "member_id": "M001236",
+  "as_of": "2026-09-17",
+  "publication_enabled": false,
+  "status": "partial-evidence-not-total-holdings",
+  "rows": [
+    {
+      "ticker": "T",
+      "model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": -4762.118678329656,
+        "max_net_share_change": 5495.923988151479,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+            "page": 1,
+            "date": "2026-01-09",
+            "action": "P",
+            "min_net_share_change": 616.8174419505651,
+            "max_net_share_change": 2085.070932213083,
+            "price": {
+              "date": "2026-01-09",
+              "close": 23.989999771118164,
+              "low": 23.979999542236328,
+              "high": 24.31999969482422
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+            "page": 1,
+            "date": "2026-01-30",
+            "action": "S",
+            "min_net_share_change": -1371.254158780613,
+            "max_net_share_change": 1514.4737668421171,
+            "price": {
+              "date": "2026-01-30",
+              "close": 26.209999084472656,
+              "low": 25.149999618530273,
+              "high": 26.290000915527344
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+            "page": 1,
+            "date": "2026-05-18",
+            "action": "P",
+            "min_net_share_change": -760.9612358122787,
+            "max_net_share_change": 3610.9097920108015,
+            "price": {
+              "date": "2026-05-18",
+              "close": 24.43000030517578,
+              "low": 23.850000381469727,
+              "high": 24.579999923706055
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+            "page": 1,
+            "date": "2026-05-21",
+            "action": "S",
+            "min_net_share_change": -2776.277683869316,
+            "max_net_share_change": 3020.0866190840648,
+            "price": {
+              "date": "2026-05-21",
+              "close": 25.34000015258789,
+              "low": 24.809999465942383,
+              "high": 25.389999389648438
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=2",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+            "page": 1,
+            "date": "2026-06-04",
+            "action": "P",
+            "min_net_share_change": -693.7704150916438,
+            "max_net_share_change": 7498.366974734117,
+            "price": {
+              "date": "2026-06-04",
+              "close": 22.770000457763672,
+              "low": 22.329999923706055,
+              "high": 24.010000228881836
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+            "page": 1,
+            "date": "2026-08-14",
+            "action": "S",
+            "min_net_share_change": -4762.118678329656,
+            "max_net_share_change": 5495.923988151479,
+            "price": {
+              "date": "2026-08-14",
+              "close": 24.889999389648438,
+              "low": 24.579999923706055,
+              "high": 24.969999313354492
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/T",
+      "source_hashes": {
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf": "78a67194cce7e9ae32181cc93f65ae881d77e0e289b7bebb9b4fa86c532aaf58",
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf": "db7131611e417f82a17fe093c9938ae8e6f8c5779409cf6fcb530dbfe3bfe572",
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf": "91d2bd34e3b3ccaae3cb3ddd7164d39698c51c29a17afa60809dec4c2d664ef8",
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf": "5346a6cd41245d74b05db4a7fc1074156d40024f6ff92200b588a760d7e2149d",
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf": "00784f80dcba4d620312cc7600bd4c3ab8a3cbf927f0b0f656610b7fc568fb98"
+      }
+    },
+    {
+      "ticker": "SMPL",
+      "model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": 1869.263735609748,
+        "max_net_share_change": 8173.992599957561,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=7",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+            "page": 1,
+            "date": "2026-02-03",
+            "action": "P",
+            "min_net_share_change": 823.7781852933254,
+            "max_net_share_change": 2955.9560918558304,
+            "price": {
+              "date": "2026-02-03",
+              "close": 17.079999923706055,
+              "low": 16.915000915527344,
+              "high": 18.209999084472656
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=6",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+            "page": 1,
+            "date": "2026-02-11",
+            "action": "P",
+            "min_net_share_change": 1734.033064946336,
+            "max_net_share_change": 6079.004142148837,
+            "price": {
+              "date": "2026-02-11",
+              "close": 16.420000076293945,
+              "low": 16.010000228881836,
+              "high": 16.479999542236328
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=8",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+            "page": 1,
+            "date": "2026-03-12",
+            "action": "P",
+            "min_net_share_change": 1800.5844894279624,
+            "max_net_share_change": 7123.572412248005,
+            "price": {
+              "date": "2026-03-12",
+              "close": 14.40999984741211,
+              "low": 14.359999656677246,
+              "high": 15.041000366210938
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=9",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+            "page": 2,
+            "date": "2026-03-13",
+            "action": "P",
+            "min_net_share_change": 1869.263735609748,
+            "max_net_share_change": 8173.992599957561,
+            "price": {
+              "date": "2026-03-13",
+              "close": 14.414999961853027,
+              "low": 14.279999732971191,
+              "high": 14.574999809265137
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/SMPL",
+      "source_hashes": {
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf": "db7131611e417f82a17fe093c9938ae8e6f8c5779409cf6fcb530dbfe3bfe572",
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf": "b2f0f28fd95ab49b422d7e3206b249baf6fdea1bd87660cbf905625dbd3463a0"
+      }
+    },
+    {
+      "ticker": "IHG",
+      "model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": 6.6867068831410155,
+        "max_net_share_change": 102.52904775875719,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=2",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+            "page": 1,
+            "date": "2026-05-07",
+            "action": "P",
+            "min_net_share_change": 6.6867068831410155,
+            "max_net_share_change": 102.52904775875719,
+            "price": {
+              "date": "2026-05-07",
+              "close": 146.9499969482422,
+              "low": 146.3000030517578,
+              "high": 149.6999969482422
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/IHG",
+      "source_hashes": {
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf": "91d2bd34e3b3ccaae3cb3ddd7164d39698c51c29a17afa60809dec4c2d664ef8"
+      }
+    },
+    {
+      "ticker": "RYCEY",
+      "model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": 57.13470170352792,
+        "max_net_share_change": 888.6256365974119,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=3",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+            "page": 1,
+            "date": "2026-05-07",
+            "action": "P",
+            "min_net_share_change": 57.13470170352792,
+            "max_net_share_change": 888.6256365974119,
+            "price": {
+              "date": "2026-05-07",
+              "close": 16.93000030517578,
+              "low": 16.8799991607666,
+              "high": 17.520000457763672
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "price_source": "https://query1.finance.yahoo.com/v8/finance/chart/RYCEY",
+      "source_hashes": {
+        "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf": "91d2bd34e3b3ccaae3cb3ddd7164d39698c51c29a17afa60809dec4c2d664ef8"
+      }
+    }
+  ],
+  "HY": {
+    "status": "conflicting-source-evidence",
+    "eligible_for_portfolio_total": false,
+    "annual_source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+    "annual_pages": [
+      4,
+      19
+    ],
+    "transaction_source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+    "issue": "Annual year-end None conflicts with December 31 purchase and January 5 sale.",
+    "resolution": "Requires corrected disclosure or dated account balance; do not choose either branch silently."
+  }
+}

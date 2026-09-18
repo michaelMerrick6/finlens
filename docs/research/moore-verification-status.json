@@ -1,0 +1,1688 @@
+{
+  "member_id": "M001236",
+  "name": "Tim Moore",
+  "as_of": "2026-09-17",
+  "status": "source-rows-reviewed-portfolio-not-fully-verified",
+  "publication_enabled": false,
+  "source_review": {
+    "annual_rows": 72,
+    "transaction_rows": 35,
+    "annual_schedule_a_pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "additional_hyster_yale_schedule_b_page": 19
+  },
+  "counts": {
+    "positive_account_candidates": 33,
+    "distinct_positive_candidate_tickers": 32,
+    "conditional_zero_accounts": 16,
+    "blocked_baseline_accounts": 2,
+    "unresolved_additional_tickers": 4
+  },
+  "positive_candidates": [
+    {
+      "ticker": "UPS",
+      "account": "Edward Jones",
+      "position_id": "annual:7",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 2,
+      "status": "conditional-estimate",
+      "min_shares": 10.091742870873635,
+      "max_shares": 151.22491814495956,
+      "min_value": 996.7614094788782,
+      "max_value": 14936.484657525647,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "SMCY",
+      "account": "Robinhood",
+      "position_id": "annual:18",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 2,
+      "status": "conditional-estimate",
+      "min_shares": 123.58024109356533,
+      "max_shares": 1851.8517646388411,
+      "min_value": 629.0234460230959,
+      "max_value": 9425.925764581856,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "AVIR",
+      "account": "Schwab One",
+      "position_id": "annual:21",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-estimate",
+      "min_shares": 280.3921621059373,
+      "max_shares": 4201.680750838222,
+      "min_value": 1444.0196615858574,
+      "max_value": 21638.656267520342,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "BSOL",
+      "account": "Schwab One",
+      "position_id": "annual:22",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-estimate",
+      "min_shares": 6097.622093052331,
+      "max_shares": 15243.902793602892,
+      "min_value": 82134.97122165567,
+      "max_value": 205335.37470039216,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "CBRL",
+      "account": "Schwab One",
+      "position_id": "annual:25",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 1543.7423910984016,
+      "min_value": 0.0,
+      "max_value": 66720.54802772409,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "TZA",
+      "account": "Schwab One",
+      "position_id": "annual:26",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-estimate",
+      "min_shares": 3328,
+      "max_shares": 6657.789749120918,
+      "min_value": 149427.205078125,
+      "max_value": 298934.76989451016,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "Single modeled account; fractional custody or issuer rounding/cash-out allowed conservatively. Actual broker treatment and cash proceeds are unknown."
+      ]
+    },
+    {
+      "ticker": "GNPX",
+      "account": "Schwab One",
+      "position_id": "annual:29",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-estimate",
+      "min_shares": 46.40358687280753,
+      "max_shares": 749,
+      "min_value": 158.2362352191255,
+      "max_value": 2554.0900642871857,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "Single modeled account; fractional custody or issuer rounding/cash-out allowed conservatively. Actual broker treatment and cash proceeds are unknown.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "HOG",
+      "account": "Schwab One",
+      "position_id": "annual:31",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 5371.772153775339,
+      "min_value": 0.0,
+      "max_value": 144178.36542699748,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "DNUT",
+      "account": "Schwab One",
+      "position_id": "annual:34",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 1106.4894146765864,
+      "min_value": 0.0,
+      "max_value": 3441.181963568825,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "LGIH",
+      "account": "Schwab One",
+      "position_id": "annual:35",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 4418.8923820076025,
+      "min_value": 0.0,
+      "max_value": 216658.288095677,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "VZ",
+      "account": "Schwab One",
+      "position_id": "annual:41",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 891.4771858256472,
+      "min_value": 0.0,
+      "max_value": 44359.90327036935,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "AMZY",
+      "account": "Schwab One",
+      "position_id": "annual:43",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-estimate",
+      "min_shares": 75.37650753973637,
+      "max_shares": 1129.5180950010445,
+      "min_value": 767.3328697576007,
+      "max_value": 11498.4945518122,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "MSTY",
+      "account": "Schwab One",
+      "position_id": "annual:44",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-estimate",
+      "min_shares": 506.7905340092822,
+      "max_shares": 1689.1891674197793,
+      "min_value": 7216.697088297031,
+      "max_value": 24054.05335743294,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "SMCY",
+      "account": "Schwab One",
+      "position_id": "annual:45",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-estimate",
+      "min_shares": 123.58024109356533,
+      "max_shares": 1851.8517646388411,
+      "min_value": 629.0234460230959,
+      "max_value": 9425.925764581856,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "GOOG",
+      "account": "TradeWinds",
+      "position_id": "annual:46",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 47.80433583030281,
+      "max_shares": 159.33716362343446,
+      "min_value": 16222.878707112737,
+      "max_value": 54072.657513208236,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "account": "TradeWinds",
+      "position_id": "annual:47",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 64.99003346329944,
+      "max_shares": 216.61900361075743,
+      "min_value": 15984.949066967583,
+      "max_value": 53279.611582453115,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "AAPL",
+      "account": "TradeWinds",
+      "position_id": "annual:48",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 55.1791392933428,
+      "max_shares": 183.91820309760283,
+      "min_value": 18342.09789457212,
+      "max_value": 61136.25056520273,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "BKR",
+      "account": "TradeWinds",
+      "position_id": "annual:49",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 329.4027162587353,
+      "max_shares": 1097.9358584718861,
+      "min_value": 18551.960879166243,
+      "max_value": 61835.74721407319,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "account": "TradeWinds",
+      "position_id": "annual:50",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 29.84382807550437,
+      "max_shares": 99.47279539865465,
+      "min_value": 15196.477620351367,
+      "max_value": 50651.54863126247,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "BLK",
+      "account": "TradeWinds",
+      "position_id": "annual:51",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 14.0151731963995,
+      "max_shares": 46.714129712684155,
+      "min_value": 14537.098109366492,
+      "max_value": 48453.76344699184,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "COIN",
+      "account": "TradeWinds",
+      "position_id": "annual:52",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 215.345129187685,
+      "min_value": 0.0,
+      "max_value": 35426.426019739934,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "DE",
+      "account": "TradeWinds",
+      "position_id": "annual:53",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 32.22071818203151,
+      "max_shares": 107.39523425782119,
+      "min_value": 21570.803257358282,
+      "max_value": 71897.8843322388,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "DASH",
+      "account": "TradeWinds",
+      "position_id": "annual:54",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 214.5889773490538,
+      "min_value": 0.0,
+      "max_value": 42222.52600442737,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "ITW",
+      "account": "TradeWinds",
+      "position_id": "annual:56",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 4.064149360930574,
+      "max_shares": 60.90133907488373,
+      "min_value": 1086.4689940852522,
+      "max_value": 16280.754157121663,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "JPM",
+      "account": "TradeWinds",
+      "position_id": "annual:57",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 46.5551484798274,
+      "max_shares": 155.1734833672002,
+      "min_value": 16244.023032711544,
+      "max_value": 54143.13390011181,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "JPST",
+      "account": "TradeWinds",
+      "position_id": "annual:58",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 19.786519015236546,
+      "max_shares": 296.5012839446036,
+      "min_value": 996.2512022253281,
+      "max_value": 14928.839194185735,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "account": "TradeWinds",
+      "position_id": "annual:59",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "status": "conditional-estimate",
+      "min_shares": 31.01815506276795,
+      "max_shares": 103.3869577453768,
+      "min_value": 15208.201048635538,
+      "max_value": 50690.62412051042,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "MS",
+      "account": "TradeWinds",
+      "position_id": "annual:60",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-estimate",
+      "min_shares": 84.49839521854028,
+      "max_shares": 281.6425412257192,
+      "min_value": 17104.16500541574,
+      "max_value": 57010.08267920718,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "account": "TradeWinds",
+      "position_id": "annual:61",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-estimate",
+      "min_shares": 0,
+      "max_shares": 451.0664837177999,
+      "min_value": 0.0,
+      "max_value": 96483.11811414607,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation.",
+        "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+      ]
+    },
+    {
+      "ticker": "RSG",
+      "account": "TradeWinds",
+      "position_id": "annual:62",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-estimate",
+      "min_shares": 70.78280808959926,
+      "max_shares": 235.926965167653,
+      "min_value": 15558.061434105904,
+      "max_value": 51856.74766384209,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "USFD",
+      "account": "TradeWinds",
+      "position_id": "annual:63",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-estimate",
+      "min_shares": 199.16356958018983,
+      "max_shares": 663.8343096466563,
+      "min_value": 18424.622247322648,
+      "max_value": 61411.31340351525,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "V",
+      "account": "TradeWinds",
+      "position_id": "annual:64",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-estimate",
+      "min_shares": 42.77323248693773,
+      "max_shares": 142.56793709398616,
+      "min_value": 15865.8748130993,
+      "max_value": 52882.72386207353,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    },
+    {
+      "ticker": "WMT",
+      "account": "TradeWinds",
+      "position_id": "annual:65",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-estimate",
+      "min_shares": 134.64679568179434,
+      "max_shares": 448.79273275713064,
+      "min_value": 14474.530535792892,
+      "max_value": 48245.21877139154,
+      "assumptions": [
+        "Annual dollar bracket converted at year-end closing price.",
+        "Trade quantities bounded using daily high/low on the same split basis.",
+        "Only supplied, reconciled events included; unreported changes remain possible.",
+        "Corporate actions other than splits require separate reconciliation."
+      ]
+    }
+  ],
+  "conditional_zero_positions": [
+    {
+      "ticker": "AAL",
+      "account": "Schwab One",
+      "position_id": "annual:19",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "AAPL",
+      "account": "Schwab One",
+      "position_id": "annual:20",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "CNC",
+      "account": "Schwab One",
+      "position_id": "annual:24",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "TNA",
+      "account": "Schwab One",
+      "position_id": "annual:27",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "F",
+      "account": "Schwab One",
+      "position_id": "annual:28",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "QYLD",
+      "account": "Schwab One",
+      "position_id": "annual:30",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "INTC",
+      "account": "Schwab One",
+      "position_id": "annual:33",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "TQQQ",
+      "account": "Schwab One",
+      "position_id": "annual:36",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "SMCYY",
+      "account": "Schwab One",
+      "position_id": "annual:38",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "SMCI",
+      "account": "Schwab One",
+      "position_id": "annual:39",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "UNH",
+      "account": "Schwab One",
+      "position_id": "annual:40",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "WKHS",
+      "account": "Schwab One",
+      "position_id": "annual:42",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "CL",
+      "account": "Wells Fargo",
+      "position_id": "annual:68",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "GD",
+      "account": "Wells Fargo",
+      "position_id": "annual:69",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "PG",
+      "account": "Wells Fargo",
+      "position_id": "annual:70",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    },
+    {
+      "ticker": "ROK",
+      "account": "Wells Fargo",
+      "position_id": "annual:71",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6,
+      "status": "conditional-zero",
+      "assumptions": [
+        "Explicit House year-end None carried forward with no supplied subsequent changes."
+      ]
+    }
+  ],
+  "blocked_positions": [
+    {
+      "ticker": "HY",
+      "account": "Schwab One",
+      "position_id": "annual:32",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4,
+      "reason": "sale-exceeds-modeled-balance"
+    },
+    {
+      "ticker": "HON",
+      "account": "TradeWinds",
+      "position_id": "annual:55",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5,
+      "reason": "corporate-action-reconciliation-required"
+    }
+  ],
+  "unresolved_positions": [
+    {
+      "ticker": "T",
+      "name": "AT&T Inc. (T) [ST]",
+      "owner": "not-stated",
+      "account": null,
+      "status": "starting-balance-unresolved",
+      "current_holdings_eligible": false,
+      "events": [
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=1",
+          "date": "2026-01-09",
+          "action": "P",
+          "range": "$15,001 - $50,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=1",
+          "date": "2026-01-30",
+          "action": "S",
+          "range": "$15,001 - $50,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=1",
+          "date": "2026-05-18",
+          "action": "P",
+          "range": "$15,001 - $50,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=1",
+          "date": "2026-05-21",
+          "action": "S",
+          "range": "$15,001 - $50,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=2",
+          "date": "2026-06-04",
+          "action": "P",
+          "range": "$50,001 - $100,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf#row=1",
+          "date": "2026-08-14",
+          "action": "S",
+          "range": "$50,001 - $100,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+          "page": 1
+        }
+      ],
+      "flow_model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": -4762.118678329656,
+        "max_net_share_change": 5495.923988151479,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+            "page": 1,
+            "date": "2026-01-09",
+            "action": "P",
+            "min_net_share_change": 616.8174419505651,
+            "max_net_share_change": 2085.070932213083,
+            "price": {
+              "date": "2026-01-09",
+              "close": 23.989999771118164,
+              "low": 23.979999542236328,
+              "high": 24.31999969482422
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+            "page": 1,
+            "date": "2026-01-30",
+            "action": "S",
+            "min_net_share_change": -1371.254158780613,
+            "max_net_share_change": 1514.4737668421171,
+            "price": {
+              "date": "2026-01-30",
+              "close": 26.209999084472656,
+              "low": 25.149999618530273,
+              "high": 26.290000915527344
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+            "page": 1,
+            "date": "2026-05-18",
+            "action": "P",
+            "min_net_share_change": -760.9612358122787,
+            "max_net_share_change": 3610.9097920108015,
+            "price": {
+              "date": "2026-05-18",
+              "close": 24.43000030517578,
+              "low": 23.850000381469727,
+              "high": 24.579999923706055
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+            "page": 1,
+            "date": "2026-05-21",
+            "action": "S",
+            "min_net_share_change": -2776.277683869316,
+            "max_net_share_change": 3020.0866190840648,
+            "price": {
+              "date": "2026-05-21",
+              "close": 25.34000015258789,
+              "low": 24.809999465942383,
+              "high": 25.389999389648438
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=2",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+            "page": 1,
+            "date": "2026-06-04",
+            "action": "P",
+            "min_net_share_change": -693.7704150916438,
+            "max_net_share_change": 7498.366974734117,
+            "price": {
+              "date": "2026-06-04",
+              "close": 22.770000457763672,
+              "low": 22.329999923706055,
+              "high": 24.010000228881836
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf#row=1",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+            "page": 1,
+            "date": "2026-08-14",
+            "action": "S",
+            "min_net_share_change": -4762.118678329656,
+            "max_net_share_change": 5495.923988151479,
+            "price": {
+              "date": "2026-08-14",
+              "close": 24.889999389648438,
+              "low": 24.579999923706055,
+              "high": 24.969999313354492
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "eligible_for_portfolio_total": false,
+      "eligible_for_ranking": false
+    },
+    {
+      "ticker": "SMPL",
+      "name": "The Simply Good Foods Company - Common Stock (SMPL) [ST]",
+      "owner": "not-stated",
+      "account": null,
+      "status": "starting-balance-unresolved",
+      "current_holdings_eligible": false,
+      "events": [
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=6",
+          "date": "2026-02-11",
+          "action": "P",
+          "range": "$15,001 - $50,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=7",
+          "date": "2026-02-03",
+          "action": "P",
+          "range": "$15,001 - $50,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=8",
+          "date": "2026-03-12",
+          "action": "P",
+          "range": "$1,001 - $15,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+          "page": 1
+        },
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=9",
+          "date": "2026-03-13",
+          "action": "P",
+          "range": "$1,001 - $15,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+          "page": 2
+        }
+      ],
+      "flow_model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": 1869.263735609748,
+        "max_net_share_change": 8173.992599957561,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=7",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+            "page": 1,
+            "date": "2026-02-03",
+            "action": "P",
+            "min_net_share_change": 823.7781852933254,
+            "max_net_share_change": 2955.9560918558304,
+            "price": {
+              "date": "2026-02-03",
+              "close": 17.079999923706055,
+              "low": 16.915000915527344,
+              "high": 18.209999084472656
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=6",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+            "page": 1,
+            "date": "2026-02-11",
+            "action": "P",
+            "min_net_share_change": 1734.033064946336,
+            "max_net_share_change": 6079.004142148837,
+            "price": {
+              "date": "2026-02-11",
+              "close": 16.420000076293945,
+              "low": 16.010000228881836,
+              "high": 16.479999542236328
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=8",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+            "page": 1,
+            "date": "2026-03-12",
+            "action": "P",
+            "min_net_share_change": 1800.5844894279624,
+            "max_net_share_change": 7123.572412248005,
+            "price": {
+              "date": "2026-03-12",
+              "close": 14.40999984741211,
+              "low": 14.359999656677246,
+              "high": 15.041000366210938
+            }
+          },
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=9",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+            "page": 2,
+            "date": "2026-03-13",
+            "action": "P",
+            "min_net_share_change": 1869.263735609748,
+            "max_net_share_change": 8173.992599957561,
+            "price": {
+              "date": "2026-03-13",
+              "close": 14.414999961853027,
+              "low": 14.279999732971191,
+              "high": 14.574999809265137
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "eligible_for_portfolio_total": false,
+      "eligible_for_ranking": false
+    },
+    {
+      "ticker": "IHG",
+      "name": "Intercontinental Hotels Group American Depositary Shares (IHG) [ST]",
+      "owner": "not-stated",
+      "account": null,
+      "status": "starting-balance-unresolved",
+      "current_holdings_eligible": false,
+      "events": [
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=2",
+          "date": "2026-05-07",
+          "action": "P",
+          "range": "$1,001 - $15,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+          "page": 1
+        }
+      ],
+      "flow_model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": 6.6867068831410155,
+        "max_net_share_change": 102.52904775875719,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=2",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+            "page": 1,
+            "date": "2026-05-07",
+            "action": "P",
+            "min_net_share_change": 6.6867068831410155,
+            "max_net_share_change": 102.52904775875719,
+            "price": {
+              "date": "2026-05-07",
+              "close": 146.9499969482422,
+              "low": 146.3000030517578,
+              "high": 149.6999969482422
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "eligible_for_portfolio_total": false,
+      "eligible_for_ranking": false
+    },
+    {
+      "ticker": "RYCEY",
+      "name": "ROLLS ROYCE HLDGS S/ADR (RYCEY) [ST]",
+      "owner": "not-stated",
+      "account": null,
+      "status": "starting-balance-unresolved",
+      "current_holdings_eligible": false,
+      "events": [
+        {
+          "id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=3",
+          "date": "2026-05-07",
+          "action": "P",
+          "range": "$1,001 - $15,000",
+          "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+          "page": 1
+        }
+      ],
+      "flow_model": {
+        "status": "conditional-flow-only",
+        "opening_balance": "unknown",
+        "min_net_share_change": 57.13470170352792,
+        "max_net_share_change": 888.6256365974119,
+        "min_current_shares": null,
+        "max_current_shares": null,
+        "eligible_for_portfolio_total": false,
+        "eligible_for_ranking": false,
+        "current_holdings_eligible": false,
+        "trace": [
+          {
+            "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=3",
+            "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+            "page": 1,
+            "date": "2026-05-07",
+            "action": "P",
+            "min_net_share_change": 57.13470170352792,
+            "max_net_share_change": 888.6256365974119,
+            "price": {
+              "date": "2026-05-07",
+              "close": 16.93000030517578,
+              "low": 16.8799991607666,
+              "high": 17.520000457763672
+            }
+          }
+        ],
+        "assumptions": [
+          "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+          "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+          "Account ownership and non-split corporate actions require separate reconciliation."
+        ]
+      },
+      "eligible_for_portfolio_total": false,
+      "eligible_for_ranking": false
+    }
+  ],
+  "honeywell_entitlement_scenario": {
+    "member_id": "M001236",
+    "as_of": "2026-09-17",
+    "status": "conditional-entitlement-reconstruction",
+    "current_holdings_eligible": false,
+    "publication_enabled": false,
+    "baseline": {
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "sha256": "22be0a0bde4b37c0df6d654990a7c1121d0810b4928ccf7600e7bac87a049483",
+      "page": 5,
+      "date": "2025-12-31",
+      "value_bounds": [
+        15001,
+        50000
+      ],
+      "unadjusted_close": 195.09,
+      "price_source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000023/hon-20260305.htm",
+      "implied_old_share_range": [
+        76.89271618227485,
+        256.2919678097288
+      ]
+    },
+    "action": {
+      "effective_date": "2026-06-29",
+      "record_date": "2026-06-15",
+      "HON_per_old_share": 0.5,
+      "HONA_per_old_share": 0.5,
+      "sources": [
+        "https://www.honeywellaerospace.com/us/en/company/newsroom/2026/06/honeywell-aerospace-spin-off-begins-trading-nasdaq",
+        "https://investor.honeywell.com/reverse-stock-split"
+      ]
+    },
+    "positions": [
+      {
+        "ticker": "HON",
+        "account": "TradeWinds",
+        "min_shares": 38,
+        "max_shares": 128.1459839048644
+      },
+      {
+        "ticker": "HONA",
+        "account": "TradeWinds",
+        "min_shares": 38,
+        "max_shares": 128.1459839048644
+      }
+    ],
+    "assumptions": [
+      "Annual value bracket is valued at the stated year-end closing price.",
+      "No omitted transactions, transfers or reinvestments after the annual baseline.",
+      "Original shares remained held through the record date and both resulting positions were retained.",
+      "Fractional cash-in-lieu is not included; share bounds conservatively allow rounding or fractional custody."
+    ],
+    "limitation": "Issuer conversion and price basis are sourced; Moore account entitlement and current ownership remain conditional."
+  },
+  "account_evidence_audit": {
+    "member_id": "M001236",
+    "status": "account-evidence-audit-complete",
+    "actual_account_assignment_verified": false,
+    "publication_enabled": false,
+    "counts": {
+      "baseline-period-not-rolled-forward": 4,
+      "no-established-baseline-account": 12,
+      "inferred-unique-annual-position": 19
+    },
+    "rows": [
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf#row=1",
+        "ticker": "CBRL",
+        "date": "2025-12-31",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "baseline-period-not-rolled-forward",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf#row=2",
+        "ticker": "GNPX",
+        "date": "2025-12-18",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "baseline-period-not-rolled-forward",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf#row=3",
+        "ticker": "HOG",
+        "date": "2025-12-18",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033746.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "baseline-period-not-rolled-forward",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=1",
+        "ticker": "T",
+        "date": "2026-01-09",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=2",
+        "ticker": "CBRL",
+        "date": "2026-01-05",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=3",
+        "ticker": "HY",
+        "date": "2025-12-31",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "baseline-period-not-rolled-forward",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=4",
+        "ticker": "HY",
+        "date": "2026-01-05",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=1",
+        "ticker": "T",
+        "date": "2026-01-30",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=2",
+        "ticker": "COIN",
+        "date": "2026-02-18",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "TradeWinds",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=3",
+        "ticker": "GNPX",
+        "date": "2026-02-05",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=4",
+        "ticker": "HOG",
+        "date": "2026-01-23",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=5",
+        "ticker": "DNUT",
+        "date": "2026-02-12",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=6",
+        "ticker": "SMPL",
+        "date": "2026-02-11",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=7",
+        "ticker": "SMPL",
+        "date": "2026-02-03",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=8",
+        "ticker": "VZ",
+        "date": "2026-01-30",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=1",
+        "ticker": "CBRL",
+        "date": "2026-03-23",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=2",
+        "ticker": "HOG",
+        "date": "2026-03-12",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=3",
+        "ticker": "DNUT",
+        "date": "2026-03-17",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=4",
+        "ticker": "LGIH",
+        "date": "2026-03-18",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=5",
+        "ticker": "LGIH",
+        "date": "2026-03-19",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=6",
+        "ticker": "LGIH",
+        "date": "2026-03-20",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=7",
+        "ticker": "LGIH",
+        "date": "2026-03-12",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=8",
+        "ticker": "SMPL",
+        "date": "2026-03-12",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=9",
+        "ticker": "SMPL",
+        "date": "2026-03-13",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+        "page": 2,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=1",
+        "ticker": "CBRL",
+        "date": "2026-04-01",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=2",
+        "ticker": "HOG",
+        "date": "2026-04-07",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=3",
+        "ticker": "LGIH",
+        "date": "2026-03-26",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "Schwab One",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=4",
+        "ticker": "NVDA",
+        "date": "2026-03-24",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "TradeWinds",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=1",
+        "ticker": "T",
+        "date": "2026-05-18",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=2",
+        "ticker": "IHG",
+        "date": "2026-05-07",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=3",
+        "ticker": "RYCEY",
+        "date": "2026-05-07",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=1",
+        "ticker": "T",
+        "date": "2026-05-21",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=2",
+        "ticker": "T",
+        "date": "2026-06-04",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034952.pdf#row=1",
+        "ticker": "DASH",
+        "date": "2026-06-09",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034952.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": "TradeWinds",
+        "basis": "inferred-unique-annual-position",
+        "explicit_account_confirmation": false
+      },
+      {
+        "event_id": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf#row=1",
+        "ticker": "T",
+        "date": "2026-08-14",
+        "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+        "page": 1,
+        "filed_account": null,
+        "candidate_account": null,
+        "basis": "no-established-baseline-account",
+        "explicit_account_confirmation": false
+      }
+    ],
+    "conclusion": "Account labels are absent from all reviewed PTR rows. Unique annual matches are conditional inferences, not disclosed account confirmations."
+  },
+  "remaining": [
+    "HON/HONA issuer conversion and unadjusted baseline price are reconciled in the attached conditional scenario; account entitlement and retained ownership remain unconfirmed.",
+    "HY annual None conflicts with annual Schedule B December 31 purchase and January 5 PTR sale; exact account and opening quantity unresolved.",
+    "No reviewed starting balances for T, SMPL, IHG and RYCEY; generic sale codes do not establish complete exits.",
+    "Finish issuer-level non-split corporate-action coverage; provider absence of splits is not clearance for mergers or distributions.",
+    "Ranges remain conditional on disclosed events, unknown execution prices, inferred accounts and no unreported changes. GNPX/TZA fractional settlement is conservatively bounded; actual broker treatment and cash proceeds remain unknown."
+  ]
+}

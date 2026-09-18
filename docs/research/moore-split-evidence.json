@@ -1,0 +1,674 @@
+{
+  "as_of": "2026-09-17",
+  "scope": "Provider split-event check only. Does not verify all corporate actions or account entitlement.",
+  "symbols": {
+    "AMZN": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "3359d4264f082be0c9c20f370503cbc7bd2dbe776d26aa4b48898a102cd4f25b",
+      "provider_name": "Amazon.com, Inc.",
+      "splits": []
+    },
+    "AAPL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "1e013305a6b5dc2883e5467d709c0392774a82e96f0c43f7ffba3ba14d209441",
+      "provider_name": "Apple Inc.",
+      "splits": []
+    },
+    "AVIR": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AVIR",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "37caf7fa78004a7bb24187475696ec52371f6ee5dfac43b981d9bf7feb29a88e",
+      "provider_name": "Atea Pharmaceuticals, Inc.",
+      "splits": []
+    },
+    "BKR": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/BKR",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "d483f49dcac6ecebfeb37bcc9dabb504a424d33c2c87c8e2617cb7916ee5cf38",
+      "provider_name": "Baker Hughes Company",
+      "splits": []
+    },
+    "AMZY": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AMZY",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "f111a0b79ecbae32b8289b0280ee3b0748612d00518c3e9f31466a97c67a9045",
+      "provider_name": "YieldMax AMZN Option Income Strategy ETF",
+      "splits": []
+    },
+    "AAL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "88ab75dd6b576616dd73136640bcc58284640a3fd5d805eafd9f6b279e1b51c3",
+      "provider_name": "American Airlines Group Inc.",
+      "splits": []
+    },
+    "BLK": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/BLK",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "06d069fdf556b65485bf1a8cb027ebb5d1e01f3b5ba5bbbce15c641d3bb029b0",
+      "provider_name": "BlackRock, Inc.",
+      "splits": []
+    },
+    "BRK-B": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "6583d76b7788debe5cc178dbc288312805448c9ffbca2fe41b16910f18eee73a",
+      "provider_name": "Berkshire Hathaway Inc.",
+      "splits": []
+    },
+    "BSOL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/BSOL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "ec19a39f3b41e4ee6bff6e8a5e95da8b5f20774362156714fb68dee18f2cc580",
+      "provider_name": "Bitwise Solana Staking ETF",
+      "splits": []
+    },
+    "CNC": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CNC",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "e0669bf647bef2aa5887c947523642e05a1da136a6a6558627b0b8ea18df1d50",
+      "provider_name": "Centene Corporation",
+      "splits": []
+    },
+    "CL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "faa083a8f988b9208c8a359fe5f5b17de8c83fb797af8904c6097c590023b741",
+      "provider_name": "Colgate-Palmolive Company",
+      "splits": []
+    },
+    "CBRL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/CBRL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "8d00d4c70aa5a3727454fca22899ff5264dcd5161f60ab22707a5421e2da2abe",
+      "provider_name": "Cracker Barrel Old Country Store, Inc.",
+      "splits": []
+    },
+    "DASH": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/DASH",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "54dab4f8b101ba723f912fada63df8a3b7a5a37bbc0f0e9583c2968b4be874b2",
+      "provider_name": "DoorDash, Inc.",
+      "splits": []
+    },
+    "COIN": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/COIN",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "9d3ff74ba443ed8dcb172f6352befa91ea66c9a0b7cacb123e6d8d0d9afc6667",
+      "provider_name": "Coinbase Global, Inc.",
+      "splits": []
+    },
+    "DNUT": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/DNUT",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "8a4b9d40dc7ccbe5d585e7fc8ad06f80ed33b74f8e76db7a3dacae5932cc2aa3",
+      "provider_name": "Krispy Kreme, Inc.",
+      "splits": []
+    },
+    "DE": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/DE",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "6a280b3328c159bc0cbf729b2f9cb70faa95bdb5def1b14a4740ea528dac6c2a",
+      "provider_name": "Deere & Company",
+      "splits": []
+    },
+    "GOOG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/GOOG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "b7f515cbe9e1d2e7d0d526303ee014294b77f793e25768d7de8097ff4cfa4e18",
+      "provider_name": "Alphabet Inc.",
+      "splits": []
+    },
+    "F": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/F",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "2d46b24a0108a375a442563706a493edc2c3db8fe6e14800c68ffaa04d83912c",
+      "provider_name": "Ford Motor Company",
+      "splits": []
+    },
+    "GNPX": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/GNPX",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "11073c8309731b17497bac0c8c55fa915787ce7e504aa5b4a3c9a52e5055d6cc",
+      "provider_name": "Genprex, Inc.",
+      "splits": [
+        {
+          "date": "2026-07-16",
+          "numerator": 1.0,
+          "denominator": 22.0
+        }
+      ]
+    },
+    "HOG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/HOG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "76bda343fe06a153ba3ef3f44653b0c5413282ffdb2ca7f39b5ff79cc76bc364",
+      "provider_name": "Harley-Davidson, Inc.",
+      "splits": []
+    },
+    "GD": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/GD",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "7936506c7667d9d3b8864f736ad5c33dd8089695e33de1b70a5bcad11c8e60da",
+      "provider_name": "General Dynamics Corporation",
+      "splits": []
+    },
+    "INTC": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/INTC",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "c111182909d9ad8e5c6a41711110ff60833d637b5ba340fc0172ca11c2bd92ee",
+      "provider_name": "Intel Corporation",
+      "splits": []
+    },
+    "HY": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/HY",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "4465f5d1443b01202097c622ccd6f2d3c419997708adccc49ce9122c95028940",
+      "provider_name": "Hyster-Yale, Inc.",
+      "splits": []
+    },
+    "JPM": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/JPM",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "12ce8730bc24e46049f1ca9b998b925bac15f18d6fa044128f476058dd33aea8",
+      "provider_name": "JPMorgan Chase & Co.",
+      "splits": []
+    },
+    "HON": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/HON",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "a6e6445384dfb7adad12e94aa96ec3904ce13dbe29cf30c80404835541c4ddd8",
+      "provider_name": "Honeywell International Inc.",
+      "splits": [
+        {
+          "date": "2026-06-29",
+          "numerator": 1907.0,
+          "denominator": 2000.0
+        }
+      ]
+    },
+    "IHG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/IHG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "4bfa76eb28a569b09656116b3b38a21447e4d6512c5ca2d9247fa41e581b7898",
+      "provider_name": "InterContinental Hotels Group PLC",
+      "splits": []
+    },
+    "ITW": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/ITW",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "b4cfd8e439928d5e003d233b929043f5917677dad0e0ee96a650886e9bcebd1c",
+      "provider_name": "Illinois Tool Works Inc.",
+      "splits": []
+    },
+    "MSFT": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "de51cbe5f15075c54f067a12996b417d6c0e1cb2d39d46d771c6d243df46dacc",
+      "provider_name": "Microsoft Corporation",
+      "splits": []
+    },
+    "LGIH": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/LGIH",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "abdee5f2d88bde733ff9da683b68e61772342e6df12a691d9b0cf0237e0d51d6",
+      "provider_name": "LGI Homes, Inc.",
+      "splits": []
+    },
+    "NVDA": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "69e4538c1ea8a9b46457d60505474f002fece248e1e393888642380d1765decd",
+      "provider_name": "NVIDIA Corporation",
+      "splits": []
+    },
+    "JPST": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/JPST",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "53808e01a0e32fb675d3c2f6e981af95258dc924a8ce8f24e9e7705e1c2582ed",
+      "provider_name": "JPMorgan Ultra-Short Income ETF",
+      "splits": []
+    },
+    "MSTY": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/MSTY",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "845ff70494b299f9730fc5150a5e2610a6ee5651edb272e775a351a400d8b813",
+      "provider_name": "Yieldmax MSTR Option Income Strategy ETF",
+      "splits": []
+    },
+    "MS": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/MS",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "b171a3f8a1ae2573c9f8de8210ddc179fc1b21aac9cd5e9a9421c10af09402da",
+      "provider_name": "Morgan Stanley",
+      "splits": []
+    },
+    "QYLD": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/QYLD",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "b880ab483967251cf1b1334f6abed0f52a2f54f7274209b0d663e70dd9f809bc",
+      "provider_name": "Global X NASDAQ 100 Covered Call ETF",
+      "splits": []
+    },
+    "RSG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/RSG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "657902a63899f6ca9123992d2cf3dd9d640e9a4691b06bfd065a6dc834232eb3",
+      "provider_name": "Republic Services, Inc.",
+      "splits": []
+    },
+    "PG": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/PG",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "ba51b84315780e5513bfdc4f537e3546c60549cb93e6263e148a6f48c4099983",
+      "provider_name": "The Procter & Gamble Company",
+      "splits": []
+    },
+    "ROK": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/ROK",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "3a7421b4d9f77c1f398ad558ab59b251d0b588343a5174b2c30c06c67f256a42",
+      "provider_name": "Rockwell Automation, Inc.",
+      "splits": []
+    },
+    "RYCEY": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/RYCEY",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "f754183ed08958570f7508c9c7f1c5b0956643b68dfc859849c859c50bc6fca9",
+      "provider_name": "Rolls-Royce Holdings plc",
+      "splits": []
+    },
+    "SMCI": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/SMCI",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "c8d7a9f22c465e1f4c7ba2e82542e544287cdc311f4aa12698028288caf75b88",
+      "provider_name": "Super Micro Computer, Inc.",
+      "splits": []
+    },
+    "T": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/T",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "599ce8d7b322963c83e52a5d9b984962a024438b0f1c7abb2eee90cc05a50f36",
+      "provider_name": "AT&T Inc.",
+      "splits": []
+    },
+    "SMCY": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/SMCY",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "9b746cfbec1057426e820dd9660d9541af8f760baeb0c1edc9a7c062ea571c35",
+      "provider_name": null,
+      "splits": []
+    },
+    "SMCYY": {
+      "error": "404 Client Error: Not Found for url: https://query1.finance.yahoo.com/v8/finance/chart/SMCYY?period1=1766188800&period2=1789689600&interval=1d&events=splits",
+      "review_required": true
+    },
+    "SMPL": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/SMPL",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "2fe661ae2f283c579e7cf7737d3eba7149bf1ac0ec6de66d1fcea4a40048eb33",
+      "provider_name": "The Simply Good Foods Company",
+      "splits": []
+    },
+    "TNA": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/TNA",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "89449052b2cbc3892b11b804a9a12d954310080e609fd0bd04c11a3698b69be9",
+      "provider_name": "Direxion Daily Small Cap Bull 3X Shares",
+      "splits": []
+    },
+    "TQQQ": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/TQQQ",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "fec832c9736e973beccc95bc485d2fa4b9760816f5e5e6f37e88f3d8423c2227",
+      "provider_name": "ProShares UltraPro QQQ",
+      "splits": []
+    },
+    "USFD": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/USFD",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "715e630b38a2f723322840c89933e3092efd0ac194485456f9c9a3046e86d6ca",
+      "provider_name": "US Foods Holding Corp.",
+      "splits": []
+    },
+    "UPS": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/UPS",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "a972327a4d673e14c194e74f33c117e4ab368a4ff4a3abb8e820a47ccb2ff226",
+      "provider_name": "United Parcel Service, Inc.",
+      "splits": []
+    },
+    "UNH": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/UNH",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "cc4621340982efd685ba48f6f52fc35bb57a7f017675a567c2a7933b96f97bef",
+      "provider_name": "UnitedHealth Group Incorporated",
+      "splits": []
+    },
+    "TZA": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/TZA",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "3b4dfa4f2cc48ba53dce2f55abdff308e20a375f1097065a0e15c4e2985f998f",
+      "provider_name": "Direxion Daily Small Cap Bear 3X Shares",
+      "splits": [
+        {
+          "date": "2026-07-15",
+          "numerator": 1.0,
+          "denominator": 10.0
+        }
+      ]
+    },
+    "V": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/V",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "ef2abf41be66e85d99e75908738f7798396e61603f009645153defc61b2f9818",
+      "provider_name": "Visa Inc.",
+      "splits": []
+    },
+    "WKHS": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/WKHS",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "aa4f6676cfb1f23028dfeb996d8a38a760ceab066a9bb79be8f6f44d1a10cb4d",
+      "provider_name": "Workhorse Group, Inc.",
+      "splits": []
+    },
+    "WMT": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/WMT",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "eac2f77ad0f7f526d8b63becb824295da99f8a024855b3c4b8cd4eceb9687c17",
+      "provider_name": "Walmart Inc.",
+      "splits": []
+    },
+    "VZ": {
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/VZ",
+      "request": {
+        "period1": 1766188800,
+        "period2": 1789689600,
+        "interval": "1d",
+        "events": "splits"
+      },
+      "sha256": "319e4b4e47b540af57c45d814abf8c3db609f66aa4f7f140022e1b6fa7809834",
+      "provider_name": "Verizon Communications Inc.",
+      "splits": []
+    }
+  },
+  "primary_source_crosschecks": [
+    {
+      "ticker": "GNPX",
+      "date": "2026-07-16",
+      "ratio": "1:22",
+      "source": "https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-495",
+      "provider_event_agrees": true
+    },
+    {
+      "ticker": "TZA",
+      "date": "2026-07-15",
+      "ratio": "1:10",
+      "source": "https://www.direxion.com/press-release/direxion-to-split-nine-etfs",
+      "provider_event_agrees": true
+    },
+    {
+      "ticker": "HON",
+      "date": "2026-06-29",
+      "provider_ratio": "1907:2000",
+      "warning": "Provider adjustment factor is not the disclosed 1:2 reverse split/distribution ratio. Keep blocked until historical price basis and child shares are reconciled."
+    }
+  ]
+}

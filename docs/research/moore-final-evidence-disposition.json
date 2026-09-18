@@ -1,0 +1,123 @@
+{
+  "as_of": "2026-09-17",
+  "publication_enabled": false,
+  "status": "expanded-screen-complete-portfolio-verification-blocked",
+  "primary_reports": 339,
+  "documents": 393,
+  "fetch_failures": 0,
+  "flagged_document_reviews": [
+    {
+      "ticker": "GNPX",
+      "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926025074/gnpx20260730_8k.htm",
+      "sha256": "01233817665193d9dc37fe31bd4139f15a3f50a6c307362b4a89c52f1182d4d2",
+      "finding": "Previously reviewed 2026 reverse split, related approvals/compliance notices, and historical 2025 split. No additional effective split identified in flagged text."
+    },
+    {
+      "ticker": "GNPX",
+      "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926023480/gnpx20260630_8k.htm",
+      "sha256": "e0513550ce0be3a7c511cd83e82a6a6ba30aa0965449a5fd20d588510d9a4071",
+      "finding": "Previously reviewed 2026 reverse split, related approvals/compliance notices, and historical 2025 split. No additional effective split identified in flagged text."
+    },
+    {
+      "ticker": "GNPX",
+      "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926021134/gnpx20260615_8k.htm",
+      "sha256": "e4b978ed90fbe24643d81c30aa2dd6967b388ef5b3b5bf1fe875787665d92eaa",
+      "finding": "Previously reviewed 2026 reverse split, related approvals/compliance notices, and historical 2025 split. No additional effective split identified in flagged text."
+    },
+    {
+      "ticker": "GNPX",
+      "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926020501/gnpx20260611_8k.htm",
+      "sha256": "31b3afc68f2a7fa9ccd60b49a7be7dd730204edf804266d20ccacb71952ef7f9",
+      "finding": "Previously reviewed 2026 reverse split, related approvals/compliance notices, and historical 2025 split. No additional effective split identified in flagged text."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000084/hon-20260625.htm",
+      "sha256": "b5a195314fa5a0be04873c05755d2ede1aef87d04d41bff20377fddb281c1aa0",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000080/hon-20260615.htm",
+      "sha256": "43404cce0680582b8a28de5aebfc318db5f463501eecb7ad06a7ad14374d6b24",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000072/hon-20260605.htm",
+      "sha256": "69d51a5e602db202d05845deb424c0ff04cbd448c6a1bde008183bd03d79baa6",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000119312526242011/d35048d8k.htm",
+      "sha256": "8691a7bb3d96bc621202099679f624bbebb936f3b7a33526b150df6504a5ff10",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000119312526118101/d118295d8k.htm",
+      "sha256": "89bb399a1cd64420d4026ee54059ce2f10f06a9d43710de16e2c05ecae197d0c",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000119312526108366/d107386d8k.htm",
+      "sha256": "470062a400a91035a92219d1e690f33295444fa4d1c1601462134096c09fe704",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000119312526095179/d71810d8k.htm",
+      "sha256": "0c07b884254b9ccaa5087fe694ac2e916f164ef29f070b73e1f55923a499d0b3",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "HON",
+      "source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000017/hon-20260303.htm",
+      "sha256": "c1efa893baa509b1e98f97ebfbab23e61f6d9c31ba040272ee2eaa3a52e0386e",
+      "finding": "Previously reviewed aerospace separation/reverse split and associated financing/governance notices."
+    },
+    {
+      "ticker": "IHG",
+      "source": "https://www.sec.gov/Archives/edgar/data/858446/000085844626000011/ihgarafinal.htm",
+      "sha256": "a2048715721db674b38072347485df87083c641dfe5d35e17f119b19bf2ef675",
+      "finding": "Historical consolidations and standard depositary provisions; no new 2026 ADR conversion identified in flagged text."
+    },
+    {
+      "ticker": "V",
+      "source": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000103/q32026earningsrelease.htm",
+      "sha256": "a6d07085a0cd87852dcaf401be224fa9b03a7cc349d4465af82477faa889d485",
+      "finding": "Visa Class B exchange offer; not an adjustment to the modeled publicly traded Class A holding."
+    },
+    {
+      "ticker": "V",
+      "source": "https://www.sec.gov/Archives/edgar/data/1403161/000119312526215875/d59695d8k.htm",
+      "sha256": "207a5e14f33e9feb9d56b0d7ab8a12393f8833d35851bd75069bf6c326a8e7e3",
+      "finding": "Visa Class B exchange offer; not an adjustment to the modeled publicly traded Class A holding."
+    },
+    {
+      "ticker": "V",
+      "source": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000077/q22026earningsrelease.htm",
+      "sha256": "8c685242c525fbd450277615aa4fde8f0b202bd8bde442cc723885b085f72bf9",
+      "finding": "Visa Class B exchange offer; not an adjustment to the modeled publicly traded Class A holding."
+    }
+  ],
+  "fund_supplement": {
+    "source": "https://www.globenewswire.com/news-release/2026/5/29/3303829/0/en/YieldMax-ETFs-Announces-Planned-Closure-of-Four-ETFs.html",
+    "finding": "Closure notice concerns ABNY, DISO, FEAT and FIVY; it does not close the modeled AMZY, MSTY or SMCY positions."
+  },
+  "baseline_supplement": {
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2024/10076901.pdf",
+    "finding": "Older new-filer amendment filed May 14, 2026 does not establish 2025 year-end balances for HY, T, SMPL, IHG or RYCEY."
+  },
+  "limitations": [
+    "Automated keyword screening with review of flagged passages is not exhaustive assurance of all possible actions.",
+    "Blank account labels and missing opening quantities remain unresolved; no balances are inferred from filing omissions.",
+    "No actual broker reinvestment, cash-in-lieu payment or account transfer is confirmed."
+  ],
+  "completion_choices": [
+    "Publish only a clearly labeled estimate with unresolved positions excluded from totals, subject to product decision.",
+    "Keep unpublished pending corrected filings or dated position/account evidence."
+  ]
+}

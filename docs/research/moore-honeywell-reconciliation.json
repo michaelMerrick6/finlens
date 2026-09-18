@@ -1,0 +1,54 @@
+{
+  "member_id": "M001236",
+  "as_of": "2026-09-17",
+  "status": "conditional-entitlement-reconstruction",
+  "current_holdings_eligible": false,
+  "publication_enabled": false,
+  "baseline": {
+    "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+    "sha256": "22be0a0bde4b37c0df6d654990a7c1121d0810b4928ccf7600e7bac87a049483",
+    "page": 5,
+    "date": "2025-12-31",
+    "value_bounds": [
+      15001,
+      50000
+    ],
+    "unadjusted_close": 195.09,
+    "price_source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000023/hon-20260305.htm",
+    "implied_old_share_range": [
+      76.89271618227485,
+      256.2919678097288
+    ]
+  },
+  "action": {
+    "effective_date": "2026-06-29",
+    "record_date": "2026-06-15",
+    "HON_per_old_share": 0.5,
+    "HONA_per_old_share": 0.5,
+    "sources": [
+      "https://www.honeywellaerospace.com/us/en/company/newsroom/2026/06/honeywell-aerospace-spin-off-begins-trading-nasdaq",
+      "https://investor.honeywell.com/reverse-stock-split"
+    ]
+  },
+  "positions": [
+    {
+      "ticker": "HON",
+      "account": "TradeWinds",
+      "min_shares": 38,
+      "max_shares": 128.1459839048644
+    },
+    {
+      "ticker": "HONA",
+      "account": "TradeWinds",
+      "min_shares": 38,
+      "max_shares": 128.1459839048644
+    }
+  ],
+  "assumptions": [
+    "Annual value bracket is valued at the stated year-end closing price.",
+    "No omitted transactions, transfers or reinvestments after the annual baseline.",
+    "Original shares remained held through the record date and both resulting positions were retained.",
+    "Fractional cash-in-lieu is not included; share bounds conservatively allow rounding or fractional custody."
+  ],
+  "limitation": "Issuer conversion and price basis are sourced; Moore account entitlement and current ownership remain conditional."
+}

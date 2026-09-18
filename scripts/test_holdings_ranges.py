@@ -29,6 +29,13 @@ class RangeTests(unittest.TestCase):
         self.base['zero_basis']='explicit-house-none'
         self.assertEqual(self.run_model([self.event()])['min_shares'],5)
 
+    def test_closed_position_needs_no_price_but_reopened_position_does(self):
+        self.base.update(value_bounds=[0,0],zero_basis='explicit-house-none')
+        self.assertEqual(model_range(self.base,[],[],'2026-01-05')['max_shares'],0)
+        self.assertEqual(model_range(self.base,[self.event()],[],'2026-01-05')['status'],'review-required')
+        self.base['zero_basis']=None
+        self.assertEqual(model_range(self.base,[],[],'2026-01-05')['status'],'review-required')
+
     def test_consistent_split_basis_does_not_double_apply_split(self):
         # A 2-for-1 split reflected in all historical prices doubles modeled shares,
         # while current value remains unchanged; no extra split multiplier is used.

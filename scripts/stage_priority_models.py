@@ -6,6 +6,8 @@ from pathlib import Path
 from urllib.parse import quote
 import requests
 from model_holdings_ranges import model_range
+from model_unanchored_holdings import model_unanchored_flow
+from moore_fractional_shares import apply_allowance
 from reconcile_priority_holdings import key
 from holdings_market_identity import provider_symbol, validate_price_identity, blocking_actions
 ROOT=Path(__file__).resolve().parents[1]
@@ -58,6 +60,10 @@ def prices(ticker):
 def main():
     ledger=json.loads((ROOT/'docs/research/priority-holdings-ledger.json').read_text())
     tickers=sorted({p['ticker'] for m in ledger['members'] for p in m['positions'] if p['ticker'] and p['value_bounds'] and not p['charitable'] and stock(p)})
+    # Preserve reviewed Moore transaction flow even where a baseline is missing.
+    moore=next((m for m in ledger['members'] if m['member_id']=='M001236'),None)
+    if moore:
+        tickers=sorted(set(tickers) | {e['ticker'] for e in moore['events'] if e['ticker'] and not e['position_id'] and stock(e)})
     CACHE.mkdir(parents=True,exist_ok=True);market={}
     with ThreadPoolExecutor(max_workers=5) as pool:
         futures=[pool.submit(prices,t) for t in tickers]
@@ -82,11 +88,33 @@ def main():
                 quote_data=market.get(p['ticker'],{})
                 result=model_range(dict(p,date=m['baseline_date']),events,quote_data.get('prices',[]),DAY)
             else:result=dict(status='review-required',reason=', '.join(reasons))
+            if m['member_id']=='M001236':
+                if p['ticker'] in ('GNPX','TZA'):
+                    split_evidence=json.loads((ROOT/'docs/research/moore-split-evidence.json').read_text())
+                    result=apply_allowance(result,p['ticker'],m['baseline_date'],related,DAY,split_evidence)
+                inferred=[e['id'] for e in related if e.get('position_id')==p['id'] and not e.get('account')]
+                if inferred:
+                    result['account_attribution']=dict(status='inferred-from-unique-annual-position',event_ids=inferred,explicit_account_confirmation=False)
+                    if result['status']=='conditional-model':
+                        result['assumptions'].append('PTR account is omitted; attribution to this account is inferred from the unique matching annual position.')
             if actions:result['corporate_actions']=actions
             if provider_symbol(p['ticker'])!=p['ticker']:
                 result['price_identity']=market.get(p['ticker'],{}).get('identity')
             rows.append(dict(position_id=p['id'],ticker=p['ticker'],name=p['name'],account=p['account'],owner=p['owner'],source=p['source'],page=p['page'],model=result))
-        members.append(dict(member_id=m['member_id'],name=m['name'],rows=rows,unresolved_positions=unresolved_positions(m),current_holdings_eligible=False))
+        unresolved=unresolved_positions(m)
+        if m['member_id']=='M001236':
+            reviewed=json.loads((ROOT/'docs/research/moore-source-review.json').read_text())
+            hashes={r['source']:r['sha256'] for r in reviewed['sources']}
+            by_id={e['id']:e for e in m['events']}
+            for position in unresolved:
+                events=[by_id[e['id']] for e in position['events']]
+                if any(hashes.get(e['source'])!=e['source_sha256'] for e in events):
+                    position['flow_model']=dict(status='review-required',reason='unreviewed-source')
+                    continue
+                position['flow_model']=model_unanchored_flow(events,market.get(position['ticker'],{}).get('prices',[]),m['baseline_date'],DAY)
+                position['eligible_for_portfolio_total']=False
+                position['eligible_for_ranking']=False
+        members.append(dict(member_id=m['member_id'],name=m['name'],rows=rows,unresolved_positions=unresolved,current_holdings_eligible=False))
         print(m['name'],'conditional candidates',sum(r['model']['status']=='conditional-model' for r in rows),'/',len(rows),flush=True)
     out=dict(as_of=DAY,publication_enabled=False,warning='Candidate calculations only: source-row review, ticker identity and corporate-action reconciliation are incomplete. Do not serve as current holdings.',members=members)
     (ROOT/'docs/research/priority-holdings-models.json').write_text(json.dumps(out,indent=2)+'\n')

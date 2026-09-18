@@ -15,6 +15,14 @@ def model_range(baseline,events,prices,as_of):
     bounds=baseline.get('value_bounds')
     explicit_zero=bounds==[0,0] and baseline.get('zero_basis')=='explicit-house-none'
     if not explicit_zero and (not bounds or len(bounds)!=2 or not all(positive(x) for x in bounds) or bounds[0]>bounds[1]):return fail('unbounded-or-unknown-baseline')
+    active=[e for e in events if e.get('balance_effect')!='none' and baseline['date']<e['date']<=as_of]
+    # An explicitly closed baseline with no later changes needs no market quote.
+    # Delisted/obsolete symbols must not turn a known disclosed zero into unknown.
+    if explicit_zero and not active:
+        return dict(status='conditional-model',min_shares=0,max_shares=0,min_value=0,max_value=0,
+                    baseline_price=None,latest_price=None,trace=[],
+                    assumptions=['Explicit House year-end None carried forward with no supplied subsequent changes.'],
+                    current_holdings_eligible=False)
     # Latest available close on/before year-end; reject stale series and future rows.
     candidates=[p for p in prices if p['date']<=baseline['date'] and positive(p.get('close'))]
     if not candidates:return fail('missing-baseline-price')

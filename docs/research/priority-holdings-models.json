@@ -225,28 +225,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 87.25,
-              "low": 87.20999908447266,
-              "high": 88.19999694824219
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 104.4800033569336,
-              "low": 103.75,
-              "high": 107.26000213623047
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -417,28 +404,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 3.0799999237060547,
-              "low": 3.0799999237060547,
-              "high": 3.140000104904175
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 2.630000114440918,
-              "low": 2.5999999046325684,
-              "high": 2.680000066757202
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -494,10 +468,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 4,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -588,28 +570,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 66.45999908447266,
-              "low": 66.41000366210938,
-              "high": 67.16999816894531
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 36.849998474121094,
-              "low": 36.66999816894531,
-              "high": 37.56999969482422
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -948,28 +917,15 @@
           "page": 5,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 24.899999618530273,
-              "low": 24.8799991607666,
-              "high": 25.020000457763672
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 27.459999084472656,
-              "low": 27.360000610351562,
-              "high": 27.690000534057617
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -1470,28 +1426,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 335.2699890136719,
-              "low": 335.2200012207031,
-              "high": 338.1300048828125
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 371.260009765625,
-              "low": 368.92999267578125,
-              "high": 374.9800109863281
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -2029,28 +1972,15 @@
           "page": 9,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 2.4700000286102295,
-              "low": 2.450000047683716,
-              "high": 2.4800000190734863
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 2.990000009536743,
-              "low": 2.9700000286102295,
-              "high": 3.0199999809265137
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -2734,28 +2664,15 @@
           "page": 10,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 60.369998931884766,
-              "low": 60.27000045776367,
-              "high": 60.91999816894531
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 84.13999938964844,
-              "low": 83.2699966430664,
-              "high": 86.30999755859375
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -2878,28 +2795,15 @@
           "page": 10,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 65.08999633789062,
-              "low": 65.03500366210938,
-              "high": 65.9000015258789
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 76.62999725341797,
-              "low": 75.77999877929688,
-              "high": 78.48500061035156
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -3260,10 +3164,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 11,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -3699,28 +3611,15 @@
           "page": 12,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 93.61000061035156,
-              "low": 93.41999816894531,
-              "high": 94.58999633789062
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 132.5399932861328,
-              "low": 132.3800048828125,
-              "high": 139.19000244140625
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -4013,28 +3912,15 @@
           "page": 13,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 86.2699966430664,
-              "low": 86.18000030517578,
-              "high": 86.73999786376953
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 86.94999694824219,
-              "low": 86.61000061035156,
-              "high": 87.7300033569336
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -4229,28 +4115,15 @@
           "page": 13,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 85.25,
-              "low": 85.19000244140625,
-              "high": 86.63999938964844
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 89.27999877929688,
-              "low": 84.83999633789062,
-              "high": 89.69999694824219
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -4343,28 +4216,15 @@
           "page": 14,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 6.320000171661377,
-              "low": 6.289999961853027,
-              "high": 6.429999828338623
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 2.9100000858306885,
-              "low": 2.9000000953674316,
-              "high": 2.990000009536743
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -4529,28 +4389,15 @@
           "page": 14,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 66.45999908447266,
-              "low": 66.41000366210938,
-              "high": 67.16999816894531
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 36.849998474121094,
-              "low": 36.66999816894531,
-              "high": 37.56999969482422
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -4611,10 +4458,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 14,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -4627,28 +4482,15 @@
           "page": 14,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 14.15999984741211,
-              "low": 13.979999542236328,
-              "high": 14.260000228881836
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 17.799999237060547,
-              "low": 17.350000381469727,
-              "high": 17.905000686645508
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -5148,28 +4990,15 @@
           "page": 15,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 344.1000061035156,
-              "low": 343.9700012207031,
-              "high": 346.7099914550781
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 302.4700012207031,
-              "low": 302.4700012207031,
-              "high": 308.79998779296875
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -5256,28 +5085,15 @@
           "page": 15,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 401.29998779296875,
-              "low": 398.6700134277344,
-              "high": 405.2699890136719
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 236.4600067138672,
-              "low": 234.6199951171875,
-              "high": 245.3699951171875
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -5292,28 +5108,15 @@
           "page": 15,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 85.30000305175781,
-              "low": 85.13999938964844,
-              "high": 86.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 87.45999908447266,
-              "low": 87.04000091552734,
-              "high": 89.48999786376953
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -5706,10 +5509,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 16,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -5841,28 +5652,15 @@
           "page": 16,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 96.02999877929688,
-              "low": 95.91999816894531,
-              "high": 96.38999938964844
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 105.0199966430664,
-              "low": 104.36000061035156,
-              "high": 106.16999816894531
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -6057,28 +5855,15 @@
           "page": 17,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 127.4800033569336,
-              "low": 127.36000061035156,
-              "high": 128.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 96.83999633789062,
-              "low": 95.11000061035156,
-              "high": 100.30000305175781
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -7414,10 +7199,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 19,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -7481,10 +7274,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 20,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -7569,28 +7370,15 @@
           "page": 20,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 58.380001068115234,
-              "low": 58.34000015258789,
-              "high": 59.040000915527344
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 52.709999084472656,
-              "low": 52.34700012207031,
-              "high": 53.834999084472656
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -7878,28 +7666,15 @@
           "page": 20,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 771.8699951171875,
-              "low": 769.1699829101562,
-              "high": 775.0
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 774.6099853515625,
-              "low": 771.7999877929688,
-              "high": 779.97998046875
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -8094,28 +7869,15 @@
           "page": 21,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 264.9100036621094,
-              "low": 264.3900146484375,
-              "high": 266.1000061035156
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 250.5399932861328,
-              "low": 249.60000610351562,
-              "high": 256.3999938964844
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -8697,10 +8459,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074410.pdf",
           "page": 22,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -8821,28 +8591,15 @@
           "page": 22,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 681.9199829101562,
-              "low": 681.7100219726562,
-              "high": 687.3599853515625
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 754.0499877929688,
-              "low": 749.5999755859375,
-              "high": 761.6699829101562
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9397,28 +9154,15 @@
           "page": 24,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 24.030000686645508,
-              "low": 24.0,
-              "high": 25.610000610351562
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 32.040000915527344,
-              "low": 31.950000762939453,
-              "high": 32.34000015258789
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9469,28 +9213,15 @@
           "page": 24,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 37.959999084472656,
-              "low": 37.83599853515625,
-              "high": 38.470001220703125
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 14.489999771118164,
-              "low": 14.470000267028809,
-              "high": 14.96500015258789
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9541,28 +9272,15 @@
           "page": 24,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 579.4500122070312,
-              "low": 579.0,
-              "high": 585.6099853515625
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 648.4299926757812,
-              "low": 638.0,
-              "high": 653.4000244140625
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9820,28 +9538,15 @@
           "page": 24,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 231.32000732421875,
-              "low": 231.1699981689453,
-              "high": 233.49000549316406
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 280.9200134277344,
-              "low": 280.32000732421875,
-              "high": 288.4700012207031
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9856,28 +9561,15 @@
           "page": 25,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 99.19000244140625,
-              "low": 99.05000305175781,
-              "high": 99.80999755859375
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 98.7699966430664,
-              "low": 98.1500015258789,
-              "high": 102.0999984741211
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9892,28 +9584,15 @@
           "page": 25,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 10.380000114440918,
-              "low": 10.329999923706055,
-              "high": 10.489999771118164
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 14.260000228881836,
-              "low": 14.260000228881836,
-              "high": 14.279999732971191
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -9964,28 +9643,15 @@
           "page": 25,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 62.470001220703125,
-              "low": 62.43000030517578,
-              "high": 62.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 71.26000213623047,
-              "low": 70.80999755859375,
-              "high": 72.12999725341797
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -10036,28 +9702,15 @@
           "page": 25,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 257.95001220703125,
-              "low": 257.8599853515625,
-              "high": 260.5
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 288.9800109863281,
-              "low": 286.5199890136719,
-              "high": 292.4800109863281
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -10108,28 +9761,15 @@
           "page": 25,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 162.00999450683594,
-              "low": 161.91000366210938,
-              "high": 165.75799560546875
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 239.41000366210938,
-              "low": 237.63999938964844,
-              "high": 244.75999450683594
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -10294,28 +9934,15 @@
           "page": 25,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 20.889999389648438,
-              "low": 20.854999542236328,
-              "high": 21.059999465942383
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 20.209999084472656,
-              "low": 20.18000030517578,
-              "high": 20.459999084472656
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -11778,28 +11405,15 @@
           "page": 8,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 66.87999725341797,
-              "low": 66.83999633789062,
-              "high": 67.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 56.88999938964844,
-              "low": 56.54999923706055,
-              "high": 57.79999923706055
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -11853,28 +11467,15 @@
           "page": 9,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 532.8099975585938,
-              "low": 531.1400146484375,
-              "high": 539.27001953125
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 631.1799926757812,
-              "low": 621.1099853515625,
-              "high": 637.8800048828125
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -11940,10 +11541,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074769.pdf",
           "page": 9,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -12151,28 +11760,15 @@
           "page": 11,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 96.75,
-              "low": 96.56999969482422,
-              "high": 97.7699966430664
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 145.72999572753906,
-              "low": 140.1999969482422,
-              "high": 147.5
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -12265,28 +11861,15 @@
           "page": 12,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 78.72000122070312,
-              "low": 78.66999816894531,
-              "high": 79.69999694824219
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 92.31999969482422,
-              "low": 91.61000061035156,
-              "high": 93.81999969482422
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -12353,28 +11936,15 @@
           "page": 16,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 66.87999725341797,
-              "low": 66.83999633789062,
-              "high": 67.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 56.88999938964844,
-              "low": 56.54999923706055,
-              "high": 57.79999923706055
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -12428,28 +11998,15 @@
           "page": 17,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 532.8099975585938,
-              "low": 531.1400146484375,
-              "high": 539.27001953125
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 631.1799926757812,
-              "low": 621.1099853515625,
-              "high": 637.8800048828125
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -12515,10 +12072,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074769.pdf",
           "page": 17,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -12726,28 +12291,15 @@
           "page": 19,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 96.75,
-              "low": 96.56999969482422,
-              "high": 97.7699966430664
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 145.72999572753906,
-              "low": 140.1999969482422,
-              "high": 147.5
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -12840,28 +12392,15 @@
           "page": 20,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 78.72000122070312,
-              "low": 78.66999816894531,
-              "high": 79.69999694824219
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 92.31999969482422,
-              "low": 91.61000061035156,
-              "high": 93.81999969482422
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -16500,28 +16039,15 @@
           "page": 2,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 135.72000122070312,
-              "low": 135.56500244140625,
-              "high": 137.5800018310547
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 167.50999450683594,
-              "low": 166.60000610351562,
-              "high": 170.52999877929688
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -16939,28 +16465,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 80.51000213623047,
-              "low": 80.08999633789062,
-              "high": 80.86000061035156
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 61.400001525878906,
-              "low": 61.27000045776367,
-              "high": 62.209999084472656
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -17326,10 +16839,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 4,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -19404,28 +18925,15 @@
           "page": 7,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 24.399999618530273,
-              "low": 24.170000076293945,
-              "high": 24.610000610351562
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 14.729999542236328,
-              "low": 14.149999618530273,
-              "high": 15.239999771118164
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -20078,10 +19586,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 9,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -22142,28 +21658,15 @@
           "page": 12,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 119.68000030517578,
-              "low": 119.47000122070312,
-              "high": 120.5999984741211
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 124.98999786376953,
-              "low": 124.19000244140625,
-              "high": 127.97000122070312
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -22349,28 +21852,15 @@
           "page": 13,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 14.649999618530273,
-              "low": 14.569999694824219,
-              "high": 14.84000015258789
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 11.579999923706055,
-              "low": 11.569999694824219,
-              "high": 11.850000381469727
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -23832,28 +23322,15 @@
           "page": 15,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 55.209999084472656,
-              "low": 55.18000030517578,
-              "high": 56.119998931884766
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 55.29999923706055,
-              "low": 54.7400016784668,
-              "high": 56.47999954223633
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -24913,28 +24390,15 @@
           "page": 17,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 287.25,
-              "low": 287.1499938964844,
-              "high": 290.3900146484375
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 305.6300048828125,
-              "low": 303.5400085449219,
-              "high": 310.0
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -25240,28 +24704,15 @@
           "page": 17,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 256.1300048828125,
-              "low": 256.1099853515625,
-              "high": 261.6300048828125
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 384.7200012207031,
-              "low": 382.9200134277344,
-              "high": 396.5199890136719
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -25348,28 +24799,15 @@
           "page": 18,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 85.30000305175781,
-              "low": 85.13999938964844,
-              "high": 86.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 87.45999908447266,
-              "low": 87.04000091552734,
-              "high": 89.48999786376953
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -25701,28 +25139,15 @@
           "page": 18,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 174.0399932861328,
-              "low": 173.24000549316406,
-              "high": 175.25
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 122.58000183105469,
-              "low": 119.55000305175781,
-              "high": 124.41000366210938
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -26042,10 +25467,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 19,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -26452,28 +25885,15 @@
           "page": 20,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 54.04999923706055,
-              "low": 53.91999816894531,
-              "high": 54.099998474121094
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 47.459999084472656,
-              "low": 47.310001373291016,
-              "high": 47.86000061035156
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -26756,10 +26176,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 20,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -26834,28 +26262,15 @@
           "page": 20,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 100.88999938964844,
-              "low": 100.87000274658203,
-              "high": 101.66000366210938
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 98.0999984741211,
-              "low": 97.44999694824219,
-              "high": 99.33000183105469
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -28061,28 +27476,15 @@
           "page": 23,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 820.2899780273438,
-              "low": 819.9199829101562,
-              "high": 829.25
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 887.2899780273438,
-              "low": 887.2899780273438,
-              "high": 897.6799926757812
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -29812,28 +29214,15 @@
           "page": 26,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 16.06999969482422,
-              "low": 16.020000457763672,
-              "high": 16.149999618530273
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 13.350000381469727,
-              "low": 13.220000267028809,
-              "high": 13.430000305175781
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -29847,10 +29236,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 26,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -30028,10 +29425,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 26,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -31738,28 +31143,15 @@
           "page": 29,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 242.91000366210938,
-              "low": 242.77000427246094,
-              "high": 245.50999450683594
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 213.1999969482422,
-              "low": 212.8800048828125,
-              "high": 215.97999572753906
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -32252,28 +31644,15 @@
           "page": 30,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 130.6999969482422,
-              "low": 129.97999572753906,
-              "high": 133.32000732421875
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 219.7100067138672,
-              "low": 219.5800018310547,
-              "high": 220.4499969482422
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -32567,10 +31946,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10074952.pdf",
           "page": 30,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -33106,28 +32493,15 @@
           "page": 31,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 32.220001220703125,
-              "low": 32.209999084472656,
-              "high": 34.2599983215332
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 45.45000076293945,
-              "low": 43.43000030517578,
-              "high": 45.45000076293945
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -36733,28 +36107,15 @@
           "page": 37,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 58.540000915527344,
-              "low": 58.310001373291016,
-              "high": 58.9900016784668
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 65.47000122070312,
-              "low": 64.12999725341797,
-              "high": 67.87999725341797
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -36873,28 +36234,15 @@
           "page": 45,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 16.229999542236328,
-              "low": 16.15999984741211,
-              "high": 16.631999969482422
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 18.229999542236328,
-              "low": 17.850000381469727,
-              "high": 18.93000030517578
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -37638,28 +36986,15 @@
           "page": 47,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 17.530000686645508,
-              "low": 17.514999389648438,
-              "high": 17.75
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 7.820000171661377,
-              "low": 7.789999961853027,
-              "high": 7.929999828338623
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -40678,28 +40013,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 109.30999755859375,
-              "low": 109.29000091552734,
-              "high": 111.5999984741211
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 243.97999572753906,
-              "low": 240.4499969482422,
-              "high": 252.7949981689453
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -40714,28 +40036,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 24.84000015258789,
-              "low": 24.780000686645508,
-              "high": 24.969999313354492
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 25.860000610351562,
-              "low": 25.649999618530273,
-              "high": 26.84000015258789
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -40750,28 +40059,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 27.149999618530273,
-              "low": 26.84000015258789,
-              "high": 28.079999923706055
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 22.809999465942383,
-              "low": 22.15999984741211,
-              "high": 23.590999603271484
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -40894,28 +40190,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 71.61000061035156,
-              "low": 70.43000030517578,
-              "high": 73.67500305175781
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 83.3499984741211,
-              "low": 81.15699768066406,
-              "high": 85.25800323486328
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -40930,28 +40213,15 @@
           "page": 5,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 36.900001525878906,
-              "low": 36.869998931884766,
-              "high": 37.58000183105469
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 101.05000305175781,
-              "low": 99.29000091552734,
-              "high": 104.41999816894531
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -41008,28 +40278,15 @@
           "page": 5,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 301.1499938964844,
-              "low": 301.1099853515625,
-              "high": 306.1199951171875
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 502.05999755859375,
-              "low": 496.80999755859375,
-              "high": 510.3699951171875
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -41294,28 +40551,15 @@
           "page": 5,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 5.829999923706055,
-              "low": 5.769999980926514,
-              "high": 6.0
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 2.5899999141693115,
-              "low": 2.5299999713897705,
-              "high": 2.7049999237060547
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -41474,28 +40718,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 9.970000267028809,
-              "low": 9.859999656677246,
-              "high": 10.071999549865723
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 5.929999828338623,
-              "low": 5.829999923706055,
-              "high": 6.144999980926514
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -41562,28 +40793,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 81.70999908447266,
-              "low": 81.41999816894531,
-              "high": 82.54499816894531
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 70.97000122070312,
-              "low": 70.57099914550781,
-              "high": 71.95999908447266
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -41670,28 +40888,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 37.0,
-              "low": 36.849998474121094,
-              "high": 37.2400016784668
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 33.68000030517578,
-              "low": 33.63999938964844,
-              "high": 35.2400016784668
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -48158,28 +47363,15 @@
           "page": 12,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 305.6300048828125,
-              "low": 305.3500061035156,
-              "high": 308.2099914550781
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 248.55999755859375,
-              "low": 247.8300018310547,
-              "high": 253.16000366210938
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -48764,28 +47956,15 @@
           "page": 14,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 330.1099853515625,
-              "low": 329.8800048828125,
-              "high": 333.3299865722656
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 375.260009765625,
-              "low": 373.6300048828125,
-              "high": 380.2200012207031
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -50024,28 +49203,15 @@
           "page": 21,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 46.040000915527344,
-              "low": 46.0,
-              "high": 46.189998626708984
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 44.16999816894531,
-              "low": 44.150001525878906,
-              "high": 44.369998931884766
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -50060,28 +49226,15 @@
           "page": 21,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 22.774999618530273,
-              "low": 22.774999618530273,
-              "high": 22.829999923706055
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 21.920000076293945,
-              "low": 21.920000076293945,
-              "high": 22.020000457763672
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -50096,28 +49249,15 @@
           "page": 21,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 47.349998474121094,
-              "low": 47.34000015258789,
-              "high": 47.459999084472656
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 45.43000030517578,
-              "low": 45.415000915527344,
-              "high": 45.650001525878906
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51480,28 +50620,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 15.329999923706055,
-              "low": 15.220000267028809,
-              "high": 15.420000076293945
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 12.699999809265137,
-              "low": 12.550000190734863,
-              "high": 13.279999732971191
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51516,28 +50643,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 271.8599853515625,
-              "low": 271.75,
-              "high": 273.67999267578125
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 332.4100036621094,
-              "low": 330.70001220703125,
-              "high": 335.4800109863281
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51624,28 +50738,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 41.150001525878906,
-              "low": 41.04999923706055,
-              "high": 41.79999923706055
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 66.01000213623047,
-              "low": 66.01000213623047,
-              "high": 69.41000366210938
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51697,9 +50798,19 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=2",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=1",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=1"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -51712,9 +50823,9 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 3328.9081901399572,
+            "min_shares": 3328,
             "max_shares": 6657.789749120918,
-            "min_value": 149467.98281679486,
+            "min_value": 149427.205078125,
             "max_value": 298934.76989451016,
             "baseline_price": {
               "date": "2025-12-31",
@@ -51733,9 +50844,23 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "Single modeled account; fractional custody or issuer rounding/cash-out allowed conservatively. Actual broker treatment and cash proceeds are unknown."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "fractional_share_review": {
+              "date": "2026-07-15",
+              "numerator": 1,
+              "denominator": 10,
+              "policy": "cash-in-lieu",
+              "source": "https://www.direxion.com/press-release/direxion-to-split-nine-etfs",
+              "pre_allowance_bounds": [
+                3328.9081901399572,
+                6657.789749120918
+              ],
+              "split_ratio_applied_again": false,
+              "cash_proceeds_included": false
+            }
           }
         },
         {
@@ -51748,28 +50873,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 45.540000915527344,
-              "low": 45.439998626708984,
-              "high": 46.709999084472656
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 61.970001220703125,
-              "low": 60.04999923706055,
-              "high": 63.970001220703125
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51784,28 +50896,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 13.119999885559082,
-              "low": 13.119999885559082,
-              "high": 13.220000267028809
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 13.350000381469727,
-              "low": 13.25,
-              "high": 13.569999694824219
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51821,9 +50920,9 @@
           "model": {
             "status": "conditional-model",
             "min_shares": 46.40358687280753,
-            "max_shares": 748.4620708013491,
+            "max_shares": 749,
             "min_value": 158.2362352191255,
-            "max_value": 2552.2557256736154,
+            "max_value": 2554.0900642871857,
             "baseline_price": {
               "date": "2025-12-31",
               "close": 38.5,
@@ -51847,9 +50946,31 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "Single modeled account; fractional custody or issuer rounding/cash-out allowed conservatively. Actual broker treatment and cash proceeds are unknown.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "fractional_share_review": {
+              "date": "2026-07-16",
+              "numerator": 1,
+              "denominator": 22,
+              "policy": "round-up",
+              "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926027846/gnpx20260630_10q.htm",
+              "pre_allowance_bounds": [
+                46.40358687280753,
+                748.4620708013491
+              ],
+              "split_ratio_applied_again": false,
+              "cash_proceeds_included": false
+            },
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=3"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -51862,28 +50983,15 @@
           "page": 3,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 17.670000076293945,
-              "low": 17.670000076293945,
-              "high": 17.739999771118164
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 18.299999237060547,
-              "low": 18.18000030517578,
-              "high": 18.399999618530273
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -51935,9 +51043,19 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=4",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=2",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=2"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -51952,7 +51070,14 @@
             "status": "review-required",
             "reason": "sale-exceeds-modeled-balance",
             "min_shares": null,
-            "max_shares": null
+            "max_shares": null,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=4"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -51965,28 +51090,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 36.900001525878906,
-              "low": 36.869998931884766,
-              "high": 37.58000183105469
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 101.05000305175781,
-              "low": 99.29000091552734,
-              "high": 104.41999816894531
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -52033,9 +51145,18 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=5",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=3"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -52095,9 +51216,21 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=4",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=5",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=6",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=7",
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=3"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -52110,28 +51243,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 52.720001220703125,
-              "low": 52.63999938964844,
-              "high": 54.20000076293945
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 67.93000030517578,
-              "low": 66.55000305175781,
-              "high": 69.97000122070312
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -52145,10 +51265,18 @@
           "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
           "page": 4,
           "model": {
-            "status": "review-required",
-            "reason": "missing-baseline-price",
-            "min_shares": null,
-            "max_shares": null
+            "status": "conditional-model",
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
+            "trace": [],
+            "assumptions": [
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
+            ],
+            "current_holdings_eligible": false
           }
         },
         {
@@ -52161,28 +51289,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 29.270000457763672,
-              "low": 29.020000457763672,
-              "high": 29.8700008392334
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 36.849998474121094,
-              "low": 35.36000061035156,
-              "high": 37.119998931884766
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -52197,28 +51312,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 330.1099853515625,
-              "low": 329.8800048828125,
-              "high": 333.3299865722656
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 375.260009765625,
-              "low": 373.6300048828125,
-              "high": 380.2200012207031
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -52260,9 +51362,17 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=8"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -52275,28 +51385,15 @@
           "page": 4,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 5.090000152587891,
-              "low": 5.010000228881836,
-              "high": 5.269999980926514
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 3.0299999713897705,
-              "low": 2.950000047683716,
-              "high": 3.069999933242798
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -52672,9 +51769,17 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=2"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -52750,9 +51855,17 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034952.pdf#row=1"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -53003,9 +52116,17 @@
               "Annual dollar bracket converted at year-end closing price.",
               "Trade quantities bounded using daily high/low on the same split basis.",
               "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Corporate actions other than splits require separate reconciliation.",
+              "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
             ],
-            "current_holdings_eligible": false
+            "current_holdings_eligible": false,
+            "account_attribution": {
+              "status": "inferred-from-unique-annual-position",
+              "event_ids": [
+                "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034424.pdf#row=4"
+              ],
+              "explicit_account_confirmation": false
+            }
           }
         },
         {
@@ -53162,28 +52283,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 79.0199966430664,
-              "low": 78.98999786376953,
-              "high": 79.68000030517578
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 87.0199966430664,
-              "low": 86.68000030517578,
-              "high": 87.76000213623047
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -53198,28 +52306,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 336.6600036621094,
-              "low": 336.4800109863281,
-              "high": 340.989990234375
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 360.0,
-              "low": 356.04998779296875,
-              "high": 362.07000732421875
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -53234,28 +52329,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 143.30999755859375,
-              "low": 143.22999572753906,
-              "high": 144.13999938964844
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 147.02000427246094,
-              "low": 146.5,
-              "high": 148.22999572753906
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -53270,28 +52352,15 @@
           "page": 6,
           "model": {
             "status": "conditional-model",
-            "min_shares": 0.0,
-            "max_shares": 0.0,
-            "min_value": 0.0,
-            "max_value": 0.0,
-            "baseline_price": {
-              "date": "2025-12-31",
-              "close": 389.07000732421875,
-              "low": 388.80999755859375,
-              "high": 394.9599914550781
-            },
-            "latest_price": {
-              "date": "2026-09-16",
-              "close": 414.9200134277344,
-              "low": 411.760009765625,
-              "high": 425.6600036621094
-            },
+            "min_shares": 0,
+            "max_shares": 0,
+            "min_value": 0,
+            "max_value": 0,
+            "baseline_price": null,
+            "latest_price": null,
             "trace": [],
             "assumptions": [
-              "Annual dollar bracket converted at year-end closing price.",
-              "Trade quantities bounded using daily high/low on the same split basis.",
-              "Only supplied, reconciled events included; unreported changes remain possible.",
-              "Corporate actions other than splits require separate reconciliation."
+              "Explicit House year-end None carried forward with no supplied subsequent changes."
             ],
             "current_holdings_eligible": false
           }
@@ -53354,7 +52423,117 @@
               "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
               "page": 1
             }
-          ]
+          ],
+          "flow_model": {
+            "status": "conditional-flow-only",
+            "opening_balance": "unknown",
+            "min_net_share_change": -4762.118678329656,
+            "max_net_share_change": 5495.923988151479,
+            "min_current_shares": null,
+            "max_current_shares": null,
+            "eligible_for_portfolio_total": false,
+            "eligible_for_ranking": false,
+            "current_holdings_eligible": false,
+            "trace": [
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf#row=1",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+                "page": 1,
+                "date": "2026-01-09",
+                "action": "P",
+                "min_net_share_change": 616.8174419505651,
+                "max_net_share_change": 2085.070932213083,
+                "price": {
+                  "date": "2026-01-09",
+                  "close": 23.989999771118164,
+                  "low": 23.979999542236328,
+                  "high": 24.31999969482422
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=1",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+                "page": 1,
+                "date": "2026-01-30",
+                "action": "S",
+                "min_net_share_change": -1371.254158780613,
+                "max_net_share_change": 1514.4737668421171,
+                "price": {
+                  "date": "2026-01-30",
+                  "close": 26.209999084472656,
+                  "low": 25.149999618530273,
+                  "high": 26.290000915527344
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=1",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+                "page": 1,
+                "date": "2026-05-18",
+                "action": "P",
+                "min_net_share_change": -760.9612358122787,
+                "max_net_share_change": 3610.9097920108015,
+                "price": {
+                  "date": "2026-05-18",
+                  "close": 24.43000030517578,
+                  "low": 23.850000381469727,
+                  "high": 24.579999923706055
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=1",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+                "page": 1,
+                "date": "2026-05-21",
+                "action": "S",
+                "min_net_share_change": -2776.277683869316,
+                "max_net_share_change": 3020.0866190840648,
+                "price": {
+                  "date": "2026-05-21",
+                  "close": 25.34000015258789,
+                  "low": 24.809999465942383,
+                  "high": 25.389999389648438
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf#row=2",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf",
+                "page": 1,
+                "date": "2026-06-04",
+                "action": "P",
+                "min_net_share_change": -693.7704150916438,
+                "max_net_share_change": 7498.366974734117,
+                "price": {
+                  "date": "2026-06-04",
+                  "close": 22.770000457763672,
+                  "low": 22.329999923706055,
+                  "high": 24.010000228881836
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf#row=1",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035291.pdf",
+                "page": 1,
+                "date": "2026-08-14",
+                "action": "S",
+                "min_net_share_change": -4762.118678329656,
+                "max_net_share_change": 5495.923988151479,
+                "price": {
+                  "date": "2026-08-14",
+                  "close": 24.889999389648438,
+                  "low": 24.579999923706055,
+                  "high": 24.969999313354492
+                }
+              }
+            ],
+            "assumptions": [
+              "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+              "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+              "Account ownership and non-split corporate actions require separate reconciliation."
+            ]
+          },
+          "eligible_for_portfolio_total": false,
+          "eligible_for_ranking": false
         },
         {
           "ticker": "SMPL",
@@ -53396,7 +52575,87 @@
               "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
               "page": 2
             }
-          ]
+          ],
+          "flow_model": {
+            "status": "conditional-flow-only",
+            "opening_balance": "unknown",
+            "min_net_share_change": 1869.263735609748,
+            "max_net_share_change": 8173.992599957561,
+            "min_current_shares": null,
+            "max_current_shares": null,
+            "eligible_for_portfolio_total": false,
+            "eligible_for_ranking": false,
+            "current_holdings_eligible": false,
+            "trace": [
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=7",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+                "page": 1,
+                "date": "2026-02-03",
+                "action": "P",
+                "min_net_share_change": 823.7781852933254,
+                "max_net_share_change": 2955.9560918558304,
+                "price": {
+                  "date": "2026-02-03",
+                  "close": 17.079999923706055,
+                  "low": 16.915000915527344,
+                  "high": 18.209999084472656
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf#row=6",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+                "page": 1,
+                "date": "2026-02-11",
+                "action": "P",
+                "min_net_share_change": 1734.033064946336,
+                "max_net_share_change": 6079.004142148837,
+                "price": {
+                  "date": "2026-02-11",
+                  "close": 16.420000076293945,
+                  "low": 16.010000228881836,
+                  "high": 16.479999542236328
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=8",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+                "page": 1,
+                "date": "2026-03-12",
+                "action": "P",
+                "min_net_share_change": 1800.5844894279624,
+                "max_net_share_change": 7123.572412248005,
+                "price": {
+                  "date": "2026-03-12",
+                  "close": 14.40999984741211,
+                  "low": 14.359999656677246,
+                  "high": 15.041000366210938
+                }
+              },
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf#row=9",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034217.pdf",
+                "page": 2,
+                "date": "2026-03-13",
+                "action": "P",
+                "min_net_share_change": 1869.263735609748,
+                "max_net_share_change": 8173.992599957561,
+                "price": {
+                  "date": "2026-03-13",
+                  "close": 14.414999961853027,
+                  "low": 14.279999732971191,
+                  "high": 14.574999809265137
+                }
+              }
+            ],
+            "assumptions": [
+              "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+              "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+              "Account ownership and non-split corporate actions require separate reconciliation."
+            ]
+          },
+          "eligible_for_portfolio_total": false,
+          "eligible_for_ranking": false
         },
         {
           "ticker": "IHG",
@@ -53414,7 +52673,42 @@
               "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
               "page": 1
             }
-          ]
+          ],
+          "flow_model": {
+            "status": "conditional-flow-only",
+            "opening_balance": "unknown",
+            "min_net_share_change": 6.6867068831410155,
+            "max_net_share_change": 102.52904775875719,
+            "min_current_shares": null,
+            "max_current_shares": null,
+            "eligible_for_portfolio_total": false,
+            "eligible_for_ranking": false,
+            "current_holdings_eligible": false,
+            "trace": [
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=2",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+                "page": 1,
+                "date": "2026-05-07",
+                "action": "P",
+                "min_net_share_change": 6.6867068831410155,
+                "max_net_share_change": 102.52904775875719,
+                "price": {
+                  "date": "2026-05-07",
+                  "close": 146.9499969482422,
+                  "low": 146.3000030517578,
+                  "high": 149.6999969482422
+                }
+              }
+            ],
+            "assumptions": [
+              "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+              "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+              "Account ownership and non-split corporate actions require separate reconciliation."
+            ]
+          },
+          "eligible_for_portfolio_total": false,
+          "eligible_for_ranking": false
         },
         {
           "ticker": "RYCEY",
@@ -53432,7 +52726,42 @@
               "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
               "page": 1
             }
-          ]
+          ],
+          "flow_model": {
+            "status": "conditional-flow-only",
+            "opening_balance": "unknown",
+            "min_net_share_change": 57.13470170352792,
+            "max_net_share_change": 888.6256365974119,
+            "min_current_shares": null,
+            "max_current_shares": null,
+            "eligible_for_portfolio_total": false,
+            "eligible_for_ranking": false,
+            "current_holdings_eligible": false,
+            "trace": [
+              {
+                "event": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf#row=3",
+                "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+                "page": 1,
+                "date": "2026-05-07",
+                "action": "P",
+                "min_net_share_change": 57.13470170352792,
+                "max_net_share_change": 888.6256365974119,
+                "price": {
+                  "date": "2026-05-07",
+                  "close": 16.93000030517578,
+                  "low": 16.8799991607666,
+                  "high": 17.520000457763672
+                }
+              }
+            ],
+            "assumptions": [
+              "Dollar brackets converted using daily highs/lows on one split-adjusted basis.",
+              "Flow includes only supplied disclosures; no inferred opening balance or full exit.",
+              "Account ownership and non-split corporate actions require separate reconciliation."
+            ]
+          },
+          "eligible_for_portfolio_total": false,
+          "eligible_for_ranking": false
         }
       ],
       "current_holdings_eligible": false

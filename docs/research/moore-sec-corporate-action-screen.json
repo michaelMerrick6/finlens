@@ -1,0 +1,839 @@
+{
+  "as_of": "2026-09-17",
+  "scope": "Latest 10-Q/20-F and 2026 8-K items 2.01/3.03/5.03, forms 25 and S-4 from SEC recent submissions. Does not cover every exhibit, 6-K, older submissions archive or fund filing.",
+  "publication_enabled": false,
+  "issuers": [
+    {
+      "ticker": "AAPL",
+      "issuer": "Apple Inc.",
+      "cik": 320193,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000320193.json",
+      "submissions_sha256": "cb90ffafc5b6f997b60aa109e07008223ad35abe896ec7918fd43652b4057329",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-31",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000020/aapl-20260627.htm",
+          "sha256": "4ad5bea67cedfa7542d623900355cc8d143ef95c1acc135a597f2eedabdb9177",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2015-07-24"
+    },
+    {
+      "ticker": "AMZN",
+      "issuer": "AMAZON COM INC",
+      "cik": 1018724,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001018724.json",
+      "submissions_sha256": "e12c1f29dc9deb9202456c28d81f77602a41e190c105d6364619fc35a9ec063d",
+      "documents": [
+        {
+          "form": "S-4/A",
+          "date": "2026-08-14",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000110465926096195/tm2617924-3_s4a.htm",
+          "sha256": "a8e078471cd4e84f17c6570e36d872a7f56d503129301ef5afa5bc82c6fa05a3",
+          "keyword_hit_count": 130
+        },
+        {
+          "form": "S-4",
+          "date": "2026-07-31",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000110465926089294/tm2617924-1_s4.htm",
+          "sha256": "d5d94594a28f40b02a3de4012c5b29c589aa51451d5ddf6b0848b5b12390479e",
+          "keyword_hit_count": 131
+        },
+        {
+          "form": "10-Q",
+          "date": "2026-07-31",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000026/amzn-20260630.htm",
+          "sha256": "d07b8a88fa442c2c55bd65b3f1d336ca16e7d1e9fda831e1063d24adea60e4eb",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2020-09-30"
+    },
+    {
+      "ticker": "AMZY",
+      "status": "no-sec-ticker-mapping"
+    },
+    {
+      "ticker": "AVIR",
+      "issuer": "Atea Pharmaceuticals, Inc.",
+      "cik": 1593899,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001593899.json",
+      "submissions_sha256": "e40bf910f54632ba7b861139abf7755af95ffd8ee99fec10f38b4770feed6345",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-12",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1593899/000119312526347021/avir-20260630.htm",
+          "sha256": "8593ad3890007c691d341fe1ae53025abfbcec54b36bdd0adb3ea0caecce5c79",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2013-12-11"
+    },
+    {
+      "ticker": "BKR",
+      "issuer": "Baker Hughes Co",
+      "cik": 1701605,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001701605.json",
+      "submissions_sha256": "80530b734b519e14dc049aa0077b0f92b42ec3dbe1203b65c7dc8add50908a88",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-27",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1701605/000170160526000023/bkr-20260630.htm",
+          "sha256": "b67a319af3b69c7b117a541ee5de63b6bd141f600678c3fcb89afdcf6f128683",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-07-16",
+          "items": "1.01,1.02,2.01,2.03,7.01,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/1701605/000119312526305477/d105425d8k.htm",
+          "sha256": "3a7ef8470be5334b6c0577db8a1c7e2084bdaa6d0c7109cd7b7054c5e6193db2",
+          "keyword_hit_count": 3
+        }
+      ],
+      "recent_filings_start": "2017-03-29"
+    },
+    {
+      "ticker": "BLK",
+      "issuer": "BlackRock, Inc.",
+      "cik": 2012383,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0002012383.json",
+      "submissions_sha256": "e60c29d6f1925e597f93e8daaee226a492c1c553f43d349f921b6704ee97d96e",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-06",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/2012383/000119312526337177/blk-20260630.htm",
+          "sha256": "443cff039719ca1a5ad933708b9dc8fcafd984d867d6397fcc8e590a0c6c22e2",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2025-09-04"
+    },
+    {
+      "ticker": "BRK.B",
+      "issuer": "BERKSHIRE HATHAWAY INC",
+      "cik": 1067983,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001067983.json",
+      "submissions_sha256": "f5efd38abf95a1b7cc1286557b6263cf9f6e673cfc8c870b7c2b9304682e4a4b",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-10",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526341032/brka-20260630.htm",
+          "sha256": "114bf1fd3a066dee73cd4d5c3d9b21634ff7b34b5f9e7ee6ab945f380b1c62a2",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-05-07",
+          "items": "2.02,5.02,5.03,5.07,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526212148/d74313d8k.htm",
+          "sha256": "16518a7f41e79225f86904c5d9c3580f6aa4564004ccbeb8847785958862e1bd",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2017-01-10"
+    },
+    {
+      "ticker": "BSOL",
+      "issuer": "Bitwise Solana Staking ETF",
+      "cik": 2045872,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0002045872.json",
+      "submissions_sha256": "91337e5f59ef4e20f1c93476a4574521d48d45e23ea72470d1e255ad673d17e7",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-07",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/2045872/000119312526340160/bsol-20260630.htm",
+          "sha256": "75c16bc824eb2b6c473e298d413a78a48e97ce87520d877f6cbc226d741d754f",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2024-11-21"
+    },
+    {
+      "ticker": "CBRL",
+      "issuer": "CRACKER BARREL OLD COUNTRY STORE, INC",
+      "cik": 1067294,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001067294.json",
+      "submissions_sha256": "de542c1804867d0771b778535d67df815b90262e7034fcdef651afce77bfa009",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-06-09",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1067294/000110465926071825/cbrl-20260501x10q.htm",
+          "sha256": "915b16c0974dec56df5aadcad2dc585cde57e1b63d6323770bb22895dd14e56f",
+          "keyword_hit_count": 1
+        }
+      ],
+      "recent_filings_start": "2012-10-30"
+    },
+    {
+      "ticker": "COIN",
+      "issuer": "Coinbase Global, Inc.",
+      "cik": 1679788,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001679788.json",
+      "submissions_sha256": "7c185c66912c187879de4163569920b4d34b04771a517860cca1b992eb67615c",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-30",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1679788/000167978826000088/coin-20260630.htm",
+          "sha256": "6f3db6aeb84e14d70e5376fc83e5ac6b57c10798ee8ec6fa1c9a3a249240060a",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2022-02-24"
+    },
+    {
+      "ticker": "DASH",
+      "issuer": "DoorDash, Inc.",
+      "cik": 1792789,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001792789.json",
+      "submissions_sha256": "3243208cc66191496a21385fe33a730a92fbe3147c2ec788ca51aca41aed0f9a",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-05",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1792789/000179278926000050/dash-20260630.htm",
+          "sha256": "cc20eacc71f000cb0ba2f114557b2b61d095e0a7813460482ad5ba1a183f91ba",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2022-04-20"
+    },
+    {
+      "ticker": "DE",
+      "issuer": "DEERE & CO",
+      "cik": 315189,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000315189.json",
+      "submissions_sha256": "608a46c8a4c41ab74dcab966c29251ee656f58f0ffb3cb014c6694acb3fc1671",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-27",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/315189/000110465926102213/de-20260802x10q.htm",
+          "sha256": "ae0b091d96e724827a684e4927b4daed873e69465845743e5fa2d5514c02af9d",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2014-12-19"
+    },
+    {
+      "ticker": "DNUT",
+      "issuer": "Krispy Kreme, Inc.",
+      "cik": 1857154,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001857154.json",
+      "submissions_sha256": "9b21d1391b80ce70242b30e7c2d9eb390f1c961cdf6476e2f078b6598dc57ad5",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-06",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1857154/000185715426000046/dnut-20260628.htm",
+          "sha256": "c53a4e8f6371b35e3c21c50ba6a7da9d99636fd24a4b6db554947980c1b98fb7",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2021-04-23"
+    },
+    {
+      "ticker": "GNPX",
+      "issuer": "Genprex, Inc.",
+      "cik": 1595248,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001595248.json",
+      "submissions_sha256": "69fbf199e179c8d03383d360f14cca0b33be13ca39e39a88618716399515ed59",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-14",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926027846/gnpx20260630_10q.htm",
+          "sha256": "6f7591684ba97d22d720afda41616e2f51a58ba9098e3713e5c03309bd282cd2",
+          "keyword_hit_count": 45
+        },
+        {
+          "form": "8-K",
+          "date": "2026-07-14",
+          "items": "3.03,5.03,7.01,8.01,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/1595248/000143774926023480/gnpx20260630_8k.htm",
+          "sha256": "e0513550ce0be3a7c511cd83e82a6a6ba30aa0965449a5fd20d588510d9a4071",
+          "keyword_hit_count": 29
+        }
+      ],
+      "recent_filings_start": "2013-12-26"
+    },
+    {
+      "ticker": "GOOG",
+      "issuer": "Alphabet Inc.",
+      "cik": 1652044,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001652044.json",
+      "submissions_sha256": "9624fe558574d3c33ca6a6a0f9451a2fdba6e11e465de1d5a822d2e3d70042bc",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-23",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+          "sha256": "fecfbc2683f630380b17937278ce3745eca150eb90e21a945fd6b78fe19728c7",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-06-05",
+          "items": "1.01,3.03,5.03,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/1652044/000119312526259830/d36818d8k.htm",
+          "sha256": "36cba01d4c376ecd15e079870b8d7d17ffd1f585127d5eee9c3d756839ac4909",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2023-06-29"
+    },
+    {
+      "ticker": "HOG",
+      "issuer": "HARLEY-DAVIDSON, INC.",
+      "cik": 793952,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000793952.json",
+      "submissions_sha256": "09c31a4a3abf5b17a48fc04ea162a467b5aafcdaa5d5f372a2130f91e3c799a6",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-05",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/793952/000079395226000061/hog-20260630.htm",
+          "sha256": "61248de01de501b52351084806e9f551848aecac2e27fe8631c1e7c4bb5c1c90",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2015-02-10"
+    },
+    {
+      "ticker": "HON",
+      "issuer": "HONEYWELL INTERNATIONAL INC",
+      "cik": 773840,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000773840.json",
+      "submissions_sha256": "bb969eb537f64a604dd1b7f428333c918d0b4454930d59511feb3cfa2167705b",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-23",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000124/hon-20260630.htm",
+          "sha256": "eb593f0a7cac1222711b4c73acc5dbc2a32ffba8c62e059ad972ce191c57c074",
+          "keyword_hit_count": 70
+        },
+        {
+          "form": "8-K",
+          "date": "2026-06-29",
+          "items": "1.01,2.01,2.02,3.03,5.02,5.03,7.01,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/773840/000077384026000084/hon-20260625.htm",
+          "sha256": "b5a195314fa5a0be04873c05755d2ede1aef87d04d41bff20377fddb281c1aa0",
+          "keyword_hit_count": 21
+        },
+        {
+          "form": "25-NSE",
+          "date": "2026-04-10",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/773840/000135445726000338/xslF25X02/primary_doc.xml",
+          "sha256": "d177b49359628a94be3d22f424b42a3f8df7b6b5d7ec56cd95f5359c2526f729",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2020-04-29"
+    },
+    {
+      "ticker": "HY",
+      "issuer": "HYSTER-YALE, INC.",
+      "cik": 1173514,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001173514.json",
+      "submissions_sha256": "35a92e7c9647b264088071c046f5a1e58632149719fac8e9eedad21cc9c5d2db",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-04",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1173514/000117351426000202/hy-20260630.htm",
+          "sha256": "2e4f21b28dc730667e7cf7106a2f50b7131176f1d559a65382fce775e4c3b35e",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2021-01-26"
+    },
+    {
+      "ticker": "IHG",
+      "issuer": "INTERCONTINENTAL HOTELS GROUP PLC /NEW/",
+      "cik": 858446,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000858446.json",
+      "submissions_sha256": "1fa27464871260bec6ad164492bd6a606b1e2098e0de440e7f97f0ea44f6f370",
+      "documents": [
+        {
+          "form": "20-F",
+          "date": "2026-02-26",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/858446/000085844626000010/ihg-20251231.htm",
+          "sha256": "889c18a2ebb3998219e53395c034b883b451061536c56b4c02049567ff961665",
+          "keyword_hit_count": 3
+        }
+      ],
+      "recent_filings_start": "2003-06-12"
+    },
+    {
+      "ticker": "ITW",
+      "issuer": "ILLINOIS TOOL WORKS INC",
+      "cik": 49826,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000049826.json",
+      "submissions_sha256": "370cca865e25e38e156aa403b817b920c496705c7093c33651d2ad858140841c",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-06",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/49826/000004982626000049/itw-20260630.htm",
+          "sha256": "10e85483c9e940861f7bbb45523fcd5401e44dae0a10924201458c056480e30c",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2015-02-10"
+    },
+    {
+      "ticker": "JPM",
+      "issuer": "JPMORGAN CHASE & CO",
+      "cik": 19617,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000019617.json",
+      "submissions_sha256": "d19b851aa22bc90d99dbda7aac70c0178ac16b4109d09e08e97bd9473ba6318c",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-06",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/19617/000162828026054343/jpm-20260630.htm",
+          "sha256": "a26d1bf7303e06b74834b9d812e5be13b6132d6aa5031e11a43dc5c71bbf89c3",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-07-23",
+          "items": "5.03",
+          "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961726000288/jpm-20260721.htm",
+          "sha256": "da58977baab3be32ba75d7fa43558ec70d86d09b581cefc30adf65438dedd7b4",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-05-07",
+          "items": "3.03,5.03,8.01,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/19617/000119312526211978/d903351d8k.htm",
+          "sha256": "8adabb74e486692459424592bd14548042a36d9eb888ab466fdcf8b6d2a6e096",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-04-24",
+          "items": "5.03",
+          "source": "https://www.sec.gov/Archives/edgar/data/19617/000001961726000119/jpm-20260421.htm",
+          "sha256": "004e0d12ea15ce0df9dc4f7624b3d19e856b800bf83cbf5c0e9cf93359456d6e",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2025-09-17"
+    },
+    {
+      "ticker": "JPST",
+      "status": "no-sec-ticker-mapping"
+    },
+    {
+      "ticker": "LGIH",
+      "issuer": "LGI Homes, Inc.",
+      "cik": 1580670,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001580670.json",
+      "submissions_sha256": "374189a8eff7c78b59785fd9f0d81a75f0161ef0754fb67732f43e7bf47a84c6",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-04",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1580670/000158067026000072/lgih-20260630.htm",
+          "sha256": "4adea5b1694da2d68190f02698bd82c13e49c051c14d38094db5c04092fb9d17",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2013-07-10"
+    },
+    {
+      "ticker": "MS",
+      "issuer": "MORGAN STANLEY",
+      "cik": 895421,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000895421.json",
+      "submissions_sha256": "e79746230ca72d9f2cbd73588a87c782e6fcf7a9f7b9d6c623313c664526b7bd",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-04",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/895421/000089542126000212/ms-20260630.htm",
+          "sha256": "7fb93ae56c753c2cea19667e980ce88dfd9e2650c8926ac00a2262c97b24c94e",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "25-NSE",
+          "date": "2026-02-23",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/895421/000087666126000160/xslF25X02/primary_doc.xml",
+          "sha256": "0111dc9ba67a2e9f23d32d5225ca6ed0646ebf5d9c7d39b321dcfe521c0f9dd3",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2025-09-17"
+    },
+    {
+      "ticker": "MSFT",
+      "issuer": "MICROSOFT CORP",
+      "cik": 789019,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000789019.json",
+      "submissions_sha256": "14c55f17f1043b0ddfb47e57495567ddb5c042f8b1a987e69c488287e48fdd0c",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-04-29",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/789019/000119312526191507/msft-20260331.htm",
+          "sha256": "76945a2c148afb8521cff13adcd320e99a8c09bcb1a2541b5d0ed5a2b02adf2d",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2020-08-03"
+    },
+    {
+      "ticker": "MSTY",
+      "status": "no-sec-ticker-mapping"
+    },
+    {
+      "ticker": "NVDA",
+      "issuer": "NVIDIA CORP",
+      "cik": 1045810,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001045810.json",
+      "submissions_sha256": "a80c83198833a5ddbed1bf39df36f570643824c28d3562f37ad5b5b147da70db",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-26",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+          "sha256": "e2634e509c241c5f45e3f6c115dc38a85645e5fdbee760b4a04f5e9035f6f7a9",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2020-07-13"
+    },
+    {
+      "ticker": "RSG",
+      "issuer": "REPUBLIC SERVICES, INC.",
+      "cik": 1060391,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001060391.json",
+      "submissions_sha256": "0649fc84515fa9e030df9e8037a8560bfe2f568b0cb14d5a1c631419ccc7a7d0",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-07",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1060391/000106039126000275/rsg-20260630.htm",
+          "sha256": "ed621f431975615ad1a087ca728b662b7b95ef1aef29d07f3343052636c4fdb0",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-02-17",
+          "items": "5.03",
+          "source": "https://www.sec.gov/Archives/edgar/data/1060391/000106039126000072/rsg-20260210.htm",
+          "sha256": "131a76e2a8623b44a4ede21b4d4c3e4f7b98e6d46549c3f1d6c8ff68c17b93bb",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2021-04-02"
+    },
+    {
+      "ticker": "RYCEY",
+      "status": "no-sec-ticker-mapping"
+    },
+    {
+      "ticker": "SMCY",
+      "status": "no-sec-ticker-mapping"
+    },
+    {
+      "ticker": "SMPL",
+      "issuer": "Simply Good Foods Co",
+      "cik": 1702744,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001702744.json",
+      "submissions_sha256": "58769415456435f1ef8f938fbb554d90f03cec71e6825323aabbac51a481a7b1",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-09",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1702744/000170274426000023/atk-20260530.htm",
+          "sha256": "4f8d6f837448ef9a0c147527cd5d42b29e1fd8b054298a6e1b36bff17abf917c",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2017-04-11"
+    },
+    {
+      "ticker": "T",
+      "issuer": "AT&T INC.",
+      "cik": 732717,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000732717.json",
+      "submissions_sha256": "84eccf0171172ec4fe29525f0b3c7338b8268677e7ea36781301a1d912c7c56f",
+      "documents": [
+        {
+          "form": "25-NSE",
+          "date": "2026-09-08",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/732717/000087666126000719/xslF25X02/primary_doc.xml",
+          "sha256": "d216e325e00fff70d21297f716aceac35a57bb4e13679124b2734195875136a8",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "10-Q",
+          "date": "2026-07-22",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/732717/000073271726000297/t-20260630.htm",
+          "sha256": "863666dc564189add1f0eda2ccf30652bacd7f87ff59307ea783dac680d77254",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-05-20",
+          "items": "5.02,5.03,5.07,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/732717/000119312526232817/d227921d8k.htm",
+          "sha256": "e6c23279c5cf55ea83bd6b15940d9782659c8a5c0c59278361ae1f3405f720d8",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "25-NSE",
+          "date": "2026-03-04",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/732717/000087666126000208/xslF25X02/primary_doc.xml",
+          "sha256": "0c5442da46f625a98a18ac3931a4cd5bbcb17855a0c9821aaae1f56c4a911313",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2022-06-02"
+    },
+    {
+      "ticker": "TZA",
+      "status": "no-sec-ticker-mapping"
+    },
+    {
+      "ticker": "UPS",
+      "issuer": "UNITED PARCEL SERVICE INC",
+      "cik": 1090727,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001090727.json",
+      "submissions_sha256": "793f90142dea33161094673bfbb66236de5cebfa84ddd19bc86fa226bf6afb92",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-05",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1090727/000162828026053249/ups-20260630.htm",
+          "sha256": "c2777f461c8359906248b04ec5e8b690a307c8976288ac517effd735658275a8",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2016-04-28"
+    },
+    {
+      "ticker": "USFD",
+      "issuer": "US Foods Holding Corp.",
+      "cik": 1665918,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001665918.json",
+      "submissions_sha256": "f5b39c8cfeb347b02def6038c669bd2fb1c27db57bb86f04eebcbc278a8717de",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-08-06",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1665918/000166591826000045/usfd-20260627.htm",
+          "sha256": "8ef3602c3d807a22d9d3672c8303f46ddb9fc5dd4e57a8c5c6c761678cf3e37d",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-05-15",
+          "items": "5.03,5.07,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/1665918/000166591826000038/usfd-20260514.htm",
+          "sha256": "308f5dfb81a242dcf02d0a9665a349b9f0b8f55caf108de7c802426a6f1a88ad",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2016-06-07"
+    },
+    {
+      "ticker": "V",
+      "issuer": "VISA INC.",
+      "cik": 1403161,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0001403161.json",
+      "submissions_sha256": "9909129e9ac5c5599522781265ffa2cd05046dc05f402fc039a2b1eda05d4bd5",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-29",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000104/v-20260630.htm",
+          "sha256": "453a586f19f4b9dc4e9d212c4f340fcc9aa14a96bb8510577f82e0560cc8269e",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-07-15",
+          "items": "5.03,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000096/v-20260714.htm",
+          "sha256": "c02dbc25bc3c0592d60b1782a3c7b29ac9df7a77b330f2fb92a998f32eab968f",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "25-NSE",
+          "date": "2026-06-15",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1403161/000087666126000531/xslF25X02/primary_doc.xml",
+          "sha256": "29195bafd9b36f2d09bac1df8cf3c56e123b8746a7aa3fce391c9c16e2062be2",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "S-4/A",
+          "date": "2026-04-06",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1403161/000119312526143849/d124284ds4a.htm",
+          "sha256": "000578eeac945763865841d83cad9d8202b4fa86300dda651b21bb02d9b8c3b3",
+          "keyword_hit_count": 13
+        },
+        {
+          "form": "S-4",
+          "date": "2026-03-05",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/1403161/000119312526094117/d124284ds4.htm",
+          "sha256": "ad459ae9aabaedf770acd0cd53ac1da846a158225d5a17522e932d1f1a11f590",
+          "keyword_hit_count": 13
+        },
+        {
+          "form": "8-K",
+          "date": "2026-01-28",
+          "items": "5.03,5.07",
+          "source": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000029/v-20260127.htm",
+          "sha256": "10dd8f353a27680beda06d5b34fe95ffb795e05b615a981a6b5daf066653e8dd",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2015-01-29"
+    },
+    {
+      "ticker": "VZ",
+      "issuer": "VERIZON COMMUNICATIONS INC",
+      "cik": 732712,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000732712.json",
+      "submissions_sha256": "56ee743b36ba2675f277fcae26d97170a547e81848d3602c85548813cc74faa1",
+      "documents": [
+        {
+          "form": "10-Q",
+          "date": "2026-07-31",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/732712/000073271226000046/vz-20260630.htm",
+          "sha256": "bef955f7946430f4463a1bc5ab383faeff8d9fec39880d628621885dfd611eb7",
+          "keyword_hit_count": 2
+        }
+      ],
+      "recent_filings_start": "2023-11-30"
+    },
+    {
+      "ticker": "WMT",
+      "issuer": "Walmart Inc.",
+      "cik": 104169,
+      "status": "filings-screened-not-blanket-clearance",
+      "submissions_source": "https://data.sec.gov/submissions/CIK0000104169.json",
+      "submissions_sha256": "878850d9f8d2193e6f1a3d3e28c003ecb4b31c9721bbe3b04d9be0e250b7def3",
+      "documents": [
+        {
+          "form": "25-NSE",
+          "date": "2026-09-16",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/104169/000135445726000882/xslF25X02/primary_doc.xml",
+          "sha256": "88c8a1723f53872d14e2765fddd9abc15335a484d8e5a21f6fc38be90fbc997c",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "10-Q",
+          "date": "2026-08-28",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000154/wmt-20260731.htm",
+          "sha256": "2ced9efbff155829771aed8b8aaeef0fab3a66ea6c1d95031953245cb071c5f6",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "8-K",
+          "date": "2026-06-05",
+          "items": "5.03,5.07,9.01",
+          "source": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000111/wmt-20260604.htm",
+          "sha256": "ca75ff4fa3eff767dbdc2409358f22a76961483cf29b1528e9b6a17f7395f86e",
+          "keyword_hit_count": 0
+        },
+        {
+          "form": "25-NSE",
+          "date": "2026-04-07",
+          "items": "",
+          "source": "https://www.sec.gov/Archives/edgar/data/104169/000135445726000333/xslF25X02/primary_doc.xml",
+          "sha256": "c229a6f21fc165ef9eba75426e6803296bcaedd141eaf605f73d0b12a4f17656",
+          "keyword_hit_count": 0
+        }
+      ],
+      "recent_filings_start": "2023-05-02"
+    }
+  ]
+}

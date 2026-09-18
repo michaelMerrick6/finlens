@@ -1,0 +1,912 @@
+{
+  "asOf": "2026-09-17",
+  "baselineDate": "2025-12-31",
+  "status": "partial-estimate",
+  "fullyVerified": false,
+  "rows": [
+    {
+      "ticker": "TZA",
+      "name": "Direxion Small Cap Bear 3X Shares (TZA)",
+      "minShares": 3328,
+      "maxShares": 6657.789749120918,
+      "minValue": 149427.205078125,
+      "maxValue": 298934.76989451016,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 3,
+          "reportedRange": "$250,001 - $500,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "Single modeled account; fractional custody or issuer rounding/cash-out allowed conservatively. Actual broker treatment and cash proceeds are unknown."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "BSOL",
+      "name": "Bitwise Solana Staking ETF (BSOL)",
+      "minShares": 6097.622093052331,
+      "maxShares": 15243.902793602892,
+      "minValue": 82134.97122165567,
+      "maxValue": 205335.37470039216,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 3,
+          "reportedRange": "$100,001 - $250,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "LGIH",
+      "name": "LGI Homes, Inc. - Common Stock (LGIH)",
+      "minShares": 0,
+      "maxShares": 4418.8923820076025,
+      "minValue": 0.0,
+      "maxValue": 216658.288095677,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 4,
+          "reportedRange": "None",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "HOG",
+      "name": "Harley-Davidson, Inc. Common Stock (HOG)",
+      "minShares": 0,
+      "maxShares": 5371.772153775339,
+      "minValue": 0.0,
+      "maxValue": 144178.36542699748,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 3,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation (NVDA)",
+      "minShares": 0,
+      "maxShares": 451.0664837177999,
+      "minValue": 0.0,
+      "maxValue": 96483.11811414607,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 6,
+          "reportedRange": "$50,001 - $100,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "DE",
+      "name": "Deere & Company (DE)",
+      "minShares": 32.22071818203151,
+      "maxShares": 107.39523425782119,
+      "minValue": 21570.803257358282,
+      "maxValue": 71897.8843322388,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "BKR",
+      "name": "Baker Hughes Company - Common Stock (BKR)",
+      "minShares": 329.4027162587353,
+      "maxShares": 1097.9358584718861,
+      "minValue": 18551.960879166243,
+      "maxValue": 61835.74721407319,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "USFD",
+      "name": "US Foods Holding Corp. Common Stock (USFD)",
+      "minShares": 199.16356958018983,
+      "maxShares": 663.8343096466563,
+      "minValue": 18424.622247322648,
+      "maxValue": 61411.31340351525,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 6,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc. (AAPL)",
+      "minShares": 55.1791392933428,
+      "maxShares": 183.91820309760283,
+      "minValue": 18342.09789457212,
+      "maxValue": 61136.25056520273,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "MS",
+      "name": "Morgan Stanley (MS)",
+      "minShares": 84.49839521854028,
+      "maxShares": 281.6425412257192,
+      "minValue": 17104.16500541574,
+      "maxValue": 57010.08267920718,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 6,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "JPM",
+      "name": "JP Morgan Chase & Co. (JPM)",
+      "minShares": 46.5551484798274,
+      "maxShares": 155.1734833672002,
+      "minValue": 16244.023032711544,
+      "maxValue": 54143.13390011181,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "GOOG",
+      "name": "Alphabet Inc. - Class C Capital Stock (GOOG)",
+      "minShares": 47.80433583030281,
+      "maxShares": 159.33716362343446,
+      "minValue": 16222.878707112737,
+      "maxValue": 54072.657513208236,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com, Inc. (AMZN)",
+      "minShares": 64.99003346329944,
+      "maxShares": 216.61900361075743,
+      "minValue": 15984.949066967583,
+      "maxValue": 53279.611582453115,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc. (V)",
+      "minShares": 42.77323248693773,
+      "maxShares": 142.56793709398616,
+      "minValue": 15865.8748130993,
+      "maxValue": 52882.72386207353,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 6,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "RSG",
+      "name": "Republic Services, Inc. Common Stock (RSG)",
+      "minShares": 70.78280808959926,
+      "maxShares": 235.926965167653,
+      "minValue": 15558.061434105904,
+      "maxValue": 51856.74766384209,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 6,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. New (BRK.B)",
+      "minShares": 29.84382807550437,
+      "maxShares": 99.47279539865465,
+      "minValue": 15512.821469342629,
+      "maxValue": 51705.957833953165,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "CBRL",
+      "name": "Cracker Barrel Old Country Store, Inc. - Common Stock (CBRL)",
+      "minShares": 0,
+      "maxShares": 1543.7423910984016,
+      "minValue": 0.0,
+      "maxValue": 66720.54802772409,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 3,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation (MSFT)",
+      "minShares": 31.01815506276795,
+      "maxShares": 103.3869577453768,
+      "minValue": 15208.201048635538,
+      "maxValue": 50690.62412051042,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "BLK",
+      "name": "BlackRock, Inc. Common Stock (BLK)",
+      "minShares": 14.0151731963995,
+      "maxShares": 46.714129712684155,
+      "minValue": 14537.098109366492,
+      "maxValue": 48453.76344699184,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc. (WMT)",
+      "minShares": 134.64679568179434,
+      "maxShares": 448.79273275713064,
+      "minValue": 14474.530535792892,
+      "maxValue": 48245.21877139154,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 6,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "VZ",
+      "name": "Verizon Communications Inc. Common Stock (VZ)",
+      "minShares": 0,
+      "maxShares": 891.4771858256472,
+      "minValue": 0.0,
+      "maxValue": 44359.90327036935,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 4,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "DASH",
+      "name": "DoorDash, Inc. - Common Stock (DASH)",
+      "minShares": 0,
+      "maxShares": 214.5889773490538,
+      "minValue": 0.0,
+      "maxValue": 42222.52600442737,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "COIN",
+      "name": "Coinbase Global, Inc. - Class A Common Stock (COIN)",
+      "minShares": 0,
+      "maxShares": 215.345129187685,
+      "minValue": 0.0,
+      "maxValue": 35426.426019739934,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "MSTY",
+      "name": "YieldMax MSTR Option Income Strategy ETF (MSTY)",
+      "minShares": 506.7905340092822,
+      "maxShares": 1689.1891674197793,
+      "minValue": 7216.697088297031,
+      "maxValue": 24054.05335743294,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 4,
+          "reportedRange": "$15,001 - $50,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "AVIR",
+      "name": "Atea Pharmaceuticals, Inc. - common stock (AVIR)",
+      "minShares": 280.3921621059373,
+      "maxShares": 4201.680750838222,
+      "minValue": 1444.0196615858574,
+      "maxValue": 21638.656267520342,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 3,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "SMCY",
+      "name": "YieldMax SMCI Option Income Strategy ETF (SMCY)",
+      "minShares": 247.16048218713067,
+      "maxShares": 3703.7035292776823,
+      "minValue": 1258.0468920461917,
+      "maxValue": 18851.851529163712,
+      "accounts": [
+        {
+          "account": "Robinhood",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 2,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        },
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 4,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "ITW",
+      "name": "Illinois Tool Works Inc. (ITW)",
+      "minShares": 4.064149360930574,
+      "maxShares": 60.90133907488373,
+      "minValue": 1086.4689940852522,
+      "maxValue": 16280.754157121663,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "UPS",
+      "name": "United Parcel Service, Inc. (UPS)",
+      "minShares": 10.091742870873635,
+      "maxShares": 151.22491814495956,
+      "minValue": 996.7614094788782,
+      "maxValue": 14936.484657525647,
+      "accounts": [
+        {
+          "account": "Edward Jones",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 2,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "JPST",
+      "name": "JPMorgan Ultra-Short Income ETF (JPST)",
+      "minShares": 19.786519015236546,
+      "maxShares": 296.5012839446036,
+      "minValue": 996.2512022253281,
+      "maxValue": 14928.839194185735,
+      "accounts": [
+        {
+          "account": "TradeWinds",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 5,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "AMZY",
+      "name": "YieldMax AMZN Option Income Strategy ETF (AMZY)",
+      "minShares": 75.37650753973637,
+      "maxShares": 1129.5180950010445,
+      "minValue": 767.3328697576007,
+      "maxValue": 11498.4945518122,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 4,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "DNUT",
+      "name": "Krispy Kreme, Inc. - Common Stock (DNUT)",
+      "minShares": 0,
+      "maxShares": 1106.4894146765864,
+      "minValue": 0.0,
+      "maxValue": 3441.181963568825,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 4,
+          "reportedRange": "None",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "GNPX",
+      "name": "Genprex, Inc. - Common Stock (GNPX)",
+      "minShares": 46.40358687280753,
+      "maxShares": 749,
+      "minValue": 158.2362352191255,
+      "maxValue": 2554.0900642871857,
+      "accounts": [
+        {
+          "account": "Schwab One",
+          "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+          "page": 3,
+          "reportedRange": "$1,001 - $15,000",
+          "priceDate": "2026-09-16",
+          "assumptions": [
+            "Annual dollar bracket converted at year-end closing price.",
+            "Trade quantities bounded using daily high/low on the same split basis.",
+            "Only supplied, reconciled events included; unreported changes remain possible.",
+            "Corporate actions other than splits require separate reconciliation.",
+            "Single modeled account; fractional custody or issuer rounding/cash-out allowed conservatively. Actual broker treatment and cash proceeds are unknown.",
+            "PTR account is omitted; attribution to this account is inferred from the unique matching annual position."
+          ]
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "ticker": "HY",
+      "name": "Hyster-Yale, Inc. Class A common stock (HY)",
+      "reason": "Conflicting year-end and transaction disclosures.",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "HON",
+      "name": "Honeywell International Inc. (HON)",
+      "reason": "Corporate-action scenario exists, but retained shares and valuation are not established.",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 5
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc. (T) [ST]",
+      "reason": "Disclosed transactions are recorded, but the opening share balance is unknown.",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033856.pdf",
+      "page": 1
+    },
+    {
+      "ticker": "SMPL",
+      "name": "The Simply Good Foods Company - Common Stock (SMPL) [ST]",
+      "reason": "Disclosed transactions are recorded, but the opening share balance is unknown.",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034034.pdf",
+      "page": 1
+    },
+    {
+      "ticker": "IHG",
+      "name": "Intercontinental Hotels Group American Depositary Shares (IHG) [ST]",
+      "reason": "Disclosed transactions are recorded, but the opening share balance is unknown.",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+      "page": 1
+    },
+    {
+      "ticker": "RYCEY",
+      "name": "ROLLS ROYCE HLDGS S/ADR (RYCEY) [ST]",
+      "reason": "Disclosed transactions are recorded, but the opening share balance is unknown.",
+      "source": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034587.pdf",
+      "page": 1
+    }
+  ],
+  "closed": [
+    {
+      "ticker": "AAL",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3
+    },
+    {
+      "ticker": "AAPL",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3
+    },
+    {
+      "ticker": "CNC",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3
+    },
+    {
+      "ticker": "TNA",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3
+    },
+    {
+      "ticker": "F",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3
+    },
+    {
+      "ticker": "QYLD",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 3
+    },
+    {
+      "ticker": "INTC",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "TQQQ",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "SMCYY",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "SMCI",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "UNH",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "WKHS",
+      "account": "Schwab One",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 4
+    },
+    {
+      "ticker": "CL",
+      "account": "Wells Fargo",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6
+    },
+    {
+      "ticker": "GD",
+      "account": "Wells Fargo",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6
+    },
+    {
+      "ticker": "PG",
+      "account": "Wells Fargo",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6
+    },
+    {
+      "ticker": "ROK",
+      "account": "Wells Fargo",
+      "source": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/2025/10075481.pdf",
+      "page": 6
+    }
+  ],
+  "subtotalMin": 479088.07815344556,
+  "subtotalMax": 2057125.4421853747
+}
