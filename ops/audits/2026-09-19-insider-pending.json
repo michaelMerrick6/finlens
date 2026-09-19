@@ -247,5 +247,6 @@
       "source_url": "https://www.sec.gov/Archives/edgar/data/2115232/000119312526394803/0001193125-26-394803.txt",
       "updated_at": "2026-09-17T20:48:23-04:00"
     }
-  ]
+  ],
+  "resolution": "All 41 filings completed by durable worker on 2026-09-19; 70 records published, queue empty. See insider-recovery-complete audit."
 }

@@ -40,3 +40,12 @@ review; these operational protections do not certify that backlog as complete.
 
 Tests: `test_sec_recovery_worker.py`, `test_sec_recovery_postgres.py`, and the existing
 SEC/parser/audit tests. Set `VAIL_TEST_POSTGRES_DSN` only to an isolated test database.
+
+## Production verification
+
+The new worker completed all 41 previously rate-limited filings and published
+70 records, with zero parsing failures and no queue items remaining. The final
+source/database comparison matched all 529 checked filings (449 recent feed
+filings plus 80 existing accessions), with zero mismatches or parse failures.
+Backend and frontend checks passed on 3a36cae; the later workflow-only retry
+configuration change was still running CI at this verification point.
