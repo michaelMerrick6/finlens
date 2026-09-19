@@ -1,4 +1,5 @@
 import json
+import hashlib
 import os
 import re
 from collections import defaultdict
@@ -586,6 +587,7 @@ def parse_13f_filing(session, filing: dict[str, str], resolver: SecTickerResolve
     return {
         "fund_name": filing["fund_name"],
         "amendment_type": amendment_type,
+        "source_sha256": hashlib.sha256(text.encode()).hexdigest(),
         "accession": filing.get("accession"),
         "report_period": report_period,
         "published_date": filing.get("filed_date"),

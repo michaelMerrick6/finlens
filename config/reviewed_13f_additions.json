@@ -1,0 +1,20 @@
+[
+  {
+    "report_period": "2025-03-31",
+    "baseline": {
+      "accession": "0000950123-25-005701",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095012325005701/0000950123-25-005701.txt",
+      "sha256": "d9c5a10bd60999519d288c7347ce598be49b38d2c2bfe9d7c5d08b9dd6775a45"
+    },
+    "amendment": {
+      "accession": "0000950123-25-008361",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095012325008361/0000950123-25-008361.txt",
+      "sha256": "c9f62a5e7fd0473f8ace8c70929a348c4f3fe13f1b192752cd0c4e0346bbdca3"
+    },
+    "overlap_tickers": [
+      "LEN-B"
+    ],
+    "reason": "NEW HOLDINGS amendment releases confidential entries; Form 13F Confidential Treatment Instruction 4 and Special Instruction 3 require additions, not restatement. Same CUSIP 526057302, CL B: 152572 original shares plus 202 newly disclosed shares = 152774.",
+    "instruction_source": "https://www.sec.gov/files/form13f.pdf"
+  }
+]

@@ -518,18 +518,29 @@ def first_name_tokens_match(first_tokens: list[str], member_first_name: str) -> 
     return False
 
 
-def member_matches_chamber(member: dict, target_chamber: str) -> bool:
+# Reviewed House service through the last full calendar year before Senate service.
+# https://history.house.gov/People/Detail/15032440317 (Banks, 2017–2025)
+# https://history.house.gov/People/Detail/15032409715 (Gallego, 2015–2025)
+# Conservative year bounds: transition-year filings still need individual review.
+REVIEWED_HOUSE_YEARS = {"B001299": (2017, 2024), "G000574": (2015, 2024)}
+
+
+def member_matches_chamber(member: dict, target_chamber: str, filing_year: int | None = None) -> bool:
     chamber = (member.get("chamber") or "").strip().lower()
     if not chamber or chamber == "both":
         return True
-    return chamber == target_chamber.lower()
+    if chamber == target_chamber.lower():
+        return True
+    years = REVIEWED_HOUSE_YEARS.get(member.get("id"))
+    return bool(target_chamber.lower() == "house" and years and filing_year is not None
+                and years[0] <= filing_year <= years[1])
 
 
 def is_placeholder_member(member: dict) -> bool:
     return str(member.get("id") or "").startswith("unknown-")
 
 
-def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], target_chamber: str = "House") -> str:
+def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], target_chamber: str = "House", *, filing_year: int | None = None) -> str:
     # Credentials in the Clerk index are not part of the surname (e.g. Dunn, MD, FACS).
     last_name = re.sub(r",\s*(?:MD|FACS)(?:\s*,\s*(?:MD|FACS))*\s*$", "", last_name, flags=re.I)
     first_tokens = normalize_name_tokens(first_name)
@@ -539,7 +550,7 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
     for member in members_db:
         if is_placeholder_member(member):
             continue
-        if not member_matches_chamber(member, target_chamber):
+        if not member_matches_chamber(member, target_chamber, filing_year):
             continue
         # Official sources can split a compound surname at different boundaries.
         # Require the same complete token sequence and retain ambiguity handling.
@@ -1116,7 +1127,7 @@ def extract_transactions_from_scanned_house_pdf(
     except Exception as exc:
         raise HouseScanReviewRequired(f"Cannot render scanned House PDF {doc_id}") from exc
 
-    member_id = resolve_member_id(first_name, last_name, members_db)
+    member_id = resolve_member_id(first_name, last_name, members_db, filing_year=tx_year)
     transactions: list[dict] = []
 
     if not images:
@@ -1250,7 +1261,7 @@ def extract_transactions_from_lines(
     company_lookup: list[dict] | None = None,
 ) -> list[dict]:
     filtered_lines = [line for line in lines if line and not should_skip_house_line(line)]
-    member_id = resolve_member_id(first_name, last_name, members_db)
+    member_id = resolve_member_id(first_name, last_name, members_db, filing_year=tx_year)
 
     transactions: list[dict] = []
 
@@ -1341,7 +1352,7 @@ def extract_transactions_from_layout_lines(
     company_lookup: list[dict] | None = None,
 ) -> list[dict]:
     filtered_lines = [normalize_line(line) for line in lines if normalize_line(line)]
-    member_id = resolve_member_id(first_name, last_name, members_db)
+    member_id = resolve_member_id(first_name, last_name, members_db, filing_year=tx_year)
 
     transactions: list[dict] = []
 

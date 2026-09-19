@@ -1,5 +1,21 @@
 """Build effective quarter snapshots without treating additions as restatements."""
 from copy import deepcopy
+import json
+from pathlib import Path
+
+
+def reviewed_addition(state, entry, overlap):
+    reviews = json.loads((Path(__file__).resolve().parents[1] / 'config' / 'reviewed_13f_additions.json').read_text())
+    for review in reviews:
+        if review['report_period'] != entry['report_period'] or set(review['overlap_tickers']) != overlap:
+            continue
+        if all(parsed.get('accession') == source['accession']
+               and parsed.get('source_sha256') == source['sha256']
+               and parsed.get('source_url') == source['source_url']
+               for parsed, source in [(state, review['baseline']), (entry, review['amendment'])]):
+            return True
+    return False
+
 
 
 def compose_periods(filings, max_periods=8):
@@ -26,13 +42,27 @@ def compose_periods(filings, max_periods=8):
                         return row.get('ticker') or row.get('_asset_key') or row.get('_cusip')
                     existing = {key(row) for row in state['holdings']}
                     additions = {key(row) for row in entry['holdings']}
-                    if None in existing or None in additions or existing & additions:
+                    overlap = existing & additions
+                    if None in existing or None in additions or (overlap and not reviewed_addition(state, entry, overlap)):
                         raise ValueError('Overlapping or unidentified amendment holdings require source review')
-                    state['holdings'].extend(deepcopy(entry['holdings']))
+                    by_key = {key(row): row for row in state['holdings']}
+                    for row in deepcopy(entry['holdings']):
+                        if key(row) in overlap:
+                            current = by_key[key(row)]
+                            if not current.get('_cusip') or current['_cusip'] != row.get('_cusip') or current.get('_share_class') != row.get('_share_class'):
+                                raise ValueError('Reviewed amendment security identity changed')
+                            current['shares_held'] += row['shares_held']
+                            current['value_held'] += row['value_held']
+                            current['_source_urls'] = [current['source_url'], row['source_url']]
+                            current['source_url'] = row['source_url']
+                            current['_accession'] = entry.get('accession')
+                        else:
+                            state['holdings'].append(row)
                     for field in ('rows_seen','rows_supported','rows_skipped','rows_resolved','rows_unresolved'):
                         state[field] = int(state.get(field,0)) + int(entry.get(field,0))
                     state['published_date'] = entry['published_date']
                     state['accession'] = entry.get('accession')
+                    state['source_sha256'] = None
                 else:
                     raise ValueError('Unknown amendment type')
             if state:

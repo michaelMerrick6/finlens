@@ -84,6 +84,20 @@ class ReviewedFilingsTests(unittest.TestCase):
         self.assertEqual(trades[1]['asset_name'], trades[4]['asset_name'])
         self.assertEqual(trades[2]['transaction_date'], '2026-08-06')
 
+    def test_fetterman_cover_letter_and_examples_are_not_trades(self):
+        key = 'senate-3b1affbf-2359-4fef-980d-1d2600cb8731'
+        data = reviewed.load_reviewed_filing(key)
+        trades = reviewed.reviewed_trades(key, data)
+        self.assertEqual(len(data['image_rgb_sha256']), 2)
+        self.assertEqual([(r['page'], r['row']) for r in data['rows']], [(2, 1), (2, 2)])
+        self.assertEqual(len(trades), 2)
+        self.assertEqual({r['asset_type'] for r in trades}, {'Bond'})
+        self.assertEqual({r['ticker'] for r in trades}, {'N/A'})
+        self.assertEqual({r['transaction_type'] for r in trades}, {'buy'})
+        self.assertEqual({r['transaction_date'] for r in trades}, {'2024-06-06', '2024-06-21'})
+        with self.assertRaisesRegex(ValueError, 'source changed'):
+            reviewed.reviewed_senate_trades(key, [], 'F000479', '2024-07-12')
+
     def test_empty_review_requires_explicit_evidence_and_unchanged_source(self):
         key = 'house-2026-9116311'
         data = reviewed.load_reviewed_filing(key)

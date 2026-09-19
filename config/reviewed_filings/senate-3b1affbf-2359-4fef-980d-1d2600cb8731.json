@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "source_url": "https://efdsearch.senate.gov/search/view/paper/3b1affbf-2359-4fef-980d-1d2600cb8731/",
+  "image_rgb_sha256": [
+    "5b036ec2c5e1e19b574f7a783931bf4fb7f453e79e679cfee7b2d96a0bf9718d",
+    "d684e462bf9e961c4f23fc61a6e77882bf82ab3da244753738947112e3d55d89"
+  ],
+  "published_date": "2024-07-12",
+  "member_id": "F000479",
+  "politician_name": "John Fetterman",
+  "chamber": "Senate",
+  "row_count": 2,
+  "review_note": "Both original Senate images visually reviewed. Page 1 is counsel cover letter, page 2 contains two dependent-child bond purchases in rows 1 and 2. Both purchase boxes and first amount band marked. Example IBM and Microsoft entries excluded. Coupon and maturity identify bonds; no equity ticker inferred. Cover letter corroborates both transaction dates.",
+  "rows": [
+    {
+      "page": 2,
+      "row": 1,
+      "owner": "DC",
+      "asset_name": "Nokia Corp Note; CPN 6.625%; Matures 05/15/2039",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2024-06-06",
+      "transaction_type": "buy",
+      "amount_range": "$1,001 - $15,000"
+    },
+    {
+      "page": 2,
+      "row": 2,
+      "owner": "DC",
+      "asset_name": "Freeport McMoran Inc.; CPN 9.5%; Matures 06/01/2031",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2024-06-21",
+      "transaction_type": "buy",
+      "amount_range": "$1,001 - $15,000"
+    }
+  ]
+}

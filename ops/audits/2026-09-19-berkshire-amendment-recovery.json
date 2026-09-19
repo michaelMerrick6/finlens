@@ -1,0 +1,31 @@
+{
+  "fund": "Berkshire Hathaway Inc",
+  "report_period": "2025-03-31",
+  "stored_rows": 38,
+  "rows_supported": 114,
+  "rows_resolved": 102,
+  "rows_unresolved": 12,
+  "len_b": {
+    "fund_name": "Berkshire Hathaway Inc",
+    "ticker": "LEN-B",
+    "report_period": "2025-03-31",
+    "published_date": "2025-08-14",
+    "shares_held": 152774,
+    "value_held": 16663060,
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000095012325008361/0000950123-25-008361.txt",
+    "_issuer_name": "LENNAR CORP",
+    "_title_of_class": "CL B",
+    "_cusip": "526057302",
+    "_share_class": "B",
+    "_asset_key": "LEN-B",
+    "_accession": "0000950123-25-008361",
+    "_source_urls": [
+      "https://www.sec.gov/Archives/edgar/data/1067983/000095012325005701/0000950123-25-005701.txt",
+      "https://www.sec.gov/Archives/edgar/data/1067983/000095012325008361/0000950123-25-008361.txt"
+    ],
+    "qoq_change_shares": 202,
+    "qoq_change_percent": 0.13
+  },
+  "database_readback_matches": true,
+  "composition_review": "config/reviewed_13f_additions.json"
+}

@@ -52,6 +52,19 @@ class MemberResolutionTests(unittest.TestCase):
             self.assertEqual(house.resolve_member_id('Anna','Paulina Luna',rows),'L000596')
             self.assertTrue(house.resolve_member_id('Other','Dunn, MD, FACS',rows).startswith('unknown-'))
 
+    def test_historical_house_service_does_not_change_current_chamber(self):
+        rows = [dict(id='B001299', first_name='Jim', last_name='Banks', chamber='Senate'),
+                dict(id='G000574', first_name='Ruben', last_name='Gallego', chamber='Senate')]
+        with read_only_parser_scope(), patch.object(house, 'supabase') as db:
+            for first, last, expected in [('James E Hon', 'Banks', 'B001299'),
+                                           ('Ruben', 'Gallego', 'G000574')]:
+                self.assertEqual(house.resolve_member_id(first, last, rows, filing_year=2024), expected)
+                for year in (None, 2010, 2025, 2026):
+                    self.assertTrue(house.resolve_member_id(first, last, rows, filing_year=year).startswith('unknown-'))
+                self.assertTrue(house.resolve_member_id('Other', last, rows, filing_year=2024).startswith('unknown-'))
+            db.table.assert_not_called()
+        self.assertTrue(all(row['chamber'] == 'Senate' for row in rows))
+
     def test_missing_first_name_stays_unresolved(self):
         for result in self.resolve('', [{'id': 'A000001', 'first_name': 'Alex', 'last_name': 'Smith'}]):
             self.assertTrue(result.startswith('unknown-'))

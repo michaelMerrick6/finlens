@@ -80,3 +80,66 @@ All 63 pipeline test files passed. The focused 13F suite passed 23 tests after t
 final changes. Next: historical-chamber identity cases, source-specific paper form
 layouts, Berkshire's overlapping amendment entries, and unresolved fund security
 identities. Do not loosen parser validation merely to empty the queue.
+
+## Follow-up source review
+
+### Banks and Gallego historical House filings
+
+Resolved `house-2024-20025626` (Jim / James E. Banks, B001299) and
+`house-2024-20025670` (Ruben Gallego, G000574) using their reviewed House service
+windows. Current Senate roster affiliations are unchanged. No cross-chamber
+surname fallback was added; filings outside the reviewed years remain unresolved.
+Three existing transaction rows were reparsed and atomically republished, not
+three new trades. Both filing ledgers now report complete.
+
+Sources: [Banks House service](https://history.house.gov/People/Detail/15032440317),
+[Gallego House service](https://history.house.gov/People/Detail/15032409715), and the
+original [Banks PDF](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20025626.pdf)
+and [Gallego PDF](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20025670.pdf).
+Audit: `audits/2026-09-19-house-historical-chamber-recovery.json`.
+
+### Berkshire overlap resolved
+
+The amendment explicitly says NEW HOLDINGS, confidential treatment expired,
+original report dated May 15, 2025. SEC Form 13F Confidential Treatment Instruction
+4 and Special Instruction 3 establish that these entries supplement the public
+report. Direct review of both information tables found the same Class B CUSIP
+526057302: original 152,572 shares / $16,641,028 plus newly disclosed 202 shares /
+$22,032 = **152,774 shares / $16,663,060** as of March 31, 2025.
+
+Added an exact-source review in `config/reviewed_13f_additions.json`, requiring
+both accessions, document hashes, source URLs, quarter, overlap set, and matching
+security identifiers. Other overlaps still fail closed. Repeated accessions do
+not double-count additions; combined snapshots retain the amendment availability
+date of August 14, 2025, and the audit preserves both source URLs.
+
+Restored the previously empty Berkshire quarter: **38 stored ticker positions**,
+102 resolved source rows out of 114 supported source rows; 12 still unresolved.
+Database readback matched every ticker/share/value tuple. This is not a claim of
+complete portfolio coverage. Audit: `audits/2026-09-19-berkshire-amendment-recovery.json`.
+
+### Fetterman paper filing
+
+Visually reviewed both original Senate images for
+`senate-3b1affbf-2359-4fef-980d-1d2600cb8731`. The first is a counsel cover letter;
+the second lists two dependent-child bond purchases: Nokia on June 6, 2024, and
+Freeport McMoran on June 21, 2024, each $1,001–$15,000. The cover letter
+corroborates the dates. Printed IBM/Microsoft examples were excluded. Bond
+positions retain `N/A` tickers instead of being attributed to the issuers' stocks.
+
+The parser had attempted to read the cover letter as a transaction table. A
+source-image-hash-locked transcription now handles this filing. Two existing rows
+were republished with a matching database readback, and the ledger is complete.
+Audit: `audits/2026-09-19-fetterman-paper-recovery.json`.
+
+### Updated remaining work and validation
+
+**189 failed filings from 2024 onward** remain: 175 House (168 extraction/layout,
+7 date conflicts) and 14 Senate paper filings. Fund security-resolution gaps
+remain; the previously identified Berkshire overlap is resolved.
+
+All 63 pipeline test files passed after the code changes. The final Fetterman
+fixture and regression test then passed all 12 reviewed-filing tests. Tests cover
+historical chamber boundaries, ambiguous/wrong names, exact amendment source
+matching, security identity mismatch, duplicate accessions, and unchanged baseline
+objects. No notifications were manually dispatched.
