@@ -1,0 +1,147 @@
+{
+  "scope": "Filing failures, not confirmed missing transactions",
+  "by_year": [
+    {
+      "chamber": "House",
+      "year": 2026,
+      "filings": 43
+    },
+    {
+      "chamber": "Senate",
+      "year": 2026,
+      "filings": 1
+    },
+    {
+      "chamber": "House",
+      "year": 2025,
+      "filings": 71
+    },
+    {
+      "chamber": "Senate",
+      "year": 2025,
+      "filings": 3
+    },
+    {
+      "chamber": "House",
+      "year": 2024,
+      "filings": 63
+    },
+    {
+      "chamber": "Senate",
+      "year": 2024,
+      "filings": 11
+    },
+    {
+      "chamber": "House",
+      "year": 2023,
+      "filings": 109
+    },
+    {
+      "chamber": "Senate",
+      "year": 2023,
+      "filings": 17
+    },
+    {
+      "chamber": "House",
+      "year": 2022,
+      "filings": 146
+    },
+    {
+      "chamber": "Senate",
+      "year": 2022,
+      "filings": 20
+    },
+    {
+      "chamber": "House",
+      "year": 2021,
+      "filings": 158
+    },
+    {
+      "chamber": "Senate",
+      "year": 2021,
+      "filings": 23
+    },
+    {
+      "chamber": "House",
+      "year": 2020,
+      "filings": 184
+    },
+    {
+      "chamber": "Senate",
+      "year": 2020,
+      "filings": 35
+    },
+    {
+      "chamber": "House",
+      "year": 2019,
+      "filings": 204
+    },
+    {
+      "chamber": "Senate",
+      "year": 2019,
+      "filings": 54
+    },
+    {
+      "chamber": "House",
+      "year": 2018,
+      "filings": 338
+    },
+    {
+      "chamber": "Senate",
+      "year": 2018,
+      "filings": 50
+    },
+    {
+      "chamber": "House",
+      "year": 2017,
+      "filings": 333
+    },
+    {
+      "chamber": "Senate",
+      "year": 2017,
+      "filings": 41
+    },
+    {
+      "chamber": "House",
+      "year": 2016,
+      "filings": 345
+    },
+    {
+      "chamber": "Senate",
+      "year": 2016,
+      "filings": 42
+    },
+    {
+      "chamber": "House",
+      "year": 2015,
+      "filings": 353
+    },
+    {
+      "chamber": "Senate",
+      "year": 2015,
+      "filings": 35
+    },
+    {
+      "chamber": "House",
+      "year": 2014,
+      "filings": 407
+    },
+    {
+      "chamber": "Senate",
+      "year": 2014,
+      "filings": 41
+    },
+    {
+      "chamber": "Senate",
+      "year": 2013,
+      "filings": 169
+    },
+    {
+      "chamber": "Senate",
+      "year": 2012,
+      "filings": 60
+    }
+  ],
+  "remaining_2024_onward": 192,
+  "remaining_all_years": 3356
+}

@@ -1,0 +1,218 @@
+[
+  {
+    "filing_id": "house-2026-20033840",
+    "previous_rows": 2,
+    "stored_rows": 2,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20031007",
+    "previous_rows": 2,
+    "stored_rows": 2,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20030692",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20030622",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20030466",
+    "previous_rows": 5,
+    "stored_rows": 5,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20030439",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20029131",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20029130",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20027962",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20027820",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20026696",
+    "previous_rows": 3,
+    "stored_rows": 3,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2025-20026489",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20026250",
+    "previous_rows": 5,
+    "stored_rows": 5,
+    "member_ids": [
+      "D000628"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20026303",
+    "previous_rows": 3,
+    "stored_rows": 3,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20026127",
+    "previous_rows": 4,
+    "stored_rows": 4,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20026140",
+    "previous_rows": 8,
+    "stored_rows": 8,
+    "member_ids": [
+      "D000628"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20025729",
+    "previous_rows": 2,
+    "stored_rows": 2,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20025632",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "G000061"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20025446",
+    "previous_rows": 6,
+    "stored_rows": 6,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20025282",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20025104",
+    "previous_rows": 2,
+    "stored_rows": 2,
+    "member_ids": [
+      "D000628"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20025103",
+    "previous_rows": 3,
+    "stored_rows": 3,
+    "member_ids": [
+      "L000596"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20024673",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "member_ids": [
+      "G000061"
+    ],
+    "status": "complete"
+  },
+  {
+    "filing_id": "house-2024-20024275",
+    "previous_rows": 2,
+    "stored_rows": 2,
+    "member_ids": [
+      "C001129"
+    ],
+    "status": "complete"
+  }
+]

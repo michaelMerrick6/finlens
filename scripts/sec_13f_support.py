@@ -524,6 +524,10 @@ def parse_13f_filing(session, filing: dict[str, str], resolver: SecTickerResolve
     if root is None or not report_period:
         return None
 
+    amendment = re.search(r'<(?:\w+:)?amendmentType>\s*([^<]+)', text, re.I)
+    is_amended = filing.get('form') == '13F-HR/A' or bool(re.search(r'<(?:\w+:)?isAmendment>\s*true', text, re.I))
+    amendment_type = amendment[1].strip().upper() if amendment else ('UNKNOWN' if is_amended else 'ORIGINAL')
+
     aggregated: dict[str, dict[str, Any]] = {}
     rows_seen = 0
     rows_supported = 0
@@ -581,6 +585,7 @@ def parse_13f_filing(session, filing: dict[str, str], resolver: SecTickerResolve
     holdings = list(aggregated.values())
     return {
         "fund_name": filing["fund_name"],
+        "amendment_type": amendment_type,
         "accession": filing.get("accession"),
         "report_period": report_period,
         "published_date": filing.get("filed_date"),

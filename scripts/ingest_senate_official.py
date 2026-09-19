@@ -39,6 +39,7 @@ COMMON_NAME_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
 PRIVATE_ENTITY_MARKERS = (" LLC", " L.L.C", " L.P.", " LP", " PARTNERS", " FAMILY", " TRUST")
 PUBLIC_COMPANY_HINTS = (" STOCK", " SHARES", " COMMON", " ETF", " ETN", " ADR", " ADS", " INC", " CORP", " PLC")
 FIRST_NAME_ALIAS_GROUPS = (
+    {"mike", "michael"},
     {"bill", "billy", "will", "william"},
     {"dan", "daniel", "danny"},
     {"dave", "david"},

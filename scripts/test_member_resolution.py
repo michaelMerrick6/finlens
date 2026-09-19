@@ -32,7 +32,7 @@ class MemberResolutionTests(unittest.TestCase):
         self.assertEqual(self.resolve('Alex', rows), ['A000001', 'A000001'])
 
     def test_disclosure_name_variants_resolve_known_members(self):
-        cases = [('Rob', 'Robert'), ('Timothy P', 'Tim'), ('Rohit', 'Ro')]
+        cases = [('Michael A', 'Mike'), ('Rob', 'Robert'), ('Timothy P', 'Tim'), ('Rohit', 'Ro')]
         for filed, canonical in cases:
             self.assertEqual(self.resolve(filed, [dict(id='A000001', first_name=canonical, last_name='Smith')]),
                              ['A000001', 'A000001'])
@@ -43,6 +43,14 @@ class MemberResolutionTests(unittest.TestCase):
         for ordered in (rows, list(reversed(rows))):
             with read_only_parser_scope():
                 self.assertTrue(senate.resolve_member_id_from_full_name('Timothy Smith', ordered).startswith('unknown-'))
+
+    def test_clerk_credentials_and_luna_name_split(self):
+        rows = [dict(id='D000628',first_name='Neal',last_name='Dunn',chamber='House'),
+                dict(id='L000596',first_name='Anna',last_name='Luna',chamber='House')]
+        with read_only_parser_scope():
+            self.assertEqual(house.resolve_member_id('Neal Patrick','Dunn, MD, FACS',rows),'D000628')
+            self.assertEqual(house.resolve_member_id('Anna','Paulina Luna',rows),'L000596')
+            self.assertTrue(house.resolve_member_id('Other','Dunn, MD, FACS',rows).startswith('unknown-'))
 
     def test_missing_first_name_stays_unresolved(self):
         for result in self.resolve('', [{'id': 'A000001', 'first_name': 'Alex', 'last_name': 'Smith'}]):

@@ -157,11 +157,14 @@ def main() -> None:
     parse_failures = 0
     failed_funds: list[str] = []
 
+    from sec_13f_periods import compose_periods, previous_quarter_holdings
+    amendment_issues = []
     for fund in TRACKED_13F_FUNDS:
         funds_seen += 1
         fund_name = fund["name"]
         fund_filings = load_available_13f_filings(session, fund, max_filings=MAX_FILINGS_PER_FUND)
-        parsed_by_period: dict[str, dict] = {}
+        parsed_filings = []
+        blocked_periods = set()
 
         for filing in fund_filings:
             filings_seen += 1
@@ -175,23 +178,23 @@ def main() -> None:
             resolution_ratio = (resolved / supported) if supported else 0.0
             if supported <= 0 or resolution_ratio < MIN_RESOLUTION_RATIO:
                 parse_failures += 1
+                blocked_periods.add(parsed['report_period'])
                 continue
 
-            report_period = str(parsed.get("report_period") or "")
-            existing = parsed_by_period.get(report_period)
-            if not existing or str(parsed.get("published_date") or "") > str(existing.get("published_date") or ""):
-                parsed_by_period[report_period] = parsed
-            if not is_unbounded_limit(MAX_DISTINCT_PERIODS_PER_FUND) and len(parsed_by_period) >= MAX_DISTINCT_PERIODS_PER_FUND:
-                break
+            parsed_filings.append(parsed)
 
-        parsed_periods = select_recent_distinct_periods(list(parsed_by_period.values()), MAX_DISTINCT_PERIODS_PER_FUND)
+        parsed_periods, problems = compose_periods(parsed_filings, MAX_DISTINCT_PERIODS_PER_FUND)
+        # A failed amendment must not silently revert a quarter to an older filing.
+        parsed_periods = [p for p in parsed_periods if p['report_period'] not in blocked_periods]
+        parse_failures += len(problems)
+        amendment_issues.extend(dict(problem, fund_name=fund['name']) for problem in problems)
         if not parsed_periods:
             failed_funds.append(fund_name)
             continue
 
         for index, parsed in enumerate(parsed_periods):
             current_holdings = parsed.get("holdings") or []
-            previous_holdings = parsed_periods[index - 1].get("holdings") or [] if index > 0 else []
+            previous_holdings = previous_quarter_holdings(parsed_periods, index)
             compared_holdings = apply_qoq(current_holdings, previous_holdings)
 
             records_seen += len(compared_holdings)
@@ -219,6 +222,7 @@ def main() -> None:
         "unsupported_rows": unsupported_rows,
         "parse_failures": parse_failures,
         "failed_funds": failed_funds,
+        "amendment_issues": amendment_issues,
     }
     emit_summary(summary)
     if parse_failures or failed_funds:

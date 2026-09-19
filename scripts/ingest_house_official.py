@@ -61,6 +61,7 @@ HOUSE_LAYOUT_ROW_RE = re.compile(
 HOUSE_OWNER_PREFIX_RE = re.compile(r"^(?:SP|DC|JT|C|D|S)\s+", re.IGNORECASE)
 HOUSE_LAYOUT_OWNER_PREFIX_RE = re.compile(r"^(?:(?:SP|DC|JT|C|D|S)\s+)+", re.IGNORECASE)
 FIRST_NAME_ALIAS_GROUPS = (
+    {"mike", "michael"},
     {"bill", "billy", "will", "william"},
     {"dan", "daniel", "danny"},
     {"dave", "david"},
@@ -529,6 +530,8 @@ def is_placeholder_member(member: dict) -> bool:
 
 
 def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], target_chamber: str = "House") -> str:
+    # Credentials in the Clerk index are not part of the surname (e.g. Dunn, MD, FACS).
+    last_name = re.sub(r",\s*(?:MD|FACS)(?:\s*,\s*(?:MD|FACS))*\s*$", "", last_name, flags=re.I)
     first_tokens = normalize_name_tokens(first_name)
     last_key = "".join(normalize_name_tokens(last_name))
     matching_ids: set[str] = set()
@@ -541,7 +544,10 @@ def resolve_member_id(first_name: str, last_name: str, members_db: list[dict], t
         # Official sources can split a compound surname at different boundaries.
         # Require the same complete token sequence and retain ambiguity handling.
         full_tokens = first_tokens + normalize_name_tokens(last_name)
-        member_tokens = normalize_name_tokens(member['first_name']) + normalize_name_tokens(member['last_name'])
+        # Clerk profile L000596 gives the full name Anna Paulina Luna.
+        official_full = {'L000596': ('Anna Paulina', 'Luna')}
+        member_first, member_last = official_full.get(member['id'], (member['first_name'], member['last_name']))
+        member_tokens = normalize_name_tokens(member_first) + normalize_name_tokens(member_last)
         if first_tokens and last_key and full_tokens == member_tokens:
             matching_ids.add(member['id'])
             continue

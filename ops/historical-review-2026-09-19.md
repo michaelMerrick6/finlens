@@ -1,0 +1,82 @@
+# Historical source review — September 19, 2026
+
+## Scope and results
+
+The initial 3,380 failed Congress filings span 2012–2026. Only 216 were filed in
+2024 or later. Prioritize that user-requested window; do not call these counts
+missing trades, since some failed filings already have stored rows.
+
+### House identity batch
+
+Cleared 24 filing failures covering 58 existing transaction records:
+18 Michael A. Collins filings, three Neal Patrick Dunn filings, two Michael Garcia
+filings and one Anna Paulina Luna filing. Reparsed official PDFs, resolved the
+member IDs, and published through the atomic filing publisher. All 24 ledger
+entries completed. Detailed per-filing counts/IDs are in
+`audits/2026-09-19-house-identity-recovery.json`.
+
+Cause: missing Michael/Mike nickname equivalence, credentials treated as surnames,
+and the Clerk index splitting Anna / Paulina Luna differently from our roster.
+Ambiguous names still fail closed; no surname-only match was introduced.
+
+Evidence includes original filing headers (name, state and district):
+[Collins GA10](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033840.pdf),
+[Dunn FL02](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20026250.pdf),
+[Garcia CA27](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20025632.pdf),
+[Luna FL13](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2024/20025103.pdf).
+Official Clerk profiles confirm [Collins C001129](https://clerk.house.gov/members/C001129),
+[Dunn D000628](https://clerk.house.gov/members/D000628), and
+[Luna L000596](https://clerk.house.gov/members/L000596).
+
+Remaining from 2024 onward: **192** (168 House extraction/layout failures,
+7 House transaction/filing-date conflicts, 2 House historical-chamber identity
+failures, 15 Senate paper-form failures). Global unresolved total: 3,356.
+Banks and Gallego require historical chamber handling, not a change to their
+current Senate roster entries.
+
+### Fund quarters
+
+Restored only previously empty, validated target periods using atomic publication:
+
+| Fund | Quarter | Stored rows | Unresolved supported source rows |
+| --- | --- | ---: | ---: |
+| Coatue | 2025-12-31 | 76 | 28 |
+| Farallon | 2025-09-30 | 110 | 27 |
+
+Database readback matched ticker/share/value sets. Source rows can aggregate into
+fewer stored ticker positions; unresolved securities are not invented. These
+restorations do not certify complete fund portfolios. Exact SEC filing URLs and
+counts are in `audits/2026-09-19-fund-quarter-recovery.json`.
+
+D. E. Shaw 2026-06-30 was already restored by the background worker before this
+batch wrote it. Independently compared all 2,428 stored ticker/share/value rows:
+no missing or extra rows against the parsed effective snapshot. No rewrite made.
+There remain 1,205 supported source rows without resolved tickers for that filing.
+
+### Amendment bug corrected
+
+The old code selected the latest filing for a period even when that filing only
+added holdings. New logic distinguishes ORIGINAL, RESTATEMENT and NEW HOLDINGS,
+retains the original baseline for additions, and excludes unknown amendment types,
+missing baselines and overlaps requiring further review. Accession deduplication
+prevents adding the same amendment twice. Original source links remain on rows;
+the assembled snapshot's availability date is the final amendment date.
+
+Berkshire 2025-03-31 remains withheld pending overlap review: original
+0000950123-25-005701 includes 152,572 LEN-B shares; NEW HOLDINGS amendment
+0000950123-25-008361 adds an entry for 202 LEN-B shares alongside three other
+positions. The source labels alone have not been treated as enough to resolve
+whether overlapping aggregated entries can safely combine.
+
+Reference: [SEC filing manual, amendment behavior](https://www.sec.gov/files/edgar/filermanual/archive/edgarfm-vol2-v76.pdf).
+
+Also prevented comparisons across missing quarters from being labelled
+quarter-over-quarter changes or generating false exited positions. A rejected
+amendment no longer causes a silent fallback to an older quarter snapshot.
+
+## Validation and next work
+
+All 63 pipeline test files passed. The focused 13F suite passed 23 tests after the
+final changes. Next: historical-chamber identity cases, source-specific paper form
+layouts, Berkshire's overlapping amendment entries, and unresolved fund security
+identities. Do not loosen parser validation merely to empty the queue.
