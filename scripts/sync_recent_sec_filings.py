@@ -47,7 +47,7 @@ def upsert_companies(supabase, rows: list[dict]) -> None:
         if ticker and ticker != "UNKNOWN":
             company_rows[ticker] = {"ticker": ticker[:10], "name": company_name[:255], "sector": "Unknown", "industry": "Unknown"}
     if company_rows:
-        supabase.table("companies").upsert(list(company_rows.values()), on_conflict="ticker").execute()
+        supabase.table("companies").upsert(list(company_rows.values()), on_conflict="ticker", ignore_duplicates=True).execute()
 
 
 def build_filing_inputs(feed_filings: list[dict], recent_rows: list[dict], *, db_accession_limit: int) -> list[dict]:
@@ -102,6 +102,9 @@ def main() -> None:
     )
     filings = build_filing_inputs(feed_filings, recent_rows, db_accession_limit=RECENT_DB_ACCESSION_LIMIT)
 
+    from sec_filing_store import register_filings, publish, fail
+    register_filings(supabase, filings)
+
     filings_seen = len(filings)
     filings_with_trades = 0
     filings_without_buy_sell = 0
@@ -113,11 +116,13 @@ def main() -> None:
         accession = filing["accession"]
         try:
             parsed = parse_form4_filing(session, filing["source_url"], filed_date=filing.get("filed_date"))
-        except Exception:
+        except Exception as exc:
+            fail(supabase, filing, exc)
             failed_accessions.append(accession)
             continue
 
         if not parsed:
+            fail(supabase, filing, 'No ownership XML found')
             failed_accessions.append(accession)
             continue
 
@@ -125,24 +130,19 @@ def main() -> None:
         existing_rows = rows_by_accession.get(accession, [])
         existing_ids = [row["id"] for row in existing_rows if row.get("id")]
 
-        if existing_ids:
-            for index in range(0, len(existing_ids), 200):
-                chunk = existing_ids[index : index + 200]
-                supabase.table("insider_trades").delete().in_("id", chunk).execute()
-
+        # Replacement and completion are one transaction; a failed insert leaves old rows intact.
+        try:
+            upsert_companies(supabase, parsed_rows)
+            publish(supabase, filing, parsed_rows)
+        except Exception as exc:
+            fail(supabase, filing, exc)
+            failed_accessions.append(accession)
+            continue
         rows_replaced += len(existing_ids)
-        rows_by_accession[accession] = []
-
+        rows_inserted += len(parsed_rows)
         if not parsed_rows:
             filings_without_buy_sell += 1
             continue
-
-        upsert_companies(supabase, parsed_rows)
-        insert_rows = [{key: value for key, value in row.items() if not key.startswith("_")} for row in parsed_rows]
-        for index in range(0, len(insert_rows), 100):
-            chunk = insert_rows[index : index + 100]
-            supabase.table("insider_trades").insert(chunk).execute()
-            rows_inserted += len(chunk)
         filings_with_trades += 1
 
     emit_summary(
@@ -156,6 +156,9 @@ def main() -> None:
             "parse_failures": len(failed_accessions),
         }
     )
+
+    if failed_accessions:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

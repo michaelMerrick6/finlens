@@ -12,7 +12,8 @@ permissions:
 
 concurrency:
   group: capture-insider
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   capture-insider:
@@ -33,6 +34,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r scripts/requirements.txt
+        pip check
 
     - name: Run SEC Parser Tests
       if: github.event_name == 'workflow_dispatch'
@@ -47,13 +49,10 @@ jobs:
         SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         FINLENS_DAILY_MODE: '1'
         PYTHONUNBUFFERED: '1'
+        SEC_REQUEST_RETRIES: '2'
         SEC_DAILY_MAX_FILINGS: '600'
         SEC_DAILY_MAX_PAGES: '10'
         SEC_DAILY_RECENT_SCAN_DAYS: '10'
-        SEC_RECENT_SYNC_LIMIT: '600'
-        SEC_RECENT_SYNC_PAGES: '10'
-        SEC_RECENT_AUDIT_LIMIT: '600'
-        SEC_RECENT_AUDIT_PAGES: '10'
         CAPTURE_FRESHNESS_SOURCE_LIMIT: '120'
         CAPTURE_FRESHNESS_SEC_PAGES: '3'
         CAPTURE_FRESHNESS_PARSE_LIMIT: '40'
@@ -62,10 +61,8 @@ jobs:
         cd scripts
         echo "=== SEC Daily Ingest ==="
         python ingest_sec_daily.py
-        echo "=== SEC Recent Sync ==="
-        python sync_recent_sec_filings.py --fresh-feed
         echo "=== SEC Audit ==="
-        python ../ops/audit_recent_insider_coverage.py --fresh-feed
+        python ../ops/audit_recent_insider_coverage.py --limit 120 --pages 3 --fresh-feed
         echo "=== Insider Freshness Guard ==="
         python validate_recent_trade_capture.py --checks insider --lookback-days 10 --grace-days 2 --source-limit 120 --sec-pages 3 --parse-limit 40
 

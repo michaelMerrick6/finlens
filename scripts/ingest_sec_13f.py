@@ -117,14 +117,10 @@ def upsert_companies(supabase, holdings: list[dict]) -> None:
             "industry": "13F Filing",
         }
     if company_rows:
-        supabase.table("companies").upsert(list(company_rows.values()), on_conflict="ticker").execute()
+        supabase.table("companies").upsert(list(company_rows.values()), on_conflict="ticker", ignore_duplicates=True).execute()
 
 
 def replace_holdings_for_period(supabase, fund_name: str, report_period: str, holdings: list[dict]) -> int:
-    supabase.table("institutional_holdings").delete().eq("fund_name", fund_name).eq("report_period", report_period).execute()
-    published_date = str(holdings[0].get("published_date") or "").strip() if holdings else ""
-    if published_date:
-        supabase.table("institutional_holdings").delete().eq("fund_name", fund_name).eq("published_date", published_date).execute()
     insert_rows = [
         {
             "fund_name": holding["fund_name"],
@@ -142,9 +138,8 @@ def replace_holdings_for_period(supabase, fund_name: str, report_period: str, ho
     ]
     if not insert_rows:
         return 0
-    for index in range(0, len(insert_rows), 200):
-        supabase.table("institutional_holdings").insert(insert_rows[index : index + 200]).execute()
-    return len(insert_rows)
+    return supabase.rpc('replace_13f_period', {'target_fund': fund_name,
+        'target_period': report_period, 'holdings': insert_rows}).execute().data
 
 
 def main() -> None:
@@ -226,6 +221,8 @@ def main() -> None:
         "failed_funds": failed_funds,
     }
     emit_summary(summary)
+    if parse_failures or failed_funds:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
