@@ -15,6 +15,8 @@ from time_utils import congress_today
 SEC_HEADERS = {"User-Agent": os.environ.get("SEC_USER_AGENT", "Vail/1.0 mikemerricka@gmail.com")}
 SEC_RSS_TIMEOUT_SECONDS = int(os.environ.get("SEC_RSS_TIMEOUT_SECONDS", "20"))
 SEC_DOC_TIMEOUT_SECONDS = int(os.environ.get("SEC_DOC_TIMEOUT_SECONDS", "10"))
+SEC_MIN_REQUEST_INTERVAL_SECONDS = 0.25
+_last_sec_request_started = 0.0
 SEC_REQUEST_RETRIES = int(os.environ.get("SEC_REQUEST_RETRIES", "5"))
 SEC_REQUEST_RETRY_SLEEP_SECONDS = float(os.environ.get("SEC_REQUEST_RETRY_SLEEP_SECONDS", "5"))
 SEC_FORM4_RSS_URL = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=4&company=&owner=only&count=100&output=atom"
@@ -50,9 +52,15 @@ def write_json_cache(path: Path, payload: dict) -> None:
 
 
 def fetch_with_retry(session: requests.Session, url: str, *, timeout: int, label: str) -> requests.Response:
+    global _last_sec_request_started
     last_error = None
     for attempt in range(1, SEC_REQUEST_RETRIES + 1):
         try:
+            # Shared by Form 4 and 13F fetches: pace each process, including retries.
+            remaining = SEC_MIN_REQUEST_INTERVAL_SECONDS - (time.monotonic() - _last_sec_request_started)
+            if remaining > 0:
+                time.sleep(remaining)
+            _last_sec_request_started = time.monotonic()
             response = session.get(url, timeout=timeout)
             if response.status_code == 429:
                 retry_after = response.headers.get("Retry-After")

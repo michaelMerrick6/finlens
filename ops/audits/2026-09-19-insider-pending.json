@@ -1,0 +1,251 @@
+{
+  "reason": "SEC HTTP 429 prevented source parsing; not confirmed missing trade rows",
+  "filings": [
+    {
+      "accession": "0001976408-26-000856",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1910424/000197640826000856/0001976408-26-000856.txt",
+      "updated_at": "2026-09-18T06:13:59-04:00"
+    },
+    {
+      "accession": "0001104659-26-108703",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1746334/000110465926108703/0001104659-26-108703.txt",
+      "updated_at": "2026-09-18T06:11:24-04:00"
+    },
+    {
+      "accession": "0001628280-26-062609",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1167476/000162828026062609/0001628280-26-062609.txt",
+      "updated_at": "2026-09-18T06:08:27-04:00"
+    },
+    {
+      "accession": "0001193125-26-395004",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1978952/000119312526395004/0001193125-26-395004.txt",
+      "updated_at": "2026-09-18T06:08:18-04:00"
+    },
+    {
+      "accession": "0001628280-26-062608",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1973720/000162828026062608/0001628280-26-062608.txt",
+      "updated_at": "2026-09-18T06:08:04-04:00"
+    },
+    {
+      "accession": "0001628280-26-062607",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1974743/000162828026062607/0001628280-26-062607.txt",
+      "updated_at": "2026-09-18T06:07:38-04:00"
+    },
+    {
+      "accession": "0001193125-26-395003",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1765369/000119312526395003/0001193125-26-395003.txt",
+      "updated_at": "2026-09-18T06:06:09-04:00"
+    },
+    {
+      "accession": "0001193125-26-395001",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2011305/000119312526395001/0001193125-26-395001.txt",
+      "updated_at": "2026-09-18T06:03:43-04:00"
+    },
+    {
+      "accession": "0001193125-26-394995",
+      "filed_date": "2026-09-18",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1958709/000119312526394995/0001193125-26-394995.txt",
+      "updated_at": "2026-09-18T06:01:30-04:00"
+    },
+    {
+      "accession": "0000950103-26-014163",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2117047/000095010326014163/0000950103-26-014163.txt",
+      "updated_at": "2026-09-17T21:48:21-04:00"
+    },
+    {
+      "accession": "0001873031-26-000003",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1873031/000187303126000003/0001873031-26-000003.txt",
+      "updated_at": "2026-09-17T21:44:15-04:00"
+    },
+    {
+      "accession": "0001213900-26-101101",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2120249/000121390026101101/0001213900-26-101101.txt",
+      "updated_at": "2026-09-17T21:39:14-04:00"
+    },
+    {
+      "accession": "0001698262-26-000005",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1698262/000169826226000005/0001698262-26-000005.txt",
+      "updated_at": "2026-09-17T21:35:57-04:00"
+    },
+    {
+      "accession": "0001483410-26-000005",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2011286/000148341026000005/0001483410-26-000005.txt",
+      "updated_at": "2026-09-17T21:35:55-04:00"
+    },
+    {
+      "accession": "0001372514-26-000085",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2155788/000137251426000085/0001372514-26-000085.txt",
+      "updated_at": "2026-09-17T21:35:25-04:00"
+    },
+    {
+      "accession": "0001646649-26-000032",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1646649/000164664926000032/0001646649-26-000032.txt",
+      "updated_at": "2026-09-17T21:35:07-04:00"
+    },
+    {
+      "accession": "0001789617-26-000004",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1789617/000178961726000004/0001789617-26-000004.txt",
+      "updated_at": "2026-09-17T21:35:06-04:00"
+    },
+    {
+      "accession": "0001902368-26-000008",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1902368/000190236826000008/0001902368-26-000008.txt",
+      "updated_at": "2026-09-17T21:33:51-04:00"
+    },
+    {
+      "accession": "0001283303-26-000010",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1438533/000128330326000010/0001283303-26-000010.txt",
+      "updated_at": "2026-09-17T21:32:52-04:00"
+    },
+    {
+      "accession": "0001763494-26-000007",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1763494/000176349426000007/0001763494-26-000007.txt",
+      "updated_at": "2026-09-17T21:31:33-04:00"
+    },
+    {
+      "accession": "0001943192-26-000006",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1943192/000194319226000006/0001943192-26-000006.txt",
+      "updated_at": "2026-09-17T21:30:33-04:00"
+    },
+    {
+      "accession": "0001193125-26-394831",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1704234/000119312526394831/0001193125-26-394831.txt",
+      "updated_at": "2026-09-17T21:30:04-04:00"
+    },
+    {
+      "accession": "0001882909-26-000004",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1882909/000188290926000004/0001882909-26-000004.txt",
+      "updated_at": "2026-09-17T21:29:21-04:00"
+    },
+    {
+      "accession": "0001193125-26-394830",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1277357/000119312526394830/0001193125-26-394830.txt",
+      "updated_at": "2026-09-17T21:28:14-04:00"
+    },
+    {
+      "accession": "0000037472-26-000112",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2155382/000003747226000112/0000037472-26-000112.txt",
+      "updated_at": "2026-09-17T21:26:57-04:00"
+    },
+    {
+      "accession": "0001193125-26-394827",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1277357/000119312526394827/0001193125-26-394827.txt",
+      "updated_at": "2026-09-17T21:25:02-04:00"
+    },
+    {
+      "accession": "0001193125-26-394823",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2018287/000119312526394823/0001193125-26-394823.txt",
+      "updated_at": "2026-09-17T21:22:00-04:00"
+    },
+    {
+      "accession": "0000037472-26-000110",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1845293/000003747226000110/0000037472-26-000110.txt",
+      "updated_at": "2026-09-17T21:21:07-04:00"
+    },
+    {
+      "accession": "0000037472-26-000108",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1756867/000003747226000108/0000037472-26-000108.txt",
+      "updated_at": "2026-09-17T21:18:10-04:00"
+    },
+    {
+      "accession": "0000037472-26-000106",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1601006/000003747226000106/0000037472-26-000106.txt",
+      "updated_at": "2026-09-17T21:15:47-04:00"
+    },
+    {
+      "accession": "0002019143-26-000021",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2019143/000201914326000021/0002019143-26-000021.txt",
+      "updated_at": "2026-09-17T21:15:42-04:00"
+    },
+    {
+      "accession": "0002020220-26-000022",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2020220/000202022026000022/0002020220-26-000022.txt",
+      "updated_at": "2026-09-17T21:14:17-04:00"
+    },
+    {
+      "accession": "0000037472-26-000104",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1668493/000003747226000104/0000037472-26-000104.txt",
+      "updated_at": "2026-09-17T21:13:19-04:00"
+    },
+    {
+      "accession": "0000037472-26-000102",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2071230/000003747226000102/0000037472-26-000102.txt",
+      "updated_at": "2026-09-17T21:11:12-04:00"
+    },
+    {
+      "accession": "0001683168-26-007224",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1717123/000168316826007224/0001683168-26-007224.txt",
+      "updated_at": "2026-09-17T21:00:13-04:00"
+    },
+    {
+      "accession": "0001213900-26-101086",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2007069/000121390026101086/0001213900-26-101086.txt",
+      "updated_at": "2026-09-17T20:59:27-04:00"
+    },
+    {
+      "accession": "0001493152-26-043191",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1397565/000149315226043191/0001493152-26-043191.txt",
+      "updated_at": "2026-09-17T20:56:05-04:00"
+    },
+    {
+      "accession": "0001193125-26-394809",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2112997/000119312526394809/0001193125-26-394809.txt",
+      "updated_at": "2026-09-17T20:55:14-04:00"
+    },
+    {
+      "accession": "0001823952-26-000022",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1823952/000182395226000022/0001823952-26-000022.txt",
+      "updated_at": "2026-09-17T20:53:51-04:00"
+    },
+    {
+      "accession": "0001193125-26-394805",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2115226/000119312526394805/0001193125-26-394805.txt",
+      "updated_at": "2026-09-17T20:49:50-04:00"
+    },
+    {
+      "accession": "0001193125-26-394803",
+      "filed_date": "2026-09-17",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2115232/000119312526394803/0001193125-26-394803.txt",
+      "updated_at": "2026-09-17T20:48:23-04:00"
+    }
+  ]
+}

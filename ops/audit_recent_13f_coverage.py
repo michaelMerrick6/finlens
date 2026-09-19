@@ -132,8 +132,11 @@ def main() -> None:
             "mismatches": mismatches[:20],
             "unresolved_rows": unresolved_rows,
             "parse_failures": parse_failures + len(mismatches),
+            "coverage_mismatches": len(mismatches),
         }
     )
+    if parse_failures or mismatches:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
