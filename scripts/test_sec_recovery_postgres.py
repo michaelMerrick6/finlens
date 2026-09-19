@@ -32,7 +32,7 @@ class SecRecoveryTests(unittest.TestCase):
         return self.db.execute('SELECT publish_insider_filing(%s,%s::jsonb)',('0000000001-26-000001',json.dumps(rows))).fetchone()[0]
 
     def trade(self):
-        return dict(ticker='SEC_TEST',filer_name='Test',filer_relation='Director',transaction_date='2026-09-01',published_date='2026-09-02',transaction_code='P',amount=10,price=2,value=20,source_url='https://www.sec.gov/Archives/0000000001-26-000001.txt#1')
+        return dict(ticker='SEC_TEST',filer_name='Test',filer_relation='Director',transaction_date='2026-09-01',published_date='2026-09-02',transaction_code='buy',amount=10,price=2,value=20,source_url='https://www.sec.gov/Archives/0000000001-26-000001.txt#1')
 
     def holding(self):
         return dict(fund_name='SEC Test Fund',ticker='SEC_TEST',report_period='2026-06-30',published_date='2026-08-01',shares_held=10,value_held=20,source_url='https://www.sec.gov/test')

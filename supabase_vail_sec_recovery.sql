@@ -27,7 +27,7 @@ BEGIN
  IF NOT EXISTS(SELECT 1 FROM sec_filing_queue WHERE accession=target_accession) THEN RAISE EXCEPTION 'Register filing before publication'; END IF;
  IF EXISTS(SELECT 1 FROM jsonb_populate_recordset(NULL::insider_trades,trades) x
   WHERE public.sec_accession(x.source_url) IS DISTINCT FROM target_accession
-    OR x.transaction_code NOT IN ('P','S') OR x.transaction_code IS NULL
+    OR x.transaction_code NOT IN ('buy','sell') OR x.transaction_code IS NULL
     OR x.transaction_date>x.published_date) THEN RAISE EXCEPTION 'Invalid filing rows'; END IF;
  SELECT coalesce(jsonb_agg(j ORDER BY j),'[]'::jsonb) INTO old_rows
   FROM (SELECT to_jsonb(t)-'id'-'created_at' j FROM insider_trades t WHERE public.sec_accession(source_url)=target_accession) q;
