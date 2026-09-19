@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/9116331.pdf",
+  "source_sha256": "58cefce89a3fe84a5d4893337e79b4bc9add769d02fac1869403456afd5a4343",
+  "published_date": "2026-09-11",
+  "member_id": "H001086",
+  "politician_name": "Diana Harshbarger",
+  "chamber": "House",
+  "row_count": 5,
+  "review_note": "Both original PDF pages visually reviewed. Five bond transactions; printed example excluded. All five use amount column B. Repeated Round Rock sales and Conroe purchases retained as separate physical rows. Owner fields blank. Degraded letters in second Round Rock name normalized from first row; no security ticker or CUSIP inferred. Transaction dates distinguished from notification date 8/19/26.",
+  "rows": [
+    {
+      "page": 1,
+      "row": 1,
+      "owner": "",
+      "asset_name": "Round Rock TX Indpt Sch Prema BE/R/",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2026-07-30",
+      "transaction_type": "sell",
+      "amount_range": "$15,001 - $50,000"
+    },
+    {
+      "page": 1,
+      "row": 2,
+      "owner": "",
+      "asset_name": "Conroe TX Indept Sch Ult BE/R/",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2026-07-30",
+      "transaction_type": "buy",
+      "amount_range": "$15,001 - $50,000"
+    },
+    {
+      "page": 1,
+      "row": 3,
+      "owner": "",
+      "asset_name": "US TSY NOTE 04.000 / Due 05/31/28",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2026-08-06",
+      "transaction_type": "buy",
+      "amount_range": "$15,001 - $50,000"
+    },
+    {
+      "page": 1,
+      "row": 4,
+      "owner": "",
+      "asset_name": "Round Rock TX Indpt Sch Prema BE/R/",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2026-07-30",
+      "transaction_type": "sell",
+      "amount_range": "$15,001 - $50,000"
+    },
+    {
+      "page": 2,
+      "row": 1,
+      "owner": "",
+      "asset_name": "Conroe TX Indept Sch Ult BE/R/",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2026-07-30",
+      "transaction_type": "buy",
+      "amount_range": "$15,001 - $50,000"
+    }
+  ]
+}

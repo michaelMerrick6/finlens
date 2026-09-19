@@ -70,6 +70,20 @@ class ReviewedFilingsTests(unittest.TestCase):
         self.assertEqual({r['transaction_date'] for r in mann['rows']}, {'2024-08-20', '2024-09-09'})
         self.assertEqual(mann['published_date'], '2026-08-13')
 
+    def test_harshbarger_bonds_keep_repeated_rows_without_stock_tickers(self):
+        data = reviewed.load_reviewed_filing('house-2026-9116331')
+        trades = reviewed.reviewed_trades('house-2026-9116331', data)
+        self.assertEqual(len(trades), 5)
+        self.assertEqual({r['ticker'] for r in trades}, {'N/A'})
+        self.assertEqual({r['asset_type'] for r in trades}, {'Bond'})
+        self.assertEqual(sum(r['transaction_type'] == 'buy' for r in trades), 3)
+        self.assertEqual(sum(r['transaction_type'] == 'sell' for r in trades), 2)
+        self.assertEqual({r['amount_range'] for r in trades}, {'$15,001 - $50,000'})
+        self.assertEqual(trades[0]['asset_name'], trades[3]['asset_name'])
+        self.assertNotEqual(trades[0]['doc_id'], trades[3]['doc_id'])
+        self.assertEqual(trades[1]['asset_name'], trades[4]['asset_name'])
+        self.assertEqual(trades[2]['transaction_date'], '2026-08-06')
+
     def test_empty_review_requires_explicit_evidence_and_unchanged_source(self):
         key = 'house-2026-9116311'
         data = reviewed.load_reviewed_filing(key)

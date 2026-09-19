@@ -9,6 +9,7 @@ numbered from the first transaction on each attachment page.
 
 | Filing | Source rows | Initially observed database rows |
 | --- | ---: | ---: |
+| House 2026 / 9116331, Diana Harshbarger | 5 bonds | failed scan, 0 rows |
 | House 2026 / 9116328, Rohit Khanna | 244 | 40 |
 | Senate 929216d5-5dbd-429c-858c-1e9332924627, Richard Blumenthal | 111 | 19 |
 | House 2026 / 9116267, Rohit Khanna | 274 | queued for review |

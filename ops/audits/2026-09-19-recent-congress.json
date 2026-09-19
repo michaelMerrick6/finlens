@@ -1,0 +1,126 @@
+{
+  "status": "completed",
+  "scope": "bounded recent filing sample, not historical completeness",
+  "document_timeout_seconds": 45.0,
+  "house": {
+    "filings_seen": 17,
+    "filings_with_trades": 17,
+    "no_trade_filings": 0,
+    "source_parse_failures": [],
+    "fallback_doc_rows": [],
+    "row_count_mismatches": [],
+    "transaction_mismatches": [],
+    "published_date_mismatches": [],
+    "unexpected_rows_for_no_trade_filings": [],
+    "unknown_member_docs": [],
+    "document_outcomes": [
+      {
+        "doc_id": "house-2026-20035471",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035450",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035420",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035455",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035432",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035400",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035445",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035444",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035431",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-9116331",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035390",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035411",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035410",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035408",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035403",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035401",
+        "status": "completed"
+      },
+      {
+        "doc_id": "house-2026-20035392",
+        "status": "completed"
+      }
+    ]
+  },
+  "senate": {
+    "filings_seen": 6,
+    "filings_with_trades": 6,
+    "paper_unmapped_filings": [],
+    "source_parse_failures": [],
+    "fallback_doc_rows": [],
+    "row_count_mismatches": [],
+    "transaction_mismatches": [],
+    "published_date_mismatches": [],
+    "unknown_member_docs": [],
+    "document_outcomes": [
+      {
+        "doc_id": "senate-b999bc0e-3eb0-4ca9-ab07-8e8f2e04b41f",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-e67c6e56-c81e-4e74-b960-849a460165e2",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-6298991b-e48f-4b11-9bbb-dfc94a7e1b32",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-0632f542-7ac2-46e4-bd9c-603e3673f0cd",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-a0431e36-2161-4e97-b99a-74a966d7193a",
+        "status": "completed"
+      },
+      {
+        "doc_id": "senate-e5144197-e49c-4f74-bec4-19f1f3124668",
+        "status": "completed"
+      }
+    ]
+  },
+  "recent_unknown_rows": [],
+  "parse_failures": 0
+}
