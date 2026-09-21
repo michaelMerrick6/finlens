@@ -2,7 +2,12 @@ export type PoliticianPhotoSize = '225x275' | '450x550' | 'original';
 
 const DEFAULT_POLITICIAN_PHOTO_SIZE: PoliticianPhotoSize = '225x275';
 
+const LOCAL_POLITICIAN_PHOTOS: Record<string, string> = {
+  A000383: '/images/politicians/alan-armstrong.png',
+};
+
 const POLITICIAN_NAME_TO_MEMBER_ID: Record<string, string> = {
+  'alan armstrong': 'A000383',
   'david j taylor': 'T000480',
   'david j. taylor': 'T000480',
   'daniel meuser': 'M001204',
@@ -72,5 +77,6 @@ export function getPoliticianPhotoUrl(
     return null;
   }
 
-  return `https://unitedstates.github.io/images/congress/${size}/${normalizedMemberId}.jpg`;
+  return LOCAL_POLITICIAN_PHOTOS[normalizedMemberId]
+    || `https://unitedstates.github.io/images/congress/${size}/${normalizedMemberId}.jpg`;
 }
