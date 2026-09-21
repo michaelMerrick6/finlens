@@ -15,6 +15,27 @@ from scripts.ingest_house_official import (
 
 
 class HouseParserRegressionTests(unittest.TestCase):
+    def test_spouse_open_ended_amount_keeps_all_three_source_rows(self):
+        from parser_write_policy import read_only_parser_scope
+        members = [dict(id='P000608', first_name='Scott', last_name='Peters', chamber='House')]
+        lines = ['SP Audax Senior Loan Fund ST LP [OT] P 07/29/202607/31/2026Spouse/DC Over',
+                 '$1,000,000', 'F S : New',
+                 'SP U.S. Treasury Bill [GS] P 07/27/202607/31/2026Spouse/DC Over',
+                 '$1,000,000', 'F S : New',
+                 'SP U.S. Treasury Bill [GS] S (partial) 07/28/202607/31/2026Spouse/DC Over',
+                 '$1,000,000', 'F S : New']
+        with read_only_parser_scope():
+            rows = extract_transactions_from_lines(lines, '20035191', 'Scott H', 'Peters', 2026, members, [])
+            self.assertEqual(len(rows), 3)
+            self.assertEqual([r['transaction_type'] for r in rows], ['buy', 'buy', 'sell'])
+            self.assertEqual({r['amount_range'] for r in rows}, {'Over $1,000,000'})
+            self.assertEqual([r['asset_type'] for r in rows], ['OT', 'GS', 'GS'])
+            for bad in ['Spouse/DC Over', 'Unexpected Over $1,000,000']:
+                with self.assertRaises(HouseScanReviewRequired):
+                    extract_transactions_from_lines(
+                        ['SP U.S. Treasury Bill [GS] P 07/27/202607/31/2026' + bad],
+                        '1', 'Scott', 'Peters', 2026, members, [])
+
     def test_wrapped_amount_is_not_part_of_asset_name(self):
         lines = [
             'SP Nokia Corporation Sponsored S (partial) 05/11/2026 06/02/2026 $15,001 -',

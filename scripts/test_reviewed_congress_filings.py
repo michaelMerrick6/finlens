@@ -98,6 +98,28 @@ class ReviewedFilingsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'source changed'):
             reviewed.reviewed_senate_trades(key, [], 'F000479', '2024-07-12')
 
+    def test_blumenthal_historical_source_rows_preserve_account_repetitions(self):
+        from collections import Counter
+        cases = [
+            ('068274e1-4b7a-4453-a242-563dde4c10d8', {2: 8, 3: 12, 4: 11, 5: 5}, 36),
+            ('09694768-3b1e-4af0-8b46-8521c00cbd96', {2: 7, 3: 10, 4: 6}, 23),
+            ('520e479e-3586-4de5-a16b-cb7c22414594', {2: 5, 3: 5}, 10),
+        ]
+        for key, page_counts, count in cases:
+            prefix = 'senate-' + key
+            data = reviewed.load_reviewed_filing(prefix)
+            self.assertEqual(Counter(r['page'] for r in data['rows']), page_counts)
+            trades = reviewed.reviewed_trades(prefix, data)
+            self.assertEqual(len({r['doc_id'] for r in trades}), count)
+            self.assertEqual({r['ticker'] for r in trades}, {'N/A'})
+            self.assertTrue(all(r['account'] and r['owner'] == 'S' for r in data['rows']))
+            with self.assertRaisesRegex(ValueError, 'source changed'):
+                reviewed.reviewed_senate_trades(prefix, [], 'B001277', data['published_date'])
+        october = reviewed.load_reviewed_filing('senate-' + cases[2][0])
+        self.assertEqual(sum(r['asset_type'] == 'Bond' for r in october['rows']), 2)
+        self.assertEqual(sum(r['asset_name'] == 'Going Down the Road Feeling Bad LLC' for r in october['rows']), 8)
+        self.assertEqual(len({r['account'] for r in october['rows']}), 8)
+
     def test_empty_review_requires_explicit_evidence_and_unchanged_source(self):
         key = 'house-2026-9116311'
         data = reviewed.load_reviewed_filing(key)

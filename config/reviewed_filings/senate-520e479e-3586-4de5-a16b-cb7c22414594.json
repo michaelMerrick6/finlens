@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "source_url": "https://efdsearch.senate.gov/search/view/paper/520e479e-3586-4de5-a16b-cb7c22414594/",
+  "image_rgb_sha256": [
+    "c232b5a6c6a84251506f2f7d3f86509178489243c89b100e6f8f13b0c07b5ff4",
+    "ad22a93d1b64a287b59242ba3254b84c515a48e355bed81b272d1b740dee1246",
+    "5c9cc4a505a22f021ad825a59865d599329e9949f3819e32d1970c24c9c74c74"
+  ],
+  "published_date": "2024-10-16",
+  "member_id": "B001277",
+  "politician_name": "Richard Blumenthal",
+  "chamber": "Senate",
+  "row_count": 10,
+  "review_note": "All three original Senate images visually reviewed. Cover letter plus two transaction pages: 10 spouse-owned purchases (five per table page), including two Brazilian government bond entries and eight private LLC entries in separate account groups. Account headings, blank rows and printed IBM/Microsoft examples excluded. No public stock ticker inferred. Amount bands read separately on each page; eight identical asset names preserved as distinct source rows. Cover letter corroborates September 2\u201317 date span.",
+  "rows": [
+    {
+      "page": 2,
+      "row": 2,
+      "owner": "S",
+      "account": "Peter L Malkin Family 9 LLC",
+      "asset_name": "Brazilian SELIC (LFT) Bonds (Held by BTG)",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2024-09-02",
+      "transaction_type": "buy",
+      "amount_range": "$100,001 - $250,000"
+    },
+    {
+      "page": 2,
+      "row": 3,
+      "owner": "S",
+      "account": "Peter L Malkin Family 9 LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$100,001 - $250,000"
+    },
+    {
+      "page": 2,
+      "row": 4,
+      "owner": "S",
+      "account": "Peter L Malkin Family 9 LLC",
+      "asset_name": "Brazilian SELIC (LTN) Fixed Rate Treasury (Held by BTG)",
+      "ticker": "N/A",
+      "asset_type": "Bond",
+      "transaction_date": "2024-09-17",
+      "transaction_type": "buy",
+      "amount_range": "$250,001 - $500,000"
+    },
+    {
+      "page": 2,
+      "row": 7,
+      "owner": "S",
+      "account": "Peter L Malkin Family 2000 LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$250,001 - $500,000"
+    },
+    {
+      "page": 2,
+      "row": 10,
+      "owner": "S",
+      "account": "Peter L Malkin Family 9 LLC - 3M's Partners LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$50,001 - $100,000"
+    },
+    {
+      "page": 3,
+      "row": 2,
+      "owner": "S",
+      "account": "3M's Partners LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$15,001 - $50,000"
+    },
+    {
+      "page": 3,
+      "row": 5,
+      "owner": "S",
+      "account": "Hedge Holdings LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$50,001 - $100,000"
+    },
+    {
+      "page": 3,
+      "row": 8,
+      "owner": "S",
+      "account": "LarryMae Partners LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$100,001 - $250,000"
+    },
+    {
+      "page": 3,
+      "row": 11,
+      "owner": "S",
+      "account": "Other One LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$15,001 - $50,000"
+    },
+    {
+      "page": 3,
+      "row": 14,
+      "owner": "S",
+      "account": "Summa I LLC",
+      "asset_name": "Going Down the Road Feeling Bad LLC",
+      "ticker": "N/A",
+      "asset_type": "Other",
+      "transaction_date": "2024-09-09",
+      "transaction_type": "buy",
+      "amount_range": "$15,001 - $50,000"
+    }
+  ]
+}

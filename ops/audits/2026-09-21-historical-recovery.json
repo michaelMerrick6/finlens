@@ -1,0 +1,35 @@
+[
+  {
+    "filing_id": "senate-068274e1-4b7a-4453-a242-563dde4c10d8",
+    "source_url": "https://efdsearch.senate.gov/search/view/paper/068274e1-4b7a-4453-a242-563dde4c10d8/",
+    "previous_rows": 15,
+    "stored_rows": 36,
+    "changed_row_multiset": true,
+    "readback_matches": true
+  },
+  {
+    "filing_id": "senate-09694768-3b1e-4af0-8b46-8521c00cbd96",
+    "source_url": "https://efdsearch.senate.gov/search/view/paper/09694768-3b1e-4af0-8b46-8521c00cbd96/",
+    "previous_rows": 14,
+    "stored_rows": 23,
+    "changed_row_multiset": true,
+    "readback_matches": true
+  },
+  {
+    "filing_id": "senate-520e479e-3586-4de5-a16b-cb7c22414594",
+    "source_url": "https://efdsearch.senate.gov/search/view/paper/520e479e-3586-4de5-a16b-cb7c22414594/",
+    "previous_rows": 0,
+    "stored_rows": 10,
+    "changed_row_multiset": true,
+    "readback_matches": true
+  },
+  {
+    "filing_id": "house-2026-20035191",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035191.pdf",
+    "source_sha256": "84b342dd33c462efca7f4740b81367a6ed6bf7a0d67dd3e4ceab63c384e4db05",
+    "previous_rows": 15,
+    "stored_rows": 15,
+    "changed_row_multiset": false,
+    "readback_matches": true
+  }
+]

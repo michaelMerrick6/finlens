@@ -45,6 +45,7 @@ HOUSE_TX_RE = re.compile(
     r"(?P<tail>.*)$"
 )
 HOUSE_AMOUNT_RE = re.compile(
+    r"(?:Spouse/DC\s+)?"
     r"(Over\s+\$[0-9,]+|Under\s+\$[0-9,]+|\$[0-9,]+\s*-\s*\$[0-9,]+|\$[0-9,]+\.[0-9]{2})(?![0-9,.])"
 )
 HOUSE_TICKER_RE = re.compile(r"\(([A-Za-z]{1,6})\)")
