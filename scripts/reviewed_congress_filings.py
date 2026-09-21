@@ -24,7 +24,12 @@ def load_reviewed_filing(prefix: str) -> dict | None:
     if not data["rows"] and not (data.get("verified_no_trades") is True and data.get("review_note")):
         raise ValueError(f"Empty reviewed filing lacks no-transaction evidence: {prefix}")
     locations = set()
-    for row in data['rows']:
+    indexes = set()
+    for index, row in enumerate(data['rows']):
+        source_index = row.get('source_index', index)
+        if type(source_index) is not int or source_index < 0 or source_index in indexes:
+            raise ValueError(f'Duplicate/invalid source index: {prefix}')
+        indexes.add(source_index)
         location = (row['page'], row['row'])
         if location in locations or min(location) < 1:
             raise ValueError(f'Duplicate/invalid source row: {prefix} {location}')
@@ -33,7 +38,54 @@ def load_reviewed_filing(prefix: str) -> dict | None:
                 or row['transaction_type'] not in {'buy', 'sell', 'exchange'}
                 or not row['asset_name'] or not row['amount_range'].startswith(('$', 'Over $'))):
             raise ValueError(f'Invalid reviewed transaction: {prefix} {location}')
+    validate_amendment_links(prefix, data, locations, indexes)
     return data
+
+
+def validate_amendment_links(prefix, data, locations, indexes):
+    """Require reciprocal, explicit replacements; never infer from equal trade values."""
+    if data.get('amendment_only') and len(data.get('replaces_rows', [])) != len(data['rows']):
+        raise ValueError('Amendment-only filing must link every replacement row')
+    if data.get('source_transaction_count', len(data['rows'])) != len(data['rows']) + len(data.get('superseded_rows', [])):
+        raise ValueError('Original source row accounting is incomplete')
+    for field in ('superseded_rows', 'replaces_rows'):
+        for link in data.get(field, []):
+            original = field == 'superseded_rows'
+            own = 'original' if original else 'amendment'
+            other = 'amendment' if original else 'original'
+            other_prefix = link[f'{other}_filing']
+            if link[f'{own}_filing'] != prefix or not re.fullmatch(r'senate-[a-f0-9-]+', other_prefix):
+                raise ValueError('Invalid amendment filing link')
+            other_data = json.loads((REVIEW_DIR / f'{other_prefix}.json').read_text())
+            reciprocal = 'replaces_rows' if original else 'superseded_rows'
+            if (link not in other_data.get(reciprocal, [])
+                    or other_data['member_id'] != data['member_id']
+                    or other_data['chamber'] != data['chamber']):
+                raise ValueError('Amendment link is not reciprocal for the same member')
+            original_data, amendment_data = (data, other_data) if original else (other_data, data)
+            if amendment_data['published_date'] <= original_data['published_date']:
+                raise ValueError('Amendment must follow the original filing')
+            if any((r['page'], r['row']) == (link['original_page'], link['original_row'])
+                   or r.get('source_index', i) == link['original_source_index']
+                   for i, r in enumerate(original_data['rows'])):
+                raise ValueError('Superseded original row must not remain active')
+            replacements = [r for i, r in enumerate(amendment_data['rows'])
+                            if (r['page'], r['row'], r.get('source_index', i)) ==
+                            (link['amendment_page'], link['amendment_row'], link['amendment_source_index'])]
+            if len(replacements) != 1 or any(replacements[0].get(k) != link[k] for k in
+                    ('account', 'ticker', 'transaction_date', 'transaction_type', 'amount_range')):
+                raise ValueError('Amendment replacement does not match reviewed correction')
+    superseded = data.get('superseded_rows', [])
+    if superseded:
+        excluded_indexes = [r['original_source_index'] for r in superseded]
+        excluded_locations = [(r['original_page'], r['original_row']) for r in superseded]
+        total = data.get('source_transaction_count')
+        if (len(set(excluded_indexes)) != len(superseded)
+                or len(set(excluded_locations)) != len(superseded)
+                or set(excluded_locations) & locations or set(excluded_indexes) & indexes
+                or type(total) is not int or total != len(data['rows']) + len(superseded)
+                or indexes | set(excluded_indexes) != set(range(total))):
+            raise ValueError('Original source row accounting is incomplete')
 
 
 def reviewed_trades(prefix: str, data: dict) -> list[dict]:
@@ -45,7 +97,7 @@ def reviewed_trades(prefix: str, data: dict) -> list[dict]:
         transaction_date=row['transaction_date'], published_date=data['published_date'],
         transaction_type=row['transaction_type'], asset_type=row['asset_type'],
         amount_range=row['amount_range'], source_url=data['source_url'],
-        doc_id=f'{prefix}-{index}', asset_name=row['asset_name'],
+        doc_id=f"{prefix}-{row.get('source_index', index)}", asset_name=row['asset_name'],
     ) for index, row in enumerate(data['rows'])]
 
 

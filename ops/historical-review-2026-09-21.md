@@ -53,24 +53,38 @@ Original sources:
 - [Blumenthal October 2024](https://efdsearch.senate.gov/search/view/paper/520e479e-3586-4de5-a16b-cb7c22414594/)
 - [Peters original PDF](https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035191.pdf)
 
-## Remaining: 186 filings
+## Amendment resolved in a subsequent batch
 
-175 House and 11 Senate failures from 2024 onward remain. These counts refer to
-failed filing reviews, not numbers of missing trades.
+The [September 12, 2025 original](https://efdsearch.senate.gov/search/view/paper/e08ef39c-87e8-4381-9f92-41218ecc7cd4/)
+and [October 2, 2025 amendment](https://efdsearch.senate.gov/search/view/paper/f8c167e9-090d-471d-81c9-f8c7366420d1/)
+are now reconciled. All five original source images and the amendment were
+visually reviewed. The original contains 35 transactions; printed page 1, line 7
+has no amount checked. Counsel's amendment explicitly replaces that spouse-owned
+SERA sale in the Peter L. Malkin Family 2000 LLC account: August 14, 2025,
+$1,001–$15,000.
 
-### Amendment requiring explicit supersession
+- Original: 34 active rows, preserving the source index gap at the replaced row.
+- Amendment: one corrected row, retaining its October 2 availability date.
+- Combined: 35 transactions, up from 21 stored rows (**14 net restored**).
+- Four separate SERA sales and five IRTC sales remain across distinct accounts;
+  identical trade values do not establish duplicates.
+- Original transaction pages retain 8/10/11/5 active rows; the excluded row and
+  its replacement have reciprocal account/page/row/index provenance.
+- Both sources were fetched again and their image hashes checked before publication.
+- Both filings were published in one PostgreSQL transaction through the existing
+  publication functions. Full row readbacks, complete statuses, reciprocal ledger
+  metadata, and absence of the superseded row were checked before commit.
+- Publication now rejects changed or resurrected rows for linked reviewed filings.
+  Regression tests cover missing links, wrong member/amount/date, duplicate original
+  rows, and rejected publication before any RPC call.
 
-Visually inspected the one-page [October 2, 2025 Blumenthal amendment](https://efdsearch.senate.gov/search/view/paper/f8c167e9-090d-471d-81c9-f8c7366420d1/).
-It explicitly corrects page 1, line 7 of the September 12, 2025 report in the
-Peter L. Malkin Family 2000 LLC account to a spouse-owned **SERA sale on
-August 14, 2025, $1,001–$15,000**. This is a replacement, not an additional trade.
+Audit: `audits/2026-09-21-blumenthal-amendment.json`.
 
-Both that amendment and its original report
-`senate-e08ef39c-87e8-4381-9f92-41218ecc7cd4` remain unresolved. The original's five
-images were retrieved but not fully reviewed in this batch. Next work must verify
-all original rows, identify the corrected source row, and preserve the amendment
-relationship and availability date without counting two transactions. No standalone
-amendment trade or guessed original transaction was published.
+## Remaining: 184 filings
+
+175 House and 9 Senate failures from 2024 onward remain at this batch's readback.
+These are failed filing reviews, not counts of missing trades. Historical holdings
+and source completeness are not implied by clearing these two failures.
 
 ## Validation
 

@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "member_id": "B001277",
+  "politician_name": "Richard Blumenthal",
+  "chamber": "Senate",
+  "source_url": "https://efdsearch.senate.gov/search/view/paper/f8c167e9-090d-471d-81c9-f8c7366420d1/",
+  "image_rgb_sha256": [
+    "5dfe19b1cc208b022b47006197a2b4e14410f921552e9d49cf4e5bd5db8c4f11"
+  ],
+  "published_date": "2025-10-02",
+  "row_count": 1,
+  "replaces_rows": [
+    {
+      "original_filing": "senate-e08ef39c-87e8-4381-9f92-41218ecc7cd4",
+      "original_page": 2,
+      "original_row": 7,
+      "original_source_index": 5,
+      "amendment_filing": "senate-f8c167e9-090d-471d-81c9-f8c7366420d1",
+      "amendment_page": 1,
+      "amendment_row": 1,
+      "amendment_source_index": 0,
+      "account": "Peter L Malkin Family 2000 LLC",
+      "ticker": "SERA",
+      "transaction_date": "2025-08-14",
+      "transaction_type": "sell",
+      "amount_range": "$1,001 - $15,000"
+    }
+  ],
+  "review_note": "Original one-page counsel amendment visually reviewed. Explicitly replaces printed page 1 line 7 of September 12 PTR (Peter L Malkin Family 2000 LLC) with spouse-owned SERA sale on August 14, $1,001\u2013$15,000. One replacement, not a fifth account or an additional sale. Availability date retained as October 2.",
+  "rows": [
+    {
+      "page": 1,
+      "row": 1,
+      "source_index": 0,
+      "owner": "S",
+      "account": "Peter L Malkin Family 2000 LLC",
+      "asset_name": "Sera Prognostics Inc-A",
+      "ticker": "SERA",
+      "asset_type": "Stock",
+      "transaction_date": "2025-08-14",
+      "transaction_type": "sell",
+      "amount_range": "$1,001 - $15,000"
+    }
+  ],
+  "amendment_only": true
+}

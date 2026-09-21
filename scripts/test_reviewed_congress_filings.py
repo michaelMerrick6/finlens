@@ -14,6 +14,21 @@ SENATE = 'senate-929216d5-5dbd-429c-858c-1e9332924627'
 
 
 class ReviewedFilingsTests(unittest.TestCase):
+    def test_publication_rejects_resurrected_or_changed_amendment_rows(self):
+        from unittest.mock import Mock
+        from congress_filing_store import publish_filing
+        prefix = 'senate-e08ef39c-87e8-4381-9f92-41218ecc7cd4'
+        trades = reviewed.reviewed_trades(prefix, reviewed.load_reviewed_filing(prefix))
+        client = Mock()
+        extra = dict(trades[0], doc_id=prefix + '-5')
+        with self.assertRaisesRegex(ValueError, 'reviewed amendment rows'):
+            publish_filing(client, prefix, trades + [extra])
+        altered = [dict(row) for row in trades]
+        altered[0]['amount_range'] = '$1,001 - $15,000'
+        with self.assertRaisesRegex(ValueError, 'reviewed amendment rows'):
+            publish_filing(client, prefix, altered)
+        client.rpc.assert_not_called()
+
     def test_counts_and_source_positions(self):
         for prefix, count in [(HOUSE, 244), (SENATE, 111)]:
             data = reviewed.load_reviewed_filing(prefix)
@@ -119,6 +134,39 @@ class ReviewedFilingsTests(unittest.TestCase):
         self.assertEqual(sum(r['asset_type'] == 'Bond' for r in october['rows']), 2)
         self.assertEqual(sum(r['asset_name'] == 'Going Down the Road Feeling Bad LLC' for r in october['rows']), 8)
         self.assertEqual(len({r['account'] for r in october['rows']}), 8)
+
+    def test_blumenthal_amendment_replaces_exactly_one_source_row(self):
+        from collections import Counter
+        original = 'senate-e08ef39c-87e8-4381-9f92-41218ecc7cd4'
+        amendment = 'senate-f8c167e9-090d-471d-81c9-f8c7366420d1'
+        base = reviewed.load_reviewed_filing(original)
+        correction = reviewed.load_reviewed_filing(amendment)
+        self.assertEqual(Counter(r['page'] for r in base['rows']), {2: 8, 3: 10, 4: 11, 5: 5})
+        trades = reviewed.reviewed_trades(original, base) + reviewed.reviewed_trades(amendment, correction)
+        self.assertEqual(len(trades), 35)
+        self.assertNotIn(original + '-5', {r['doc_id'] for r in trades})
+        self.assertIn(original + '-34', {r['doc_id'] for r in trades})
+        self.assertEqual(sum(r['ticker'] == 'SERA' for r in trades), 4)
+        self.assertEqual(trades[-1]['published_date'], '2025-10-02')
+        self.assertEqual(trades[-1]['transaction_date'], '2025-08-14')
+        self.assertEqual(trades[-1]['amount_range'], '$1,001 - $15,000')
+        self.assertEqual(trades[-1]['source_url'], correction['source_url'])
+        # Breaking either side of the relationship prevents publication/replay.
+        import copy
+        for fault in ('missing_link', 'wrong_member', 'wrong_amount', 'early_date', 'duplicate_original'):
+            with tempfile.TemporaryDirectory() as directory:
+                a, b = copy.deepcopy(base), copy.deepcopy(correction)
+                if fault == 'missing_link': b['replaces_rows'] = []
+                elif fault == 'wrong_member': b['member_id'] = 'wrong'
+                elif fault == 'wrong_amount': b['rows'][0]['amount_range'] = '$15,001 - $50,000'
+                elif fault == 'early_date': b['published_date'] = '2025-09-01'
+                else:
+                    a['rows'][0]['page'], a['rows'][0]['row'] = 2, 7
+                Path(directory, original + '.json').write_text(json.dumps(a))
+                Path(directory, amendment + '.json').write_text(json.dumps(b))
+                with patch.object(reviewed, 'REVIEW_DIR', Path(directory)):
+                    for prefix in (original, amendment):
+                        with self.assertRaises(ValueError): reviewed.load_reviewed_filing(prefix)
 
     def test_empty_review_requires_explicit_evidence_and_unchanged_source(self):
         key = 'house-2026-9116311'

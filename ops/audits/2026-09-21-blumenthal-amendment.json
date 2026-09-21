@@ -1,0 +1,18 @@
+[
+  {
+    "filing_id": "senate-e08ef39c-87e8-4381-9f92-41218ecc7cd4",
+    "source_url": "https://efdsearch.senate.gov/search/view/paper/e08ef39c-87e8-4381-9f92-41218ecc7cd4/",
+    "previous_rows": 20,
+    "stored_rows": 34,
+    "readback_matches": true,
+    "relationship_persisted": true
+  },
+  {
+    "filing_id": "senate-f8c167e9-090d-471d-81c9-f8c7366420d1",
+    "source_url": "https://efdsearch.senate.gov/search/view/paper/f8c167e9-090d-471d-81c9-f8c7366420d1/",
+    "previous_rows": 1,
+    "stored_rows": 1,
+    "readback_matches": true,
+    "relationship_persisted": true
+  }
+]

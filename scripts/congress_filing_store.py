@@ -26,6 +26,14 @@ def publish_filing(client, prefix, trades, *, filing=None, token=None, source_ha
         raise ValueError(f"Invalid official filing key: {prefix}")
     if not trades and not verified_no_trades:
         raise ValueError("Empty extraction is not a verified no-transactions filing")
+    # Persist source-reviewed replacement relationships with the filing ledger.
+    from reviewed_congress_filings import load_reviewed_filing
+    reviewed = load_reviewed_filing(prefix)
+    filing = dict(filing or {})
+    if reviewed:
+        for field in ('superseded_rows', 'replaces_rows', 'source_transaction_count'):
+            if field in reviewed:
+                filing[field] = reviewed[field]
     clean = []
     seen = set()
     for trade in trades:
@@ -37,6 +45,13 @@ def publish_filing(client, prefix, trades, *, filing=None, token=None, source_ha
         if row["transaction_date"] > row["published_date"]:
             raise ValueError("Transaction date is after official filing date")
         clean.append(row)
+    if reviewed and (reviewed.get('superseded_rows') or reviewed.get('replaces_rows')):
+        from reviewed_congress_filings import reviewed_trades
+        fields = ('doc_id', 'member_id', 'ticker', 'transaction_date', 'published_date',
+                  'transaction_type', 'amount_range', 'asset_name', 'asset_type', 'source_url')
+        signature = lambda row: tuple(row.get(field) for field in fields)
+        if sorted(map(signature, clean)) != sorted(map(signature, reviewed_trades(prefix, reviewed))):
+            raise ValueError('Publication does not match reviewed amendment rows')
     if token is None:
         metadata = dict(filing or {})
         published = (clean[0]["published_date"] if clean else metadata.get("published_date"))
