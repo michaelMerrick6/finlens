@@ -26,7 +26,8 @@ function AnalysisNavigation({ path }: { path: string }) {
       aria-controls="analysis-pages" onClick={() => setOpen(value => !value)}>⌄</button>
     <div id="analysis-pages" className="analysis-nav-dropdown" hidden={!open}>
       {[["/analysis", "Activity Overview", "Explore congressional buying and selling."],
-        ["/analysis/screener", "Research Screener", "Ask questions and save company screens."]].map(([href, label, description]) =>
+        ["/analysis/screener", "Research Screener", "Ask questions and save company screens."],
+        ["/analysis/strategies", "Strategies", "Explore portfolios built from public disclosures."]].map(([href, label, description]) =>
         <Link key={href} href={href} aria-current={path === href ? "page" : undefined} onClick={() => setOpen(false)}>
           <strong>{label}</strong><span>{description}</span>
         </Link>)}

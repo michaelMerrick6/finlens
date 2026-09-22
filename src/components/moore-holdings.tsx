@@ -12,7 +12,6 @@ export function MooreHoldings() {
     <span className="eyebrow">TIM MOORE · PARTIAL ESTIMATE</span>
     <h1>Estimated holdings.</h1>
     <p className={styles.intro}>A reconstruction from his annual disclosure and subsequent reported trades. Snapshot: {snapshot.asOf}. Exact share counts and some account assignments are inferred.</p>
-    <div className={styles.note}><strong>This is an incomplete portfolio estimate.</strong> Six unresolved positions are listed below and excluded from the subtotal and chart. This dated snapshot does not automatically incorporate later filings.</div>
     <div className={styles.stats}>
       <div><strong>{range(snapshot.subtotalMin, snapshot.subtotalMax)}</strong><span>Modeled portion only · not total portfolio value</span></div>
       <div><strong>{snapshot.rows.length}</strong><span>Stocks and funds with estimates</span></div>
@@ -29,7 +28,7 @@ export function MooreHoldings() {
     <div className={styles.listHeading}><h2>Estimated holdings</h2><span>Largest modeled midpoint first</span></div>
     <div className={styles.tableHead}><span>Rank / company</span><span>Estimated shares</span><span>Estimated value</span></div>
     {snapshot.rows.map((r,i) => <details className={styles.stockRow} key={r.ticker} id={`holding-${r.ticker}`}>
-      <summary><div className={styles.identity}><span className={styles.rank}>{String(i+1).padStart(2,'0')}</span><CompanyLogo ticker={r.ticker}/><div><strong>{r.name}</strong><span>{r.ticker}</span></div></div>
+      <summary><div className={styles.identity}><span className={styles.rank}>{String(i+1).padStart(2,'0')}</span><CompanyLogo ticker={r.ticker}/><div><strong>{r.name}</strong><span>{r.ticker}</span>{r.minShares === 0 && r.maxShares > 0 && <span>Possibly sold out. Reported dollar ranges leave the remaining shares uncertain.</span>}</div></div>
         <span className={styles.quantity}>{shares(r.minShares)}–{shares(r.maxShares)}</span><strong className={styles.value}>{range(r.minValue,r.maxValue)} <span>⌄</span></strong></summary>
       <div className={styles.expanded}>{r.accounts.map((a,i) => <div key={`${a.account}-${i}`}>
         <p><strong>{a.account || 'Account not stated'}</strong> · Annual value: {a.reportedRange}. Valued using the completed close on {a.priceDate}.</p>
