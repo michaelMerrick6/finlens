@@ -8,6 +8,7 @@ const MARKET_DATA_TTL_MS = 15 * 60 * 1000;
 
 type CachedSeries = {
   expiresAt: number;
+  period1: number;
   value: MarketPriceSeries | null;
 };
 
@@ -51,16 +52,15 @@ export async function getMarketPriceSeries(
   const cached = marketSeriesCache.get(normalizedTicker);
   const now = Date.now();
 
-  if (cached && cached.expiresAt > now) {
-    return cached.value;
-  }
-
   const period1 = earliestDate
     ? Math.max(
         0,
         Math.floor(new Date(`${earliestDate}T00:00:00Z`).getTime() / 1000) - 7 * 24 * 60 * 60,
       )
     : 0;
+  if (cached && cached.expiresAt > now && cached.period1 <= period1) {
+    return cached.value;
+  }
   const period2 = Math.floor(now / 1000);
 
   try {
@@ -101,7 +101,7 @@ export async function getMarketPriceSeries(
       }
 
       if (!response.ok) {
-        marketSeriesCache.set(normalizedTicker, { expiresAt: now + 60_000, value: null });
+        marketSeriesCache.set(normalizedTicker, { expiresAt: now + 60_000, period1, value: null });
         return null;
       }
 
@@ -124,7 +124,7 @@ export async function getMarketPriceSeries(
     }
 
     if (!payload) {
-      marketSeriesCache.set(normalizedTicker, { expiresAt: now + 60_000, value: null });
+      marketSeriesCache.set(normalizedTicker, { expiresAt: now + 60_000, period1, value: null });
       return null;
     }
 
@@ -161,11 +161,12 @@ export async function getMarketPriceSeries(
 
     marketSeriesCache.set(normalizedTicker, {
       expiresAt: now + MARKET_DATA_TTL_MS,
+      period1,
       value: series,
     });
     return series;
   } catch {
-    marketSeriesCache.set(normalizedTicker, { expiresAt: now + 60_000, value: null });
+    marketSeriesCache.set(normalizedTicker, { expiresAt: now + 60_000, period1, value: null });
     return null;
   }
 }
@@ -174,13 +175,17 @@ export async function getMarketPriceSeriesMap(
   requests: MarketSeriesRequest[],
   concurrency = 6,
 ): Promise<Map<string, MarketPriceSeries | null>> {
-  const uniqueRequests = Array.from(
-    new Map(
-      requests
-        .filter((request) => normalizeTicker(request.ticker))
-        .map((request) => [normalizeTicker(request.ticker), request] as const),
-    ).values(),
-  );
+  const byTicker = new Map<string, MarketSeriesRequest>();
+  for (const request of requests) {
+    const ticker = normalizeTicker(request.ticker);
+    if (!ticker) continue;
+    const existing = byTicker.get(ticker);
+    // An omitted date requests all history and takes precedence over any date.
+    if (!existing || (existing.earliestDate && (!request.earliestDate || request.earliestDate < existing.earliestDate))) {
+      byTicker.set(ticker, { ...request, ticker });
+    }
+  }
+  const uniqueRequests = [...byTicker.values()];
   const cappedConcurrency = Math.max(1, Math.min(concurrency, uniqueRequests.length || 1));
   const result = new Map<string, MarketPriceSeries | null>();
   let currentIndex = 0;

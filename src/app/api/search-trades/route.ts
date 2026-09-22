@@ -13,7 +13,6 @@ import { getPublicSupabase } from '@/lib/supabase-server';
 export const dynamic = 'force-dynamic';
 
 const TRADE_SELECT = `*, congress_members ( first_name, last_name, party, chamber, state )`;
-const SEARCH_RESULT_LIMIT = 250;
 const DEFAULT_PAGE_SIZE = 20;
 const MAX_PAGE_SIZE = 50;
 const MAX_SEARCH_LENGTH = 100;
@@ -72,44 +71,9 @@ function readBoundedInteger(value: string | null, fallback: number, maximum?: nu
   return maximum ? Math.min(parsed, maximum) : parsed;
 }
 
-function pageResponse(trades: TradeRow[], offset: number, limit: number, mayHaveMore = false) {
-  return NextResponse.json({
-    trades: trades.slice(offset, offset + limit),
-    hasMore: trades.length > offset + limit || mayHaveMore,
-    nextOffset: offset + limit,
-  });
-}
-
 function selectCompanyMatches(matches: CompanySearchMatch[]) {
   const preferred = matches.find((match) => match.exactMatch) || matches.find((match) => match.strongMatch);
   return preferred ? [preferred] : matches.slice(0, 3);
-}
-
-function sortTrades(rows: TradeRow[], tickerScores: Map<string, number>, memberScores: Map<string, number>): TradeRow[] {
-  return [...rows].sort((left, right) => {
-    const leftScore = Math.max(
-      tickerScores.get(String(left.ticker || '').toUpperCase()) || 0,
-      memberScores.get(String(left.member_id || '').toLowerCase()) || 0,
-    );
-    const rightScore = Math.max(
-      tickerScores.get(String(right.ticker || '').toUpperCase()) || 0,
-      memberScores.get(String(right.member_id || '').toLowerCase()) || 0,
-    );
-    if (rightScore !== leftScore) {
-      return rightScore - leftScore;
-    }
-    const rightPublished = new Date(right.published_date || right.transaction_date || '').getTime();
-    const leftPublished = new Date(left.published_date || left.transaction_date || '').getTime();
-    if (rightPublished !== leftPublished) {
-      return rightPublished - leftPublished;
-    }
-    const rightCreated = new Date(right.created_at || '').getTime();
-    const leftCreated = new Date(left.created_at || '').getTime();
-    if (rightCreated !== leftCreated) {
-      return rightCreated - leftCreated;
-    }
-    return String(left.id || '').localeCompare(String(right.id || ''));
-  });
 }
 
 export async function GET(request: NextRequest) {
@@ -129,131 +93,62 @@ export async function GET(request: NextRequest) {
   if (memberIds.length > 25 || memberIds.some(id => !/^[A-Za-z0-9-]{1,70}$/.test(id)) || (exactTicker && !/^[A-Z0-9.-]{1,12}$/.test(exactTicker))) {
     return NextResponse.json({error:'Invalid disclosure filter.'},{status:400});
   }
-  if (!trimmedQuery || memberIds.length || exactTicker) {
-    try {
-      const page = await readFilteredPage<TradeRow>({
-        offset,
-        limit,
-        include: (trade) => filterDisplayPoliticianTrades([trade]).length > 0,
-        fetchRows: async (cursor, count) => {
-          const baseQuery = applyDisplayTradeScope(
-            supabase
-              .from('politician_trades')
-              .select(TRADE_SELECT)
-              .gte('published_date', HOUSE_PRODUCT_START_DATE)
-              .order('published_date', { ascending: false })
-              .order('created_at', { ascending: false })
-              .order('id', { ascending: true })
-              .range(cursor, cursor + count - 1),
-          );
-          let scopedQuery = applyTradeFilters(baseQuery, chamber, direction);
-          if (memberIds.length) scopedQuery = scopedQuery.in('member_id', memberIds);
-          if (exactTicker) scopedQuery = scopedQuery.eq('ticker', exactTicker);
-          const { data, error } = await scopedQuery;
-          if (error) throw error;
-          return ((data || []) as TradeRow[]).map(reviewPoliticianTrade);
-        },
-      });
-      return NextResponse.json({ trades: page.rows, hasMore: page.hasMore, nextOffset: page.nextOffset });
-    } catch (error) {
-      return NextResponse.json({ trades: [], error: routeErrorMessage(error, 'Failed to load trades.', 'search-trades') }, { status: 500 });
-    }
-  }
-
   try {
-    const [rawCompanyMatches, rawPoliticianMatches] = await Promise.all([
-      searchCompaniesDetailed(trimmedQuery, 8),
-      searchPoliticiansDetailed(trimmedQuery, 8),
-    ]);
-
-    const companyMatches = selectCompanyMatches(rawCompanyMatches);
-    const politicianMatches = rawPoliticianMatches.slice(0, 5);
-
-    const tickers = [...new Set(companyMatches.map((match) => match.ticker).filter(Boolean))];
-    const memberIds = [...new Set(politicianMatches.map((match) => match.id).filter(Boolean))];
-    const sanitizedQuery = sanitizeSearchValue(trimmedQuery);
-    const requests = [];
-    const searchFetchLimit = Math.min(offset + limit + 1, SEARCH_RESULT_LIMIT);
-
-    if (tickers.length > 0) {
-      requests.push(
-        applyTradeFilters(
-          applyDisplayTradeScope(
-            supabase
-              .from('politician_trades')
-              .select(TRADE_SELECT)
-              .in('ticker', tickers)
-              .order('published_date', { ascending: false })
-              .order('created_at', { ascending: false })
-              .order('id', { ascending: true })
-              .limit(searchFetchLimit),
-          ),
-          chamber,
-          direction,
-        ),
-      );
-    }
-
-    if (memberIds.length > 0) {
-      requests.push(
-        applyTradeFilters(
-          applyDisplayTradeScope(
-            supabase
-              .from('politician_trades')
-              .select(TRADE_SELECT)
-              .in('member_id', memberIds)
-              .order('published_date', { ascending: false })
-              .order('created_at', { ascending: false })
-              .order('id', { ascending: true })
-              .limit(searchFetchLimit),
-          ),
-          chamber,
-          direction,
-        ),
-      );
-    }
-
-    if (tickers.length === 0 && memberIds.length === 0 && sanitizedQuery.length >= 2) {
-      requests.push(
-        applyTradeFilters(
-          applyDisplayTradeScope(
-            supabase
-              .from('politician_trades')
-              .select(TRADE_SELECT)
-              .or(`politician_name.ilike.%${sanitizedQuery}%,ticker.ilike.%${sanitizedQuery}%`)
-              .order('published_date', { ascending: false })
-              .order('created_at', { ascending: false })
-              .order('id', { ascending: true })
-              .limit(searchFetchLimit),
-          ),
-          chamber,
-          direction,
-        ),
-      );
-    }
-
-    const responses = await Promise.all(requests);
-    const firstError = responses.find((response) => response.error);
-    if (firstError?.error) {
-      return NextResponse.json({ trades: [], error: routeErrorMessage(firstError.error, 'Failed to search trades.', 'search-trades') }, { status: 500 });
-    }
-
-    const tickerScores = new Map(companyMatches.map((match) => [match.ticker.toUpperCase(), match.score]));
-    const memberScores = new Map(politicianMatches.map((match) => [match.id.toLowerCase(), match.score]));
-    const merged = new Map<string, TradeRow>();
-
-    for (const response of responses) {
-      for (const trade of (response.data || []) as TradeRow[]) {
-        if (trade.id) {
-          merged.set(trade.id, trade);
-        }
+    // Resolve the search once, then use the same raw-row cursor as browsing.
+    // Ordering by filing date also keeps pages stable as filters discard rows.
+    let searchTickers: string[] = [];
+    let searchMemberIds: string[] = [];
+    let textSearch = '';
+    const searching = Boolean(trimmedQuery && !memberIds.length && !exactTicker);
+    if (searching) {
+      const [companyMatches, politicianMatches] = await Promise.all([
+        searchCompaniesDetailed(trimmedQuery, 8),
+        searchPoliticiansDetailed(trimmedQuery, 8),
+      ]);
+      searchTickers = [...new Set(selectCompanyMatches(companyMatches).map(match => match.ticker).filter(Boolean))];
+      searchMemberIds = [...new Set(politicianMatches.slice(0, 5).map(match => match.id).filter(Boolean))];
+      textSearch = sanitizeSearchValue(trimmedQuery);
+      if (!searchTickers.length && !searchMemberIds.length && textSearch.length < 2) {
+        return NextResponse.json({ trades: [], hasMore: false, nextOffset: offset });
       }
     }
 
-    const trades = filterDisplayPoliticianTrades(sortTrades([...merged.values()].map(reviewPoliticianTrade), tickerScores, memberScores));
-    return pageResponse(trades, offset, limit);
+    const page = await readFilteredPage<TradeRow>({
+      offset,
+      limit,
+      include: (trade) => filterDisplayPoliticianTrades([trade]).length > 0,
+      fetchRows: async (cursor, count) => {
+        let query = applyTradeFilters(
+          applyDisplayTradeScope(supabase.from('politician_trades').select(TRADE_SELECT)),
+          chamber,
+          direction,
+        );
+        if (!searching) query = query.gte('published_date', HOUSE_PRODUCT_START_DATE);
+        if (memberIds.length) query = query.in('member_id', memberIds);
+        if (exactTicker) query = query.eq('ticker', exactTicker);
+        if (searchTickers.length && searchMemberIds.length) {
+          const tickerValues = searchTickers.map(value => JSON.stringify(value)).join(',');
+          const memberValues = searchMemberIds.map(value => JSON.stringify(value)).join(',');
+          query = query.or(`ticker.in.(${tickerValues}),member_id.in.(${memberValues})`);
+        } else if (searchTickers.length) {
+          query = query.in('ticker', searchTickers);
+        } else if (searchMemberIds.length) {
+          query = query.in('member_id', searchMemberIds);
+        } else if (searching) {
+          query = query.or(`politician_name.ilike.%${textSearch}%,ticker.ilike.%${textSearch}%`);
+        }
+        const { data, error } = await query
+          .order('published_date', { ascending: false })
+          .order('created_at', { ascending: false })
+          .order('id', { ascending: true })
+          .range(cursor, cursor + count - 1);
+        if (error) throw error;
+        return ((data || []) as TradeRow[]).map(reviewPoliticianTrade);
+      },
+    });
+    return NextResponse.json({ trades: page.rows, hasMore: page.hasMore, nextOffset: page.nextOffset });
   } catch (error) {
-    const message = routeErrorMessage(error, 'Search failed.', 'search-trades');
+    const message = routeErrorMessage(error, 'Failed to load trades.', 'search-trades');
     return NextResponse.json({ trades: [], error: message }, { status: 500 });
   }
 }

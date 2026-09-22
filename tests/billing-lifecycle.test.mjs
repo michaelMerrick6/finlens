@@ -105,6 +105,12 @@ for(const endpoint of ['portal','checkout'])test(`${endpoint} uses the bearer ac
   const route=h.load(`src/app/api/account/billing/${endpoint}/route.ts`);
   const response=await route.POST(new Request(`http://localhost/api/account/billing/${endpoint}`,{method:'POST',headers:{authorization:'Bearer token1'},body:JSON.stringify({userId:'user2',customer:'cus2'})}));
   assert.equal(response.status,200);assert.equal(h.calls[0].customer,'cus1');
+  const redirects = endpoint === 'checkout'
+    ? [h.calls[0].success_url, h.calls[0].cancel_url] : [h.calls[0].return_url];
+  for (const redirect of redirects) {
+    assert.equal(new URL(redirect).pathname, '/tracking');
+    assert.ok(fs.existsSync('src/app/tracking/page.tsx'));
+  }
   for(const token of ['', 'Bearer invalid']){
     assert.equal((await route.POST(new Request('http://localhost',{method:'POST',headers:{authorization:token}}))).status,401);
   }

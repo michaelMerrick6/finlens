@@ -1,4 +1,5 @@
 import 'server-only';
+import { saveAccountFollow } from '@/lib/account-follows-server';
 import { readBoundedRows } from '@/lib/bounded-rows';
 
 import type { User } from '@supabase/supabase-js';
@@ -2140,45 +2141,10 @@ export async function searchFundSuggestions(query: string): Promise<AccountFollo
   return [...deduped.values()].slice(0, 8);
 }
 
-async function countCurrentFollows(watchlistId: string) {
-  const [tickers, actors] = await Promise.all([fetchWatchlistTickers(watchlistId), fetchWatchlistActors(watchlistId)]);
-  return tickers.length + actors.length;
-}
-
-function assertCanAddFollow(count: number, limit: number) {
-  if (count >= limit) {
-    throw new Error(`${Math.min(count, limit)}/${limit} free follows used.`);
-  }
-}
-
 export async function addTickerFollow(user: User, ticker: string, alertMode: AlertMode) {
-  const { profile, watchlist } = await ensureUserWorkspace(user);
-  const supabase = getAdminSupabase();
+  const { watchlist } = await ensureUserWorkspace(user);
   const normalizedTicker = await resolveTickerTarget(ticker);
-
-  const existing = await supabase
-    .from('watchlist_tickers')
-    .select('id')
-    .eq('watchlist_id', watchlist.id)
-    .eq('ticker', normalizedTicker)
-    .limit(1);
-
-  if (existing.error) {
-    handleSupabaseError(existing.error);
-  }
-
-  if (!(existing.data?.length)) {
-    const count = await countCurrentFollows(watchlist.id);
-    assertCanAddFollow(count, profile.follow_limit || DEFAULT_FOLLOW_LIMIT);
-  }
-
-  const response = await supabase
-    .from('watchlist_tickers')
-    .upsert({ watchlist_id: watchlist.id, ticker: normalizedTicker, alert_mode: alertMode }, { onConflict: 'watchlist_id,ticker' });
-
-  if (response.error) {
-    handleSupabaseError(response.error);
-  }
+  await saveAccountFollow(user.id, watchlist.id, { kind: 'ticker', target: normalizedTicker, alertMode });
 }
 
 export async function addActorFollow(
@@ -2188,8 +2154,7 @@ export async function addActorFollow(
   alertMode: AlertMode,
   preferredActorKey?: string | null
 ) {
-  const { profile, watchlist } = await ensureUserWorkspace(user);
-  const supabase = getAdminSupabase();
+  const { watchlist } = await ensureUserWorkspace(user);
   const trimmedName = actorName.trim();
   if (!trimmedName) {
     throw new Error('Enter a name.');
@@ -2236,38 +2201,14 @@ export async function addActorFollow(
     };
   }
 
-  const existing = await supabase
-    .from('watchlist_actors')
-    .select('id')
-    .eq('watchlist_id', watchlist.id)
-    .eq('actor_type', actorType)
-    .eq('actor_key', actorKey)
-    .limit(1);
-
-  if (existing.error) {
-    handleSupabaseError(existing.error);
-  }
-
-  if (!(existing.data?.length)) {
-    const count = await countCurrentFollows(watchlist.id);
-    assertCanAddFollow(count, profile.follow_limit || DEFAULT_FOLLOW_LIMIT);
-  }
-
-  const response = await supabase.from('watchlist_actors').upsert(
-    {
-      watchlist_id: watchlist.id,
-      actor_type: actorType,
-      actor_key: actorKey,
-      actor_name: resolvedName,
-      alert_mode: alertMode,
-      metadata,
-    },
-    { onConflict: 'watchlist_id,actor_type,actor_key' }
-  );
-
-  if (response.error) {
-    handleSupabaseError(response.error);
-  }
+  await saveAccountFollow(user.id, watchlist.id, {
+    kind: 'actor',
+    target: actorKey,
+    actorType,
+    actorName: resolvedName,
+    alertMode,
+    metadata,
+  });
 }
 
 export async function updateTickerFollowMode(user: User, followId: string, alertMode: AlertMode) {

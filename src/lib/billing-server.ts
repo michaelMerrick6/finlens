@@ -261,8 +261,8 @@ export async function createCheckoutSession(user: User) {
     client_reference_id: user.id,
     payment_method_types: ['card'],
     allow_promotion_codes: true,
-    success_url: `${getAppBaseUrl()}/account?billing=success`,
-    cancel_url: `${getAppBaseUrl()}/account?billing=cancelled`,
+    success_url: `${getAppBaseUrl()}/tracking?billing=success`,
+    cancel_url: `${getAppBaseUrl()}/tracking?billing=cancelled`,
     line_items: [
       {
         price: getStripePriceId(),
@@ -298,7 +298,7 @@ export async function createBillingPortalSession(user: User) {
   const customerId = await ensureStripeCustomer(profile, user);
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: `${getAppBaseUrl()}/account?billing=portal`,
+    return_url: `${getAppBaseUrl()}/tracking?billing=portal`,
   });
 
   return session.url;

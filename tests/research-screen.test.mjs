@@ -59,5 +59,5 @@ test('purchase amount ranking orders money ahead of buyer count without inventin
  const {buildResearchBrief}=load('src/lib/research-brief.ts');const brief=buildResearchBrief({...result,filters:{...DEFAULT_SCREEN,activity:'buy',rank:'purchase_amount'},start:'2026-08-03',end:'2026-09-16'});assert.match(brief.title,/purchase minimum/);assert.match(brief.sections[0].headline,/100,001/);assert.doesNotMatch(brief.title,/distinct buyers/);
 });
 test('old saved screens keep their prior ranking and incompatible amount modes are rejected',()=>{
- const {rank,...legacy}=DEFAULT_SCREEN;assert.equal(validateScreen(legacy).rank,'politicians');assert.throws(()=>validateScreen({...DEFAULT_SCREEN,rank:'purchase_amount',activity:'sell'}));assert.throws(()=>validateScreen({...DEFAULT_SCREEN,rank:'profit'}));
+ const legacy={...DEFAULT_SCREEN};delete legacy.rank;assert.equal(validateScreen(legacy).rank,'politicians');assert.throws(()=>validateScreen({...DEFAULT_SCREEN,rank:'purchase_amount',activity:'sell'}));assert.throws(()=>validateScreen({...DEFAULT_SCREEN,rank:'profit'}));
 });
