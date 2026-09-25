@@ -116,6 +116,9 @@ def event_actor_match_keys(event: dict) -> set[str]:
         if normalized:
             keys.add(f"{target_actor_type}:{normalized}")
 
+    if signal_type == "strategy_filing":
+        add_exact_key("politician", payload.get("strategy_key"))
+        return keys
     if actor_type == "politician":
         member_id = (payload.get("member_id") or "").strip()
         if member_id:

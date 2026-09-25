@@ -1,5 +1,7 @@
 import 'server-only';
+import { ApiRouteError } from '@/lib/auth-server';
 import { saveAccountFollow } from '@/lib/account-follows-server';
+import { followedStrategy, strategyFollow } from '@/lib/strategies/strategy-follow';
 import { readBoundedRows } from '@/lib/bounded-rows';
 
 import type { User } from '@supabase/supabase-js';
@@ -930,7 +932,9 @@ function signalActorKeys(row: SignalEventPreviewRow) {
     }
   };
 
-  if (actorType === 'politician') {
+  if (signalType === 'strategy_filing') {
+    addExactKey('politician', payload.strategy_key);
+  } else if (actorType === 'politician') {
     addExactKey('politician', payload.member_id);
     addNormalizedKey('politician', payload.politician_name);
     addNormalizedKey('politician', row.actor_name);
@@ -1230,6 +1234,14 @@ async function fetchTickerRawActivity(follow: AccountTickerFollow): Promise<Acco
 
 async function fetchActorRawActivity(follow: AccountActorFollow): Promise<AccountMatchedSignal[]> {
   const supabase = getAdminSupabase();
+
+  if (followedStrategy(follow)) {
+    const response = await supabase.from('signal_events').select(SIGNAL_EVENT_PREVIEW_SELECT)
+      .eq('signal_type', 'strategy_filing').eq('payload->>strategy_key', follow.actorKey)
+      .order('created_at', { ascending: false }).limit(ACCOUNT_ACTIVITY_PER_FOLLOW_SOURCE_LIMIT);
+    if (response.error) handleSupabaseError(response.error);
+    return ((response.data || []) as SignalEventPreviewRow[]).map(row => toMatchedSignal(row, ['politician']));
+  }
 
   if (follow.actorType === 'politician') {
     const memberId = politicianMemberIdForFollow(follow);
@@ -2145,6 +2157,18 @@ export async function addTickerFollow(user: User, ticker: string, alertMode: Ale
   const { watchlist } = await ensureUserWorkspace(user);
   const normalizedTicker = await resolveTickerTarget(ticker);
   await saveAccountFollow(user.id, watchlist.id, { kind: 'ticker', target: normalizedTicker, alertMode });
+}
+
+export async function addStrategyFollow(user: User, strategyId: string) {
+  const strategy = strategyFollow(strategyId);
+  if (!strategy) throw new ApiRouteError(400, 'INVALID_STRATEGY', 'Unknown strategy.');
+  const { watchlist } = await ensureUserWorkspace(user);
+  // Political strategies share the existing actor follow, quota and delivery system.
+  // The namespaced key keeps them separate from congressional member follows.
+  await saveAccountFollow(user.id, watchlist.id, {
+    kind: 'actor', target: strategy.actorKey, actorType: 'politician',
+    actorName: strategy.name, alertMode: 'activity', metadata: { strategy_id: strategy.id },
+  });
 }
 
 export async function addActorFollow(

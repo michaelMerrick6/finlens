@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import {
   addActorFollow,
+  addStrategyFollow,
   addTickerFollow,
   deleteActorFollow,
   deleteTickerFollow,
@@ -36,11 +37,14 @@ export async function POST(request: Request) {
     const user = await requireApiUser(request);
     const body = (await request.json()) as
       | { kind?: 'ticker'; ticker?: string; alertMode?: string }
+      | { kind?: 'strategy'; strategyId?: string }
       | { kind?: 'actor'; actorType?: string; actorName?: string; actorKey?: string; alertMode?: string };
 
     const kind = body.kind;
     if (kind === 'ticker') {
       await addTickerFollow(user, body.ticker || '', parseAlertMode(body.alertMode));
+    } else if (kind === 'strategy') {
+      await addStrategyFollow(user, body.strategyId || '');
     } else if (kind === 'actor') {
       await addActorFollow(user, parseActorType(body.actorType), body.actorName || '', parseAlertMode(body.alertMode), body.actorKey || null);
     } else {

@@ -18,9 +18,9 @@ export function applyPelosiOverlay(events: LiveEvent[], asOf: string) {
       ...(q.range ? { range: { min: q.range.min + delta, max: q.range.max + delta } } : {}),
       reason: q.reason + (delta ? ` New automatically parsed disclosures change the balance by ${delta > 0 ? '+' : ''}${delta.toLocaleString('en-US')} shares.` : '') });
   }
-  return { positions, quantities };
+  return { positions, quantities, events: [...changes.events, ...events].filter(event => event.date > '2025-12-31' && event.date <= asOf) };
 }
-export async function getLivePelosiHoldings(): Promise<{ positions: ReviewedPosition[]; quantities: Map<string, ShareReconciliation>; note: string; checkedAt: string | null }> {
+export async function getLivePelosiHoldings(): Promise<{ positions: ReviewedPosition[]; quantities: Map<string, ShareReconciliation>; events: LiveEvent[]; note: string; checkedAt: string | null }> {
   const asOf = new Date().toISOString().slice(0, 10);
   const fallback = applyPelosiOverlay([], asOf);
   try {

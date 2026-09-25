@@ -9,7 +9,7 @@ export default function StrategiesPage() {
   return <main id="main" className={`container ${styles.page}`}>
     <span className="eyebrow">ANALYSIS · STRATEGIES</span>
     <h1>Follow the disclosures.</h1>
-    <p className={styles.intro}>Explore model portfolios built from public financial disclosures. Explore Pelosi’s estimated allocation and the upcoming Trump, Congress, Red and Blue strategies.</p>
+    <p className={styles.intro}>Explore model portfolios built from public financial disclosures. Inspect the holdings, sources and coverage behind each strategy.</p>
     <div className={styles.cards}>
       <article className={styles.card}>
         <div className={styles.cardTop}><Avatar name="Nancy Pelosi" memberId="P000197"/><span className={styles.badge}>Allocation preview</span></div>
@@ -18,9 +18,10 @@ export default function StrategiesPage() {
         <Link href="/analysis/strategies/pelosi" className="button">Explore Pelosi strategy →</Link>
       </article>
       <article className={styles.card}>
-        <div className={styles.cardTop}><span className={styles.symbol} aria-hidden="true">T</span><span className={styles.badge}>Planned</span></div>
+        <div className={styles.cardTop}><Avatar name="Donald Trump" src="/images/politicians/donald-trump.png"/><span className={styles.badge}>Disclosed holdings</span></div>
         <h2>Trump strategy</h2>
-        <p>A portfolio informed by Trump’s public financial disclosures. Data coverage and strategy rules are being defined.</p>
+        <p>Explore Trump’s latest reviewed public stock holdings, including DJT, with reported amounts, disclosure dates and original sources.</p>
+        <Link href="/analysis/strategies/trump" className="button secondary">Explore Trump strategy →</Link>
       </article>
       <article className={styles.card}>
         <div className={styles.cardTop}><span className={styles.symbol} aria-hidden="true">C</span><span className={styles.badge}>Planned</span></div>

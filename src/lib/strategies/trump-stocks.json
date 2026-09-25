@@ -1,0 +1,1698 @@
+{
+  "annualSha256": "84b5987e4c8a418188600bea1e1ba6b44e0d5735cdd757cee5aba551977ca402",
+  "scope": "public-company-stocks",
+  "complete": false,
+  "listingSource": "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqtraded.txt",
+  "listingCheckedOn": "2026-09-22",
+  "note": "Partial stock identity review. Unmapped rows and later transactions block portfolio weights.",
+  "stocks": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "listingName": "Apple Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "9-8",
+          "name": "APPLE INC"
+        },
+        {
+          "id": "17-31",
+          "name": "APPLECOMPUTERINC"
+        },
+        {
+          "id": "23-30",
+          "name": "APPLE INC"
+        },
+        {
+          "id": "31-23",
+          "name": "APPLE INC"
+        },
+        {
+          "id": "31-24",
+          "name": "APPLE INC COM"
+        },
+        {
+          "id": "77-35",
+          "name": "APPLE INC"
+        },
+        {
+          "id": "101-23",
+          "name": "APPLE INC"
+        },
+        {
+          "id": "136-31",
+          "name": "APPLE INC"
+        },
+        {
+          "id": "136-37",
+          "name": "APPLE INC"
+        }
+      ]
+    },
+    {
+      "ticker": "ABBV",
+      "name": "AbbVie",
+      "listingName": "AbbVie Inc. Common Stock",
+      "rows": [
+        {
+          "id": "8-24",
+          "name": "ABBVIE INC"
+        },
+        {
+          "id": "17-14",
+          "name": "ABBVIEINC"
+        },
+        {
+          "id": "23-6",
+          "name": "ABBVIE INC COM"
+        },
+        {
+          "id": "31-11",
+          "name": "ABBVIE INC"
+        },
+        {
+          "id": "77-29",
+          "name": "ABBVIE INC"
+        },
+        {
+          "id": "94-30",
+          "name": "ABBVIE INC"
+        },
+        {
+          "id": "97-17",
+          "name": "ABBVIE INC"
+        },
+        {
+          "id": "136-11",
+          "name": "ABBVIE INC"
+        },
+        {
+          "id": "136-29",
+          "name": "ABBVIE INC"
+        }
+      ]
+    },
+    {
+      "ticker": "ABT",
+      "name": "Abbott Laboratories",
+      "listingName": "Abbott Laboratories Common Stock",
+      "rows": [
+        {
+          "id": "8-23",
+          "name": "ABBOTT LABORATORIES"
+        },
+        {
+          "id": "17-13",
+          "name": "ABBOTTLABSCO"
+        },
+        {
+          "id": "23-5",
+          "name": "ABBOTT LABS"
+        },
+        {
+          "id": "76-33",
+          "name": "ABBOTT LABORATORIES"
+        },
+        {
+          "id": "91-33",
+          "name": "ABBOTT LABS"
+        },
+        {
+          "id": "99-9",
+          "name": "ABBOTT LABS"
+        },
+        {
+          "id": "133-23",
+          "name": "ABBOTT LABS"
+        },
+        {
+          "id": "134-40",
+          "name": "ABBOTT LABS"
+        }
+      ]
+    },
+    {
+      "ticker": "ADBE",
+      "name": "Adobe",
+      "listingName": "Adobe Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "8-25",
+          "name": "ADOBE INC"
+        },
+        {
+          "id": "17-16",
+          "name": "ADOBESYSTEMSINC"
+        },
+        {
+          "id": "23-9",
+          "name": "ADOBE INC. (DELAWARE)"
+        },
+        {
+          "id": "42-17",
+          "name": "ADOBE INC"
+        },
+        {
+          "id": "98-19",
+          "name": "ADOBE INC"
+        },
+        {
+          "id": "137-5",
+          "name": "ADOBE INC"
+        },
+        {
+          "id": "137-6",
+          "name": "ADOBE INC"
+        }
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "listingName": "Amazon.com, Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "8-37",
+          "name": "AMAZON.COM INC"
+        },
+        {
+          "id": "17-23",
+          "name": "AMAZON.COMINC"
+        },
+        {
+          "id": "31-18",
+          "name": "AMAZON COM INC COM"
+        },
+        {
+          "id": "42-28",
+          "name": "AMAZON.COM INC"
+        },
+        {
+          "id": "72-7",
+          "name": "AMAZON COM INC"
+        },
+        {
+          "id": "110-14",
+          "name": "AMAZON.COM INC"
+        },
+        {
+          "id": "137-32",
+          "name": "AMAZON.COM INC"
+        },
+        {
+          "id": "137-33",
+          "name": "AMAZON.COM INC"
+        }
+      ]
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "listingName": "Broadcom Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "9-27",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "18-4",
+          "name": "BROADCOMINC"
+        },
+        {
+          "id": "24-14",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "32-1",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "34-16",
+          "name": "BROADCOM INC COM"
+        },
+        {
+          "id": "35-31",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "77-36",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "103-30",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "103-31",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "136-30",
+          "name": "BROADCOM INC"
+        },
+        {
+          "id": "136-34",
+          "name": "BROADCOM INC"
+        }
+      ]
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America",
+      "listingName": "Bank of America Corporation Common Stock",
+      "rows": [
+        {
+          "id": "9-19",
+          "name": "BANK OF AMERICA CORP"
+        },
+        {
+          "id": "77-30",
+          "name": "BANK OF AMERICA CORP"
+        },
+        {
+          "id": "110-11",
+          "name": "BANK OF AMERICA CORP"
+        },
+        {
+          "id": "135-41",
+          "name": "BANK OF AMERICA CORP"
+        },
+        {
+          "id": "136-16",
+          "name": "BANK OF AMERICA CORP"
+        }
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Class B",
+      "listingName": "Berkshire Hathaway Inc. New Common Stock",
+      "rows": [
+        {
+          "id": "17-38",
+          "name": "BERKSHIREHATHAWAYINCDELCLBNEW"
+        },
+        {
+          "id": "24-6",
+          "name": "BERKSHIRE HATHAWAY INC NEW CL B"
+        },
+        {
+          "id": "103-41",
+          "name": "BERKSHIRE HATHAWAY CLASS CLASS B"
+        },
+        {
+          "id": "139-23",
+          "name": "BERKSHIRE HATHAWAY CLASS CLASS B"
+        },
+        {
+          "id": "139-24",
+          "name": "BERKSHIRE HATHAWAY CLASS CLASS B"
+        }
+      ]
+    },
+    {
+      "ticker": "CAT",
+      "name": "Caterpillar",
+      "listingName": "Caterpillar, Inc. Common Stock",
+      "rows": [
+        {
+          "id": "9-37",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "18-8",
+          "name": "CATERPILLARINC"
+        },
+        {
+          "id": "24-22",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "36-2",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "76-15",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "108-3",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "111-36",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "132-20",
+          "name": "CATERPILLAR INC"
+        },
+        {
+          "id": "134-3",
+          "name": "CATERPILLAR INC"
+        }
+      ]
+    },
+    {
+      "ticker": "COP",
+      "name": "ConocoPhillips",
+      "listingName": "ConocoPhillips Common Stock",
+      "rows": [
+        {
+          "id": "18-20",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "24-40",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "32-28",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "75-20",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "92-31",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "108-4",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "133-39",
+          "name": "CONOCOPHILLIPS"
+        },
+        {
+          "id": "134-22",
+          "name": "CONOCOPHILLIPS"
+        }
+      ]
+    },
+    {
+      "ticker": "COST",
+      "name": "Costco",
+      "listingName": "Costco Wholesale Corporation - Common Stock",
+      "rows": [
+        {
+          "id": "10-23",
+          "name": "COSTCO WHOLESALE CORP-NEW"
+        },
+        {
+          "id": "18-23",
+          "name": "COSTCOWHSLCORPNEW"
+        },
+        {
+          "id": "25-6",
+          "name": "COSTCO WHOLESALE CORP"
+        },
+        {
+          "id": "75-1",
+          "name": "COSTCO WHOLESALE CORP"
+        },
+        {
+          "id": "91-28",
+          "name": "COSTCO WHSL CORP NEW"
+        },
+        {
+          "id": "132-25",
+          "name": "COSTCO WHSL CORP NEW"
+        },
+        {
+          "id": "132-27",
+          "name": "COSTCO WHSL CORP NEW"
+        }
+      ]
+    },
+    {
+      "ticker": "CRM",
+      "name": "Salesforce",
+      "listingName": "Salesforce, Inc. Common Stock",
+      "rows": [
+        {
+          "id": "15-29",
+          "name": "SALESFORCE INC"
+        },
+        {
+          "id": "20-26",
+          "name": "SALESFORCECOMINC"
+        },
+        {
+          "id": "29-23",
+          "name": "SALESFORCE, INC."
+        },
+        {
+          "id": "74-40",
+          "name": "SALESFORCE INC"
+        },
+        {
+          "id": "114-6",
+          "name": "SALESFORCE INC"
+        },
+        {
+          "id": "130-6",
+          "name": "SALESFORCE INC"
+        },
+        {
+          "id": "130-26",
+          "name": "SALESFORCE INC"
+        }
+      ]
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron",
+      "listingName": "Chevron Corporation Common Stock",
+      "rows": [
+        {
+          "id": "10-6",
+          "name": "CHEVRON CORPORATION"
+        },
+        {
+          "id": "18-10",
+          "name": "CHEVRONCORPORATION"
+        },
+        {
+          "id": "24-26",
+          "name": "CHEVRON CORP"
+        },
+        {
+          "id": "36-6",
+          "name": "CHEVRON CORP"
+        },
+        {
+          "id": "36-7",
+          "name": "CHEVRON CORP"
+        },
+        {
+          "id": "77-39",
+          "name": "CHEVRON CORP"
+        },
+        {
+          "id": "91-9",
+          "name": "CHEVRON CORP NEW"
+        },
+        {
+          "id": "113-6",
+          "name": "CHEVRON CORP NEW"
+        },
+        {
+          "id": "136-27",
+          "name": "CHEVRON CORP NEW"
+        },
+        {
+          "id": "136-32",
+          "name": "CHEVRON CORP NEW"
+        }
+      ]
+    },
+    {
+      "ticker": "DIS",
+      "name": "Walt Disney",
+      "listingName": "Walt Disney Company (The) Common Stock",
+      "rows": [
+        {
+          "id": "16-41",
+          "name": "WALT DISNEY CO"
+        },
+        {
+          "id": "21-22",
+          "name": "WALTDISNEYCO"
+        },
+        {
+          "id": "30-36",
+          "name": "WALT DISNEY CO (HOLDING CO) DISNEY COM"
+        },
+        {
+          "id": "73-21",
+          "name": "WALT DISNEY CO"
+        },
+        {
+          "id": "95-17",
+          "name": "DISNEY WALT CO"
+        },
+        {
+          "id": "128-31",
+          "name": "DISNEY WALT CO"
+        },
+        {
+          "id": "131-33",
+          "name": "DISNEY WALT CO"
+        }
+      ]
+    },
+    {
+      "ticker": "GE",
+      "name": "GE Aerospace",
+      "listingName": "GE Aerospace Common Stock",
+      "rows": [
+        {
+          "id": "12-4",
+          "name": "GE AEROSPACE"
+        },
+        {
+          "id": "19-6",
+          "name": "GENERALELECTRICCO"
+        },
+        {
+          "id": "26-17",
+          "name": "GE AEROSPACE"
+        },
+        {
+          "id": "33-20",
+          "name": "GE AEROSPACE COM NEW"
+        },
+        {
+          "id": "72-1",
+          "name": "GENERAL ELECTRIC CO"
+        },
+        {
+          "id": "108-1",
+          "name": "GE AEROSPACE"
+        },
+        {
+          "id": "129-32",
+          "name": "GE AEROSPACE"
+        },
+        {
+          "id": "131-1",
+          "name": "GE AEROSPACE"
+        }
+      ]
+    },
+    {
+      "ticker": "GOOG",
+      "name": "Alphabet Class C",
+      "listingName": "Alphabet Inc. - Class C Capital Stock",
+      "rows": [
+        {
+          "id": "17-21",
+          "name": "ALPHABETINCCL-C"
+        },
+        {
+          "id": "38-20",
+          "name": "ALPHABET INC CL C"
+        },
+        {
+          "id": "77-9",
+          "name": "ALPHABET INC CLASS C"
+        },
+        {
+          "id": "96-26",
+          "name": "ALPHABET INC CLASS CLASS C"
+        },
+        {
+          "id": "135-12",
+          "name": "ALPHABET INC CLASS CLASS C"
+        },
+        {
+          "id": "135-26",
+          "name": "ALPHABET INC CLASS CLASS C"
+        }
+      ]
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Class A",
+      "listingName": "Alphabet Inc. - Class A Common Stock",
+      "rows": [
+        {
+          "id": "17-20",
+          "name": "ALPHABETINCCL-A"
+        },
+        {
+          "id": "23-15",
+          "name": "ALPHABET INC CL A"
+        },
+        {
+          "id": "31-14",
+          "name": "ALPHABET INC CAP STK CL A"
+        },
+        {
+          "id": "38-19",
+          "name": "ALPHABET INC CL A"
+        },
+        {
+          "id": "91-15",
+          "name": "ALPHABET INC CLASS CLASS A"
+        },
+        {
+          "id": "134-39",
+          "name": "ALPHABET INC CLASS CLASS A"
+        },
+        {
+          "id": "135-31",
+          "name": "ALPHABET INC CLASS CLASS A"
+        }
+      ]
+    },
+    {
+      "ticker": "GS",
+      "name": "Goldman Sachs",
+      "listingName": "Goldman Sachs Group, Inc. (The) Common Stock",
+      "rows": [
+        {
+          "id": "12-14",
+          "name": "GOLDMAN SACHS GROUP INC"
+        },
+        {
+          "id": "19-11",
+          "name": "GOLDMANSACHSGROUPINC"
+        },
+        {
+          "id": "26-23",
+          "name": "GOLDMAN SACHS GROUP INC"
+        },
+        {
+          "id": "41-19",
+          "name": "GOLDMAN SACHS GROUP INC COM"
+        },
+        {
+          "id": "77-23",
+          "name": "GOLDMAN SACHS GROUP INC/THE"
+        },
+        {
+          "id": "106-9",
+          "name": "GOLDMAN SACHS GROUP INC"
+        },
+        {
+          "id": "135-14",
+          "name": "GOLDMAN SACHS GROUP INC"
+        },
+        {
+          "id": "135-22",
+          "name": "GOLDMAN SACHS GROUP INC"
+        }
+      ]
+    },
+    {
+      "ticker": "HD",
+      "name": "Home Depot",
+      "listingName": "Home Depot, Inc. (The) Common Stock",
+      "rows": [
+        {
+          "id": "12-23",
+          "name": "HOME DEPOT INC"
+        },
+        {
+          "id": "19-14",
+          "name": "HOMEDEPOTINC"
+        },
+        {
+          "id": "26-30",
+          "name": "HOME DEPOT INC"
+        },
+        {
+          "id": "38-3",
+          "name": "HOME DEPOT INC"
+        },
+        {
+          "id": "77-34",
+          "name": "HOME DEPOT INC/THE"
+        },
+        {
+          "id": "106-8",
+          "name": "HOME DEPOT INC"
+        },
+        {
+          "id": "113-12",
+          "name": "HOME DEPOT INC"
+        },
+        {
+          "id": "136-21",
+          "name": "HOME DEPOT INC"
+        },
+        {
+          "id": "136-25",
+          "name": "HOME DEPOT INC"
+        }
+      ]
+    },
+    {
+      "ticker": "IBM",
+      "name": "IBM",
+      "listingName": "International Business Machines Corporation Common Stock",
+      "rows": [
+        {
+          "id": "12-38",
+          "name": "INTERNATIONAL BUSINESS MACHINES"
+        },
+        {
+          "id": "19-18",
+          "name": "INTLBUSINESSMACHINESCORP"
+        },
+        {
+          "id": "27-3",
+          "name": "INTL BUSINESS MACH"
+        },
+        {
+          "id": "39-34",
+          "name": "INTL BUSINESS MACHINES CORP"
+        },
+        {
+          "id": "42-13",
+          "name": "INTL BUSINESS MACHINES CORP"
+        },
+        {
+          "id": "77-18",
+          "name": "INTERNATIONAL BUSINESS MACHINE"
+        },
+        {
+          "id": "95-33",
+          "name": "IBM CORP"
+        },
+        {
+          "id": "95-35",
+          "name": "IBM CORP"
+        },
+        {
+          "id": "135-33",
+          "name": "IBM CORP"
+        },
+        {
+          "id": "135-39",
+          "name": "IBM CORP"
+        }
+      ]
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "listingName": "Johnson & Johnson Common Stock",
+      "rows": [
+        {
+          "id": "13-5",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "19-24",
+          "name": "JOHNSONANDJOHNSONCO"
+        },
+        {
+          "id": "27-8",
+          "name": "JOHNSON & JOHNSON COM"
+        },
+        {
+          "id": "51-10",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "51-11",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "77-37",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "101-21",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "107-39",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "136-28",
+          "name": "JOHNSON & JOHNSON"
+        },
+        {
+          "id": "136-35",
+          "name": "JOHNSON & JOHNSON"
+        }
+      ]
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
+      "listingName": "JP Morgan Chase & Co. Common Stock",
+      "rows": [
+        {
+          "id": "13-6",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "19-22",
+          "name": "JPMORGANCHASEANDCO"
+        },
+        {
+          "id": "27-10",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "51-16",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "59-22",
+          "name": "JPMORGAN CHASE & CO. COM"
+        },
+        {
+          "id": "77-33",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "91-14",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "102-24",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "136-33",
+          "name": "JPMORGAN CHASE & CO"
+        },
+        {
+          "id": "136-36",
+          "name": "JPMORGAN CHASE & CO"
+        }
+      ]
+    },
+    {
+      "ticker": "KO",
+      "name": "Coca-Cola",
+      "listingName": "Coca-Cola Company (The) Common Stock",
+      "rows": [
+        {
+          "id": "10-12",
+          "name": "COCA COLA COMPANY"
+        },
+        {
+          "id": "18-17",
+          "name": "COCACOLACO"
+        },
+        {
+          "id": "24-34",
+          "name": "COCA COLA CO COM"
+        },
+        {
+          "id": "32-20",
+          "name": "COCA-COLA COMPANY"
+        },
+        {
+          "id": "77-31",
+          "name": "COCA-COLA CO"
+        },
+        {
+          "id": "97-7",
+          "name": "THE COCA-COLA CO"
+        },
+        {
+          "id": "113-40",
+          "name": "THE COCA-COLA CO"
+        },
+        {
+          "id": "136-13",
+          "name": "THE COCA-COLA CO"
+        },
+        {
+          "id": "136-19",
+          "name": "THE COCA-COLA CO"
+        }
+      ]
+    },
+    {
+      "ticker": "LLY",
+      "name": "Eli Lilly",
+      "listingName": "Eli Lilly and Company Common Stock",
+      "rows": [
+        {
+          "id": "11-13",
+          "name": "ELI LILLY & CO"
+        },
+        {
+          "id": "18-37",
+          "name": "ELILILLYANDCO"
+        },
+        {
+          "id": "27-24",
+          "name": "LILLY ELI & CO"
+        },
+        {
+          "id": "77-3",
+          "name": "ELI LILLY & CO"
+        },
+        {
+          "id": "102-1",
+          "name": "ELI LILLY AND CO"
+        },
+        {
+          "id": "135-11",
+          "name": "ELI LILLY AND CO"
+        },
+        {
+          "id": "135-19",
+          "name": "ELI LILLY AND CO"
+        }
+      ]
+    },
+    {
+      "ticker": "MA",
+      "name": "Mastercard",
+      "listingName": "Mastercard Incorporated Common Stock",
+      "rows": [
+        {
+          "id": "13-32",
+          "name": "MASTERCARD INCORPORATED"
+        },
+        {
+          "id": "19-35",
+          "name": "MASTERCARDINC"
+        },
+        {
+          "id": "27-34",
+          "name": "MASTERCARD INC CL A"
+        },
+        {
+          "id": "76-6",
+          "name": "MASTERCARD INC"
+        },
+        {
+          "id": "98-4",
+          "name": "MASTERCARD INC CLASS CLASS A"
+        },
+        {
+          "id": "132-40",
+          "name": "MASTERCARD INC CLASS CLASS A"
+        },
+        {
+          "id": "133-17",
+          "name": "MASTERCARD INC CLASS CLASS A"
+        }
+      ]
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "listingName": "Meta Platforms, Inc. - Class A Common Stock",
+      "rows": [
+        {
+          "id": "13-37",
+          "name": "META PLATFORMS INC"
+        },
+        {
+          "id": "19-2",
+          "name": "FACEBOOKINC"
+        },
+        {
+          "id": "27-39",
+          "name": "META PLATFORMS INC CL A"
+        },
+        {
+          "id": "57-31",
+          "name": "META PLATFORMS INC CL A"
+        },
+        {
+          "id": "77-14",
+          "name": "META PLATFORMS INC"
+        },
+        {
+          "id": "95-15",
+          "name": "META PLATFORMS INC CLASS A"
+        },
+        {
+          "id": "105-37",
+          "name": "META PLATFORMS INC CLASS A"
+        },
+        {
+          "id": "135-17",
+          "name": "META PLATFORMS INC CLASS A"
+        },
+        {
+          "id": "135-28",
+          "name": "META PLATFORMS INC CLASS A"
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "listingName": "Microsoft Corporation - Common Stock",
+      "rows": [
+        {
+          "id": "14-1",
+          "name": "MICROSOFT CORP"
+        },
+        {
+          "id": "19-40",
+          "name": "MICROSOFTCORPORATION"
+        },
+        {
+          "id": "52-41",
+          "name": "MICROSOFT CORP"
+        },
+        {
+          "id": "64-30",
+          "name": "MICROSOFT CORP COM"
+        },
+        {
+          "id": "77-41",
+          "name": "MICROSOFT CORP"
+        },
+        {
+          "id": "96-7",
+          "name": "MICROSOFT CORP"
+        },
+        {
+          "id": "136-40",
+          "name": "MICROSOFT CORP"
+        },
+        {
+          "id": "136-41",
+          "name": "MICROSOFT CORP"
+        }
+      ]
+    },
+    {
+      "ticker": "NFLX",
+      "name": "Netflix",
+      "listingName": "Netflix, Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "14-13",
+          "name": "NETFLIX INC"
+        },
+        {
+          "id": "20-2",
+          "name": "NETFLIXINC"
+        },
+        {
+          "id": "28-13",
+          "name": "NETFLIX INC"
+        },
+        {
+          "id": "72-3",
+          "name": "NETFLIX INC"
+        },
+        {
+          "id": "91-12",
+          "name": "NETFLIX INC"
+        },
+        {
+          "id": "150-10",
+          "name": "NETFLIX INC"
+        },
+        {
+          "id": "150-11",
+          "name": "NETFLIX INC"
+        }
+      ]
+    },
+    {
+      "ticker": "NKE",
+      "name": "Nike Class B",
+      "listingName": "Nike, Inc. Common Stock",
+      "rows": [
+        {
+          "id": "20-5",
+          "name": "NIKEINC.CLASSB"
+        },
+        {
+          "id": "28-16",
+          "name": "NIKE INC CL B"
+        },
+        {
+          "id": "76-8",
+          "name": "NIKE INC CL B"
+        },
+        {
+          "id": "92-32",
+          "name": "NIKE INC CLASS B"
+        },
+        {
+          "id": "112-35",
+          "name": "NIKE INC CLASS B"
+        },
+        {
+          "id": "130-2",
+          "name": "NIKE INC CLASS B"
+        },
+        {
+          "id": "132-24",
+          "name": "NIKE INC CLASS B"
+        }
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "listingName": "NVIDIA Corporation - Common Stock",
+      "rows": [
+        {
+          "id": "14-22",
+          "name": "NVIDIA CORP"
+        },
+        {
+          "id": "20-6",
+          "name": "NVIDIACORP"
+        },
+        {
+          "id": "65-17",
+          "name": "NVIDIA CORP"
+        },
+        {
+          "id": "74-39",
+          "name": "NVIDIA CORP"
+        },
+        {
+          "id": "104-27",
+          "name": "NVIDIA CORP"
+        },
+        {
+          "id": "128-20",
+          "name": "NVIDIA CORP"
+        },
+        {
+          "id": "128-35",
+          "name": "NVIDIA CORP"
+        }
+      ]
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle",
+      "listingName": "Oracle Corporation Common Stock",
+      "rows": [
+        {
+          "id": "14-28",
+          "name": "ORACLE CORPORATION"
+        },
+        {
+          "id": "20-7",
+          "name": "ORACLECORPORATION"
+        },
+        {
+          "id": "76-17",
+          "name": "ORACLE CORP"
+        },
+        {
+          "id": "106-6",
+          "name": "ORACLE CORP"
+        },
+        {
+          "id": "133-20",
+          "name": "ORACLE CORP"
+        },
+        {
+          "id": "134-2",
+          "name": "ORACLE CORP"
+        }
+      ]
+    },
+    {
+      "ticker": "PEP",
+      "name": "PepsiCo",
+      "listingName": "PepsiCo, Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "14-35",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "20-12",
+          "name": "PEPSICOINCORPORATED"
+        },
+        {
+          "id": "28-33",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "48-12",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "58-7",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "61-27",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "77-13",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "103-39",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "136-9",
+          "name": "PEPSICO INC"
+        },
+        {
+          "id": "136-15",
+          "name": "PEPSICO INC"
+        }
+      ]
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble",
+      "listingName": "Procter & Gamble Company (The) Common Stock",
+      "rows": [
+        {
+          "id": "15-5",
+          "name": "PROCTER & GAMBLE CO"
+        },
+        {
+          "id": "20-16",
+          "name": "PROCTERGAMBLECO"
+        },
+        {
+          "id": "29-2",
+          "name": "PROCTER & GAMBLE CO"
+        },
+        {
+          "id": "54-39",
+          "name": "PROCTER & GAMBLE CO"
+        },
+        {
+          "id": "77-27",
+          "name": "PROCTER & GAMBLE CO/THE"
+        },
+        {
+          "id": "113-3",
+          "name": "PROCTER & GAMBLE CO"
+        },
+        {
+          "id": "136-6",
+          "name": "PROCTER & GAMBLE CO"
+        },
+        {
+          "id": "136-23",
+          "name": "PROCTER & GAMBLE CO"
+        }
+      ]
+    },
+    {
+      "ticker": "PLTR",
+      "name": "Palantir",
+      "listingName": "Palantir Technologies Inc. - Class A Common Stock",
+      "rows": [
+        {
+          "id": "14-31",
+          "name": "PALANTIR TECHNOLOGIES INC"
+        },
+        {
+          "id": "20-9",
+          "name": "PALANTIRTECHNOLOGIESINC"
+        },
+        {
+          "id": "65-28",
+          "name": "PALANTIR TECHNOLOGIES INC CL A"
+        },
+        {
+          "id": "72-4",
+          "name": "PALANTIR TECHNOLOGIES INC"
+        },
+        {
+          "id": "91-11",
+          "name": "PALANTIR TECHNOLOGIES INCLASS CLASS A"
+        },
+        {
+          "id": "151-16",
+          "name": "PALANTIR TECHNOLOGIES INCLASS CLASS A"
+        },
+        {
+          "id": "151-17",
+          "name": "PALANTIR TECHNOLOGIES INCLASS CLASS A"
+        }
+      ]
+    },
+    {
+      "ticker": "RTX",
+      "name": "RTX",
+      "listingName": "RTX Corporation Common Stock",
+      "rows": [
+        {
+          "id": "15-27",
+          "name": "RTX CORPORATION"
+        },
+        {
+          "id": "20-21",
+          "name": "RAYTHEONTECHNOLOGIES"
+        },
+        {
+          "id": "29-21",
+          "name": "RTX CORP"
+        },
+        {
+          "id": "76-39",
+          "name": "RTX CORP"
+        },
+        {
+          "id": "94-13",
+          "name": "RTX CORP"
+        },
+        {
+          "id": "103-29",
+          "name": "RTX CORP"
+        },
+        {
+          "id": "134-33",
+          "name": "RTX CORP"
+        },
+        {
+          "id": "134-34",
+          "name": "RTX CORP"
+        }
+      ]
+    },
+    {
+      "ticker": "SPGI",
+      "name": "S&P Global",
+      "listingName": "S&P Global Inc. Common Stock",
+      "rows": [
+        {
+          "id": "15-28",
+          "name": "S&P GLOBAL INC"
+        },
+        {
+          "id": "29-22",
+          "name": "S&P GLOBAL INC"
+        },
+        {
+          "id": "75-33",
+          "name": "S&P GLOBAL INC"
+        },
+        {
+          "id": "91-4",
+          "name": "S&P GLOBAL INC"
+        },
+        {
+          "id": "129-28",
+          "name": "S&P GLOBAL INC"
+        },
+        {
+          "id": "130-23",
+          "name": "S&P GLOBAL INC"
+        }
+      ]
+    },
+    {
+      "ticker": "TMO",
+      "name": "Thermo Fisher Scientific",
+      "listingName": "Thermo Fisher Scientific Inc Common Stock",
+      "rows": [
+        {
+          "id": "16-14",
+          "name": "THERMO FISHER SCIENTIFIC INC"
+        },
+        {
+          "id": "30-9",
+          "name": "THERMO FISHER SCIENTIFIC INC"
+        },
+        {
+          "id": "73-16",
+          "name": "THERMO FISHER SCIENTIFIC INC"
+        },
+        {
+          "id": "98-22",
+          "name": "THERMO FISHER SCIENTIFIC"
+        },
+        {
+          "id": "121-15",
+          "name": "THERMO FISHER SCIENTIFIC"
+        },
+        {
+          "id": "126-22",
+          "name": "THERMO FISHER SCIENTIFIC"
+        }
+      ]
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "listingName": "Tesla, Inc.  - Common Stock",
+      "rows": [
+        {
+          "id": "16-10",
+          "name": "TESLA INC"
+        },
+        {
+          "id": "21-1",
+          "name": "TESLAMOTORSINC"
+        },
+        {
+          "id": "30-5",
+          "name": "TESLA INC"
+        },
+        {
+          "id": "67-23",
+          "name": "TESLA INC"
+        },
+        {
+          "id": "72-6",
+          "name": "TESLA INC"
+        },
+        {
+          "id": "109-9",
+          "name": "TESLA INC"
+        },
+        {
+          "id": "154-7",
+          "name": "TESLA INC"
+        },
+        {
+          "id": "154-8",
+          "name": "TESLA INC"
+        }
+      ]
+    },
+    {
+      "ticker": "UBER",
+      "name": "Uber",
+      "listingName": "Uber Technologies, Inc. Common Stock",
+      "rows": [
+        {
+          "id": "21-10",
+          "name": "UBERTECHNOLOGIESINC"
+        },
+        {
+          "id": "30-16",
+          "name": "UBER TECHNOLOGIES INC"
+        },
+        {
+          "id": "71-38",
+          "name": "UBER TECHNOLOGIES INC"
+        },
+        {
+          "id": "103-15",
+          "name": "UBER TECHNOLOGIES INC"
+        },
+        {
+          "id": "155-3",
+          "name": "UBER TECHNOLOGIES INC"
+        },
+        {
+          "id": "155-4",
+          "name": "UBER TECHNOLOGIES INC"
+        }
+      ]
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group",
+      "listingName": "UnitedHealth Group Incorporated Common Stock (DE)",
+      "rows": [
+        {
+          "id": "16-26",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "21-14",
+          "name": "UNITEDHEALTHGROUPINC"
+        },
+        {
+          "id": "30-21",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "49-17",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "77-32",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "100-38",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "107-40",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "135-40",
+          "name": "UNITEDHEALTH GROUP INC"
+        },
+        {
+          "id": "136-20",
+          "name": "UNITEDHEALTH GROUP INC"
+        }
+      ]
+    },
+    {
+      "ticker": "V",
+      "name": "Visa",
+      "listingName": "Visa Inc.",
+      "rows": [
+        {
+          "id": "16-36",
+          "name": "VISA INC"
+        },
+        {
+          "id": "21-18",
+          "name": "VISAINC"
+        },
+        {
+          "id": "30-31",
+          "name": "VISA INC CL A"
+        },
+        {
+          "id": "77-2",
+          "name": "VISA INC"
+        },
+        {
+          "id": "97-33",
+          "name": "VISA INC CLASS CLASS A"
+        },
+        {
+          "id": "99-12",
+          "name": "VISA INC CLASS CLASS A"
+        },
+        {
+          "id": "134-19",
+          "name": "VISA INC CLASS CLASS A"
+        },
+        {
+          "id": "135-9",
+          "name": "VISA INC CLASS CLASS A"
+        }
+      ]
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo",
+      "listingName": "Wells Fargo & Company Common Stock",
+      "rows": [
+        {
+          "id": "17-4",
+          "name": "WELLS FARGO & CO"
+        },
+        {
+          "id": "21-24",
+          "name": "WELLSFARGOANDCONEW"
+        },
+        {
+          "id": "30-40",
+          "name": "WELLS FARGO & CO NEW"
+        },
+        {
+          "id": "77-16",
+          "name": "WELLS FARGO & CO NEW"
+        },
+        {
+          "id": "99-8",
+          "name": "WELLS FARGO & CO"
+        },
+        {
+          "id": "134-35",
+          "name": "WELLS FARGO & CO"
+        },
+        {
+          "id": "135-32",
+          "name": "WELLS FARGO & CO"
+        }
+      ]
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart",
+      "listingName": "Walmart Inc. - Common Stock",
+      "rows": [
+        {
+          "id": "16-40",
+          "name": "WALMART INC"
+        },
+        {
+          "id": "21-21",
+          "name": "WALMARTSTORESINC"
+        },
+        {
+          "id": "30-35",
+          "name": "WALMART INC"
+        },
+        {
+          "id": "75-28",
+          "name": "WALMART INC"
+        },
+        {
+          "id": "100-40",
+          "name": "WALMART INC"
+        },
+        {
+          "id": "113-5",
+          "name": "WALMART INC"
+        },
+        {
+          "id": "133-35",
+          "name": "WALMART INC"
+        },
+        {
+          "id": "134-29",
+          "name": "WALMART INC"
+        }
+      ]
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil",
+      "listingName": "ExxonMobil Holdings Corporation Common Stock",
+      "rows": [
+        {
+          "id": "11-30",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "19-1",
+          "name": "EXXONMOBILCORP"
+        },
+        {
+          "id": "26-4",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "37-6",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "77-40",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "101-30",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "103-18",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "136-38",
+          "name": "EXXON MOBIL CORP"
+        },
+        {
+          "id": "136-39",
+          "name": "EXXON MOBIL CORP"
+        }
+      ]
+    }
+  ]
+}

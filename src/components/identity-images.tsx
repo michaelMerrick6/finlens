@@ -23,12 +23,13 @@ function IdentityImage({ src, fallback, className, size }: {
   );
 }
 
-export function Avatar({ name, memberId, large = false }: {
+export function Avatar({ name, memberId, src, large = false }: {
   name: string;
   memberId?: string | null;
+  src?: string;
   large?: boolean;
 }) {
-  return <IdentityImage src={getPoliticianPhotoUrl(memberId, "225x275", name)}
+  return <IdentityImage src={src || getPoliticianPhotoUrl(memberId, "225x275", name)}
     fallback={initials(name)} className={`avatar ${large ? "large" : ""}`} size={large ? 96 : 48} />;
 }
 

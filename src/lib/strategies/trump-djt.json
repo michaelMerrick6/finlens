@@ -1,0 +1,11 @@
+{
+  "ticker": "DJT",
+  "shares": 114750000,
+  "ownershipAsOf": "2026-06-19",
+  "sourceSignedOn": "2026-06-23",
+  "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1849635/000143774926021434/xslF345X06/rdgdoc.xml",
+  "location": "Table I, indirect holding; footnote 4",
+  "holder": "Donald J. Trump Revocable Trust dated April 7, 2014",
+  "beneficiarySource": "https://www.sec.gov/Archives/edgar/data/947033/000114036125046424/xslSCHEDULE_13D_X01/primary_doc.xml",
+  "note": "The trustee's Form 4 separately reports the trust's 114,750,000 shares. The trustee's own direct shares and RSUs are excluded. The same trust stake is counted once, not once per reporting person. This corroborates the annual disclosure; it does not establish an unchanged current balance."
+}

@@ -227,7 +227,7 @@ def classify_event_behavior(event: dict) -> dict:
             result["reasons"].append(f"theme_{theme}")
         return result
 
-    if signal_type in {"fund_filing_deadline_reminder", "fund_filing_received"}:
+    if signal_type in {"fund_filing_deadline_reminder", "fund_filing_received", "strategy_filing"}:
         result["activity"] = True
         result["reasons"].append(signal_type)
         return result

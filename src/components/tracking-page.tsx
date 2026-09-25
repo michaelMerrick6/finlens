@@ -8,7 +8,9 @@ import { playTrackingOpenSound } from "@/lib/tracking-chime";
 import { SentNotifications } from "./sent-notifications";
 import { AddTracking } from "./add-tracking";
 import { Icon } from "./icon";
+import { PageSkeleton } from "./loading-state";
 import type { AccountState } from "@/lib/account-types";
+import { followedStrategy } from "@/lib/strategies/strategy-follow";
 function EmailPreference({ account }: { account: AccountState }) {
   const { mutate } = useAccount();
   const [busy, setBusy] = useState(false);
@@ -27,7 +29,7 @@ function EmailPreference({ account }: { account: AccountState }) {
             : "Check in whenever you like, or receive new activity by email."}
         </p>
         <small>
-          At most one email a day, combining all your tracked people and stocks.
+          At most one email a day, combining your tracked people, stocks and strategies.
           The prior day’s new disclosures are sent after 8 a.m. Eastern. No new activity, no email.
         </small>
         {error && (
@@ -136,16 +138,7 @@ export function TrackingPage() {
       </main>
     );
   if (loading && !account)
-    return (
-      <main id="main" className="container loading-page">
-        <span role="status">Loading your tracking list…</span>
-        <div className="skeleton-rows">
-          {[0, 1, 2].map((n) => (
-            <div key={n} />
-          ))}
-        </div>
-      </main>
-    );
+    return <PageSkeleton label="Loading your tracking list…"/>;
   if (error || !account)
     return (
       <main id="main" className="container empty-page">
@@ -157,7 +150,7 @@ export function TrackingPage() {
       </main>
     );
   const politicians = account.follows.actors.filter(
-    (a) => a.actorType === "politician",
+    (a) => a.actorType === "politician" && !followedStrategy(a),
   );
   const canonical = (a: (typeof politicians)[number]) =>
     String(
@@ -172,7 +165,7 @@ export function TrackingPage() {
         <div className="page-heading">
           <span className="eyebrow">YOUR VIEW OF THE PUBLIC RECORD</span>
           <h1>Tracking.</h1>
-          <p>The people and stocks you’re keeping an eye on, all in one place.</p>
+          <p>The people, stocks and strategies you follow, all in one place.</p>
         </div>
         <button className="button secondary" onClick={() => { playTrackingOpenSound(); setAdding(true); }}>
           <Icon name="plus" size={17} />
@@ -205,9 +198,11 @@ export function TrackingPage() {
         <div className="tracked-people">
           {account.follows.actors.map((a) => (
             <div className="tracked-person" key={a.id}>
-              <Avatar name={a.actorName} memberId={a.actorType === "politician" ? canonical(a) : null} />
+              <Avatar name={a.actorName} memberId={a.actorType === "politician" && !followedStrategy(a) ? canonical(a) : null} />
               <div>
-                {a.actorType === "politician" ? (
+                {followedStrategy(a) ? (
+                  <Link href={followedStrategy(a)!.href}>{a.actorName}</Link>
+                ) : a.actorType === "politician" ? (
                   <Link
                     href={`/politicians/${encodeURIComponent(canonical(a))}`}
                   >
@@ -217,7 +212,7 @@ export function TrackingPage() {
                   <strong>{a.actorName}</strong>
                 )}
                 <small>
-                  {a.actorType === "politician"
+                  {followedStrategy(a) ? "Strategy" : a.actorType === "politician"
                     ? "Politician"
                     : "Previously tracked " + a.actorType}
                 </small>
@@ -328,8 +323,7 @@ export function TrackingPage() {
       )}
       {!politicians.length && !!account.followCount && (
         <p className="fine-print">
-          Track a politician to see their disclosure feed here. Previously
-          tracked stocks remain available through their links above.
+          Open an item above to see its latest activity.
         </p>
       )}
       </>}

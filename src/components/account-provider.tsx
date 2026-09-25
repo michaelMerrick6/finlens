@@ -12,6 +12,8 @@ import {
 import { createClient, type SupabaseClient, type Session } from "@supabase/supabase-js";
 import type { AccountState } from "@/lib/account-types";
 import { prepareTrackingChime } from "@/lib/tracking-chime";
+import { strategyFollow } from "@/lib/strategies/strategy-follow";
+import Link from "next/link";
 import { Modal } from "./modal";
 import { Icon } from "./icon";
 
@@ -210,8 +212,8 @@ export function AccountProvider({
             what matters.
           </h2>
           <p className="muted">
-            Sign in to track politicians and choose whether to receive email
-            alerts. Browsing is always open.
+            Sign in to follow people, stocks and strategies, and choose whether
+            to receive email alerts. Browsing is always open.
           </p>
           <button
             type="button"
@@ -309,15 +311,16 @@ export function AccountProvider({
     </AccountContext.Provider>
   );
 }
-export function TrackButton({ id, name }: { id: string; name: string }) {
+export function TrackButton({ id, name, strategy = false }: { id: string; name: string; strategy?: boolean }) {
   const [burst, setBurst] = useState(0);
   const { account, session, loading, openSignIn, mutate } = useAccount();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const strategyTarget = strategy ? strategyFollow(id) : null;
   const tracked = account?.follows.actors.find(
     (a) =>
       a.actorType === "politician" &&
-      a.actorKey.toLowerCase() === id.toLowerCase(),
+      a.actorKey.toLowerCase() === (strategyTarget?.actorKey ?? id).toLowerCase(),
   );
   return (
     <div className="track-control">
@@ -338,7 +341,8 @@ export function TrackButton({ id, name }: { id: string; name: string }) {
       )}
       <button
         className={`button ${tracked ? "secondary" : "primary"}`}
-        disabled={busy || loading}
+        disabled={busy || loading || (strategy && !strategyTarget)}
+        aria-pressed={Boolean(tracked)}
         onClick={async () => {
           if (!session) {
             openSignIn();
@@ -362,7 +366,7 @@ export function TrackButton({ id, name }: { id: string; name: string }) {
               "/api/account/follows",
               tracked
                 ? { kind: "actor", id: tracked.id }
-                : {
+                : strategyTarget ? { kind: "strategy", strategyId: strategyTarget.id } : {
                     kind: "actor",
                     actorType: "politician",
                     actorName: name,
@@ -383,9 +387,12 @@ export function TrackButton({ id, name }: { id: string; name: string }) {
           }
         }}
       >
-        <Icon name={tracked ? "check" : "plus"} size={16} />
-        {busy ? "Saving…" : tracked ? "Tracking" : "Track politician"}
+        <Icon name={tracked ? "check" : strategy ? "bell" : "plus"} size={16} />
+        {busy ? "Saving…" : tracked ? (strategy ? "Following" : "Tracking") : strategy ? "Follow strategy" : "Track politician"}
       </button>
+      {strategy && tracked && <Link className="fine-print" href="/tracking">
+        {account?.subscriptions.email.active ? "Notification settings" : "Turn on email updates"}
+      </Link>}
       {error && (
         <p className="error" role="alert">
           {error}

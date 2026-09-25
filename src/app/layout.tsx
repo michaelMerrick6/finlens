@@ -4,6 +4,7 @@ import { DM_Sans, Newsreader } from "next/font/google";
 import { AccountProvider } from "@/components/account-provider";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
 import "./globals.css";
+import "./loading.css";
 const sans = DM_Sans({
   subsets: ["latin"],
   display: "swap",

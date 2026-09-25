@@ -1,0 +1,201 @@
+{
+  "sources": [
+    {
+      "id": "IVV",
+      "url": "https://www.ishares.com/us/products/239726/ishares-core-s-p-500-etf/latest-holdings.csv",
+      "holdingsAsOf": "2026-09-22",
+      "checkedOn": "2026-09-23",
+      "sha256": "93752137481fe3bb7c3c4a5aa420fbba724fab4147606b8e3c517dc6f8691c63"
+    },
+    {
+      "id": "IWM",
+      "url": "https://www.ishares.com/us/products/239710/ishares-russell-2000-etf/latest-holdings.csv",
+      "holdingsAsOf": "2026-09-21",
+      "checkedOn": "2026-09-23",
+      "sha256": "b95c71306344e57b06e21fa1dec22e8e036a049d8734a04259ef1f335e697450"
+    }
+  ],
+  "stocks": {
+    "NVDA": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "AAPL": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "MSFT": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "AMZN": {
+      "sector": "Consumer Discretionary",
+      "sourceId": "IVV"
+    },
+    "GOOGL": {
+      "sector": "Communication",
+      "sourceId": "IVV"
+    },
+    "AVGO": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "GOOG": {
+      "sector": "Communication",
+      "sourceId": "IVV"
+    },
+    "META": {
+      "sector": "Communication",
+      "sourceId": "IVV"
+    },
+    "TSLA": {
+      "sector": "Consumer Discretionary",
+      "sourceId": "IVV"
+    },
+    "BRK.B": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "LLY": {
+      "sector": "Health Care",
+      "sourceId": "IVV"
+    },
+    "JPM": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "XOM": {
+      "sector": "Energy",
+      "sourceId": "IVV"
+    },
+    "JNJ": {
+      "sector": "Health Care",
+      "sourceId": "IVV"
+    },
+    "V": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "WMT": {
+      "sector": "Consumer Staples",
+      "sourceId": "IVV"
+    },
+    "ABBV": {
+      "sector": "Health Care",
+      "sourceId": "IVV"
+    },
+    "MA": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "PLTR": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "CVX": {
+      "sector": "Energy",
+      "sourceId": "IVV"
+    },
+    "COST": {
+      "sector": "Consumer Staples",
+      "sourceId": "IVV"
+    },
+    "CAT": {
+      "sector": "Industrials",
+      "sourceId": "IVV"
+    },
+    "BAC": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "PG": {
+      "sector": "Consumer Staples",
+      "sourceId": "IVV"
+    },
+    "KO": {
+      "sector": "Consumer Staples",
+      "sourceId": "IVV"
+    },
+    "UNH": {
+      "sector": "Health Care",
+      "sourceId": "IVV"
+    },
+    "GE": {
+      "sector": "Industrials",
+      "sourceId": "IVV"
+    },
+    "HD": {
+      "sector": "Consumer Discretionary",
+      "sourceId": "IVV"
+    },
+    "NFLX": {
+      "sector": "Communication",
+      "sourceId": "IVV"
+    },
+    "GS": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "ORCL": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "RTX": {
+      "sector": "Industrials",
+      "sourceId": "IVV"
+    },
+    "WFC": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "TMO": {
+      "sector": "Health Care",
+      "sourceId": "IVV"
+    },
+    "IBM": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "CRM": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "ABT": {
+      "sector": "Health Care",
+      "sourceId": "IVV"
+    },
+    "DIS": {
+      "sector": "Communication",
+      "sourceId": "IVV"
+    },
+    "PEP": {
+      "sector": "Consumer Staples",
+      "sourceId": "IVV"
+    },
+    "COP": {
+      "sector": "Energy",
+      "sourceId": "IVV"
+    },
+    "UBER": {
+      "sector": "Industrials",
+      "sourceId": "IVV"
+    },
+    "SPGI": {
+      "sector": "Financials",
+      "sourceId": "IVV"
+    },
+    "ADBE": {
+      "sector": "Information Technology",
+      "sourceId": "IVV"
+    },
+    "NKE": {
+      "sector": "Consumer Discretionary",
+      "sourceId": "IVV"
+    },
+    "DJT": {
+      "sector": "Communication",
+      "sourceId": "IWM"
+    }
+  },
+  "note": "Sector labels from iShares equity holdings, matched by ticker. BRK B maps to BRK.B; Communication is displayed as Communication services. These sources supply classifications only, not Trump holdings or portfolio weights."
+}

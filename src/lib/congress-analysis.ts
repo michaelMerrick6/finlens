@@ -10,7 +10,7 @@ function bounds(raw:string|null){
  const min=Number(match[1].replaceAll(',','')),max=Number(match[2].replaceAll(',',''));
  return min>0&&max>=min?{min,max,inferred:false}:null;
 }
-export function aggregateAnalysis(rows:AnalysisTrade[],instrument:string){
+export function aggregateAnalysis(rows:AnalysisTrade[],instrument:string,calculateTogether=true){
  const groups=new Map<string,{ticker:string;buyers:Set<string>;sellers:Set<string>;purchaseMin:number;purchaseMax:number;saleMin:number;saleMax:number;unknownAmounts:number;inferredAmounts:number;trades:AnalysisTrade[];latest:string}>();
  const seen=new Set<string>();let excluded=0;
  for(const raw of rows){
@@ -28,6 +28,6 @@ export function aggregateAnalysis(rows:AnalysisTrade[],instrument:string){
  return {excluded,stocks:[...groups.values()].map(g=>{
  const buys=g.trades.filter(t=>t.transaction_type==='buy'&&t.transaction_date).sort((a,b)=>a.transaction_date!.localeCompare(b.transaction_date!));
  let together=0;
- for(let i=0;i<buys.length;i++){const start=Date.parse(buys[i].transaction_date!);const ids=new Set<string>();for(let j=i;j<buys.length&&Date.parse(buys[j].transaction_date!)-start<=13*86400000;j++)ids.add(buys[j].member_id!.toUpperCase());together=Math.max(together,ids.size);}
+ if(calculateTogether)for(let i=0;i<buys.length;i++){const start=Date.parse(buys[i].transaction_date!);const ids=new Set<string>();for(let j=i;j<buys.length&&Date.parse(buys[j].transaction_date!)-start<=13*86400000;j++)ids.add(buys[j].member_id!.toUpperCase());together=Math.max(together,ids.size);}
  return {...g,buyers:g.buyers.size,sellers:g.sellers.size,together,trades:g.trades.sort((a,b)=>(b.published_date||'').localeCompare(a.published_date||'')||a.id.localeCompare(b.id))};})};
 }

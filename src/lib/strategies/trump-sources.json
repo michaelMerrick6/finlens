@@ -1,0 +1,204 @@
+{
+  "inventoryAsOf": "2026-09-22",
+  "indexUrl": "https://www.whitehouse.gov/disclosures/",
+  "sources": [
+    {
+      "title": "President Donald J. Trump 2025 Annual Report",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/06/President-Donald-J.-Trump-2025-Annual-Report.pdf",
+      "kind": "annual",
+      "status": "extracted",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/06/President-Donald-J.-Trump.pdf",
+      "kind": "annual",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 08.12.26",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/08/President-Donald-J.-Trump-Periodic-Transaction-Report-08.12.26.pdf",
+      "kind": "transactions",
+      "status": "partially-reviewed",
+      "reviewedStockTransactions": 56,
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 06.25.26 (1)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/06/President-Donald-J.-Trump-Periodic-Transaction-Report-0.6.25.26-1.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 06.25.26 (2)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/06/President-Donald-J.-Trump-Periodic-Transaction-Report-0.6.25.26-2.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 05.08.26 (1)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/05/President-Donald-J.-Trump-Periodic-Transaction-Report-05.08.26-1.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 05.08.26 (2)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/05/President-Donald-J.-Trump-Periodic-Transaction-Report-05.08.26-2.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 04.20.26",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/04/President-Donald-J.-Trump-Periodic-Transaction-Report-4.20.26.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 02.26.26 (1)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/03/President-Donald-J.-Trump-Periodic-Transaction-Report-2.26.26-1.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 02.26.26 (2)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/03/President-Donald-J.-Trump-Periodic-Transaction-Report-2.26.26-2.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 01.14.26",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/01/President-Donald-J.-Trump-Periodic-Transaction-Report-1.14.2026-.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report Amendment 01.14.26",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2026/01/President-Donald-J.-Trump-Periodic-Transaction-Report-Amendment-1.14.26.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 12.18.25",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/12/President-Donald-J.-Trump-Periodic-Transaction-Report-12.18.25.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 11.14.25",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/11/President-Donald-J.-Trump-Periodic-Transaction-Report-11.14.25.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 08.12.25 (1)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/08/President-Donald-J.-Trump-Periodic-Transaction-Report-8.12.25-1.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 08.12.25 (2)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/08/President-Donald-J.-Trump-Periodic-Transaction-Report-8.12.25-2.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 08.12.25 (3)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/08/President-Donald-J.-Trump-Periodic-Transaction-Report-8.12.25-3.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "President Donald J. Trump Periodic Transaction Report 09.3.25 (4)",
+      "url": "https://www.whitehouse.gov/wp-content/uploads/2025/09/President-Donald-J.-Trump-Periodic-Transaction-Report-9.3.25-4.pdf",
+      "kind": "transactions",
+      "status": "needs-review",
+      "notificationBaseline": true
+    },
+    {
+      "title": "2015 candidate disclosure",
+      "url": "https://s3.documentcloud.org/documents/3870993/Trump-Donald-J-2015-Financial-Disclosure-Report.pdf",
+      "kind": "historical",
+      "status": "holdings-reviewed",
+      "reviewedPart": "Part 6",
+      "reviewedRows": 326,
+      "publishedOn": "2015-07-22"
+    },
+    {
+      "title": "2016 candidate disclosure",
+      "url": "https://s3.documentcloud.org/documents/2839058/5-18-16-Report.pdf",
+      "kind": "historical",
+      "status": "needs-review"
+    },
+    {
+      "title": "2017 disclosure",
+      "url": "https://s3.documentcloud.org/documents/21154684/trump-oge-2017.pdf",
+      "kind": "historical",
+      "status": "needs-review"
+    },
+    {
+      "title": "2018 annual disclosure",
+      "url": "https://s3.documentcloud.org/documents/21154685/trump-oge-2018.pdf",
+      "kind": "historical",
+      "status": "needs-review"
+    },
+    {
+      "title": "2020 annual disclosure",
+      "url": "https://s3.documentcloud.org/documents/7012257/President-Donald-Trump-2020-financial-disclosure.pdf",
+      "kind": "historical",
+      "status": "needs-review"
+    },
+    {
+      "title": "2023 candidate disclosure, part 1",
+      "url": "https://s3.documentcloud.org/documents/23876912/donald-trump-oge-public-financial-disclosure-report-2023-part-1.pdf",
+      "kind": "historical",
+      "status": "needs-review"
+    },
+    {
+      "title": "2024 candidate disclosure, part 1",
+      "url": "https://s3.documentcloud.org/documents/26496905/donald-trump-2024-278pc-part-1.pdf",
+      "kind": "historical",
+      "status": "needs-review"
+    },
+    {
+      "title": "DJT trust ownership corroboration: trustee Form 4, June 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1849635/000143774926021434/xslF345X06/rdgdoc.xml",
+      "kind": "ownership",
+      "status": "reviewed"
+    },
+    {
+      "title": "DJT Schedule 13D amendment: trust and reporting persons",
+      "url": "https://www.sec.gov/Archives/edgar/data/947033/000114036125046424/xslSCHEDULE_13D_X01/primary_doc.xml",
+      "kind": "ownership",
+      "status": "reviewed"
+    },
+    {
+      "title": "2019 annual disclosure",
+      "url": "https://s3.documentcloud.org/documents/21154683/trump-oge-2019.pdf",
+      "kind": "annual",
+      "status": "needs-review",
+      "sha256": "0a0873bcf2d2dc104ec310af3e1024a631c262c61c331d0030eaa1d7a947382b"
+    },
+    {
+      "title": "2021 termination disclosure",
+      "url": "https://www.citizensforethics.org/wp-content/uploads/2021/01/Trump-Donald-J.-2021Termination-278.pdf",
+      "kind": "termination",
+      "status": "needs-review",
+      "sha256": "1575753950174791339cace250fa059cc02694e43dc3641f431cf2c8c1401e41"
+    }
+  ]
+}

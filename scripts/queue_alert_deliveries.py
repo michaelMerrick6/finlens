@@ -207,6 +207,8 @@ def queue_subscription_deliveries(events, subscriptions, watchlist_tickers, watc
         if behavior.get("suppressed"):
             continue
         for subscription in global_subscriptions:
+            if signal_type == "strategy_filing":
+                continue  # Strategy notices belong only to accounts following that strategy.
             if subscription.get("channel") == "email" and signal_type in AGGREGATE_TYPES:
                 continue
             if not event_matches_subscription(event, subscription, behavior=behavior):
@@ -359,6 +361,8 @@ def queue_global_discord_deliveries(events, subscriptions):
 
     queued = []
     for event in events:
+        if event.get("signal_type") == "strategy_filing":
+            continue
         if float(event.get("importance_score") or 0) < GLOBAL_MIN_IMPORTANCE:
             continue
         queued.append(

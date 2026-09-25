@@ -44,6 +44,7 @@ jobs:
       run: |
         python test_alert_rules.py
         python test_emit_13f_deadline_events.py
+        python test_strategy_updates.py
         python test_notification_compiler.py
         python test_politician_gain_signals.py
         python test_queue_alert_deliveries.py
@@ -89,6 +90,7 @@ jobs:
         fi
 
         run_stage "13F Deadline Reminders" python emit_13f_deadline_events.py
+        run_stage "Strategy Filing Updates" python emit_strategy_updates.py
         run_stage "Compile Derived Signals" python compile_derived_signal_events.py
         run_stage "Queue Alert Deliveries" python queue_alert_deliveries.py
         run_stage "Queue Tweet Candidates" python queue_tweet_candidates.py

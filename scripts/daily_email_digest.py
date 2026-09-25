@@ -60,9 +60,10 @@ def render_digest(digest, events):
             amount=payload.get('amount_range') or (f"${float(payload['value']):,.2f}" if payload.get('value') else ''),
             tradedAt=payload.get('transaction_date') or event.get('occurred_at'),
             filedAt=payload.get('published_date') or event.get('published_at'),
+            detectedAt=payload.get('detected_at') if event.get('signal_type') == 'strategy_filing' else None,
             summary=event.get('summary') or '', sourceUrl=safe_url(event.get('source_url'))))
     subject = f"Vail daily tracking · {len(items)} update{'s' if len(items) != 1 else ''}"
-    intro = 'Your daily roundup of newly detected activity across all the people and stocks you track.'
+    intro = 'Your daily roundup of new activity across the people, stocks and strategies you follow.'
     grouped = defaultdict(list)
     for item in items:
         grouped[item['actor']].append(item)
@@ -74,7 +75,7 @@ def render_digest(digest, events):
         body = []
         for row in rows:
             detail = ' · '.join(str(row[k]) for k in ['activity','asset','amount'] if row[k]) or row['title']
-            dates = ' · '.join(f'{label} {str(row[k])[:10]}' for k,label in [('tradedAt','Traded'),('filedAt','Filed')] if row[k])
+            dates = ' · '.join(f'{label} {str(row[k])[:10]}' for k,label in [('tradedAt','Traded'),('filedAt','Filed'),('detectedAt','Detected')] if row[k])
             text.extend([detail, dates, row['summary'], row['sourceUrl']])
             source = f'<a href="{esc(row["sourceUrl"])}">Source filing</a>' if row['sourceUrl'] else ''
             body.append(f'<tr><td style="padding:14px 0;border-bottom:1px solid #e3e8df"><strong>{esc(detail)}</strong><br>'
